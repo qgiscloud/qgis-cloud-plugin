@@ -1,0 +1,18 @@
+=qgis-cloud-plugin
+
+qgis-cloud-plugin is a QGIS[http://www.qgis.org/] plugin for publishing maps on qgiscloud.com.
+
+
+==Installation
+
+=== Bug tracker and Wiki
+ http://hub.qgis.org/projects/qgiscloud
+
+=== Plugin repository
+ http://build.sourcepole.ch/qgis/plugins.xml
+
+==License
+
+qgis-cloud-plugin is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+<em>Copyright (c) 2011 Pirmin Kalberer, Sourcepole AG</em>

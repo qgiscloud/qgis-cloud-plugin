@@ -1,0 +1,65 @@
+= qgsiscloud REST API
+
+== Authentication
+
+Use HTTP basic auth to provide the qgsiscloud username (email) and password with
+each request.
+
+== Content Types
+
+Actions that take additional input besides the verb and URL fall into two
+categories: JSON/formencoded, or plaintext.  Actions that take multiple input
+parameters (such as updating the map settings) accept either an JSON input body,
+or form variables as an input body in x-www-form-urlencoded format.  Actions
+that take a block of code or text data (such as uploading an ssh key) expect a
+plaintext input body.
+
+Most actions return JSON, except for a few that return plaintext (such as the
+output of rake).
+
+== Resources & Actions
+
+  GET https://api.qgiscloud.com/maps
+
+Returns JSON listing of maps belonging to the user.
+
+  POST https://api.qgiscloud.com/maps
+
+Create a new map with an untitled name.  Returns JSON of map settings, including
+the generated name.
+
+  POST https://api.qgiscloud.com/maps
+    map[name]=:mapname
+
+Create a new map with the provided name.  Returns JSON of map settings.
+
+  GET https://api.qgiscloud.com/maps/:mapname
+
+Returns JSON of the map settings (the same data returned after creation).
+
+  PUT https://api.qgiscloud.com/maps/:mapname
+
+Update map settings, with input structure matching the output of the GET above.
+
+  GET https://api.qgiscloud.com/maps/:mapname/collaborators
+
+Returns JSON list of collaborators (email addresses) on the map
+
+  POST https://api.qgiscloud.com/maps/:mapname/collaborators
+    collaborator[email]=:email
+
+Add a new collaborator to the map.
+
+  DELETE https://api.qgiscloud.com/maps/:mapname/collaborators/:email
+
+Delete a collaborator from the map.  Don't forget to urlencode the email, since
+@ signs are not valid in URLs.
+
+  POST https://api.qgiscloud.com/maps/:mapname/rake
+
+Execute a rake command on the map.  The input body should be plaintext
+containing the command.  Returns a plaintext output body with the rake output.
+
+  DELETE https://api.qgiscloud.com/maps/:mapname
+
+Permanently destroy the map.
