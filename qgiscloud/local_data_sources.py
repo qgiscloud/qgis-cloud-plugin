@@ -72,7 +72,7 @@ class LocalDataSources:
         # get unique local data sources
         self.local_data_sources = {}
         for layer in sorted(local_layers, key=lambda layer: layer.name()):
-            qDebug("local layer source: %s (provider type: %s)" % (layer.source(), layer.providerType()))
+            qDebug(u"local layer source: %s (provider type: %s)" % (layer.source(), layer.providerType()))
             # get layer source without filter
             ds = QgsDataSourceURI(layer.source())
             if len(ds.connectionInfo()) > 0:

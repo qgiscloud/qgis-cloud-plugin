@@ -36,6 +36,7 @@ import urllib
 import traceback
 import re
 import time
+import platform
 
 class QgisCloudPluginDialog(QDockWidget):
     COLUMN_LAYERS = 0
@@ -44,9 +45,10 @@ class QgisCloudPluginDialog(QDockWidget):
     COLUMN_GEOMETRY_TYPE = 3
     COLUMN_SRID = 4
 
-    def __init__(self, iface):
+    def __init__(self, iface, version):
         QDockWidget.__init__(self, None)
         self.iface = iface
+        self.version = version
         # Set up the user interface from Designer.
         self.ui = Ui_QgisCloudPlugin()
         self.ui.setupUi(self)
@@ -116,6 +118,9 @@ class QgisCloudPluginDialog(QDockWidget):
         s = QSettings()
         self.user = s.value("qgiscloud/user").toString()
 
+    def _version_info(self):
+        return {'versions': {'plugin': self.version, 'QGIS': QGis.QGIS_VERSION, 'OS': platform.platform()}}
+
     def check_login(self):
         if not self.api.check_auth():
             login_dialog = QDialog(self)
@@ -129,7 +134,7 @@ class QgisCloudPluginDialog(QDockWidget):
                     return login_ok
                 self.api.set_auth(user=login_dialog.ui.editUser.text(), password=login_dialog.ui.editPassword.text())
                 try:
-                    self.api.check_login()
+                    self.api.check_login(version_info=self._version_info())
                     self.user = login_dialog.ui.editUser.text()
                     self.ui.serviceLinks.setCurrentIndex(1)
                     self.update_urls()

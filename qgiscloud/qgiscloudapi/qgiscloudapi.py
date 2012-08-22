@@ -120,9 +120,9 @@ class API():
             return True
         return False
 
-    def check_login(self):
+    def check_login(self, version_info):
         self.requires_auth()
-        resource = '/maps.json'
+        resource = '/maps.json?%s' % urlencode(version_info)
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
         content = request.get(resource)
         return json.loads(content)
@@ -301,68 +301,6 @@ class API():
         content = request.post(resource, data)
         return json.loads(content)
 
-    def create_addon(self, map_name, deployment_name, addon_name):
-        """
-            Add an alias to a deployment.
-        """
-        self.requires_auth()
-        resource = '/maps/%s/deployment/%s/addon.json' % (map_name, deployment_name)
-        request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
-        data = {
-            'addon': addon_name
-        }
-        content = request.post(resource, data)
-        return json.loads(content)
-
-    def read_addons(self, map_name=None, deployment_name=None):
-        """
-            Get a list of addons.
-
-            If map_name and deployment_name are None it will return a list
-            of available addons. Otherwise a list of addons related to that
-            deployment.
-        """
-        if map_name and deployment_name:
-            self.requires_auth()
-            resource = '/maps/%s/deployment/%s/addon.json' % (map_name, deployment_name)
-            request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
-            content = request.get(resource)
-        else:
-            resource = '/addon.json'
-            request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
-            content = request.get(resource)
-        return json.loads(content)
-
-    def read_addon(self, map_name, deployment_name, addon_name):
-        """
-            Get all addon details.
-        """
-        self.requires_auth()
-        resource = '/maps/%s/deployment/%s/addon/%s.json' % (map_name, deployment_name, addon_name)
-        request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
-        content = request.get(resource)
-        return json.loads(content)
-
-    def update_addon(self, map_name, deployment_name, addon_name_current, addon_name_to_update_to):
-        self.requires_auth()
-        resource = '/maps/%s/deployment/%s/addon/%s.json' % (map_name, deployment_name, addon_name_current)
-        request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
-        data = {
-            'addon': addon_name_to_update_to
-        }
-        content = request.put(resource, data)
-        return json.loads(content)
-
-    def delete_addon(self, map_name, deployment_name, addon_name):
-        """
-            Remove an addon from a deployment.
-        """
-        self.requires_auth()
-        resource = '/maps/%s/deployment/%s/addon/%s.json' % (map_name, deployment_name, addon_name)
-        request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
-        request.delete(resource)
-        return True
-    
     def read_mapusers(self, map_name):
         """
             Get a list of map users.
@@ -457,54 +395,6 @@ class API():
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
         content = request.delete(resource)
         return True
-
-    def read_log(self, map_name, deployment_name, log_type, last_time=None):
-        """
-            Get a deployment's log by log_type.
-
-            log_type choices are 'access' or 'error'
-
-            last_time is optional format is a Python time struct
-        """
-        self.requires_auth()
-        if last_time:
-            timestamp = calendar.timegm(last_time)
-            resource = '/maps/%s/deployment/%s/log/%s.json?timestamp=%s' % (map_name, deployment_name, log_type, timestamp)
-        else:
-            resource = '/maps/%s/deployment/%s/log/%s.json' % (map_name, deployment_name, log_type)
-        request = Request(user=self.user, password=self.password, token=self.get_token(), cache=None, url=self.url)
-        content = request.get(resource)
-        return json.loads(content)
-
-    def create_billing_account(self, userName, billingName, data):
-        """
-        creates a billing account.
-        """
-        self.requires_auth();
-        resource = '/users/%s/billing/%s.json' % (userName, billingName)
-        request = Request(user=self.user, password=self.password, token=self.get_token(), cache=None, url=self.url)
-        content = request.post(resource, data)
-        return json.loads(content)
-
-    def update_billing_account(self, userName, billingName, data):
-        """
-        updates a billing account
-        """
-        self.requires_auth();
-        resource = '/users/%s/billing/%s.json' % (userName, billingName)
-        request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
-        content = request.put(resource, data)
-        return json.loads(content)
-
-    def get_billing_accounts(self, userName):
-        """
-        return all users billling accounts
-        """
-        self.requires_auth();
-        resource = '/users/%s/billing.json' % userName;
-        request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
-        content = request.get(resource)
-        return json.loads(content);
 
 ###
 #

@@ -34,4 +34,4 @@ def authorName():
   return "Sourcepole"
 def classFactory(iface):
     from qgiscloudplugin import QgisCloudPlugin
-    return QgisCloudPlugin(iface)
+    return QgisCloudPlugin(iface, version())

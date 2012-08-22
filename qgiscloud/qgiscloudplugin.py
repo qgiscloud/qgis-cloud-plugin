@@ -31,9 +31,10 @@ from qgiscloudplugindialog import QgisCloudPluginDialog
 
 class QgisCloudPlugin:
 
-    def __init__(self, iface):
+    def __init__(self, iface, version):
         # Save reference to the QGIS interface
         self.iface = iface
+        self.version = version
 
     def initGui(self):
         # Create action that will start plugin configuration
@@ -46,7 +47,7 @@ class QgisCloudPlugin:
         self.iface.addPluginToMenu("&Cloud", self.action)
 
         # dock widget
-        self.dockWidget = QgisCloudPluginDialog(self.iface)
+        self.dockWidget = QgisCloudPluginDialog(self.iface, self.version)
         self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)
 
     def unload(self):
