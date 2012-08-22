@@ -22,7 +22,7 @@ PLUGIN_UPLOAD = $(CURDIR)/plugin_upload.py
 
 # Makefile for a PyQGIS plugin 
 
-PLUGINNAME = qgiscloudplugin
+PLUGINNAME = qgiscloud
 
 PY_FILES = qgiscloudplugin.py qgiscloudplugindialog.py __init__.py
 
