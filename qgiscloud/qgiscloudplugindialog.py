@@ -271,7 +271,7 @@ class QgisCloudPluginDialog(QDockWidget):
         msgBox.setTextFormat(Qt.RichText)
         msgBox.setText("<b>%s</b><br/>%s" % (stack[-1], stack[1]))
         maillink = "<a href=\"mailto:%s?subject=QGISCloud exception: %s&body=%s\">Mail to support</a>" % \
-            ("support@qgiscloud.com", title, urllib.quote(stack[-1] + stack[1]))
+            ("support@qgiscloud.com", title, urllib.quote(traceback.format_exc() + str(self._version_info())))
         msgBox.setInformativeText(maillink)
         msgBox.exec_()
 
