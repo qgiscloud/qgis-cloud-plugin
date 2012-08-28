@@ -801,6 +801,8 @@ def ogr2ogr(
 
             if bDisplayProgress:
                 pfnProgress = ScaledProgressFunc
+                if nCountLayersFeatures == 0:
+                    nCountLayersFeatures = 1 #Avoid division by zero
                 pProgressData = ScaledProgressObject(\
                         nAccCountFeatures * 1.0 / nCountLayersFeatures, \
                         (nAccCountFeatures + panLayerCountFeatures[iLayer]) * 1.0 / nCountLayersFeatures, \
