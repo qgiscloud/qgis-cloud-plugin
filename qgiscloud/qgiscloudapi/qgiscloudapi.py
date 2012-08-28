@@ -244,7 +244,7 @@ class API():
         encoded_file = file.read()
         data = {
                 'map': {
-                    'name' : str(name),
+                    'name' : unicode(name).encode('utf-8'),
                     'config': config
                 },
                 'file': encoded_file
@@ -293,7 +293,7 @@ class API():
         encoded_file = file.read()
         data = {
                 'graphic': {
-                    'name' : str(name),
+                    'name' : unicode(name).encode('utf-8'),
                 },
                 'file': encoded_file
         }
