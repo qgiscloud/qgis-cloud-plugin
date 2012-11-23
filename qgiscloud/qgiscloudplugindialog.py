@@ -358,7 +358,7 @@ class QgisCloudPluginDialog(QDockWidget):
         for data_source, layers in self.local_data_sources.iteritems():
             layer_names = []
             for layer in layers:
-                layer_names.append(str(layer.name()))
+                layer_names.append(unicode(layer.name()))
             layers_item = QTableWidgetItem(", ".join(layer_names))
             layers_item.setToolTip("\n".join(layer_names))
             data_source_item = QTableWidgetItem(data_source)
@@ -395,7 +395,7 @@ class QgisCloudPluginDialog(QDockWidget):
 
     @staticmethod
     def launder_pg_name(name):
-        return re.sub(r"[#'-]", '_', str(name).lower()) #OGRPGDataSource::LaunderName
+        return re.sub(r"[#'-]", '_', unicode(name).lower()) #OGRPGDataSource::LaunderName
 
     def refresh_local_data_sources(self):
         if not self.dbs_refreshed:
