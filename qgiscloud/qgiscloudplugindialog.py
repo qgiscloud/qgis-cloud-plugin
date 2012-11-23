@@ -265,15 +265,15 @@ class QgisCloudPluginDialog(QDockWidget):
                 self._exception_message("Error uploading project")
 
     def _exception_message(self, title):
-        exc_type, exc_value, exc_traceback = sys.exc_info()
         stack = traceback.format_exc().splitlines()
-        msgBox = QMessageBox(QMessageBox.Critical, title, "")
-        msgBox.setTextFormat(Qt.RichText)
-        msgBox.setText("<b>%s</b><br/>%s" % (stack[-1], stack[1]))
-        maillink = "<a href=\"mailto:%s?subject=QGISCloud exception: %s&body=%s\">Mail to support</a>" % \
-            ("support@qgiscloud.com", title, urllib.quote(traceback.format_exc() + str(self._version_info())))
-        msgBox.setInformativeText(maillink)
-        msgBox.exec_()
+        msgBox = QMessageBox()
+        msgBox.setText("An error occurred: %s" % stack[-1])
+        msgBox.setInformativeText("Do you want to send the exception info to qgiscloud.com?")
+        msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        msgBox.setIcon(QMessageBox.Question)
+        ret = msgBox.exec_()
+        if ret == QMessageBox.Ok:
+            self.api.create_exception(unicode(traceback.format_exc()), self._version_info())
 
     def publish_symbols(self, missingSvgSymbols):
         self.statusBar().showMessage(u"Uploading SVG symbols")

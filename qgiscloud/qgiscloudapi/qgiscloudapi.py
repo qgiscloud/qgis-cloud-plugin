@@ -302,6 +302,20 @@ class API():
         return json.loads(content)
 
 
+    def create_exception(self, exception, version_info):
+        """
+            Upload a plugin exception.
+        """
+        #self.requires_auth()
+        resource = '/exception_infos.json'
+        data = {
+            'exception': exception,
+            'version_info': version_info
+        }
+        request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
+        content = request.post(resource, data)
+        return json.loads(content)
+
 ###
 #
 # EXCEPTIONS
