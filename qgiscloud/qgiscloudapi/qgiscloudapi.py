@@ -525,7 +525,7 @@ class Request():
         #
         # We set the Host Header for MacOSX 10.5, to circumvent the NotFoundError
         #
-        headers['Host'] = 'api.qgiscloud.com'
+        #headers['Host'] = 'api.qgiscloud.com'
         #
         # We set the User-Agent Header to qgiscloudapi and the local version.
         # This enables basic statistics about still used qgiscloudapi versions in
