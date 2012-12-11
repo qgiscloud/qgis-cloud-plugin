@@ -307,10 +307,10 @@ class API():
             Upload a plugin exception.
         """
         #self.requires_auth()
-        resource = '/exception_infos.json'
+        resource = '/notifications.json'
         data = {
-            'exception': exception,
-            'version_info': version_info
+            'type': 'ClientException',
+            'info': exception + unicode(version_info)
         }
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
         content = request.post(resource, data)
