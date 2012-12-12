@@ -306,7 +306,7 @@ class API():
         """
             Upload a plugin exception.
         """
-        #self.requires_auth()
+        self.requires_auth()
         resource = '/notifications.json'
         data = {
             'type': 'ClientException',
