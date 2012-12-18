@@ -1,0 +1,24 @@
+[general]
+name=QGIS Cloud Plugin
+qgisMinimumVersion=1.8
+description=Publish maps on qgiscloud.com
+version=0.7.5
+author=Pirmin Kalberer, Mathias Walker, Horst Düster
+email=pka@sourcepole.ch
+
+; Optional items:
+
+changelog=0.7.5
+    -Support for non-ASCII characters in layer names
+    -Notification API for plugin exceptions
+
+; tags are in comma separated value format, spaces are allowed
+tags=cloud,mobile,wfs,server,web-client,wms
+
+homepage=http://qgiscloud.com/
+tracker=https://github.com/qgiscloud/qgis-cloud-plugin/issues
+repository=https://github.com/qgiscloud/qgis-cloud-plugin
+icon=icon.png
+
+experimental=False
+deprecated=False

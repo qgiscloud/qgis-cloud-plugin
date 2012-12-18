@@ -25,12 +25,12 @@ def name():
 def description():
     return "Publish maps on qgiscloud.com"
 def version():
-    return "0.7.4"
+    return "0.7.5"
 def icon():
     return "icon.png"
 def qgisMinimumVersion():
-    return "1.6"
-def authorName():
+    return "1.8"
+def author():
   return "Sourcepole"
 def classFactory(iface):
     from qgiscloudplugin import QgisCloudPlugin
