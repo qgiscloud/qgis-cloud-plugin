@@ -255,7 +255,8 @@ class DataUpload:
                 eGType=eGType,
                 bOverwrite=True, #TODO: Ask user for overwriting existing table
                 bDisplayProgress=True,
-                progress_func=self._progress)
+                progress_func=self._progress,
+                errfunc=self._ogrerr)
 
             self.progress_bar.hide()
 
@@ -304,6 +305,9 @@ class DataUpload:
         self.progress_bar.show()
         self.progress_bar.setValue((int) (dfComplete * 100.0))
         QApplication.processEvents() # allow progress bar to scale properly
+
+    def _ogrerr(self, text):
+        raise Exception(text)
 
     def _replace_local_layers(self, layers_to_replace):
         if len(layers_to_replace) > 0:

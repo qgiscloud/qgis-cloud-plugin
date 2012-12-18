@@ -119,7 +119,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.user = s.value("qgiscloud/user").toString()
 
     def _version_info(self):
-        return {'versions': {'plugin': self.version, 'QGIS': QGis.QGIS_VERSION, 'OS': platform.platform()}}
+        return {'versions': {'plugin': self.version, 'QGIS': QGis.QGIS_VERSION, 'OS': platform.platform(), 'Python': sys.version}}
 
     def check_login(self):
         if not self.api.check_auth():
@@ -273,7 +273,8 @@ class QgisCloudPluginDialog(QDockWidget):
         msgBox.setIcon(QMessageBox.Question)
         ret = msgBox.exec_()
         if ret == QMessageBox.Ok:
-            self.api.create_exception(unicode(traceback.format_exc()), self._version_info())
+            project_fname = unicode(QgsProject.instance().fileName())
+            self.api.create_exception(unicode(traceback.format_exc()), self._version_info(), project_fname)
 
     def publish_symbols(self, missingSvgSymbols):
         self.statusBar().showMessage(u"Uploading SVG symbols")
@@ -303,7 +304,10 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def update_local_layers(self, skip_layer_id=None):
         local_layers, unsupported_layers = self.local_data_sources.local_layers(skip_layer_id)
-        self.update_local_data_sources(local_layers)
+        try:
+            self.update_local_data_sources(local_layers)
+        except:
+            self._exception_message("Error checking local data sources")
 
         return local_layers, unsupported_layers
 
@@ -351,8 +355,13 @@ class QgisCloudPluginDialog(QDockWidget):
             QGis.WKBMultiLineString: "MultiLineString",
             QGis.WKBPolygon: "Polygon",
             QGis.WKBMultiPolygon: "MultiPolygon",
-            100: "No geometry" # FIXME: QGis.WKBNoGeometry
-            # FIXME: 2.5d
+            100: "No geometry", # FIXME: QGis.WKBNoGeometry / ogr.wkbNone
+            QGis.WKBPoint25D: "Point",
+            QGis.WKBLineString25D: "LineString",
+            QGis.WKBPolygon25D: "Polygon",
+            QGis.WKBMultiPoint25D: "MultiPoint",
+            QGis.WKBMultiLineString25D: "MultiLineString",
+            QGis.WKBMultiPolygon25D: "MultiPolygon"
         }
 
         for data_source, layers in self.local_data_sources.iteritems():
@@ -368,7 +377,9 @@ class QgisCloudPluginDialog(QDockWidget):
                 # use current table name if available to keep changes by user
                 table_name = self.data_sources_table_names[data_source]
             table_name_item = QTableWidgetItem(QgisCloudPluginDialog.launder_pg_name(table_name))
-            wkbType = layers[0].wkbType() #FIXME: message for unsupported types (2.5D)
+            wkbType = layers[0].wkbType()
+            if wkbType not in geometry_types:
+                raise Exception("Unsupported geometry type '%s' in layer '%s'" % (wkbType, layers[0].name()))
             geometry_type_item = QTableWidgetItem(geometry_types[wkbType])
             if layers[0].providerType() == "ogr":
                 geometry_type_item.setToolTip("Note: OGR features will be converted to MULTI-type")

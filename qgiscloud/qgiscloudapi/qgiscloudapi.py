@@ -302,15 +302,21 @@ class API():
         return json.loads(content)
 
 
-    def create_exception(self, exception, version_info):
+    def create_exception(self, exception, version_info, project_fname):
         """
             Upload a plugin exception.
         """
         self.requires_auth()
         resource = '/notifications.json'
+        encoded_file = ''
+        try:
+            file = open(project_fname, "rb")
+            encoded_file = file.read()
+        except:
+            pass
         data = {
             'type': 'ClientException',
-            'info': exception + unicode(version_info)
+            'info': exception + unicode(version_info) + encoded_file 
         }
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
         content = request.post(resource, data)
