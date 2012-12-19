@@ -2,13 +2,16 @@
 name=QGIS Cloud Plugin
 qgisMinimumVersion=1.8
 description=Publish maps on qgiscloud.com
-version=0.7.5
+version=0.7.6
 author=Pirmin Kalberer, Mathias Walker, Horst Düster
 email=pka@sourcepole.ch
 
 ; Optional items:
 
-changelog=0.7.5
+changelog=0.7.6
+    -Return ogr2ogr error messages
+    -Add project file and Python version to exception notification
+    0.7.5
     -Support for non-ASCII characters in layer names
     -Notification API for plugin exceptions
 
