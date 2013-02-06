@@ -248,10 +248,14 @@ class QgisCloudPluginDialog(QDockWidget):
             self.statusBar().showMessage(u"Publishing map")
             try:
                 fullExtent = self.iface.mapCanvas().fullExtent()
-                config = { 'fullExtent': {
-                    'xmin': fullExtent.xMinimum(), 'ymin': fullExtent.yMinimum(),
-                    'xmax': fullExtent.xMaximum(), 'ymax': fullExtent.yMaximum()
-                }}
+                config = {
+                    'fullExtent': {
+                        'xmin': fullExtent.xMinimum(), 'ymin': fullExtent.yMinimum(),
+                        'xmax': fullExtent.xMaximum(), 'ymax': fullExtent.yMaximum()
+                    #},
+                    #'svgPaths': QgsApplication.svgPaths() #For resolving absolute symbol paths in print composer
+                    }
+                }
                 map = self.api.create_map(self.map(), fname, config)['map']
                 #QMessageBox.information(self, "create_map", str(map['config']))
                 self.show_api_error(map)
@@ -284,6 +288,9 @@ class QgisCloudPluginDialog(QDockWidget):
                 fullpath = path + sym
                 if os.path.isfile(fullpath):
                     self.api.create_graphic(sym, fullpath)
+            #Custom path
+            if os.path.isfile(sym):
+                self.api.create_graphic(sym, sym)
 
 
     def reset_load_data(self):

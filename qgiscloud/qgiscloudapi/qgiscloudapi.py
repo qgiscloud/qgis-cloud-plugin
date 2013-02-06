@@ -316,7 +316,7 @@ class API():
             pass
         data = {
             'type': 'ClientException',
-            'info': exception + unicode(version_info) + encoded_file 
+            'info': exception + unicode(version_info) + encoded_file
         }
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
         content = request.post(resource, data)
