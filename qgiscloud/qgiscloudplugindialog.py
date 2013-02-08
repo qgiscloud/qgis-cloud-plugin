@@ -27,6 +27,7 @@ from qgis.core import *
 from ui_qgiscloudplugin import Ui_QgisCloudPlugin
 from ui_login import Ui_LoginDialog
 from qgiscloudapi.qgiscloudapi import *
+from pyogr.ogr2ogr import ogr_version_info
 from db_connections import DbConnections
 from local_data_sources import LocalDataSources
 from data_upload import DataUpload
@@ -85,7 +86,6 @@ class QgisCloudPluginDialog(QDockWidget):
         QObject.connect(self.ui.btnPublishMapUpload, SIGNAL("clicked()"), self.publish_map)
 
         self.read_settings()
-        self.update_urls()
         self.api = API()
         self.db_connections = DbConnections()
         self.local_data_sources = LocalDataSources()
@@ -121,6 +121,13 @@ class QgisCloudPluginDialog(QDockWidget):
     def _version_info(self):
         return {'versions': {'plugin': self.version, 'QGIS': QGis.QGIS_VERSION, 'OS': platform.platform(), 'Python': sys.version}}
 
+    def _update_versions(self):
+        self.ui.lblVersionQGIS.setText(QGis.QGIS_VERSION)
+        self.ui.lblVersionPlugin.setText(self.version)
+        self.ui.lblVersionOGR.setText(ogr_version_info())
+        self.ui.lblVersionPython.setText(sys.version)
+        self.ui.lblVersionOS.setText(platform.platform())
+
     def check_login(self):
         if not self.api.check_auth():
             login_dialog = QDialog(self)
@@ -136,8 +143,8 @@ class QgisCloudPluginDialog(QDockWidget):
                 try:
                     self.api.check_login(version_info=self._version_info())
                     self.user = login_dialog.ui.editUser.text()
-                    self.ui.serviceLinks.setCurrentIndex(1)
-                    self.update_urls()
+                    self._update_versions()
+                    self.ui.serviceLinks.setCurrentWidget(self.ui.pageVersions)
                     self.store_settings()
                     self.ui.btnLogin.hide()
                     self.ui.lblSignup.hide()
@@ -199,7 +206,6 @@ class QgisCloudPluginDialog(QDockWidget):
                 self.ui.cbUploadDatabase.addItem("Create new database")
             elif len(self.dbs) > 1:
                 self.ui.cbUploadDatabase.addItem("Select database")
-            #import rpdb2; rpdb2.start_embedded_debugger("dbg")
             for name, db in self.dbs.iteritems():
                 it = QListWidgetItem(name)
                 it.setToolTip("host: %s port: %s database: %s username: %s password: %s" % (db['host'], db['port'], name, db['username'], db['password']))
@@ -209,13 +215,14 @@ class QgisCloudPluginDialog(QDockWidget):
             self.dbs_refreshed = True
 
     def update_urls(self):
-        self.update_url(self.ui.lblWMS, self.user, self.map())
-        self.update_url(self.ui.lblWebmap, self.user, self.map())
-        self.update_url(self.ui.lblMobileMap, self.user, self.map())
-        #self.update_url(self.ui.lblWFS, self.user, self.map())
+        self.update_url(self.ui.lblWMS, self.api.api_url(), '{0}/{1}'.format(self.user, self.map()))
+        self.update_url(self.ui.lblWebmap, self.api.api_url(), '{0}/{1}'.format(self.user, self.map()))
+        self.update_url(self.ui.lblMobileMap, self.api.api_url(), '{0}/{1}'.format(self.user, self.map()))
+        self.update_url(self.ui.lblMaps, self.api.api_url(), 'maps')
 
-    def update_url(self, label, user, map):
-        text = re.sub(r'qgiscloud.com/.*?/[^/"<>]*', 'qgiscloud.com/%s/%s' % (user, map), unicode(label.text()))
+    def update_url(self, label, api_url, path):
+        url = '{0}/{1}'.format(api_url, path)
+        text = re.sub(r'http[^"]+', url, unicode(label.text()))
         label.setText(text)
 
     def read_maps(self):
@@ -262,6 +269,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 if map['config']['missingSvgSymbols']:
                     self.publish_symbols(map['config']['missingSvgSymbols'])
                 self.update_urls()
+                self.ui.serviceLinks.setCurrentWidget(self.ui.pageLinks)
                 self.ui.btnPublishMapUpload.hide()
                 self.statusBar().showMessage(u"Map successfully published")
             except Exception:
@@ -291,6 +299,7 @@ class QgisCloudPluginDialog(QDockWidget):
             #Custom path
             if os.path.isfile(sym):
                 self.api.create_graphic(sym, sym)
+        self.statusBar().showMessage("")
 
 
     def reset_load_data(self):
@@ -459,11 +468,13 @@ class QgisCloudPluginDialog(QDockWidget):
                 self.statusBar().showMessage(u"Create new database...")
                 QApplication.processEvents() # refresh status bar
                 self.create_database()
+                self.statusBar().showMessage("")
 
             db_name = self.ui.cbUploadDatabase.currentText()
 
             # disable update of local data sources during upload, as there are temporary layers added and removed
             self.do_update_local_data_sources = False
+            self.statusBar().showMessage(u"Uploading data...")
             self.setCursor(Qt.WaitCursor)
 
             # Map<data_source, {table: table, layers: layers}>
