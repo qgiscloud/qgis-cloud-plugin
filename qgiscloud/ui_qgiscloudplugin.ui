@@ -143,20 +143,6 @@ p, li { white-space: pre-wrap; }
             </item>
             <item>
              <layout class="QGridLayout" name="gridLayout_3">
-              <item row="6" column="1">
-               <widget class="QLabel" name="label_15">
-                <property name="text">
-                 <string>Python:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="2">
-               <widget class="QLabel" name="lblVersionPlugin">
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
               <item row="3" column="2">
                <widget class="QLabel" name="lblVersionQGIS">
                 <property name="text">
@@ -164,15 +150,15 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
-              <item row="5" column="2">
-               <widget class="QLabel" name="lblVersionOGR">
+              <item row="3" column="1">
+               <widget class="QLabel" name="label_11">
                 <property name="text">
-                 <string/>
+                 <string>QGIS:</string>
                 </property>
                </widget>
               </item>
-              <item row="6" column="2">
-               <widget class="QLabel" name="lblVersionPython">
+              <item row="4" column="2">
+               <widget class="QLabel" name="lblVersionPlugin">
                 <property name="text">
                  <string/>
                 </property>
@@ -185,10 +171,10 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
-              <item row="3" column="1">
-               <widget class="QLabel" name="label_11">
+              <item row="6" column="2">
+               <widget class="QLabel" name="lblVersionPython">
                 <property name="text">
-                 <string>QGIS:</string>
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -199,10 +185,17 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
-              <item row="7" column="1">
-               <widget class="QLabel" name="label_16">
+              <item row="6" column="1">
+               <widget class="QLabel" name="label_15">
                 <property name="text">
-                 <string>OS:</string>
+                 <string>Python:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="2">
+               <widget class="QLabel" name="lblVersionOGR">
+                <property name="text">
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -210,6 +203,13 @@ p, li { white-space: pre-wrap; }
                <widget class="QLabel" name="lblVersionOS">
                 <property name="text">
                  <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="1">
+               <widget class="QLabel" name="label_16">
+                <property name="text">
+                 <string>OS:</string>
                 </property>
                </widget>
               </item>
@@ -366,7 +366,7 @@ p, li { white-space: pre-wrap; }
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab">
+      <widget class="QWidget" name="upload">
        <attribute name="title">
         <string>Upload Data</string>
        </attribute>

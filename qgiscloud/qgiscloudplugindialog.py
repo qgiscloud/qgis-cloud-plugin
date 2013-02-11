@@ -27,7 +27,7 @@ from qgis.core import *
 from ui_qgiscloudplugin import Ui_QgisCloudPlugin
 from ui_login import Ui_LoginDialog
 from qgiscloudapi.qgiscloudapi import *
-from pyogr.ogr2ogr import ogr_version_info
+from pyogr.ogr2ogr import ogr_version_info, ogr_version_num
 from db_connections import DbConnections
 from local_data_sources import LocalDataSources
 from data_upload import DataUpload
@@ -38,6 +38,7 @@ import traceback
 import re
 import time
 import platform
+from distutils.version import StrictVersion
 
 class QgisCloudPluginDialog(QDockWidget):
     COLUMN_LAYERS = 0
@@ -92,6 +93,8 @@ class QgisCloudPluginDialog(QDockWidget):
         self.data_upload = DataUpload(self.iface, self.statusBar(), self.ui.uploadProgressBar, self.api, self.db_connections)
 
         self.ui.editServer.setText(self.api.api_url())
+        self.palette_red = QPalette(self.ui.serviceLinks.palette())
+        self.palette_red.setColor(QPalette.WindowText, QColor('red'))
 
     def __del__(self):
         QObject.disconnect(self.iface, SIGNAL("newProjectCreated()"), self.reset_load_data)
@@ -119,43 +122,58 @@ class QgisCloudPluginDialog(QDockWidget):
         self.user = s.value("qgiscloud/user").toString()
 
     def _version_info(self):
-        return {'versions': {'plugin': self.version, 'QGIS': QGis.QGIS_VERSION, 'OS': platform.platform(), 'Python': sys.version}}
+        return {'versions': {'plugin': self.version, 'QGIS': QGis.QGIS_VERSION, 'OGR': ogr_version_info(), 'OS': platform.platform(), 'Python': sys.version}}
 
-    def _update_versions(self):
+    def _update_versions(self, current_plugin_version):
+        version_ok = True
         self.ui.lblVersionQGIS.setText(QGis.QGIS_VERSION)
         self.ui.lblVersionPlugin.setText(self.version)
+        if StrictVersion(self.version) < StrictVersion(current_plugin_version):
+            self.ui.lblVersionPlugin.setPalette(self.palette_red)
+            version_ok = False
         self.ui.lblVersionOGR.setText(ogr_version_info())
+        if ogr_version_num() < 1800:
+            self.ui.lblVersionOGR.setPalette(self.palette_red)
+            version_ok = False
         self.ui.lblVersionPython.setText(sys.version)
         self.ui.lblVersionOS.setText(platform.platform())
+        return version_ok
 
     def check_login(self):
+        version_ok = True
         if not self.api.check_auth():
             login_dialog = QDialog(self)
             login_dialog.ui = Ui_LoginDialog()
             login_dialog.ui.setupUi(login_dialog)
             login_dialog.ui.editUser.setText(self.user)
             login_ok = False
-            while not login_ok:
+            while not login_ok and version_ok:
                 if not login_dialog.exec_():
                     self.api.set_auth(user=login_dialog.ui.editUser.text(), password=None)
                     return login_ok
                 self.api.set_auth(user=login_dialog.ui.editUser.text(), password=login_dialog.ui.editPassword.text())
                 try:
-                    self.api.check_login(version_info=self._version_info())
+                    login_info = self.api.check_login(version_info=self._version_info())
+                    #{u'paid_until': None, u'plan': u'Free', u'current_plugin': u'0.8.0'}
                     self.user = login_dialog.ui.editUser.text()
-                    self._update_versions()
+                    version_ok = self._update_versions(login_info['current_plugin'])
                     self.ui.serviceLinks.setCurrentWidget(self.ui.pageVersions)
                     self.store_settings()
                     self.ui.btnLogin.hide()
                     self.ui.lblSignup.hide()
-                    self.ui.lblLoginStatus.setText("Logged in as %s" % self.user)
+                    self.ui.lblLoginStatus.setText("Logged in as {0} ({1})".format(self.user, login_info['plan']))
                     self.ui.lblLoginStatus.show()
-                    QMessageBox.information(self, "Login successful", "Logged in as %s" % self.user)
+                    if version_ok:
+                        QMessageBox.information(self, "Login successful", "Logged in as {0}".format(self.user))
+                    else:
+                        QMessageBox.information(self, "Login successful", "Unsupported versions detected.\nPlease check your versions first!")
+                        version_ok = False
+                        self.ui.tabWidget.setCurrentWidget(self.ui.services)
                     login_ok = True
                 except (UnauthorizedError, TokenRequiredError, ConnectionException):
                     QMessageBox.critical(self, "Login failed", "Wrong user name or password")
                     login_ok = False
-        return True
+        return version_ok
 
     def create_database(self):
         if self.check_login():
@@ -348,7 +366,7 @@ class QgisCloudPluginDialog(QDockWidget):
             QMessageBox.information(self, title, message)
 
             self.refresh_databases()
-            self.ui.tabWidget.setCurrentIndex(1)
+            self.ui.tabWidget.setCurrentWidget(self.ui.upload)
             return False
 
         return True

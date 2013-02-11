@@ -122,9 +122,13 @@ class API():
 
     def check_login(self, version_info):
         self.requires_auth()
-        resource = '/maps.json?%s' % urlencode(version_info)
+        resource = '/notifications.json'
+        data = {
+            'type': 'Login',
+            'info': version_info
+        }
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
-        content = request.get(resource)
+        content = request.post(resource, data)
         return json.loads(content)
 
     def create_token(self, user, password):

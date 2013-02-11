@@ -1572,6 +1572,9 @@ def TranslateLayer(poSrcDS, poSrcLayer, poDstDS, papszLCO, pszNewLayerName, \
 def ogr_version_info():
     return gdal.VersionInfo('RELEASE_NAME')
 
+def ogr_version_num():
+    return int(gdal.VersionInfo('VERSION_NUM'))
+
 if __name__ == '__main__':
     version_num = int(gdal.VersionInfo('VERSION_NUM'))
     if version_num < 1800: # because of ogr.GetFieldTypeName
