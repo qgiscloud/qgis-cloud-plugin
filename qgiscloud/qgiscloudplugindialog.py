@@ -35,6 +35,7 @@ import os.path
 import sys
 import urllib
 import traceback
+import string
 import re
 import time
 import platform
@@ -233,13 +234,14 @@ class QgisCloudPluginDialog(QDockWidget):
             self.dbs_refreshed = True
 
     def update_urls(self):
-        self.update_url(self.ui.lblWMS, self.api.api_url(), '{0}/{1}'.format(self.user, self.map()))
-        self.update_url(self.ui.lblWebmap, self.api.api_url(), '{0}/{1}'.format(self.user, self.map()))
-        self.update_url(self.ui.lblMobileMap, self.api.api_url(), '{0}/{1}'.format(self.user, self.map()))
-        self.update_url(self.ui.lblMaps, self.api.api_url(), 'maps')
+        self.update_url(self.ui.lblWebmap, self.api.api_url(), 'http://', '{0}/{1}'.format(self.user, self.map()))
+        self.update_url(self.ui.lblMobileMap, self.api.api_url(), 'http://m.', '{0}/{1}'.format(self.user, self.map()))
+        self.update_url(self.ui.lblWMS, self.api.api_url(), 'http://wms.', '{0}/{1}'.format(self.user, self.map()))
+        self.update_url(self.ui.lblMaps, self.api.api_url(), 'http://', 'maps')
 
-    def update_url(self, label, api_url, path):
-        url = '{0}/{1}'.format(api_url, path)
+    def update_url(self, label, api_url, prefix, path):
+        base_url = string.replace(api_url, 'https://api.', prefix)
+        url = '{0}/{1}'.format(base_url, path)
         text = re.sub(r'http[^"]+', url, unicode(label.text()))
         label.setText(text)
 
