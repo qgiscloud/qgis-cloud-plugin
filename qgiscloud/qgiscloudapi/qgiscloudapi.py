@@ -577,7 +577,7 @@ class Request():
                 # All non success STATUS CODES raise an exception containing
                 # the API error message.
                 #
-                msg = e.read().decode('UTF8')
+                msg = e.read().decode('UTF8', errors='ignore')
                 if e.code in [201, 202, 203, 204]: # Workaround for old Pythons
                     return msg
                 elif e.code == 400:
