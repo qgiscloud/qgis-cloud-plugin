@@ -133,7 +133,7 @@ class QgisCloudPluginDialog(QDockWidget):
             self.ui.lblVersionPlugin.setPalette(self.palette_red)
             version_ok = False
         self.ui.lblVersionOGR.setText(ogr_version_info())
-        if ogr_version_num() < 1800:
+        if ogr_version_num() < 1900:
             self.ui.lblVersionOGR.setPalette(self.palette_red)
             version_ok = False
         self.ui.lblVersionPython.setText(sys.version)
