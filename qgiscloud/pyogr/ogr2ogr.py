@@ -4,9 +4,14 @@
 import sys
 import os
 import stat
-import ogr
-import gdal
-import osr
+try:
+    from osgeo import ogr
+    from osgeo import gdal
+    from osgeo import osr
+except ImportError:
+    import ogr
+    import gdal
+    import osr
 
 ###############################################################################
 
@@ -1570,10 +1575,16 @@ def TranslateLayer(poSrcDS, poSrcLayer, poDstDS, papszLCO, pszNewLayerName, \
     return True
 
 def ogr_version_info():
-    return gdal.VersionInfo('RELEASE_NAME')
+    try:
+        return gdal.VersionInfo('RELEASE_NAME')
+    except:
+        return "Unknown"
 
 def ogr_version_num():
-    return int(gdal.VersionInfo('VERSION_NUM'))
+    try:
+        return int(gdal.VersionInfo('VERSION_NUM'))
+    except:
+        return 1000
 
 if __name__ == '__main__':
     version_num = int(gdal.VersionInfo('VERSION_NUM'))
