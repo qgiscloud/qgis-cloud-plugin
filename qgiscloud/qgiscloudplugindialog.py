@@ -467,8 +467,8 @@ class QgisCloudPluginDialog(QDockWidget):
 
             # update table names
             for row in range(0, self.ui.tblLocalLayers.rowCount()):
-                data_source = str(self.ui.tblLocalLayers.item(row, self.COLUMN_DATA_SOURCE).text())
-                table_name = str(self.ui.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text())
+                data_source = unicode(self.ui.tblLocalLayers.item(row, self.COLUMN_DATA_SOURCE).text())
+                table_name = unicode(self.ui.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text())
                 self.data_sources_table_names[data_source] = table_name
 
     def upload_database_selected(self, index):
@@ -500,10 +500,10 @@ class QgisCloudPluginDialog(QDockWidget):
             # Map<data_source, {table: table, layers: layers}>
             data_sources_items = {}
             for row in range(0, self.ui.tblLocalLayers.rowCount()):
-                data_source = str(self.ui.tblLocalLayers.item(row, self.COLUMN_DATA_SOURCE).text())
+                data_source = unicode(self.ui.tblLocalLayers.item(row, self.COLUMN_DATA_SOURCE).text())
                 layers = self.local_data_sources.layers(data_source)
                 if layers != None:
-                    table_name = str(self.ui.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text())
+                    table_name = unicode(self.ui.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text())
                     data_sources_items[data_source] = {'table': table_name, 'layers': layers}
 
             try:
