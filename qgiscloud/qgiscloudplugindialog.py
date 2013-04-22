@@ -492,6 +492,14 @@ class QgisCloudPluginDialog(QDockWidget):
 
             db_name = self.ui.cbUploadDatabase.currentText()
 
+            if not self.db_connections.isPortOpen(db_name):
+                 uri = self.db_connections.cloud_layer_uri(db_name, "", "")
+                 host = str(uri.host())
+                 port = uri.port().toInt()[0]
+                 QMessageBox.critical(self, "Network Error",
+                                      "Could not connect to database server ({0}) on port {1}. Please contact your system administrator or internet provider".format(host, port))
+                 return
+
             # disable update of local data sources during upload, as there are temporary layers added and removed
             self.do_update_local_data_sources = False
             self.statusBar().showMessage(u"Uploading data...")

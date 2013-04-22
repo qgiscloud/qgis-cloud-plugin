@@ -25,6 +25,7 @@ from PyQt4.QtGui import *
 from pg8000 import DBAPI
 from qgis.core import *
 import time
+import socket
 
 class DbConnections:
 
@@ -114,6 +115,18 @@ class DbConnections:
         settings.endGroup()
 
         return uri
+
+    def isPortOpen(self, db_name):
+        uri = self.cloud_layer_uri(db_name, "", "")
+        host = str(uri.host())
+        port = uri.port().toInt()[0]
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            s.connect((host, port))
+            s.shutdown(2)
+            return True
+        except:
+            return False
 
     # workaround: wait until SpacialDB database is available
     def wait_for_db(self, db_name):
