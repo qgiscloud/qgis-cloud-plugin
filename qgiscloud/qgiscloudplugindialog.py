@@ -112,7 +112,7 @@ class QgisCloudPluginDialog(QDockWidget):
             name = re.search(r'.*/(.+).qgs', project.fileName()).group(1)
         except:
             name = ''
-        return name
+        return unicode(name)
 
     def store_settings(self):
         s = QSettings()
@@ -234,14 +234,14 @@ class QgisCloudPluginDialog(QDockWidget):
             self.dbs_refreshed = True
 
     def update_urls(self):
-        self.update_url(self.ui.lblWebmap, self.api.api_url(), 'http://', '{0}/{1}'.format(self.user, self.map()))
-        self.update_url(self.ui.lblMobileMap, self.api.api_url(), 'http://m.', '{0}/{1}'.format(self.user, self.map()))
-        self.update_url(self.ui.lblWMS, self.api.api_url(), 'http://wms.', '{0}/{1}'.format(self.user, self.map()))
+        self.update_url(self.ui.lblWebmap, self.api.api_url(), 'http://', u'{0}/{1}'.format(self.user, self.map()))
+        self.update_url(self.ui.lblMobileMap, self.api.api_url(), 'http://m.', u'{0}/{1}'.format(self.user, self.map()))
+        self.update_url(self.ui.lblWMS, self.api.api_url(), 'http://wms.', u'{0}/{1}'.format(self.user, self.map()))
         self.update_url(self.ui.lblMaps, self.api.api_url(), 'http://', 'maps')
 
     def update_url(self, label, api_url, prefix, path):
         base_url = string.replace(api_url, 'https://api.', prefix)
-        url = '{0}/{1}'.format(base_url, path)
+        url = u'{0}/{1}'.format(base_url, path)
         text = re.sub(r'http[^"]+', url, unicode(label.text()))
         label.setText(text)
 
@@ -306,7 +306,7 @@ class QgisCloudPluginDialog(QDockWidget):
         ret = msgBox.exec_()
         if ret == QMessageBox.Ok:
             project_fname = unicode(QgsProject.instance().fileName())
-            self.api.create_exception(unicode(traceback.format_exc()), self._version_info(), project_fname)
+            self.api.create_exception(str(traceback.format_exc()), self._version_info(), project_fname)
 
     def publish_symbols(self, missingSvgSymbols):
         self.statusBar().showMessage(u"Uploading SVG symbols")

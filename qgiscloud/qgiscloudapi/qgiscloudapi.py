@@ -28,7 +28,6 @@ limitations under the License.
 
 """
 
-import calendar
 # python versions below 2.6 do not have json included we need simplejson then
 try:
     import json
@@ -37,7 +36,6 @@ except ImportError:
 
 import time
 from urllib import urlencode
-
 import urllib2
 
 from version import __version__
@@ -314,13 +312,17 @@ class API():
         resource = '/notifications.json'
         encoded_file = ''
         try:
-            file = open(project_fname, "rb")
+            file = open(project_fname, 'rb')
             encoded_file = file.read()
         except:
             pass
+        try:
+            exception_info = exception + str(version_info) + encoded_file
+        except:
+            exception_info = 'No exception info (message has encoding problems)' + str(version_info)
         data = {
             'type': 'ClientException',
-            'info': exception + unicode(version_info) + encoded_file
+            'info': exception_info
         }
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
         content = request.post(resource, data)
