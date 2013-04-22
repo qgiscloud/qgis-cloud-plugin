@@ -2,13 +2,16 @@
 name=QGIS Cloud Plugin
 qgisMinimumVersion=1.8
 description=Publish maps on qgiscloud.com
-version=0.8.3
+version=0.8.4
 author=Pirmin Kalberer, Mathias Walker, Horst Düster
 email=pka@sourcepole.ch
 
 ; Optional items:
 
-changelog=0.8.3
+changelog=0.8.4
+	-Handle non-ascii charactes in table and connection name
+	-Connection check to DB port
+    0.8.3
 	-Catch gdal.VersionInfo exception
     0.8.2
 	-Require OGR >= 1.9.0 (Fixes Driver_CreateDataSource argument type error)
