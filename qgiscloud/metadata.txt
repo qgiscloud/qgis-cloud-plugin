@@ -9,8 +9,8 @@ email=pka@sourcepole.ch
 ; Optional items:
 
 changelog=0.8.4
-	-Handle non-ascii charactes in table and connection name
 	-Connection check to DB port
+	-Fallback for uploading exception with encoding problems
     0.8.3
 	-Catch gdal.VersionInfo exception
     0.8.2
