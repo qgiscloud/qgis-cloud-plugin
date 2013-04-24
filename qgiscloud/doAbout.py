@@ -36,10 +36,10 @@ class DlgAbout:
     
     def contribString(self):
         contribString = QString("<p><center><b>The developement of QGISCloud-Plugin was supported by the following persons:</b></center></p>") 
-        contribString.append( "<p>Pirmin Kalberer (project manager)<br>" )
-        contribString.append( "Matthias Walker<br>" )
-        contribString.append( "Dr. Marco Hugentobler<br>" )
-        contribString.append( "Dr. Horst Düster<br><br>" )
+        contribString.append( "<p>Pirmin Kalberer (project manager, developer and support)<br>" )
+        contribString.append( "Matthias Walker (developer)<br>" )
+        contribString.append( "Dr. Marco Hugentobler (developer)<br>" )
+        contribString.append( "Dr. Horst Düster (developer and support)<br><br>" )
         return contribString
         
     def licenseString(self):
