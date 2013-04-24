@@ -79,9 +79,15 @@ class StdStreamCapture(object):
     def __enter__(self):
         if self._outputfunc is not None:
             self._old_stdout = sys.stdout
-            self._old_stdout.flush()
+            try:
+                self._old_stdout.flush()
+            except IOError:
+                pass #ignore IOError: [Errno 9] Bad file descriptor
             self._old_stderr = sys.stderr
-            self._old_stderr.flush()
+            try:
+                self._old_stderr.flush()
+            except IOError:
+                pass #ignore IOError: [Errno 9] Bad file descriptor
             sys.stdout = sys.stderr = self
 
     def __exit__(self, exc_type, exc_value, traceback):
