@@ -680,7 +680,7 @@ def ogr2ogrStdstreams(
 #/* -------------------------------------------------------------------- */
 #/*      Open data source.                                               */
 #/* -------------------------------------------------------------------- */
-    if isinstance(pszDataSource, str):
+    if isinstance(pszDataSource, basestring):
         poDS = ogr.Open(pszDataSource, False)
     else:
         poDS = pszDataSource
@@ -1147,6 +1147,7 @@ def TranslateLayer(poSrcDS, poSrcLayer, poDstDS, papszLCO, pszNewLayerName, \
 
     if pszNewLayerName is None:
         pszNewLayerName = poSrcLayer.GetLayerDefn().GetName()
+    pszNewLayerName = pszNewLayerName.encode('ascii','ignore') #unicode is not supported by GetLayerByName
 
     if wkbFlatten(eGType) == ogr.wkbPolygon:
         bForceToPolygon = True

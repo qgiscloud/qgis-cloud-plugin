@@ -232,12 +232,12 @@ class DataUpload:
             qgis_layers = item['layers'] #layers with shared data source
             data_layer = qgis_layers[0]
             srcLayer = self._ogrConnectionString(data_layer)
-            qDebug("ogr2ogr source: %s" % srcLayer)
+            #qDebug("ogr2ogr source: %s" % srcLayer)
             srcUri = QgsDataSourceURI(data_layer.source())
             papszLayers = []
             if srcUri.table() != '':
                 papszLayers = [str(srcUri.table())]
-                qDebug("ogr2ogr layers: " + ' '.join(papszLayers))
+                #qDebug("ogr2ogr layers: " + ' '.join(papszLayers))
             geometry_column = 'wkb_geometry'
             eGType = dest_geometry_types.get(data_layer.wkbType()) or -2 #single to multi geom
             destUri = self.db_connections.cloud_layer_uri(db_name, table_name, geometry_column)
@@ -298,7 +298,7 @@ class DataUpload:
                         parts.append(part)
             ogrstr = 'PG:' + ' '.join(parts)
         else:
-            ogrstr = str(layer.source())
+            ogrstr = unicode(layer.source())
         return ogrstr
 
     def _progress(self, dfComplete, pszMessage, pProgressArg):
