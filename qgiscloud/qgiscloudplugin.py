@@ -46,9 +46,23 @@ class QgisCloudPlugin:
         self.iface.addToolBarIcon(self.action)
         self.iface.addPluginToMenu("&Cloud", self.action)
 
+        self.plugin_dir = QFileInfo(QgsApplication.qgisUserDbFilePath()).path() + "/python/plugins/qgiscloud"
+        # initialize locale
+        localePath = ""
+        locale = QSettings().value("locale/userLocale").toString()[0:2]
+        if QFileInfo(self.plugin_dir).exists():
+            localePath = self.plugin_dir + "/i18n/qgiscloudplugin_" + locale + ".qm"
+
+        if QFileInfo(localePath).exists():
+            self.translator = QTranslator()
+            self.translator.load(localePath)            
+
+            if qVersion() > '4.3.3':
+                QCoreApplication.installTranslator(self.translator)
+                
         # dock widget
         self.dockWidget = QgisCloudPluginDialog(self.iface, self.version)
-        self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)
+        self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)                
 
     def unload(self):
         # Remove the plugin menu item and icon

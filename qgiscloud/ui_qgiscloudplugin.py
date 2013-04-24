@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui_qgiscloudplugin.ui'
+# Form implementation generated from reading ui file '/home/hdus/dev/qgis/qgis-cloud-plugin/qgiscloud/ui_qgiscloudplugin.ui'
 #
-# Created: Mon Apr 22 15:18:48 2013
+# Created: Wed Apr 24 08:35:39 2013
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -270,6 +270,14 @@ class Ui_QgisCloudPlugin(object):
         self.verticalLayout_4.addLayout(self.horizontalLayout_6)
         self.verticalLayout_2.addWidget(self.groupBox_3)
         self.tabWidget.addTab(self.account, _fromUtf8(""))
+        self.about = QtGui.QWidget()
+        self.about.setObjectName(_fromUtf8("about"))
+        self.gridLayout_4 = QtGui.QGridLayout(self.about)
+        self.gridLayout_4.setObjectName(_fromUtf8("gridLayout_4"))
+        self.aboutText = QtGui.QTextEdit(self.about)
+        self.aboutText.setObjectName(_fromUtf8("aboutText"))
+        self.gridLayout_4.addWidget(self.aboutText, 0, 0, 1, 1)
+        self.tabWidget.addTab(self.about, _fromUtf8(""))
         self.verticalLayout.addWidget(self.tabWidget)
         QgisCloudPlugin.setWidget(self.dockWidgetContents)
         self.label_2.setBuddy(self.editServer)
@@ -353,5 +361,16 @@ class Ui_QgisCloudPlugin(object):
         self.btnDbCreate.setText(QtGui.QApplication.translate("QgisCloudPlugin", "Create new database", None, QtGui.QApplication.UnicodeUTF8))
         self.btnDbDelete.setText(QtGui.QApplication.translate("QgisCloudPlugin", "Delete database", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.account), QtGui.QApplication.translate("QgisCloudPlugin", "Account", None, QtGui.QApplication.UnicodeUTF8))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.about), QtGui.QApplication.translate("QgisCloudPlugin", "About", None, QtGui.QApplication.UnicodeUTF8))
 
 import resources_rc
+
+if __name__ == "__main__":
+    import sys
+    app = QtGui.QApplication(sys.argv)
+    QgisCloudPlugin = QtGui.QDockWidget()
+    ui = Ui_QgisCloudPlugin()
+    ui.setupUi(QgisCloudPlugin)
+    QgisCloudPlugin.show()
+    sys.exit(app.exec_())
+

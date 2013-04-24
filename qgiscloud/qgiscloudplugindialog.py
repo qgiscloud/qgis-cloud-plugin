@@ -31,6 +31,7 @@ from pyogr.ogr2ogr import ogr_version_info, ogr_version_num
 from db_connections import DbConnections
 from local_data_sources import LocalDataSources
 from data_upload import DataUpload
+from doAbout import DlgAbout
 import os.path
 import sys
 import urllib
@@ -56,6 +57,8 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui = Ui_QgisCloudPlugin()
         self.ui.setupUi(self)
 
+        myAbout = DlgAbout()
+        self.ui.aboutText.setText(myAbout.aboutString()+myAbout.contribString()+myAbout.licenseString()+"<p>Version: "+version+"</p>")
         self.ui.tblLocalLayers.setColumnCount(5)
         header = ["Layers", "Data source", "Table name", "Geometry type", "SRID"]
         self.ui.tblLocalLayers.setHorizontalHeaderLabels(header)
@@ -162,17 +165,17 @@ class QgisCloudPluginDialog(QDockWidget):
                     self.store_settings()
                     self.ui.btnLogin.hide()
                     self.ui.lblSignup.hide()
-                    self.ui.lblLoginStatus.setText("Logged in as {0} ({1})".format(self.user, login_info['plan']))
+                    self.ui.lblLoginStatus.setText(self.tr("Logged in as {0} ({1})").format(self.user, login_info['plan']))
                     self.ui.lblLoginStatus.show()
                     if version_ok:
-                        QMessageBox.information(self, "Login successful", "Logged in as {0}".format(self.user))
+                        QMessageBox.information(self, self.tr("Login successful"),self.tr("Logged in as {0}").format(self.user))
                     else:
-                        QMessageBox.information(self, "Login successful", "Unsupported versions detected.\nPlease check your versions first!")
+                        QMessageBox.information(self, self.tr("Login successful"), self.tr("Unsupported versions detected.\nPlease check your versions first!"))
                         version_ok = False
                         self.ui.tabWidget.setCurrentWidget(self.ui.services)
                     login_ok = True
                 except (UnauthorizedError, TokenRequiredError, ConnectionException):
-                    QMessageBox.critical(self, "Login failed", "Wrong user name or password")
+                    QMessageBox.critical(self, self.tr("Login failed"), self.tr("Wrong user name or password"))
                     login_ok = False
         return version_ok
 
@@ -187,8 +190,8 @@ class QgisCloudPluginDialog(QDockWidget):
         if self.check_login():
             name = self.ui.tabDatabases.currentItem().text()
             msgBox = QMessageBox()
-            msgBox.setText("Delete QGIS Cloud database.")
-            msgBox.setInformativeText("Do you want to delete the database \"%s\"?" % name)
+            msgBox.setText(self.tr("Delete QGIS Cloud database."))
+            msgBox.setInformativeText(self.tr("Do you want to delete the database \"%s\"?") % name)
             msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
             msgBox.setDefaultButton(QMessageBox.Cancel)
             msgBox.setIcon(QMessageBox.Question)
@@ -222,12 +225,12 @@ class QgisCloudPluginDialog(QDockWidget):
             self.ui.btnDbDelete.setEnabled(False)
             self.ui.cbUploadDatabase.clear()
             if len(self.dbs) == 0:
-                self.ui.cbUploadDatabase.addItem("Create new database")
+                self.ui.cbUploadDatabase.addItem(self.tr("Create new database"))
             elif len(self.dbs) > 1:
-                self.ui.cbUploadDatabase.addItem("Select database")
+                self.ui.cbUploadDatabase.addItem(self.tr("Select database"))
             for name, db in self.dbs.iteritems():
                 it = QListWidgetItem(name)
-                it.setToolTip("host: %s port: %s database: %s username: %s password: %s" % (db['host'], db['port'], name, db['username'], db['password']))
+                it.setToolTip(self.tr("host: %s port: %s database: %s username: %s password: %s") % (db['host'], db['port'], name, db['username'], db['password']))
                 self.ui.tabDatabases.addItem(it)
                 self.ui.cbUploadDatabase.addItem(name)
             self.db_connections.refresh(self.dbs, self.user)
@@ -255,8 +258,8 @@ class QgisCloudPluginDialog(QDockWidget):
         project = QgsProject.instance()
         if project.isDirty():
             msgBox = QMessageBox()
-            msgBox.setText("The project has been modified.")
-            msgBox.setInformativeText("Do you want to save your changes?")
+            msgBox.setText(self.tr("The project has been modified."))
+            msgBox.setInformativeText(self.tr("Do you want to save your changes?"))
             msgBox.setStandardButtons(QMessageBox.Save | QMessageBox.Ignore | QMessageBox.Cancel)
             msgBox.setDefaultButton(QMessageBox.Save)
             ret = msgBox.exec_()
@@ -272,7 +275,7 @@ class QgisCloudPluginDialog(QDockWidget):
             return
         fname = unicode(QgsProject.instance().fileName())
         if self.check_login() and self.check_layers():
-            self.statusBar().showMessage(u"Publishing map")
+            self.statusBar().showMessage(self.tr("Publishing map"))
             try:
                 fullExtent = self.iface.mapCanvas().fullExtent()
                 config = {
@@ -291,16 +294,16 @@ class QgisCloudPluginDialog(QDockWidget):
                 self.update_urls()
                 self.ui.serviceLinks.setCurrentWidget(self.ui.pageLinks)
                 self.ui.btnPublishMapUpload.hide()
-                self.statusBar().showMessage(u"Map successfully published")
+                self.statusBar().showMessage(self.tr("Map successfully published"))
             except Exception:
                 self.statusBar().showMessage("")
-                self._exception_message("Error uploading project")
+                self._exception_message(self.tr("Error uploading project"))
 
     def _exception_message(self, title):
         stack = traceback.format_exc().splitlines()
         msgBox = QMessageBox()
-        msgBox.setText("An error occurred: %s" % stack[-1])
-        msgBox.setInformativeText("Do you want to send the exception info to qgiscloud.com?")
+        msgBox.setText(self.tr("An error occurred: %s") % stack[-1])
+        msgBox.setInformativeText(self.tr("Do you want to send the exception info to qgiscloud.com?"))
         msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
         msgBox.setIcon(QMessageBox.Question)
         ret = msgBox.exec_()
@@ -309,7 +312,7 @@ class QgisCloudPluginDialog(QDockWidget):
             self.api.create_exception(str(traceback.format_exc()), self._version_info(), project_fname)
 
     def publish_symbols(self, missingSvgSymbols):
-        self.statusBar().showMessage(u"Uploading SVG symbols")
+        self.statusBar().showMessage(self.tr("Uploading SVG symbols"))
         #Search and upload symbol files
         for sym in missingSvgSymbols:
             for path in QgsApplication.svgPaths():
@@ -343,7 +346,7 @@ class QgisCloudPluginDialog(QDockWidget):
         try:
             self.update_local_data_sources(local_layers)
         except:
-            self._exception_message("Error checking local data sources")
+            self._exception_message(self.tr("Error checking local data sources"))
 
         return local_layers, unsupported_layers
 
@@ -353,17 +356,17 @@ class QgisCloudPluginDialog(QDockWidget):
             message = ""
 
             if local_layers:
-                title = "Local layers found"
-                message += "Some layers are using local data. You can upload local layers to your cloud database in the 'Upload Data' tab.\n\n"
+                title = self.tr("Local layers found")
+                message += self.tr("Some layers are using local data. You can upload local layers to your cloud database in the 'Upload Data' tab.\n\n")
 
             if unsupported_layers:
-                title = "Unsupported layers found"
-                message += "Raster, plugin or geometryless layers are not supported:\n\n"
+                title = self.tr("Unsupported layers found")
+                message += self.tr("Raster, plugin or geometryless layers are not supported:\n\n")
                 layer_types = ["No geometry", "Raster", "Plugin"]
                 for layer in sorted(unsupported_layers, key=lambda layer: layer.name()):
-                    message += "  -  %s (%s)\n" % (layer.name(), layer_types[layer.type()])
-                message += "\nPlease remove or replace above layers before publishing your map.\n"
-                message += "For raster data you can use public WMS layers or the OpenLayers Plugin."
+                    message += self.tr("  -  %s (%s)\n") % (layer.name(), layer_types[layer.type()])
+                message += self.tr("\nPlease remove or replace above layers before publishing your map.\n")
+                message += self.tr("For raster data you can use public WMS layers or the OpenLayers Plugin.")
 
             QMessageBox.information(self, title, message)
 
@@ -415,10 +418,10 @@ class QgisCloudPluginDialog(QDockWidget):
             table_name_item = QTableWidgetItem(QgisCloudPluginDialog.launder_pg_name(table_name))
             wkbType = layers[0].wkbType()
             if wkbType not in geometry_types:
-                raise Exception("Unsupported geometry type '%s' in layer '%s'" % (wkbType, layers[0].name()))
+                raise Exception(self.tr("Unsupported geometry type '%s' in layer '%s'") % (wkbType, layers[0].name()))
             geometry_type_item = QTableWidgetItem(geometry_types[wkbType])
             if layers[0].providerType() == "ogr":
-                geometry_type_item.setToolTip("Note: OGR features will be converted to MULTI-type")
+                geometry_type_item.setToolTip(self.tr("Note: OGR features will be converted to MULTI-type"))
             srid_item = QTableWidgetItem(layers[0].crs().authid())
 
             row = self.ui.tblLocalLayers.rowCount()
@@ -438,7 +441,7 @@ class QgisCloudPluginDialog(QDockWidget):
         else:
             self.ui.btnUploadData.setEnabled(False)
 
-        self.statusBar().showMessage(u"Updated local data sources")
+        self.statusBar().showMessage(self.tr("Updated local data sources"))
 
     @staticmethod
     def launder_pg_name(name):
@@ -485,7 +488,7 @@ class QgisCloudPluginDialog(QDockWidget):
 
             if len(self.dbs) == 0:
                 # create db
-                self.statusBar().showMessage(u"Create new database...")
+                self.statusBar().showMessage(self.tr("Create new database..."))
                 QApplication.processEvents() # refresh status bar
                 self.create_database()
                 self.statusBar().showMessage("")
@@ -496,13 +499,13 @@ class QgisCloudPluginDialog(QDockWidget):
                  uri = self.db_connections.cloud_layer_uri(db_name, "", "")
                  host = str(uri.host())
                  port = uri.port().toInt()[0]
-                 QMessageBox.critical(self, "Network Error",
-                                      "Could not connect to database server ({0}) on port {1}. Please contact your system administrator or internet provider".format(host, port))
+                 QMessageBox.critical(self, self.tr("Network Error"),
+                                      self.tr("Could not connect to database server ({0}) on port {1}. Please contact your system administrator or internet provider".format(host, port)))
                  return
 
             # disable update of local data sources during upload, as there are temporary layers added and removed
             self.do_update_local_data_sources = False
-            self.statusBar().showMessage(u"Uploading data...")
+            self.statusBar().showMessage(self.tr("Uploading data..."))
             self.setCursor(Qt.WaitCursor)
 
             # Map<data_source, {table: table, layers: layers}>
@@ -521,7 +524,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 success = self.data_upload.ogr2ogr(db_name, data_sources_items, self.ui.cbReplaceLocalLayers.isChecked())
             except Exception:
                 success = False
-                self._exception_message("Data upload error")
+                self._exception_message(self.tr("Data upload error"))
 
             self.unsetCursor()
             self.statusBar().showMessage("")
@@ -532,9 +535,9 @@ class QgisCloudPluginDialog(QDockWidget):
 
                 # show save project dialog
                 msgBox = QMessageBox()
-                msgBox.setWindowTitle("QGIS Cloud")
-                msgBox.setText("The project is ready for publishing.")
-                msgBox.setInformativeText("Do you want to save your changes?")
+                msgBox.setWindowTitle(self.tr("QGIS Cloud"))
+                msgBox.setText(self.tr("The project is ready for publishing."))
+                msgBox.setInformativeText(self.tr("Do you want to save your changes?"))
                 msgBox.setStandardButtons(QMessageBox.Save | QMessageBox.Cancel)
                 msgBox.setDefaultButton(QMessageBox.Save)
                 ret = msgBox.exec_()
@@ -544,8 +547,8 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def show_api_error(self, result):
         if 'error' in result:
-            QMessageBox.critical(self, "QGIS Cloud Error", "%s" % result['error'])
-            self.statusBar().showMessage(u"Error")
+            QMessageBox.critical(self, self.tr("QGIS Cloud Error"), "%s" % result['error'])
+            self.statusBar().showMessage(self.tr("Error"))
             return True
         else:
             return False
