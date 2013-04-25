@@ -165,10 +165,10 @@ class QgisCloudPluginDialog(QDockWidget):
                     self.store_settings()
                     self.ui.btnLogin.hide()
                     self.ui.lblSignup.hide()
-                    self.ui.lblLoginStatus.setText(self.tr("Logged in as {0} ({1})").format(self.user, login_info['plan']))
+                    self.ui.lblLoginStatus.setText(str(self.tr("Logged in as {0} ({1})")).format(self.user, login_info['plan']))
                     self.ui.lblLoginStatus.show()
                     if version_ok:
-                        QMessageBox.information(self, self.tr("Login successful"),self.tr("Logged in as {0}").format(self.user))
+                        QMessageBox.information(self, self.tr("Login successful"),str(self.tr("Logged in as {0}")).format(self.user))
                     else:
                         QMessageBox.information(self, self.tr("Login successful"), self.tr("Unsupported versions detected.\nPlease check your versions first!"))
                         version_ok = False
@@ -230,7 +230,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 self.ui.cbUploadDatabase.addItem(self.tr("Select database"))
             for name, db in self.dbs.iteritems():
                 it = QListWidgetItem(name)
-                it.setToolTip(self.tr("host: %s port: %s database: %s username: %s password: %s") % (db['host'], db['port'], name, db['username'], db['password']))
+                it.setToolTip("host: %s port: %s database: %s username: %s password: %s" % (db['host'], db['port'], name, db['username'], db['password']))
                 self.ui.tabDatabases.addItem(it)
                 self.ui.cbUploadDatabase.addItem(name)
             self.db_connections.refresh(self.dbs, self.user)
