@@ -72,7 +72,8 @@ class LocalDataSources:
         # get unique local data sources
         self.local_data_sources = {}
         for layer in sorted(local_layers, key=lambda layer: layer.name()):
-            qDebug("local layer source: {0} (provider type: {1})".format(layer.source(), layer.providerType()))
+            #qDebug("local layer source: {0} (provider type: {1})".format(layer.source(), layer.providerType()))
+            #Disabled because of UnicodeEncodeError: 'ascii' codec can't encode character u'\xf3' in position 18: ordinal not in range(128)
             # get layer source without filter
             ds = QgsDataSourceURI(layer.source())
             if len(ds.connectionInfo()) > 0:
@@ -82,10 +83,10 @@ class LocalDataSources:
             elif layer.providerType() == "ogr":
                 # OGR
                 f = layer.source().split('|')[0]
-                data_source = str(f)
+                data_source = unicode(f)
             else:
                 # FIXME: other providers
-                data_source = str(layer.source())
+                data_source = unicode(layer.source())
 
             # group layers by source
             if self.local_data_sources.has_key(data_source):
