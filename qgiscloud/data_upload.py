@@ -312,9 +312,10 @@ class DataUpload:
     def _replace_local_layers(self, layers_to_replace):
         if len(layers_to_replace) > 0:
             # replace local layers while keeping layer order
-            layer_ids = list(self.iface.mapCanvas().mapRenderer().layerSet())
-            layer_ids.reverse()
-            for layer_id in layer_ids:
+            layers = self.iface.legendInterface().layers()
+            layers.reverse()
+            for layer in layers:
+                layer_id = layer.id()
                 if layer_id in layers_to_replace:
                     # replace local layer
                     layer_info = layers_to_replace[layer_id]
@@ -333,6 +334,7 @@ class DataUpload:
                         if target_layer.isValid():
                             self.copy_layer_settings(source_layer, target_layer)
                             QgsMapLayerRegistry.instance().addMapLayer(target_layer)
+                            self.iface.legendInterface().setLayerVisible(target_layer, self.iface.legendInterface().isLayerVisible(source_layer))
                             QgsMapLayerRegistry.instance().removeMapLayer(layer_id)
 
     def replace_local_layer(self, local_layer, data_source, db_name, table_name, geom_column):
@@ -347,6 +349,7 @@ class DataUpload:
             # add remote layer
             QgsMapLayerRegistry.instance().addMapLayer(remote_layer)
             remote_layer.updateExtents()
+            self.iface.legendInterface().setLayerVisible(remote_layer, self.iface.legendInterface().isLayerVisible(local_layer))
 
             # remove local layer
             QgsMapLayerRegistry.instance().removeMapLayer(local_layer.id())
