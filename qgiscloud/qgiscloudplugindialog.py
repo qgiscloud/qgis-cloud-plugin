@@ -192,7 +192,7 @@ class QgisCloudPluginDialog(QDockWidget):
             name = self.ui.tabDatabases.currentItem().text()
             msgBox = QMessageBox()
             msgBox.setText(self.tr("Delete QGIS Cloud database."))
-            msgBox.setInformativeText(self.tr("Do you want to delete the database \"%s\"?") % name)
+            msgBox.setInformativeText(self.tr_uni("Do you want to delete the database \"%s\"?") % name)
             msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
             msgBox.setDefaultButton(QMessageBox.Cancel)
             msgBox.setIcon(QMessageBox.Question)
