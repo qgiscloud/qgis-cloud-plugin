@@ -114,3 +114,5 @@ doc:
 # To plugins.qgis.org:
 # make package VERSION=master
 # make upload
+# Web application:
+# cap production rake:invoke task=qgiscloud:fetch_plugin_xml
