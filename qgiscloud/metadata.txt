@@ -2,13 +2,15 @@
 name=QGIS Cloud Plugin
 qgisMinimumVersion=1.8
 description=Publish maps on qgiscloud.com
-version=0.9.0
+version=0.9.1
 author=Pirmin Kalberer, Mathias Walker, Horst Düster
 email=pka@sourcepole.ch
 
 ; Optional items:
 
-changelog=0.9.0
+changelog=0.9.1
+	-Fix deleting databases with non-ascii names
+    0.9.0
 	-German translation
 	-Fixed uploading inactive layers
 	-Handle shape files with non-latin file names
