@@ -49,7 +49,7 @@ class QgisCloudPlugin:
         self.plugin_dir = QFileInfo(QgsApplication.qgisUserDbFilePath()).path() + "/python/plugins/qgiscloud"
         # initialize locale
         localePath = ""
-        locale = QSettings().value("locale/userLocale").toString()[0:2]
+        locale = QSettings().value("locale/userLocale", type=str)[0:2]
         if QFileInfo(self.plugin_dir).exists():
             localePath = self.plugin_dir + "/i18n/qgiscloudplugin_" + locale + ".qm"
 

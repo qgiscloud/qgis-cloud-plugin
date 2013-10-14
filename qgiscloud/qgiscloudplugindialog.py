@@ -49,6 +49,23 @@ class QgisCloudPluginDialog(QDockWidget):
     COLUMN_GEOMETRY_TYPE = 3
     COLUMN_SRID = 4
 
+    GEOMETRY_TYPES = {
+        QGis.WKBUnknown: "Unknown",
+        QGis.WKBPoint: "Point",
+        QGis.WKBMultiPoint: "MultiPoint",
+        QGis.WKBLineString: "LineString",
+        QGis.WKBMultiLineString: "MultiLineString",
+        QGis.WKBPolygon: "Polygon",
+        QGis.WKBMultiPolygon: "MultiPolygon",
+        100: "No geometry", # Workaround (missing Python binding?): QGis.WKBNoGeometry / ogr.wkbNone
+        QGis.WKBPoint25D: "Point",
+        QGis.WKBLineString25D: "LineString",
+        QGis.WKBPolygon25D: "Polygon",
+        QGis.WKBMultiPoint25D: "MultiPoint",
+        QGis.WKBMultiLineString25D: "MultiLineString",
+        QGis.WKBMultiPolygon25D: "MultiPolygon"
+    }
+
     def __init__(self, iface, version):
         QDockWidget.__init__(self, None)
         self.iface = iface
@@ -72,6 +89,7 @@ class QgisCloudPluginDialog(QDockWidget):
 
         # map<data source, table name>
         self.data_sources_table_names = {}
+        self.dbs = {}
         self.dbs_refreshed = False
         # flag to disable update of local data sources during upload
         self.do_update_local_data_sources = True
@@ -110,11 +128,7 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def map(self):
         project = QgsProject.instance()
-        name = ''
-        try:
-            name = re.search(r'.*/(.+).qgs', project.fileName()).group(1)
-        except:
-            name = ''
+        name = os.path.splitext(os.path.basename(project.fileName()))[0]
         return unicode(name)
 
     def store_settings(self):
@@ -123,7 +137,7 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def read_settings(self):
         s = QSettings()
-        self.user = s.value("qgiscloud/user").toString()
+        self.user = s.value("qgiscloud/user", "", type=str)
 
     def _version_info(self):
         return {'versions': {'plugin': self.version, 'QGIS': QGis.QGIS_VERSION, 'OGR': ogr_version_info(), 'OS': platform.platform(), 'Python': sys.version}}
@@ -259,16 +273,16 @@ class QgisCloudPluginDialog(QDockWidget):
             msgBox = QMessageBox()
             msgBox.setText(self.tr("The project has been modified."))
             msgBox.setInformativeText(self.tr("Do you want to save your changes?"))
-            if fname == '':
+            if not fname:
                 msgBox.setStandardButtons(QMessageBox.Save | QMessageBox.Cancel)
             else:
                 msgBox.setStandardButtons(QMessageBox.Save | QMessageBox.Ignore | QMessageBox.Cancel)
             msgBox.setDefaultButton(QMessageBox.Save)
             ret = msgBox.exec_()
             if ret == QMessageBox.Save:
-                if fname == '':
+                if not fname:
                     project.setFileName(QFileDialog.getOpenFileName(self, "Save Project", "", "QGis files  (*.qgs)"))
-                if unicode(project.fileName()) == '':
+                if not unicode(project.fileName()):
                     cancel = True
                 else:
                     project.write()
@@ -394,23 +408,6 @@ class QgisCloudPluginDialog(QDockWidget):
         while self.ui.tblLocalLayers.rowCount() > 0:
             self.ui.tblLocalLayers.removeRow(0)
 
-        geometry_types = {
-            QGis.WKBUnknown: "Unknown",
-            QGis.WKBPoint: "Point",
-            QGis.WKBMultiPoint: "MultiPoint",
-            QGis.WKBLineString: "LineString",
-            QGis.WKBMultiLineString: "MultiLineString",
-            QGis.WKBPolygon: "Polygon",
-            QGis.WKBMultiPolygon: "MultiPolygon",
-            100: "No geometry", # FIXME: QGis.WKBNoGeometry / ogr.wkbNone
-            QGis.WKBPoint25D: "Point",
-            QGis.WKBLineString25D: "LineString",
-            QGis.WKBPolygon25D: "Polygon",
-            QGis.WKBMultiPoint25D: "MultiPoint",
-            QGis.WKBMultiLineString25D: "MultiLineString",
-            QGis.WKBMultiPolygon25D: "MultiPolygon"
-        }
-
         for data_source, layers in self.local_data_sources.iteritems():
             layer_names = []
             for layer in layers:
@@ -425,9 +422,9 @@ class QgisCloudPluginDialog(QDockWidget):
                 table_name = self.data_sources_table_names[data_source]
             table_name_item = QTableWidgetItem(QgisCloudPluginDialog.launder_pg_name(table_name))
             wkbType = layers[0].wkbType()
-            if wkbType not in geometry_types:
+            if wkbType not in self.GEOMETRY_TYPES:
                 raise Exception(self.tr("Unsupported geometry type '%s' in layer '%s'") % (wkbType, layers[0].name()))
-            geometry_type_item = QTableWidgetItem(geometry_types[wkbType])
+            geometry_type_item = QTableWidgetItem(self.GEOMETRY_TYPES[wkbType])
             if layers[0].providerType() == "ogr":
                 geometry_type_item.setToolTip(self.tr("Note: OGR features will be converted to MULTI-type"))
             srid_item = QTableWidgetItem(layers[0].crs().authid())
@@ -506,7 +503,7 @@ class QgisCloudPluginDialog(QDockWidget):
             if not self.db_connections.isPortOpen(db_name):
                  uri = self.db_connections.cloud_layer_uri(db_name, "", "")
                  host = str(uri.host())
-                 port = uri.port().toInt()[0]
+                 port = uri.port()
                  QMessageBox.critical(self, self.tr("Network Error"),
                                       self.tr("Could not connect to database server ({0}) on port {1}. Please contact your system administrator or internet provider".format(host, port)))
                  return
@@ -526,9 +523,6 @@ class QgisCloudPluginDialog(QDockWidget):
                     data_sources_items[data_source] = {'table': table_name, 'layers': layers}
 
             try:
-                #Via QGIS providers:
-                #success = self.data_upload.upload_data(db_name, data_sources_items, self.ui.cbReplaceLocalLayers.isChecked())
-                #Via OGR:
                 success = self.data_upload.ogr2ogr(db_name, data_sources_items, self.ui.cbReplaceLocalLayers.isChecked())
             except Exception:
                 success = False

@@ -1,14 +1,17 @@
 [general]
 name=QGIS Cloud Plugin
-qgisMinimumVersion=1.8
+qgisMinimumVersion=2.0
+qgisMaximumVersion=2.99
 description=Publish maps on qgiscloud.com
-version=0.9.1
+version=0.10.0
 author=Pirmin Kalberer, Mathias Walker, Horst Düster
 email=pka@sourcepole.ch
 
 ; Optional items:
 
-changelog=0.9.1
+changelog=0.10.0
+    -Port to QGIS 2
+    0.9.1
 	-Fix deleting databases with non-ascii names
     0.9.0
 	-German translation

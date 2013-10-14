@@ -25,11 +25,11 @@ def name():
 def description():
     return "Publish maps on qgiscloud.com"
 def version():
-    return "0.9.1"
+    return "0.10.0"
 def icon():
     return "icon.png"
 def qgisMinimumVersion():
-    return "1.8"
+    return "2.0"
 def author():
   return "Sourcepole"
 def classFactory(iface):

@@ -40,8 +40,8 @@ class DbConnections:
         settings.beginGroup(u"/PostgreSQL/connections")
         for name in settings.childGroups():
             settings.beginGroup(name)
-            db = settings.value("database").toString()
-            host = settings.value("host").toString()
+            db = settings.value("database", type=str)
+            host = settings.value("host", type=str)
             if db == db_name and host in self.CLOUD_DB_HOSTS:
                 connection_names.append(name)
             settings.endGroup()
@@ -51,11 +51,11 @@ class DbConnections:
     def add(self, name, host, port, database, username, password):
         settings = QSettings()
         key = u"/PostgreSQL/connections/" + name
-        settings.setValue(key + "/host", QVariant(host))
+        settings.setValue(key + "/host", host)
         settings.setValue(key + "/port", port)
-        settings.setValue(key + "/database", QVariant(database))
-        settings.setValue(key + "/username", QVariant(username))
-        settings.setValue(key + "/password", QVariant(password))
+        settings.setValue(key + "/database", database)
+        settings.setValue(key + "/username", username)
+        settings.setValue(key + "/password", password)
         settings.setValue(key + "/sslmode", 0) # prefer
         settings.setValue(key + "/saveUsername", True)
         settings.setValue(key + "/savePassword", True)
@@ -72,7 +72,8 @@ class DbConnections:
         settings = QSettings()
 
         cloud_dbs_from_server = dbs.keys()
-        cloud_dbs_from_settings = map(lambda conn: str(conn), settings.value(cloud_connections_key).toStringList())
+        stored_connections = settings.value(cloud_connections_key) or []
+        cloud_dbs_from_settings = map(lambda conn: str(conn), stored_connections)
 
         # remove obsolete connections
         for db_name in (set(cloud_dbs_from_settings) - set(cloud_dbs_from_server)):
@@ -101,14 +102,14 @@ class DbConnections:
             settings.beginGroup(connections[0])
             # create uri
             uri.setConnection(
-                settings.value("host").toString(),
-                settings.value("port").toString(),
-                settings.value("database").toString(),
-                settings.value("username").toString(),
-                settings.value("password").toString(),
-                QgsDataSourceURI.SSLmode(settings.value("sslmode").toInt()[0])
+                settings.value("host", type=str),
+                settings.value("port", type=str),
+                settings.value("database", type=str),
+                settings.value("username", type=str),
+                settings.value("password", type=str),
+                QgsDataSourceURI.SSLmode(settings.value("sslmode", type=int))
             )
-            uri.setUseEstimatedMetadata(settings.value("estimatedMetadata").toBool())
+            uri.setUseEstimatedMetadata(settings.value("estimatedMetadata", type=bool))
             uri.setDataSource("", table_name, geom_column)
 
             settings.endGroup()
@@ -118,8 +119,10 @@ class DbConnections:
 
     def isPortOpen(self, db_name):
         uri = self.cloud_layer_uri(db_name, "", "")
+        if not uri.port():
+            return False
         host = str(uri.host())
-        port = uri.port().toInt()[0]
+        port = int(uri.port())
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             s.connect((host, port))
@@ -128,7 +131,7 @@ class DbConnections:
         except:
             return False
 
-    # workaround: wait until SpacialDB database is available
+    # Wait until cloud database is available (creation is asynchronous)
     def wait_for_db(self, db_name):
         uri = self.cloud_layer_uri(db_name, "", "")
         ok = False
@@ -137,7 +140,7 @@ class DbConnections:
             try:
                 connection = DBAPI.connect(
                      host = str(uri.host()),
-                     port = uri.port().toInt()[0],
+                     port = int(uri.port()),
                      database = str(uri.database()),
                      user = str(uri.username()),
                      password = str(uri.password()),
