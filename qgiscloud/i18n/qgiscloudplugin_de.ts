@@ -51,9 +51,9 @@ p, li { white-space: pre-wrap; }
 
 It&apos;s free to get started and sign up is instant. Publish your first map within minutes.</source>
         <translation>
-Publizieren Sie Ihre eigenen Karten direkt von Arbeitsplatz!
+Publizieren Sie Ihre eigenen Karten direkt vom Arbeitsplatz!
 
-Es ist kostenlos anzufangen und sofort ein QGISCloud Konto anzulegen. Pubizieren Sie Ihre erste Karte in Minuten.</translation>
+Legen Sie ein kostenloses Konto an und publizieren Sie Ihre erste Karte in Minuten.</translation>
     </message>
     <message>
         <location filename="ui_qgiscloudplugin.py" line="353"/>

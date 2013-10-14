@@ -202,11 +202,8 @@ class QgisCloudPluginDialog(QDockWidget):
                 result = self.api.delete_database(name)
                 self.show_api_error(result)
                 self.ui.btnDbDelete.setEnabled(False)
+                time.sleep(2)
                 self.refresh_databases()
-                while name in self.dbs.keys():
-                  # wait until db is deleted on server
-                  time.sleep(2)
-                  self.refresh_databases()
                 self.unsetCursor()
 
     def select_database(self):
