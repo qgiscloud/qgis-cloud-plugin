@@ -55,6 +55,7 @@ class DataUpload:
         os.environ['PG_USE_COPY'] = 'YES'
         os.environ['PG_USE_BASE64'] = 'YES'
 
+        import_ok = True
         layers_to_replace = {}
         for data_source, item in data_sources_items.iteritems():
             table_name = item['table']
@@ -86,13 +87,12 @@ class DataUpload:
                 bDisplayProgress=True,
                 progress_func=self._progress,
                 errfunc=self._ogrerr)
+            qDebug("ogr2ogr result: %s" % ok)
+            import_ok = import_ok and ok
 
             self.progress_bar.hide()
 
-            if not ok:
-                raise Exception("Error in ogr2ogr")
-
-            if do_replace_local_layers:
+            if ok and do_replace_local_layers:
                 for layer in qgis_layers:
                     layers_to_replace[layer.id()] = {
                         'layer': layer,
@@ -104,7 +104,7 @@ class DataUpload:
 
         self._replace_local_layers(layers_to_replace)
 
-        return True
+        return import_ok
 
     def _ogrCloudConnectionString(self, uri):
         return "PG:host='%s' port='%s' dbname='%s' user='%s' password='%s'" % (
@@ -139,7 +139,8 @@ class DataUpload:
         QApplication.processEvents() # allow progress bar to scale properly
 
     def _ogrerr(self, text):
-        qDebug(text) #TODO: user log
+        if text.strip(): #Skip newlines
+            QgsMessageLog.logMessage(text, 'QGISCloud')
 
     def _replace_local_layers(self, layers_to_replace):
         if len(layers_to_replace) > 0:

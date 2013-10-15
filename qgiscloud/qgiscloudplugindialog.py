@@ -526,7 +526,9 @@ class QgisCloudPluginDialog(QDockWidget):
                 success = self.data_upload.ogr2ogr(db_name, data_sources_items, self.ui.cbReplaceLocalLayers.isChecked())
             except Exception:
                 success = False
-                self._exception_message(self.tr("Data upload error"))
+                QgsMessageLog.logMessage(str(traceback.format_exc()), 'QGISCloud')
+            if not success:
+                QMessageBox.warning(self, self.tr("Upload data"), self.tr("Data upload error.\nSee Log Messages for more information."))
 
             self.unsetCursor()
             self.statusBar().showMessage("")
