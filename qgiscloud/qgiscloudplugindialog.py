@@ -89,8 +89,6 @@ class QgisCloudPluginDialog(QDockWidget):
 
         # map<data source, table name>
         self.data_sources_table_names = {}
-        self.dbs = {}
-        self.dbs_refreshed = False
         # flag to disable update of local data sources during upload
         self.do_update_local_data_sources = True
 
@@ -228,25 +226,24 @@ class QgisCloudPluginDialog(QDockWidget):
             db_list = self.api.read_databases()
             if self.show_api_error(db_list):
               return
-            self.dbs = {} # Map<dbname, {dbattributes}>
+            self.db_connections = DbConnections()
             for db in db_list:
                 #db example: {"host":"spacialdb.com","connection_string":"postgres://sekpjr_jpyled:d787b609@spacialdb.com:9999/sekpjr_jpyled","name":"sekpjr_jpyled","username":"sekpjr_jpyled","port":9999,"password":"d787b609"}
-                self.dbs[db['name']] = {'host': db['host'], 'port': db['port'], 'username': db['username'], 'password': db['password']}
+                self.db_connections.add_from_json(db)
 
             self.ui.tabDatabases.clear()
             self.ui.btnDbDelete.setEnabled(False)
             self.ui.cbUploadDatabase.clear()
-            if len(self.dbs) == 0:
+            if self.db_connections.count() == 0:
                 self.ui.cbUploadDatabase.addItem(self.tr("Create new database"))
-            elif len(self.dbs) > 1:
+            elif self.db_connections.count() > 1:
                 self.ui.cbUploadDatabase.addItem(self.tr("Select database"))
-            for name, db in self.dbs.iteritems():
+            for name, db in self.db_connections.iteritems():
                 it = QListWidgetItem(name)
-                it.setToolTip(self.tr_uni("host: %s port: %s database: %s username: %s password: %s") % (db['host'], db['port'], name, db['username'], db['password']))
+                it.setToolTip(db.description())
                 self.ui.tabDatabases.addItem(it)
                 self.ui.cbUploadDatabase.addItem(name)
-            self.db_connections.refresh(self.dbs, self.user)
-            self.dbs_refreshed = True
+            self.db_connections.refresh(self.user)
 
     def update_urls(self):
         self.update_url(self.ui.lblWebmap, self.api.api_url(), 'http://', u'{0}/{1}'.format(self.user, self.map()))
@@ -353,13 +350,13 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.btnPublishMapUpload.hide()
 
     def remove_layer(self, layer_id):
-        if self.dbs_refreshed and self.do_update_local_data_sources:
+        if self.db_connections.refreshed() and self.do_update_local_data_sources:
             # skip layer if layer will be removed
             self.update_local_layers(layer_id)
             self.activate_upload_button()
 
     def add_layer(self):
-        if self.dbs_refreshed and self.do_update_local_data_sources:
+        if self.db_connections.refreshed() and self.do_update_local_data_sources:
             self.update_local_layers()
             self.activate_upload_button()
 
@@ -453,7 +450,7 @@ class QgisCloudPluginDialog(QDockWidget):
         return re.sub(r"[#'-]", '_', unicode(name).lower()) #OGRPGDataSource::LaunderName
 
     def refresh_local_data_sources(self):
-        if not self.dbs_refreshed:
+        if not self.db_connections.refreshed():
             # get dbs on first refresh
             self.refresh_databases()
         self.do_update_local_data_sources = True
@@ -483,7 +480,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.activate_upload_button()
 
     def activate_upload_button(self):
-        self.ui.btnUploadData.setEnabled((len(self.dbs) <= 1 or self.ui.cbUploadDatabase.currentIndex() > 0) and self.local_data_sources.count() > 0)
+        self.ui.btnUploadData.setEnabled((self.db_connections.count() <= 1 or self.ui.cbUploadDatabase.currentIndex() > 0) and self.local_data_sources.count() > 0)
         self.ui.btnPublishMapUpload.hide()
 
     def upload_data(self):
@@ -491,7 +488,7 @@ class QgisCloudPluginDialog(QDockWidget):
             if self.local_data_sources.count() == 0:
                 return
 
-            if len(self.dbs) == 0:
+            if self.db_connections.count() == 0:
                 # create db
                 self.statusBar().showMessage(self.tr("Create new database..."))
                 QApplication.processEvents() # refresh status bar
@@ -523,7 +520,7 @@ class QgisCloudPluginDialog(QDockWidget):
                     data_sources_items[data_source] = {'table': table_name, 'layers': layers}
 
             try:
-                success = self.data_upload.ogr2ogr(db_name, data_sources_items, self.ui.cbReplaceLocalLayers.isChecked())
+                success = self.data_upload.upload(self.db_connections.db(db_name), data_sources_items, self.ui.cbReplaceLocalLayers.isChecked())
             except Exception:
                 success = False
                 QgsMessageLog.logMessage(str(traceback.format_exc()), 'QGISCloud')

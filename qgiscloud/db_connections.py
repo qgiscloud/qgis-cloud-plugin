@@ -22,69 +22,49 @@
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-from pg8000 import DBAPI
 from qgis.core import *
+from db_connection_cfg import DbConnectionCfg
 import time
 import socket
 
 class DbConnections:
 
-    CLOUD_DB_HOSTS = ['spacialdb.com',  'beta.spacialdb.com']
-
     def __init__(self):
-        pass
+        self._dbs = {} # Map<dbname, DbConnectionCfg>
+        self._dbs_refreshed = False
 
-    def get_cloud_db_connections(self, db_name):
-        connection_names = []
-        settings = QSettings()
-        settings.beginGroup(u"/PostgreSQL/connections")
-        for name in settings.childGroups():
-            settings.beginGroup(name)
-            db = settings.value("database", type=str)
-            host = settings.value("host", type=str)
-            if db == db_name and host in self.CLOUD_DB_HOSTS:
-                connection_names.append(name)
-            settings.endGroup()
-        settings.endGroup()
-        return connection_names
+    def add_from_json(self, db):
+        self._dbs[db['name']] = DbConnectionCfg(db['host'], db['port'], db['name'], db['username'], db['password'])
 
-    def add(self, name, host, port, database, username, password):
-        settings = QSettings()
-        key = u"/PostgreSQL/connections/" + name
-        settings.setValue(key + "/host", host)
-        settings.setValue(key + "/port", port)
-        settings.setValue(key + "/database", database)
-        settings.setValue(key + "/username", username)
-        settings.setValue(key + "/password", password)
-        settings.setValue(key + "/sslmode", 0) # prefer
-        settings.setValue(key + "/saveUsername", True)
-        settings.setValue(key + "/savePassword", True)
-        settings.setValue(key + "/geometryColumnsOnly", True)
-        settings.setValue(key + "/estimatedMetadata", True)
+    def count(self):
+        return len(self._dbs)
 
-    def remove(self, name):
-        settings = QSettings()
-        key = u"/PostgreSQL/connections/" + name
-        settings.remove(key)
+    def iteritems(self):
+        return self._dbs.iteritems()
 
-    def refresh(self, dbs, user):
+    def db(self, dbname):
+        return self._dbs[dbname]
+
+    def refreshed(self):
+        return self._dbs_refreshed
+
+    def refresh(self, user):
         cloud_connections_key = u"/qgiscloud/connections/%s" % user
         settings = QSettings()
 
-        cloud_dbs_from_server = dbs.keys()
+        cloud_dbs_from_server = self._dbs.keys()
         stored_connections = settings.value(cloud_connections_key) or []
         cloud_dbs_from_settings = map(lambda conn: str(conn), stored_connections)
 
         # remove obsolete connections
         for db_name in (set(cloud_dbs_from_settings) - set(cloud_dbs_from_server)):
-            for connection in self.get_cloud_db_connections(db_name):
-                self.remove(connection)
+            for connection in DbConnectionCfg.get_cloud_db_connections(db_name):
+                DbConnectionCfg.remove_connection(connection)
 
         # add missing connections
         for db_name in cloud_dbs_from_server:
-            if len(self.get_cloud_db_connections(db_name)) == 0:
-                connection = "QGISCloud %s" % db_name
-                self.add(connection, dbs[db_name]['host'], dbs[db_name]['port'], db_name, dbs[db_name]['username'], dbs[db_name]['password'])
+            if len(DbConnectionCfg.get_cloud_db_connections(db_name)) == 0:
+                self._dbs[db_name].store_connection()
 
         # store cloud db names in settings
         if len(cloud_dbs_from_server) > 0:
@@ -92,29 +72,16 @@ class DbConnections:
         else:
             settings.remove(cloud_connections_key)
 
+        self._dbs_refreshed = True
+
     def cloud_layer_uri(self, db_name, table_name, geom_column):
+        uri = None
         # find db connection and create uri
-        uri = QgsDataSourceURI()
-        settings = QSettings()
-        settings.beginGroup(u"/PostgreSQL/connections")
-        connections = self.get_cloud_db_connections(db_name)
+        connections = DbConnectionCfg.get_cloud_db_connections(db_name)
         if len(connections) > 0:
-            settings.beginGroup(connections[0])
-            # create uri
-            uri.setConnection(
-                settings.value("host", type=str),
-                settings.value("port", type=str),
-                settings.value("database", type=str),
-                settings.value("username", type=str),
-                settings.value("password", type=str),
-                QgsDataSourceURI.SSLmode(settings.value("sslmode", type=int))
-            )
-            uri.setUseEstimatedMetadata(settings.value("estimatedMetadata", type=bool))
+            conn = DbConnectionCfg.from_settings(connections[0])
+            uri = conn.data_source_uri()
             uri.setDataSource("", table_name, geom_column)
-
-            settings.endGroup()
-        settings.endGroup()
-
         return uri
 
     def isPortOpen(self, db_name):
@@ -132,21 +99,12 @@ class DbConnections:
             return False
 
     # Wait until cloud database is available (creation is asynchronous)
-    def wait_for_db(self, db_name):
-        uri = self.cloud_layer_uri(db_name, "", "")
+    @staticmethod
+    def wait_for_db(db, timeout = 3, retries = 5, sleeptime = 3):
         ok = False
-        retries = 5
         while not ok and retries > 0:
             try:
-                connection = DBAPI.connect(
-                     host = str(uri.host()),
-                     port = int(uri.port()),
-                     database = str(uri.database()),
-                     user = str(uri.username()),
-                     password = str(uri.password()),
-                     socket_timeout = 3, #3s
-                     ssl = (uri.sslMode() != QgsDataSourceURI.SSLdisable)
-                )
+                connection = db.dbapi_connection(timeout)
                 connection.close()
                 ok = True
             except Exception: # as err:
@@ -154,4 +112,4 @@ class DbConnections:
                 if retries == 0:
                     raise
                 else:
-                    time.sleep(3)
+                    time.sleep(sleeptime)

@@ -42,7 +42,8 @@ class DataUpload:
         self.db_connections = db_connections
         pass
 
-    def ogr2ogr(self, db_name, data_sources_items, do_replace_local_layers):
+    def upload(self, db, data_sources_items, do_replace_local_layers):
+        db_name = db.database
         self.status_bar.showMessage(u"Uploading to database %s ..." % db_name)
 
         dest_geometry_types = {
@@ -79,7 +80,7 @@ class DataUpload:
             ok = ogr2ogr(pszFormat='PostgreSQL',
                 pszDataSource=srcLayer,
                 papszLayers=papszLayers,
-                pszDestDataSource=self._ogrCloudConnectionString(destUri),
+                pszDestDataSource=db.ogr_connection_descr(),
                 pszNewLayerName=table_name,
                 papszLCO = ['LAUNDER=NO'],
                 eGType=eGType,
@@ -105,10 +106,6 @@ class DataUpload:
         self._replace_local_layers(layers_to_replace)
 
         return import_ok
-
-    def _ogrCloudConnectionString(self, uri):
-        return "PG:host='%s' port='%s' dbname='%s' user='%s' password='%s'" % (
-            uri.host(), uri.port(), uri.database(), uri.username(), uri.password())
 
     #OGR data source connection string (without table/layer)
     def _ogrConnectionString(self, layer):
@@ -212,49 +209,6 @@ class DataUpload:
 
         #copy CRS
         target_layer.setCrs(source_layer.crs(), False)
-
-    def postgres_columns(self, pg_connection, uri, geom_column):
-        """
-            get all table columns except the geometry column
-        """
-        columns = []
-        cursor = pg_connection.cursor()
-        sql = "SELECT column_name, udt_name, character_maximum_length, numeric_precision \
-            FROM information_schema.columns \
-            WHERE table_schema = '%s' AND table_name = '%s' AND column_name != '%s' \
-            ORDER BY ordinal_position" % (self.schema_from_uri(uri), uri.table(), geom_column)
-        cursor.execute(sql)
-        for name, type_name, length, precision in cursor:
-            if length is None:
-                length = -1
-            if precision is None:
-                precision = -1
-            columns.append({
-                'name': str(name),
-                'type': str(type_name),
-                'length': length,
-                'precision': precision
-            })
-        cursor.close()
-        return columns
-
-    def postgres_geometry(self, pg_connection, uri):
-        cursor = pg_connection.cursor()
-        sql = "SELECT f_geometry_column, srid, type \
-            FROM geometry_columns \
-            WHERE f_table_schema = '%s' AND f_table_name = '%s'" % (self.schema_from_uri(uri), uri.table())
-        cursor.execute(sql)
-        geom_column, srid, geom_type = cursor.fetchone()
-
-        # get column index of geometry column
-        sql = "SELECT ordinal_position \
-            FROM information_schema.columns \
-            WHERE table_schema = '%s' AND table_name = '%s' AND column_name = '%s'" % (self.schema_from_uri(uri), uri.table(), geom_column)
-        cursor.execute(sql)
-        geom_column_index = cursor.fetchone()[0] - 1
-        cursor.close()
-
-        return str(geom_column), srid, str(geom_type), geom_column_index
 
     def schema_from_uri(self, uri):
         schema = uri.schema()

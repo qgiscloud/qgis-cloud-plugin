@@ -22,7 +22,8 @@
 
 from PyQt4.QtCore import *
 from qgis.core import *
-from db_connections import DbConnections
+from db_connection_cfg import DbConnectionCfg
+
 
 class LocalDataSources:
 
@@ -54,7 +55,7 @@ class LocalDataSources:
                 provider = layer.pluginLayerType()
 
             if provider == "postgres":
-                if QgsDataSourceURI(layer.publicSource()).host() not in DbConnections.CLOUD_DB_HOSTS:
+                if QgsDataSourceURI(layer.publicSource()).host() not in DbConnectionCfg.CLOUD_DB_HOSTS:
                     if layer.wkbType() != 100: # FIXME: QGis.WKBNoGeometry
                         local_layers.append(layer)
                     else:
