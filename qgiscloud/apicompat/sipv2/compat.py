@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """
 /***************************************************************************
- QgisCloudPlugin
+ ApiCompat
                                  A QGIS plugin
- Publish maps on qgiscloud.com
-                             -------------------
-        begin                : 2011-04-04
-        copyright            : (C) 2011 by Sourcepole
+ API compatibility layer
+                              -------------------
+        begin                : 2013-07-02
+        copyright            : (C) 2013 by Pirmin Kalberer, Sourcepole
         email                : pka@sourcepole.ch
  ***************************************************************************/
 
@@ -18,22 +18,32 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- This script initializes the plugin, making it known to QGIS.
 """
-def name():
-    return "QGIS Cloud Plugin"
-def description():
-    return "Publish maps on qgiscloud.com"
-def version():
-    return "0.10.1"
-def icon():
-    return "icon.png"
-def qgisMinimumVersion():
-    return "1.8"
-def qgisMaximumVersion():
-    return "2.99"
-def author():
-  return "Sourcepole"
-def classFactory(iface):
-    from qgiscloudplugin import QgisCloudPlugin
-    return QgisCloudPlugin(iface, version())
+# Import the PyQt and QGIS libraries
+from PyQt4.QtCore import *
+from qgis.core import *
+
+import __builtin__
+
+#Define backwards compatibility functions
+def pystring(qvar):
+    return unicode(qvar)
+__builtin__.pystring = pystring
+def pylist(qvar):
+    return list(qvar)
+__builtin__.pylist = pylist
+def pyint(qvar):
+    return int(qvar)
+__builtin__.pyint = pyint
+def pyfloat(qvar):
+    return float(qvar)
+__builtin__.pyfloat = pyfloat
+def pystringlist(qvar):
+    return list(qvar)
+__builtin__.pystringlist = pystringlist
+def pybytearray(qvar):
+    return bytearray(qvar)
+__builtin__.pybytearray = pybytearray
+def pyobject(qvar):
+    return qvar
+__builtin__.pyobject = pyobject

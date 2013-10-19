@@ -43,7 +43,7 @@ class DbConnections:
         return self._dbs.iteritems()
 
     def db(self, dbname):
-        return self._dbs[dbname]
+        return self._dbs[unicode(dbname)]
 
     def refreshed(self):
         return self._dbs_refreshed
@@ -54,7 +54,7 @@ class DbConnections:
 
         cloud_dbs_from_server = self._dbs.keys()
         stored_connections = settings.value(cloud_connections_key) or []
-        cloud_dbs_from_settings = map(lambda conn: str(conn), stored_connections)
+        cloud_dbs_from_settings = map(lambda conn: str(conn), pystringlist(stored_connections))
 
         # remove obsolete connections
         for db_name in (set(cloud_dbs_from_settings) - set(cloud_dbs_from_server)):
@@ -64,7 +64,7 @@ class DbConnections:
         # add missing connections
         for db_name in cloud_dbs_from_server:
             if len(DbConnectionCfg.get_cloud_db_connections(db_name)) == 0:
-                self._dbs[db_name].store_connection()
+                self.db(db_name).store_connection()
 
         # store cloud db names in settings
         if len(cloud_dbs_from_server) > 0:

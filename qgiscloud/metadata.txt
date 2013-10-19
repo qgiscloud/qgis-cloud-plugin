@@ -1,6 +1,6 @@
 [general]
 name=QGIS Cloud Plugin
-qgisMinimumVersion=2.0
+qgisMinimumVersion=1.8
 qgisMaximumVersion=2.99
 description=Publish maps on qgiscloud.com
 version=0.10.1

@@ -126,7 +126,7 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def map(self):
         project = QgsProject.instance()
-        name = os.path.splitext(os.path.basename(project.fileName()))[0]
+        name = os.path.splitext(os.path.basename(unicode(project.fileName())))[0]
         return unicode(name)
 
     def store_settings(self):

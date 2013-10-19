@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """
 /***************************************************************************
- QgisCloudPlugin
+ ApiCompat
                                  A QGIS plugin
- Publish maps on qgiscloud.com
-                             -------------------
-        begin                : 2011-04-04
-        copyright            : (C) 2011 by Sourcepole
+ API compatibility layer
+                              -------------------
+        begin                : 2013-07-02
+        copyright            : (C) 2013 by Pirmin Kalberer, Sourcepole
         email                : pka@sourcepole.ch
  ***************************************************************************/
 
@@ -18,22 +18,18 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- This script initializes the plugin, making it known to QGIS.
 """
-def name():
-    return "QGIS Cloud Plugin"
-def description():
-    return "Publish maps on qgiscloud.com"
-def version():
-    return "0.10.1"
-def icon():
-    return "icon.png"
-def qgisMinimumVersion():
-    return "1.8"
-def qgisMaximumVersion():
-    return "2.99"
-def author():
-  return "Sourcepole"
-def classFactory(iface):
-    from qgiscloudplugin import QgisCloudPlugin
-    return QgisCloudPlugin(iface, version())
+# Import the PyQt and QGIS libraries
+from PyQt4.QtCore import *
+from qgis.core import *
+
+
+from decorators import *
+
+def vectorapiv1():
+  return not hasattr(QgsVectorLayer, 'getFeatures')
+
+@add_method(QgsVectorLayer)
+def getFeatures(self):
+    self.select([])
+    return self

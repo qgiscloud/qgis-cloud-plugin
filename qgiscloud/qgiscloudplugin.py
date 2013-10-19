@@ -27,6 +27,8 @@ from qgis.core import *
 import resources_rc
 # Import the code for the dialog
 from qgiscloudplugindialog import QgisCloudPluginDialog
+# API compatibilty module. Has to be imported only once.
+import apicompat
 
 
 class QgisCloudPlugin:
