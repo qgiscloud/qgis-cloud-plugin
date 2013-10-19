@@ -447,7 +447,10 @@ class QgisCloudPluginDialog(QDockWidget):
 
     @staticmethod
     def launder_pg_name(name):
-        return re.sub(r"[#'-]", '_', unicode(name).lower()) #OGRPGDataSource::LaunderName
+        #OGRPGDataSource::LaunderName
+        #return re.sub(r"[#'-]", '_', unicode(name).lower())
+        input_string = unicode(name).lower().encode('ascii', 'replace')
+        return re.compile("\W+", re.UNICODE).sub("_", input_string)
 
     def refresh_local_data_sources(self):
         if not self.db_connections.refreshed():

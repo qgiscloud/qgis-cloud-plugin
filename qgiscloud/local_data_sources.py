@@ -29,19 +29,19 @@ class LocalDataSources:
 
     def __init__(self):
         # map<data source, layers>
-        self.local_data_sources = {}
+        self._local_data_sources = {}
 
     def layers(self, data_source):
-        if self.local_data_sources.has_key(data_source):
-            return self.local_data_sources[data_source]
+        if self._local_data_sources.has_key(data_source):
+            return self._local_data_sources[data_source]
         else:
             return None
 
     def iteritems(self):
-        return self.local_data_sources.iteritems()
+        return self._local_data_sources.iteritems()
 
     def count(self):
-        return len(self.local_data_sources)
+        return len(self._local_data_sources)
 
     def local_layers(self, skip_layer_id=None):
         unsupported_layers = []
@@ -71,7 +71,7 @@ class LocalDataSources:
 
     def update_local_data_sources(self, local_layers):
         # get unique local data sources
-        self.local_data_sources = {}
+        self._local_data_sources = {}
         for layer in sorted(local_layers, key=lambda layer: layer.name()):
             #qDebug("local layer source: {0} (provider type: {1})".format(layer.source(), layer.providerType()))
             #Disabled because of UnicodeEncodeError: 'ascii' codec can't encode character u'\xf3' in position 18: ordinal not in range(128)
@@ -90,7 +90,7 @@ class LocalDataSources:
                 data_source = unicode(layer.source())
 
             # group layers by source
-            if self.local_data_sources.has_key(data_source):
-                self.local_data_sources[data_source].append(layer)
+            if self._local_data_sources.has_key(data_source):
+                self._local_data_sources[data_source].append(layer)
             else:
-                self.local_data_sources[data_source] = [layer]
+                self._local_data_sources[data_source] = [layer]
