@@ -4,6 +4,7 @@
 import sys
 import os
 import stat
+import tempfile
 try:
     from osgeo import ogr
     from osgeo import gdal
@@ -88,7 +89,10 @@ class StdStreamCapture(object):
                 self._old_stderr.flush()
             except IOError:
                 pass #ignore IOError: [Errno 9] Bad file descriptor
-            sys.stdout = sys.stderr = self
+            # Redirect stdout+stderr to file
+            (self._outfd, self._outfn) = tempfile.mkstemp()
+            os.dup2(self._outfd, sys.stdout.fileno())
+            os.dup2(self._outfd, sys.stderr.fileno())
 
     def __exit__(self, exc_type, exc_value, traceback):
         if self._outputfunc is not None:
@@ -97,13 +101,11 @@ class StdStreamCapture(object):
             sys.stderr.flush()
             sys.stderr = self._old_stderr
 
-    #Stream methods
-
-    def write(self, s):
-        self._outputfunc(s)
-
-    def flush(self):
-        pass
+            os.close(self._outfd)
+            f = open(self._outfn, 'r')
+            self._outputfunc(f.read())
+            f.close()
+            os.unlink(self._outfn)
 
 
 #/************************************************************************/
