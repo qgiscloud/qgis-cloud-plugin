@@ -3,13 +3,17 @@ name=QGIS Cloud Plugin
 qgisMinimumVersion=1.8
 qgisMaximumVersion=2.99
 description=Publish maps on qgiscloud.com
-version=0.10.1
+version=0.11.0
 author=Pirmin Kalberer, Mathias Walker, Horst Düster
 email=pka@sourcepole.ch
 
 ; Optional items:
 
-changelog=0.10.1
+changelog=0.11.0
+    -API compatibility with QGIS 1.8 and 2.0
+    -Replace all non-ascii characters in table names
+    -Capture output of ogr2ogr C lib
+    0.10.1
     -Show upload warnings and errors in Message Log
     0.10.0
     -Port to QGIS 2
