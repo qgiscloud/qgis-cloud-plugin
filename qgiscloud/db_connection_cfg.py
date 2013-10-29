@@ -79,7 +79,7 @@ class DbConnectionCfg:
     @staticmethod
     def remove_connection(conn_name):
         settings = QSettings()
-        settings.remove(self.connection_key(conn_name))
+        settings.remove(DbConnectionCfg.connection_key(conn_name))
 
     #Find matching connections in settings
     @staticmethod
