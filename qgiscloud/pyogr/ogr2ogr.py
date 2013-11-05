@@ -91,8 +91,14 @@ class StdStreamCapture(object):
                 pass #ignore IOError: [Errno 9] Bad file descriptor
             # Redirect stdout+stderr to file
             (self._outfd, self._outfn) = tempfile.mkstemp()
-            os.dup2(self._outfd, sys.stdout.fileno())
-            os.dup2(self._outfd, sys.stderr.fileno())
+            try:
+                os.dup2(self._outfd, sys.stdout.fileno())
+                os.dup2(self._outfd, sys.stderr.fileno())
+            except:
+                #Error on windows: OSError: [Errno 0] Error
+                sys.stdout = self._old_stdout
+                sys.stderr = self._old_stderr
+                
 
     def __exit__(self, exc_type, exc_value, traceback):
         if self._outputfunc is not None:
