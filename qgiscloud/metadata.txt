@@ -3,13 +3,15 @@ name=QGIS Cloud Plugin
 qgisMinimumVersion=2.0
 qgisMaximumVersion=2.99
 description=Publish maps on qgiscloud.com
-version=0.11.2
+version=0.11.3
 author=Pirmin Kalberer, Mathias Walker, Horst Düster
 email=pka@sourcepole.ch
 
 ; Optional items:
 
-changelog=0.11.2
+changelog=0.11.3
+    -Ignore ogr output redirection failure
+    0.11.2
     -Re-Upload for QGIS 2.0
     0.11.1
     -Fix for exception after deleting DB
