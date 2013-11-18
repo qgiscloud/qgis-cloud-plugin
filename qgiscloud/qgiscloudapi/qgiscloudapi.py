@@ -520,7 +520,7 @@ class Request():
             headers['Authorization'] = 'auth_token="%s"' % (self.token['token'])
         elif self.user is not None and self.password is not None:
             password_manager = urllib2.HTTPPasswordMgrWithDefaultRealm()
-            password_manager.add_password(None, API_URL, self.user, self.password)
+            password_manager.add_password(None, self.url, self.user, self.password)
             auth_handler = HTTPBasicAuthHandlerLimitRetries(password_manager)
             opener = urllib2.build_opener(auth_handler)
             urllib2.install_opener(opener)

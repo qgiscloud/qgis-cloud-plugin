@@ -164,6 +164,7 @@ class QgisCloudPluginDialog(QDockWidget):
             login_dialog.ui.editUser.setText(self.user)
             login_ok = False
             while not login_ok and version_ok:
+                self.api.set_url(self.api_url())
                 if not login_dialog.exec_():
                     self.api.set_auth(user=login_dialog.ui.editUser.text(), password=None)
                     return login_ok
@@ -245,11 +246,14 @@ class QgisCloudPluginDialog(QDockWidget):
                 self.ui.cbUploadDatabase.addItem(name)
             self.db_connections.refresh(self.user)
 
+    def api_url(self):
+        return self.ui.editServer.text()
+
     def update_urls(self):
-        self.update_url(self.ui.lblWebmap, self.api.api_url(), 'http://', u'{0}/{1}'.format(self.user, self.map()))
-        self.update_url(self.ui.lblMobileMap, self.api.api_url(), 'http://m.', u'{0}/{1}'.format(self.user, self.map()))
-        self.update_url(self.ui.lblWMS, self.api.api_url(), 'http://wms.', u'{0}/{1}'.format(self.user, self.map()))
-        self.update_url(self.ui.lblMaps, self.api.api_url(), 'http://', 'maps')
+        self.update_url(self.ui.lblWebmap, self.api_url(), 'http://', u'{0}/{1}'.format(self.user, self.map()))
+        self.update_url(self.ui.lblMobileMap, self.api_url(), 'http://m.', u'{0}/{1}'.format(self.user, self.map()))
+        self.update_url(self.ui.lblWMS, self.api_url(), 'http://wms.', u'{0}/{1}'.format(self.user, self.map()))
+        self.update_url(self.ui.lblMaps, self.api_url(), 'http://', 'maps')
 
     def update_url(self, label, api_url, prefix, path):
         base_url = string.replace(api_url, 'https://api.', prefix)

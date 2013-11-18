@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/hdus/dev/qgis/qgis-cloud-plugin/qgiscloud/ui_qgiscloudplugin.ui'
+# Form implementation generated from reading ui file 'ui_qgiscloudplugin.ui'
 #
-# Created: Wed Apr 24 08:35:39 2013
+# Created: Mon Nov 18 22:43:09 2013
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -216,7 +216,7 @@ class Ui_QgisCloudPlugin(object):
         self.label_2.setObjectName(_fromUtf8("label_2"))
         self.horizontalLayout_4.addWidget(self.label_2)
         self.editServer = QtGui.QLineEdit(self.account)
-        self.editServer.setEnabled(False)
+        self.editServer.setEnabled(True)
         self.editServer.setObjectName(_fromUtf8("editServer"))
         self.horizontalLayout_4.addWidget(self.editServer)
         self.verticalLayout_2.addLayout(self.horizontalLayout_4)
@@ -283,7 +283,7 @@ class Ui_QgisCloudPlugin(object):
         self.label_2.setBuddy(self.editServer)
 
         self.retranslateUi(QgisCloudPlugin)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(2)
         self.serviceLinks.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(QgisCloudPlugin)
 
@@ -364,13 +364,3 @@ class Ui_QgisCloudPlugin(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.about), QtGui.QApplication.translate("QgisCloudPlugin", "About", None, QtGui.QApplication.UnicodeUTF8))
 
 import resources_rc
-
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    QgisCloudPlugin = QtGui.QDockWidget()
-    ui = Ui_QgisCloudPlugin()
-    ui.setupUi(QgisCloudPlugin)
-    QgisCloudPlugin.show()
-    sys.exit(app.exec_())
-
