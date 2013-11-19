@@ -40,10 +40,7 @@ import urllib2
 
 from version import __version__
 
-try:
-    from apiurl import API_URL
-except ImportError:
-    API_URL = 'https://api.qgiscloud.com'
+API_URL = 'https://api.qgiscloud.com'
 
 __all__ = ['API', 'UnauthorizedError', 'ConnectionException', 'TokenRequiredError', 'BadRequestError', 'ForbiddenError',
            'ConflictDuplicateError', 'GoneError', 'InternalServerError',

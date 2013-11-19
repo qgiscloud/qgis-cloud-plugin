@@ -29,7 +29,7 @@ def version():
 def icon():
     return "icon.png"
 def qgisMinimumVersion():
-    return "2.0"
+    return "1.8"
 def qgisMaximumVersion():
     return "2.99"
 def author():

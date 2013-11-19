@@ -247,7 +247,7 @@ class QgisCloudPluginDialog(QDockWidget):
             self.db_connections.refresh(self.user)
 
     def api_url(self):
-        return self.ui.editServer.text()
+        return unicode(self.ui.editServer.text())
 
     def update_urls(self):
         self.update_url(self.ui.lblWebmap, self.api_url(), 'http://', u'{0}/{1}'.format(self.user, self.map()))
