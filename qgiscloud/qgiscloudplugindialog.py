@@ -69,6 +69,7 @@ class QgisCloudPluginDialog(QDockWidget):
     def __init__(self, iface, version):
         QDockWidget.__init__(self, None)
         self.iface = iface
+        self.clouddb = True
         self.version = version
         # Set up the user interface from Designer.
         self.ui = Ui_QgisCloudPlugin()
@@ -92,7 +93,7 @@ class QgisCloudPluginDialog(QDockWidget):
         # flag to disable update of local data sources during upload
         self.do_update_local_data_sources = True
 
-        QObject.connect(self.ui.btnLogin, SIGNAL("clicked()"), self.refresh_databases)
+        QObject.connect(self.ui.btnLogin, SIGNAL("clicked()"), self.login)
         QObject.connect(self.ui.btnDbCreate, SIGNAL("clicked()"), self.create_database)
         QObject.connect(self.ui.btnDbDelete, SIGNAL("clicked()"), self.delete_database)
         QObject.connect(self.ui.btnDbRefresh, SIGNAL("clicked()"), self.refresh_databases)
@@ -137,6 +138,15 @@ class QgisCloudPluginDialog(QDockWidget):
         s = QSettings()
         self.user = s.value("qgiscloud/user", "", type=str)
 
+    def _update_clouddb_mode(self, clouddb):
+        self.clouddb = clouddb
+        self.ui.groupBoxDatabases.setVisible(self.clouddb)
+        visible = (self.ui.tabWidget.tabText(1) == 'Upload Data')
+        if visible and not self.clouddb:
+            self.ui.tabWidget.removeTab(1)
+        elif not visible and self.clouddb:
+            self.ui.tabWidget.insertTab(1, self.ui.upload, 'Upload Data')
+
     def _version_info(self):
         return {'versions': {'plugin': self.version, 'QGIS': QGis.QGIS_VERSION, 'OGR': ogr_version_info(), 'OS': platform.platform(), 'Python': sys.version}}
 
@@ -173,6 +183,7 @@ class QgisCloudPluginDialog(QDockWidget):
                     login_info = self.api.check_login(version_info=self._version_info())
                     #{u'paid_until': None, u'plan': u'Free', u'current_plugin': u'0.8.0'}
                     self.user = login_dialog.ui.editUser.text()
+                    self._update_clouddb_mode(login_info['clouddb'])
                     version_ok = self._update_versions(login_info['current_plugin'])
                     self.ui.serviceLinks.setCurrentWidget(self.ui.pageVersions)
                     self.store_settings()
@@ -222,8 +233,12 @@ class QgisCloudPluginDialog(QDockWidget):
     def select_database(self):
         self.ui.btnDbDelete.setEnabled(len(self.ui.tabDatabases.selectedItems()) > 0)
 
-    def refresh_databases(self):
+    def login(self):
         if self.check_login():
+            self.refresh_databases()
+
+    def refresh_databases(self):
+        if self.clouddb and self.check_login():
             db_list = self.api.read_databases()
             if self.show_api_error(db_list):
               return

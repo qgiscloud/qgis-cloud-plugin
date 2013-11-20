@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_qgiscloudplugin.ui'
 #
-# Created: Mon Nov 18 22:43:09 2013
+# Created: Wed Nov 20 01:53:36 2013
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -165,6 +165,7 @@ class Ui_QgisCloudPlugin(object):
         self.verticalLayout_7.addItem(spacerItem2)
         self.tabWidget.addTab(self.services, _fromUtf8(""))
         self.upload = QtGui.QWidget()
+        self.upload.setEnabled(True)
         self.upload.setObjectName(_fromUtf8("upload"))
         self.verticalLayout_10 = QtGui.QVBoxLayout(self.upload)
         self.verticalLayout_10.setObjectName(_fromUtf8("verticalLayout_10"))
@@ -236,16 +237,16 @@ class Ui_QgisCloudPlugin(object):
         spacerItem4 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_5.addItem(spacerItem4)
         self.verticalLayout_2.addLayout(self.horizontalLayout_5)
-        self.groupBox_3 = QtGui.QGroupBox(self.account)
-        self.groupBox_3.setObjectName(_fromUtf8("groupBox_3"))
-        self.verticalLayout_4 = QtGui.QVBoxLayout(self.groupBox_3)
+        self.groupBoxDatabases = QtGui.QGroupBox(self.account)
+        self.groupBoxDatabases.setObjectName(_fromUtf8("groupBoxDatabases"))
+        self.verticalLayout_4 = QtGui.QVBoxLayout(self.groupBoxDatabases)
         self.verticalLayout_4.setObjectName(_fromUtf8("verticalLayout_4"))
-        self.tabDatabases = QtGui.QListWidget(self.groupBox_3)
+        self.tabDatabases = QtGui.QListWidget(self.groupBoxDatabases)
         self.tabDatabases.setObjectName(_fromUtf8("tabDatabases"))
         self.verticalLayout_4.addWidget(self.tabDatabases)
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
-        self.btnDbRefresh = QtGui.QPushButton(self.groupBox_3)
+        self.btnDbRefresh = QtGui.QPushButton(self.groupBoxDatabases)
         self.btnDbRefresh.setObjectName(_fromUtf8("btnDbRefresh"))
         self.horizontalLayout.addWidget(self.btnDbRefresh)
         spacerItem5 = QtGui.QSpacerItem(37, 17, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
@@ -253,7 +254,7 @@ class Ui_QgisCloudPlugin(object):
         self.verticalLayout_4.addLayout(self.horizontalLayout)
         self.horizontalLayout_2 = QtGui.QHBoxLayout()
         self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
-        self.btnDbCreate = QtGui.QPushButton(self.groupBox_3)
+        self.btnDbCreate = QtGui.QPushButton(self.groupBoxDatabases)
         self.btnDbCreate.setObjectName(_fromUtf8("btnDbCreate"))
         self.horizontalLayout_2.addWidget(self.btnDbCreate)
         spacerItem6 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
@@ -261,14 +262,14 @@ class Ui_QgisCloudPlugin(object):
         self.verticalLayout_4.addLayout(self.horizontalLayout_2)
         self.horizontalLayout_6 = QtGui.QHBoxLayout()
         self.horizontalLayout_6.setObjectName(_fromUtf8("horizontalLayout_6"))
-        self.btnDbDelete = QtGui.QPushButton(self.groupBox_3)
+        self.btnDbDelete = QtGui.QPushButton(self.groupBoxDatabases)
         self.btnDbDelete.setEnabled(False)
         self.btnDbDelete.setObjectName(_fromUtf8("btnDbDelete"))
         self.horizontalLayout_6.addWidget(self.btnDbDelete)
         spacerItem7 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_6.addItem(spacerItem7)
         self.verticalLayout_4.addLayout(self.horizontalLayout_6)
-        self.verticalLayout_2.addWidget(self.groupBox_3)
+        self.verticalLayout_2.addWidget(self.groupBoxDatabases)
         self.tabWidget.addTab(self.account, _fromUtf8(""))
         self.about = QtGui.QWidget()
         self.about.setObjectName(_fromUtf8("about"))
@@ -283,7 +284,7 @@ class Ui_QgisCloudPlugin(object):
         self.label_2.setBuddy(self.editServer)
 
         self.retranslateUi(QgisCloudPlugin)
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(0)
         self.serviceLinks.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(QgisCloudPlugin)
 
@@ -356,7 +357,7 @@ class Ui_QgisCloudPlugin(object):
 "</style></head><body style=\" font-family:\'Ubuntu\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://qgiscloud.com/account/sign_up\"><span style=\" text-decoration: underline; color:#0057ae;\">Signup</span></a></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
         self.lblLoginStatus.setText(QtGui.QApplication.translate("QgisCloudPlugin", "Logged in as ...", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox_3.setTitle(QtGui.QApplication.translate("QgisCloudPlugin", "Databases", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBoxDatabases.setTitle(QtGui.QApplication.translate("QgisCloudPlugin", "Databases", None, QtGui.QApplication.UnicodeUTF8))
         self.btnDbRefresh.setText(QtGui.QApplication.translate("QgisCloudPlugin", "Refresh", None, QtGui.QApplication.UnicodeUTF8))
         self.btnDbCreate.setText(QtGui.QApplication.translate("QgisCloudPlugin", "Create new database", None, QtGui.QApplication.UnicodeUTF8))
         self.btnDbDelete.setText(QtGui.QApplication.translate("QgisCloudPlugin", "Delete database", None, QtGui.QApplication.UnicodeUTF8))
