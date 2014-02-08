@@ -24,6 +24,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.QtXml import *
 from qgis.core import *
+from qgis.gui import QgsMessageBar
 from ui_qgiscloudplugin import Ui_QgisCloudPlugin
 from ui_login import Ui_LoginDialog
 from qgiscloudapi.qgiscloudapi import *
@@ -194,10 +195,9 @@ class QgisCloudPluginDialog(QDockWidget):
 
                     self.ui.lblLoginStatus.setText(self.tr_uni("Logged in as {0} ({1})").format(self.user, login_info['plan']))
                     self.ui.lblLoginStatus.show()
-                    if version_ok:
-                        QMessageBox.information(self, self.tr("Login successful"), self.tr_uni("Logged in as {0}").format(self.user))
-                    else:
-                        QMessageBox.information(self, self.tr("Login successful"), self.tr("Unsupported versions detected.\nPlease check your versions first!"))
+                    self._push_message(self.tr("QGIS Cloud"), self.tr_uni("Logged in as {0}").format(self.user), level=0, duration=2)
+                    if not version_ok:
+                        self._push_message(self.tr("QGIS Cloud"), self.tr("Unsupported versions detected. Please check your versions first!"), level=1)
                         version_ok = False
                         self.ui.tabWidget.setCurrentWidget(self.ui.services)
                     login_ok = True
@@ -334,6 +334,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 self.update_urls()
                 self.ui.serviceLinks.setCurrentWidget(self.ui.pageLinks)
                 self.ui.btnPublishMapUpload.hide()
+                self._push_message(self.tr("QGIS Cloud"), self.tr("Map successfully published"), level=0, duration=2)
                 self.statusBar().showMessage(self.tr("Map successfully published"))
             except Exception:
                 self.statusBar().showMessage("")
@@ -569,6 +570,12 @@ class QgisCloudPluginDialog(QDockWidget):
                 if ret == QMessageBox.Save:
                     self.iface.actionSaveProjectAs().trigger()
                     self.ui.btnPublishMapUpload.show()
+
+    def _push_message(self, title, text, level=0, duration=0):
+        if hasattr(self.iface.messageBar(), 'pushMessage'):  # QGIS >= 2.0
+            self.iface.messageBar().pushMessage(title, text, level, duration)
+        else:
+            QMessageBox.information(self, title, text)
 
     def show_api_error(self, result):
         if 'error' in result:
