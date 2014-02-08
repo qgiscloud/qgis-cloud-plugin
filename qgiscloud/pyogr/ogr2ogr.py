@@ -89,16 +89,21 @@ class StdStreamCapture(object):
                 self._old_stderr.flush()
             except IOError:
                 pass #ignore IOError: [Errno 9] Bad file descriptor
-            # Redirect stdout+stderr to file
+            # Redirect Python stdout+stderr to function
+            sys.stdout = sys.stderr = self
+            # Send OGR C lib output to file
             (self._outfd, self._outfn) = tempfile.mkstemp()
-            try:
-                os.dup2(self._outfd, sys.stdout.fileno())
-                os.dup2(self._outfd, sys.stderr.fileno())
-            except:
-                #Error on windows: OSError: [Errno 0] Error
-                sys.stdout = self._old_stdout
-                sys.stderr = self._old_stderr
-                
+            os.close(self._outfd)
+            os.environ["CPL_LOG"] = self._outfn
+            os.environ["CPL_LOG_ERRORS"] = "ON"
+
+    #Stream methods
+
+    def write(self, s):
+        self._outputfunc(s)
+
+    def flush(self):
+        pass
 
     def __exit__(self, exc_type, exc_value, traceback):
         if self._outputfunc is not None:
@@ -107,7 +112,7 @@ class StdStreamCapture(object):
             sys.stderr.flush()
             sys.stderr = self._old_stderr
 
-            os.close(self._outfd)
+            #Append CPL_LOG output
             f = open(self._outfn, 'r')
             self._outputfunc(f.read())
             f.close()
