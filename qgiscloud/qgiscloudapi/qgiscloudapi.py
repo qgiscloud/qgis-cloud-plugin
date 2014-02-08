@@ -124,7 +124,10 @@ class API():
         }
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
         content = request.post(resource, data)
-        return json.loads(content)
+        login_info = json.loads(content)
+        if 'clouddb' not in login_info:
+            login_info['clouddb'] = True
+        return login_info
 
     def create_token(self, user, password):
         """

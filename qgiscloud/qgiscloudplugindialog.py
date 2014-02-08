@@ -141,11 +141,13 @@ class QgisCloudPluginDialog(QDockWidget):
     def _update_clouddb_mode(self, clouddb):
         self.clouddb = clouddb
         self.ui.groupBoxDatabases.setVisible(self.clouddb)
-        visible = (self.ui.tabWidget.tabText(1) == 'Upload Data')
+        tab_index = 1
+        tab_name = QApplication.translate("QgisCloudPlugin", "Upload Data")
+        visible = (self.ui.tabWidget.indexOf(self.ui.upload) == tab_index)
         if visible and not self.clouddb:
-            self.ui.tabWidget.removeTab(1)
+            self.ui.tabWidget.removeTab(tab_index)
         elif not visible and self.clouddb:
-            self.ui.tabWidget.insertTab(1, self.ui.upload, 'Upload Data')
+            self.ui.tabWidget.insertTab(tab_index, self.ui.upload, tab_name)
 
     def _version_info(self):
         return {'versions': {'plugin': self.version, 'QGIS': QGis.QGIS_VERSION, 'OGR': ogr_version_info(), 'OS': platform.platform(), 'Python': sys.version}}
