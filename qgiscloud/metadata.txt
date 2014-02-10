@@ -1,15 +1,19 @@
 [general]
 name=QGIS Cloud Plugin
-qgisMinimumVersion=1.8
+qgisMinimumVersion=2.0
 qgisMaximumVersion=2.99
 description=Publish maps on qgiscloud.com
-version=0.11.3
+version=0.11.4
 author=Pirmin Kalberer, Mathias Walker, Horst Düster
 email=pka@sourcepole.ch
 
 ; Optional items:
 
-changelog=0.11.3
+changelog=0.11.4
+    -Redirect OGR output via log file
+    -UI improvements (show message log window automatically, etc.)
+    -Make API url editeable (private cloud)
+    0.11.3
     -Ignore ogr output redirection failure
     0.11.2
     -Re-Upload for QGIS 2.0
