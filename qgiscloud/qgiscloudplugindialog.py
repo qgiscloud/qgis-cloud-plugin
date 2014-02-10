@@ -550,6 +550,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 success = False
                 QgsMessageLog.logMessage(str(traceback.format_exc()), 'QGISCloud')
             if not success:
+                self._show_log_window()
                 QMessageBox.warning(self, self.tr("Upload data"), self.tr("Data upload error.\nSee Log Messages for more information."))
 
             self.unsetCursor()
@@ -570,6 +571,10 @@ class QgisCloudPluginDialog(QDockWidget):
                 if ret == QMessageBox.Save:
                     self.iface.actionSaveProjectAs().trigger()
                     self.ui.btnPublishMapUpload.show()
+
+    def _show_log_window(self):
+        logDock = self.iface.mainWindow().findChild(QDockWidget, 'MessageLog')
+        logDock.show()
 
     def _push_message(self, title, text, level=0, duration=0):
         if hasattr(self.iface.messageBar(), 'pushMessage'):  # QGIS >= 2.0
