@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui_qgiscloudplugin.ui'
+# Form implementation generated from reading ui file '/home/hdus/dev/qgis/qgis-cloud-plugin/qgiscloud/ui_qgiscloudplugin.ui'
 #
-# Created: Wed Nov 20 01:53:36 2013
+# Created: Tue Feb 11 21:00:29 2014
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -21,8 +21,8 @@ class Ui_QgisCloudPlugin(object):
         QgisCloudPlugin.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
         self.dockWidgetContents = QtGui.QWidget()
         self.dockWidgetContents.setObjectName(_fromUtf8("dockWidgetContents"))
-        self.verticalLayout = QtGui.QVBoxLayout(self.dockWidgetContents)
-        self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
+        self.gridLayout_6 = QtGui.QGridLayout(self.dockWidgetContents)
+        self.gridLayout_6.setObjectName(_fromUtf8("gridLayout_6"))
         self.tabWidget = QtGui.QTabWidget(self.dockWidgetContents)
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
         self.services = QtGui.QWidget()
@@ -209,8 +209,8 @@ class Ui_QgisCloudPlugin(object):
         self.tabWidget.addTab(self.upload, _fromUtf8(""))
         self.account = QtGui.QWidget()
         self.account.setObjectName(_fromUtf8("account"))
-        self.verticalLayout_2 = QtGui.QVBoxLayout(self.account)
-        self.verticalLayout_2.setObjectName(_fromUtf8("verticalLayout_2"))
+        self.gridLayout_5 = QtGui.QGridLayout(self.account)
+        self.gridLayout_5.setObjectName(_fromUtf8("gridLayout_5"))
         self.horizontalLayout_4 = QtGui.QHBoxLayout()
         self.horizontalLayout_4.setObjectName(_fromUtf8("horizontalLayout_4"))
         self.label_2 = QtGui.QLabel(self.account)
@@ -220,7 +220,13 @@ class Ui_QgisCloudPlugin(object):
         self.editServer.setEnabled(True)
         self.editServer.setObjectName(_fromUtf8("editServer"))
         self.horizontalLayout_4.addWidget(self.editServer)
-        self.verticalLayout_2.addLayout(self.horizontalLayout_4)
+        self.resetUrlBtn = QtGui.QToolButton(self.account)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/qgiscloud/icon.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.resetUrlBtn.setIcon(icon)
+        self.resetUrlBtn.setObjectName(_fromUtf8("resetUrlBtn"))
+        self.horizontalLayout_4.addWidget(self.resetUrlBtn)
+        self.gridLayout_5.addLayout(self.horizontalLayout_4, 1, 0, 1, 1)
         self.horizontalLayout_5 = QtGui.QHBoxLayout()
         self.horizontalLayout_5.setObjectName(_fromUtf8("horizontalLayout_5"))
         self.btnLogin = QtGui.QPushButton(self.account)
@@ -236,7 +242,7 @@ class Ui_QgisCloudPlugin(object):
         self.horizontalLayout_5.addWidget(self.lblLoginStatus)
         spacerItem4 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_5.addItem(spacerItem4)
-        self.verticalLayout_2.addLayout(self.horizontalLayout_5)
+        self.gridLayout_5.addLayout(self.horizontalLayout_5, 2, 0, 1, 1)
         self.groupBoxDatabases = QtGui.QGroupBox(self.account)
         self.groupBoxDatabases.setObjectName(_fromUtf8("groupBoxDatabases"))
         self.verticalLayout_4 = QtGui.QVBoxLayout(self.groupBoxDatabases)
@@ -269,7 +275,7 @@ class Ui_QgisCloudPlugin(object):
         spacerItem7 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_6.addItem(spacerItem7)
         self.verticalLayout_4.addLayout(self.horizontalLayout_6)
-        self.verticalLayout_2.addWidget(self.groupBoxDatabases)
+        self.gridLayout_5.addWidget(self.groupBoxDatabases, 3, 0, 1, 1)
         self.tabWidget.addTab(self.account, _fromUtf8(""))
         self.about = QtGui.QWidget()
         self.about.setObjectName(_fromUtf8("about"))
@@ -279,7 +285,7 @@ class Ui_QgisCloudPlugin(object):
         self.aboutText.setObjectName(_fromUtf8("aboutText"))
         self.gridLayout_4.addWidget(self.aboutText, 0, 0, 1, 1)
         self.tabWidget.addTab(self.about, _fromUtf8(""))
-        self.verticalLayout.addWidget(self.tabWidget)
+        self.gridLayout_6.addWidget(self.tabWidget, 0, 0, 1, 1)
         QgisCloudPlugin.setWidget(self.dockWidgetContents)
         self.label_2.setBuddy(self.editServer)
 
@@ -350,6 +356,8 @@ class Ui_QgisCloudPlugin(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.upload), QtGui.QApplication.translate("QgisCloudPlugin", "Upload Data", None, QtGui.QApplication.UnicodeUTF8))
         self.label_2.setText(QtGui.QApplication.translate("QgisCloudPlugin", "Server:", None, QtGui.QApplication.UnicodeUTF8))
         self.editServer.setText(QtGui.QApplication.translate("QgisCloudPlugin", "https://api.qgiscloud.com", None, QtGui.QApplication.UnicodeUTF8))
+        self.resetUrlBtn.setToolTip(QtGui.QApplication.translate("QgisCloudPlugin", "Reset QGIS Cloud API URL", None, QtGui.QApplication.UnicodeUTF8))
+        self.resetUrlBtn.setText(QtGui.QApplication.translate("QgisCloudPlugin", "...", None, QtGui.QApplication.UnicodeUTF8))
         self.btnLogin.setText(QtGui.QApplication.translate("QgisCloudPlugin", "Login", None, QtGui.QApplication.UnicodeUTF8))
         self.lblSignup.setText(QtGui.QApplication.translate("QgisCloudPlugin", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -365,3 +373,13 @@ class Ui_QgisCloudPlugin(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.about), QtGui.QApplication.translate("QgisCloudPlugin", "About", None, QtGui.QApplication.UnicodeUTF8))
 
 import resources_rc
+
+if __name__ == "__main__":
+    import sys
+    app = QtGui.QApplication(sys.argv)
+    QgisCloudPlugin = QtGui.QDockWidget()
+    ui = Ui_QgisCloudPlugin()
+    ui.setupUi(QgisCloudPlugin)
+    QgisCloudPlugin.show()
+    sys.exit(app.exec_())
+
