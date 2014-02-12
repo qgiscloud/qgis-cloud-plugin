@@ -107,6 +107,9 @@ class QgisCloudPluginDialog(QDockWidget):
         QObject.connect(self.ui.cbUploadDatabase, SIGNAL("currentIndexChanged(int)"), self.upload_database_selected)
         QObject.connect(self.ui.btnUploadData, SIGNAL("clicked()"), self.upload_data)
         QObject.connect(self.ui.btnPublishMapUpload, SIGNAL("clicked()"), self.publish_map)
+        
+        self.ui.editServer.textChanged.connect(self.serverURL)
+        self.ui.resetUrlBtn.clicked.connect(self.resetApiUrl)
 
         self.read_settings()
         self.api = API()
@@ -114,7 +117,11 @@ class QgisCloudPluginDialog(QDockWidget):
         self.local_data_sources = LocalDataSources()
         self.data_upload = DataUpload(self.iface, self.statusBar(), self.ui.uploadProgressBar, self.api, self.db_connections)
 
-        self.ui.editServer.setText(self.api.api_url())
+        if self.URL == "":
+            self.ui.editServer.setText(self.api.api_url())
+        else:
+            self.ui.editServer.setText(self.URL)
+            
         self.palette_red = QPalette(self.ui.serviceLinks.palette())
         self.palette_red.setColor(QPalette.WindowText, QColor('red'))
 
@@ -130,14 +137,23 @@ class QgisCloudPluginDialog(QDockWidget):
         project = QgsProject.instance()
         name = os.path.splitext(os.path.basename(unicode(project.fileName())))[0]
         return unicode(name)
+        
+    def resetApiUrl(self):
+        self.ui.editServer.setText(self.api.api_url())
+        
+    def serverURL(self,  URL):
+        self.URL = URL
+        self.store_settings()
 
     def store_settings(self):
         s = QSettings()
         s.setValue("qgiscloud/user", self.user)
+        s.setValue("qgiscloud/URL", self.URL)
 
     def read_settings(self):
         s = QSettings()
         self.user = s.value("qgiscloud/user", "", type=str)
+        self.URL = s.value("qgiscloud/URL", "", type=str)
 
     def _update_clouddb_mode(self, clouddb):
         self.clouddb = clouddb
