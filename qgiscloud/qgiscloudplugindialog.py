@@ -409,7 +409,7 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def check_layers(self):
         local_layers, unsupported_layers = self.update_local_layers()
-        if local_layers or unsupported_layers:
+        if (local_layers and self.clouddb) or unsupported_layers:
             message = ""
 
             if local_layers:
