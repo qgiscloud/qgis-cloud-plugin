@@ -591,7 +591,7 @@ class QgisCloudPluginDialog(QDockWidget):
         logDock.show()
 
     def _push_message(self, title, text, level=0, duration=0):
-        if hasattr(self.iface.messageBar(), 'pushMessage'):  # QGIS >= 2.0
+        if hasattr(self.iface, 'messageBar') and hasattr(self.iface.messageBar(), 'pushMessage'):  # QGIS >= 2.0
             self.iface.messageBar().pushMessage(title, text, level, duration)
         else:
             QMessageBox.information(self, title, text)
