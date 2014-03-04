@@ -3,16 +3,18 @@ name=QGIS Cloud Plugin
 qgisMinimumVersion=1.8
 qgisMaximumVersion=2.99
 description=Publish maps on qgiscloud.com
-version=0.11.7
+version=0.11.8
 author=Pirmin Kalberer, Mathias Walker, Horst Düster
 email=pka@sourcepole.ch
 
 ; Optional items:
 
-changelog=0.11.7
+changelog=0.11.8
+    -Logout button
+    0.11.7
     -Allow local layers in private cloud mode
     0.11.6
-    -Logout button / API URL reset
+    -API URL reset
     0.11.5
     -1.8/2.0 compatible release
     0.11.4
