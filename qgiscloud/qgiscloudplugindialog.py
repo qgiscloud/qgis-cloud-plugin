@@ -24,7 +24,6 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.QtXml import *
 from qgis.core import *
-from qgis.gui import QgsMessageBar
 from ui_qgiscloudplugin import Ui_QgisCloudPlugin
 from ui_login import Ui_LoginDialog
 from qgiscloudapi.qgiscloudapi import *
@@ -35,13 +34,13 @@ from data_upload import DataUpload
 from doAbout import DlgAbout
 import os.path
 import sys
-import urllib
 import traceback
 import string
 import re
 import time
 import platform
 from distutils.version import StrictVersion
+
 
 class QgisCloudPluginDialog(QDockWidget):
     COLUMN_LAYERS = 0
@@ -58,7 +57,7 @@ class QgisCloudPluginDialog(QDockWidget):
         QGis.WKBMultiLineString: "MultiLineString",
         QGis.WKBPolygon: "Polygon",
         QGis.WKBMultiPolygon: "MultiPolygon",
-        100: "No geometry", # Workaround (missing Python binding?): QGis.WKBNoGeometry / ogr.wkbNone
+        100: "No geometry",  # Workaround (missing Python binding?): QGis.WKBNoGeometry / ogr.wkbNone
         QGis.WKBPoint25D: "Point",
         QGis.WKBLineString25D: "LineString",
         QGis.WKBPolygon25D: "Polygon",
@@ -77,7 +76,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.setupUi(self)
 
         myAbout = DlgAbout()
-        self.ui.aboutText.setText(myAbout.aboutString()+myAbout.contribString()+myAbout.licenseString()+"<p>Version: "+version+"</p>")
+        self.ui.aboutText.setText(myAbout.aboutString() + myAbout.contribString() + myAbout.licenseString() + "<p>Version: " + version + "</p>")
         self.ui.tblLocalLayers.setColumnCount(5)
         header = ["Layers", "Data source", "Table name", "Geometry type", "SRID"]
         self.ui.tblLocalLayers.setHorizontalHeaderLabels(header)
@@ -107,7 +106,7 @@ class QgisCloudPluginDialog(QDockWidget):
         QObject.connect(self.ui.cbUploadDatabase, SIGNAL("currentIndexChanged(int)"), self.upload_database_selected)
         QObject.connect(self.ui.btnUploadData, SIGNAL("clicked()"), self.upload_data)
         QObject.connect(self.ui.btnPublishMapUpload, SIGNAL("clicked()"), self.publish_map)
-        
+
         self.ui.editServer.textChanged.connect(self.serverURL)
         self.ui.resetUrlBtn.clicked.connect(self.resetApiUrl)
 
@@ -121,7 +120,7 @@ class QgisCloudPluginDialog(QDockWidget):
             self.ui.editServer.setText(self.api.api_url())
         else:
             self.ui.editServer.setText(self.URL)
-            
+
         self.palette_red = QPalette(self.ui.serviceLinks.palette())
         self.palette_red.setColor(QPalette.WindowText, QColor('red'))
 
@@ -137,11 +136,11 @@ class QgisCloudPluginDialog(QDockWidget):
         project = QgsProject.instance()
         name = os.path.splitext(os.path.basename(unicode(project.fileName())))[0]
         return unicode(name)
-        
+
     def resetApiUrl(self):
         self.ui.editServer.setText(self.api.api_url())
-        
-    def serverURL(self,  URL):
+
+    def serverURL(self, URL):
         self.URL = URL
         self.store_settings()
 
@@ -259,7 +258,7 @@ class QgisCloudPluginDialog(QDockWidget):
         if self.clouddb and self.check_login():
             db_list = self.api.read_databases()
             if self.show_api_error(db_list):
-              return
+                return
             self.db_connections = DbConnections()
             for db in db_list:
                 #db example: {"host":"spacialdb.com","connection_string":"postgres://sekpjr_jpyled:d787b609@spacialdb.com:9999/sekpjr_jpyled","name":"sekpjr_jpyled","username":"sekpjr_jpyled","port":9999,"password":"d787b609"}
@@ -297,7 +296,7 @@ class QgisCloudPluginDialog(QDockWidget):
     def read_maps(self):
         #map = self.api.read_map("1")
         if self.check_login():
-            maps = self.api.read_maps()
+            self.api.read_maps()
 
     def check_project_saved(self):
         cancel = False
@@ -337,8 +336,8 @@ class QgisCloudPluginDialog(QDockWidget):
                     'fullExtent': {
                         'xmin': fullExtent.xMinimum(), 'ymin': fullExtent.yMinimum(),
                         'xmax': fullExtent.xMaximum(), 'ymax': fullExtent.yMaximum()
-                    #},
-                    #'svgPaths': QgsApplication.svgPaths() #For resolving absolute symbol paths in print composer
+                        #},
+                        #'svgPaths': QgsApplication.svgPaths() #For resolving absolute symbol paths in print composer
                     }
                 }
                 fname = unicode(QgsProject.instance().fileName())
@@ -380,7 +379,6 @@ class QgisCloudPluginDialog(QDockWidget):
             if os.path.isfile(sym):
                 self.api.create_graphic(sym, sym)
         self.statusBar().showMessage("")
-
 
     def reset_load_data(self):
         self.update_local_data_sources([])
@@ -451,7 +449,7 @@ class QgisCloudPluginDialog(QDockWidget):
             layers_item.setToolTip("\n".join(layer_names))
             data_source_item = QTableWidgetItem(data_source)
             data_source_item.setToolTip(data_source)
-            table_name = layers[0].name() # find a better table name if there are multiple layers with same data source?
+            table_name = layers[0].name()  # find a better table name if there are multiple layers with same data source?
             if data_source in self.data_sources_table_names:
                 # use current table name if available to keep changes by user
                 table_name = self.data_sources_table_names[data_source]
@@ -505,7 +503,7 @@ class QgisCloudPluginDialog(QDockWidget):
             # remove table names without data sources
             keys_to_remove = []
             for key in self.data_sources_table_names.iterkeys():
-                if self.local_data_sources.layers(key) == None:
+                if self.local_data_sources.layers(key) is None:
                     keys_to_remove.append(key)
 
             for key in keys_to_remove:
@@ -532,19 +530,19 @@ class QgisCloudPluginDialog(QDockWidget):
             if self.db_connections.count() == 0:
                 # create db
                 self.statusBar().showMessage(self.tr("Create new database..."))
-                QApplication.processEvents() # refresh status bar
+                QApplication.processEvents()  # refresh status bar
                 self.create_database()
                 self.statusBar().showMessage("")
 
             db_name = self.ui.cbUploadDatabase.currentText()
 
             if not self.db_connections.isPortOpen(db_name):
-                 uri = self.db_connections.cloud_layer_uri(db_name, "", "")
-                 host = str(uri.host())
-                 port = uri.port()
-                 QMessageBox.critical(self, self.tr("Network Error"),
-                                      self.tr("Could not connect to database server ({0}) on port {1}. Please contact your system administrator or internet provider".format(host, port)))
-                 return
+                uri = self.db_connections.cloud_layer_uri(db_name, "", "")
+                host = str(uri.host())
+                port = uri.port()
+                QMessageBox.critical(self, self.tr("Network Error"),
+                                     self.tr("Could not connect to database server ({0}) on port {1}. Please contact your system administrator or internet provider".format(host, port)))
+                return
 
             # disable update of local data sources during upload, as there are temporary layers added and removed
             self.do_update_local_data_sources = False
@@ -556,7 +554,7 @@ class QgisCloudPluginDialog(QDockWidget):
             for row in range(0, self.ui.tblLocalLayers.rowCount()):
                 data_source = unicode(self.ui.tblLocalLayers.item(row, self.COLUMN_DATA_SOURCE).text())
                 layers = self.local_data_sources.layers(data_source)
-                if layers != None:
+                if layers is not None:
                     table_name = unicode(self.ui.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text())
                     data_sources_items[data_source] = {'table': table_name, 'layers': layers}
 
