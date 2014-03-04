@@ -46,6 +46,7 @@ __all__ = ['API', 'UnauthorizedError', 'ConnectionException', 'TokenRequiredErro
            'ConflictDuplicateError', 'GoneError', 'InternalServerError',
            'NotImplementedError', 'ThrottledError']
 
+
 class API():
     """
         The API class contains all methods to access the qgiscloud RESTful
@@ -106,6 +107,12 @@ class API():
         self.user = user
         self.password = password
         return True
+
+    def reset_auth(self):
+        """
+            Reset user/password for authentication.
+        """
+        self.user = self.password = None
 
     def check_auth(self):
         """
@@ -202,7 +209,7 @@ class API():
                 'type': '<TYPE>',
                 'length': <LENGTH>,
                 'precision': <PRECISION>
-              }, ... 
+              }, ...
             ]
 
             srid = 'EPSG:<SRID>'

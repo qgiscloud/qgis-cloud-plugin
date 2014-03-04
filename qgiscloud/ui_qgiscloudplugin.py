@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/hdus/dev/qgis/qgis-cloud-plugin/qgiscloud/ui_qgiscloudplugin.ui'
+# Form implementation generated from reading ui file 'ui_qgiscloudplugin.ui'
 #
-# Created: Tue Feb 11 21:00:29 2014
+# Created: Tue Mar  4 09:30:42 2014
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -240,6 +240,9 @@ class Ui_QgisCloudPlugin(object):
         self.lblLoginStatus = QtGui.QLabel(self.account)
         self.lblLoginStatus.setObjectName(_fromUtf8("lblLoginStatus"))
         self.horizontalLayout_5.addWidget(self.lblLoginStatus)
+        self.btnLogout = QtGui.QPushButton(self.account)
+        self.btnLogout.setObjectName(_fromUtf8("btnLogout"))
+        self.horizontalLayout_5.addWidget(self.btnLogout)
         spacerItem4 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_5.addItem(spacerItem4)
         self.gridLayout_5.addLayout(self.horizontalLayout_5, 2, 0, 1, 1)
@@ -365,6 +368,7 @@ class Ui_QgisCloudPlugin(object):
 "</style></head><body style=\" font-family:\'Ubuntu\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://qgiscloud.com/account/sign_up\"><span style=\" text-decoration: underline; color:#0057ae;\">Signup</span></a></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
         self.lblLoginStatus.setText(QtGui.QApplication.translate("QgisCloudPlugin", "Logged in as ...", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnLogout.setText(QtGui.QApplication.translate("QgisCloudPlugin", "Logout", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBoxDatabases.setTitle(QtGui.QApplication.translate("QgisCloudPlugin", "Databases", None, QtGui.QApplication.UnicodeUTF8))
         self.btnDbRefresh.setText(QtGui.QApplication.translate("QgisCloudPlugin", "Refresh", None, QtGui.QApplication.UnicodeUTF8))
         self.btnDbCreate.setText(QtGui.QApplication.translate("QgisCloudPlugin", "Create new database", None, QtGui.QApplication.UnicodeUTF8))
@@ -373,13 +377,3 @@ class Ui_QgisCloudPlugin(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.about), QtGui.QApplication.translate("QgisCloudPlugin", "About", None, QtGui.QApplication.UnicodeUTF8))
 
 import resources_rc
-
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    QgisCloudPlugin = QtGui.QDockWidget()
-    ui = Ui_QgisCloudPlugin()
-    ui.setupUi(QgisCloudPlugin)
-    QgisCloudPlugin.show()
-    sys.exit(app.exec_())
-

@@ -86,6 +86,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.btnUploadData.setEnabled(False)
         self.ui.uploadProgressBar.hide()
         self.ui.btnPublishMapUpload.hide()
+        self.ui.btnLogout.hide()
         self.ui.lblLoginStatus.hide()
 
         # map<data source, table name>
@@ -207,6 +208,7 @@ class QgisCloudPluginDialog(QDockWidget):
                     self.store_settings()
                     self.ui.btnLogin.hide()
                     self.ui.lblSignup.hide()
+                    self.ui.btnLogout.show()
 
                     self.ui.lblLoginStatus.setText(self.tr_uni("Logged in as {0} ({1})").format(self.user, login_info['plan']))
                     self.ui.lblLoginStatus.show()
@@ -253,6 +255,13 @@ class QgisCloudPluginDialog(QDockWidget):
     def login(self):
         if self.check_login():
             self.refresh_databases()
+
+    @pyqtSignature('')
+    def on_btnLogout_clicked(self):
+        self.api.reset_auth()
+        self.ui.btnLogout.hide()
+        self.ui.lblLoginStatus.hide()
+        self.ui.btnLogin.show()
 
     def refresh_databases(self):
         if self.clouddb and self.check_login():
