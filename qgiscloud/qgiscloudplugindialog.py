@@ -323,7 +323,7 @@ class QgisCloudPluginDialog(QDockWidget):
             ret = msgBox.exec_()
             if ret == QMessageBox.Save:
                 if not fname:
-                    project.setFileName(QFileDialog.getOpenFileName(self, "Save Project", "", "QGis files  (*.qgs)"))
+                    project.setFileName(QFileDialog.getSaveFileName(self, "Save Project", "", "QGIS Project Files  (*.qgs)"))
                 if not unicode(project.fileName()):
                     cancel = True
                 else:
