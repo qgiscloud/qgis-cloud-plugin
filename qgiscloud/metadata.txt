@@ -4,7 +4,7 @@ qgisMinimumVersion=1.8
 qgisMaximumVersion=2.99
 description=Publish maps on qgiscloud.com
 version=0.11.9
-author=Pirmin Kalberer, Mathias Walker, Horst D端ster
+author=Pirmin Kalberer, Mathias Walker, Horst Duester
 email=pka@sourcepole.ch
 
 ; Optional items:
