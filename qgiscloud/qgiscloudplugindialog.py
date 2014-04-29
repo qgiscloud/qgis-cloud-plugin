@@ -292,8 +292,12 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def update_urls(self):
         self.update_url(self.ui.lblWebmap, self.api_url(), 'http://', u'{0}/{1}'.format(self.user, self.map()))
-        self.update_url(self.ui.lblMobileMap, self.api_url(), 'http://m.', u'{0}/{1}'.format(self.user, self.map()))
-        self.update_url(self.ui.lblWMS, self.api_url(), 'http://wms.', u'{0}/{1}'.format(self.user, self.map()))
+        if self.clouddb:
+            self.update_url(self.ui.lblMobileMap, self.api_url(), 'http://m.', u'{0}/{1}'.format(self.user, self.map()))
+            self.update_url(self.ui.lblWMS, self.api_url(), 'http://wms.', u'{0}/{1}'.format(self.user, self.map()))
+        else:
+            self.update_url(self.ui.lblMobileMap, self.api_url(), 'http://', u'{0}/{1}/wms'.format(self.user, self.map()))
+            self.update_url(self.ui.lblWMS, self.api_url(), 'http://', u'{0}/{1}/mobile'.format(self.user, self.map()))
         self.update_url(self.ui.lblMaps, self.api_url(), 'http://', 'maps')
 
     def update_url(self, label, api_url, prefix, path):

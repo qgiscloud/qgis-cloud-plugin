@@ -11,6 +11,7 @@ email=pka@sourcepole.ch
 
 changelog=0.11.10
     -Upload custom SVG symbols with relative path
+    -Fix WMS & Mobile URL in private cloud mode
     0.11.9
     -getOpenFileName Dialog bug fixed
     0.11.8
