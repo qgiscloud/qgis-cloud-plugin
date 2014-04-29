@@ -3,7 +3,7 @@ name=QGIS Cloud Plugin
 qgisMinimumVersion=1.8
 qgisMaximumVersion=2.99
 description=Publish maps on qgiscloud.com
-version=0.11.9
+version=0.11.10
 author=Pirmin Kalberer, Mathias Walker, Horst Duester
 email=pka@sourcepole.ch
 
