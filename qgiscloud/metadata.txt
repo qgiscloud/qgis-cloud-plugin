@@ -9,7 +9,9 @@ email=pka@sourcepole.ch
 
 ; Optional items:
 
-changelog=0.11.9
+changelog=0.11.10
+    -Upload custom SVG symbols with relative path
+    0.11.9
     -getOpenFileName Dialog bug fixed
     0.11.8
     -Logout button
