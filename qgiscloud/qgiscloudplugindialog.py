@@ -397,7 +397,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 self.api.create_graphic(sym, sym)
             else:
                 for path in search_paths:
-                    fullpath = os.path.join(path, sym)
+                    fullpath = os.path.join(unicode(path), sym)
                     if os.path.isfile(fullpath):
                         qDebug("api.create_graphic: %s" % fullpath)
                         self.api.create_graphic(sym, fullpath)
