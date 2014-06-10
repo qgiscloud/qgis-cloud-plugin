@@ -1592,6 +1592,9 @@ def TranslateLayer(poSrcDS, poSrcLayer, poDstDS, papszLCO, pszNewLayerName, \
     if nGroupTransactions > 0:
         poDstLayer.CommitTransaction()
 
+    if gdal.GetLastErrorNo() != 0:
+        print gdal.GetLastErrorMsg()
+        return False
     return True
 
 def ogr_version_info():
