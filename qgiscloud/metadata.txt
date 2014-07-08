@@ -3,13 +3,17 @@ name=QGIS Cloud Plugin
 qgisMinimumVersion=1.8
 qgisMaximumVersion=2.99
 description=Publish maps on qgiscloud.com
-version=0.11.12
+version=0.11.13
 author=Pirmin Kalberer, Mathias Walker, Horst Duester
 email=pka@sourcepole.ch
 
 ; Optional items:
 
-changelog=0.11.12
+changelog=
+    0.11.13
+    - Error message for QGIScloud error 
+      "terminating translation prematurely after failed translation of layer"
+    0.11.12
     - Service URL fix in QGIS private Cloud section
     0.11.11
     -Fix uploading project with umlauts in file name
