@@ -970,7 +970,15 @@ def ogr2ogrStdstreams(
                 and not bSkipFailures:
                 print(
                         "Terminating translation prematurely after failed\n" + \
-                        "translation of layer " + poLayer.GetLayerDefn().GetName() + " (use -skipfailures to skip errors)")
+                        "translation of layer " + poLayer.GetLayerDefn().GetName() + " (use -skipfailures to skip errors).\n" + \
+                        "Various problems can lead to this error message. To solve this issue, please go through the following steps:\n" + \
+                        " - Check if the layer contains topological errors.\n" + \
+                        " - Check if the layer encoding is set to UTF-8.\n" + \
+                        " - Check if the layer has set the correct CRS.\n" + \
+                        " - Check if the granted data volume of your account plan is sufficient to contain your data.\n" +
+                        "\n" +
+                        "In most cases, performing these checks should allow you to resolve the issue.\n" +
+                        "If you need more data volume, please upgrade your account plan.")
 
                 return False
 
