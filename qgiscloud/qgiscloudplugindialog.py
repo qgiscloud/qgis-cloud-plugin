@@ -662,5 +662,21 @@ class QgisCloudPluginDialog(QDockWidget):
             elif login_info['plan'] == 'Enterprise/Reseller' :
                 maxSize = 5000            
                 
-            self.ui.lblDbSize.setText(self.tr("Used DB: ")+str(sizeAll)+" "+tmp[1]+" / "+str(maxSize)+" MB" )           
+            lblPalette = QPalette()
+            usage = sizeAll/maxSize
+            
+            if usage < 0.8:
+                bg_color = QColor(255, 0, 0, 0)
+            elif usage >= 0.8 and usage < 1:
+                bg_color = QColor(255, 0, 0, 100)
+            elif usage >= 1:
+                bg_color = QColor(255, 0, 0, 255)
+                
+            lblPalette.setColor(QPalette.Window, QColor(bg_color));
+
+            self.ui.lblDbSize.setAutoFillBackground(True);
+            self.ui.lblDbSize.setPalette(lblPalette);
+            self.ui.lblDbSize.setText(self.tr("Used DB: ")+str(sizeAll)+" "+tmp[1]+" / "+str(maxSize)+" MB" )    
+            self.setWindowTitle("QGIS Cloud - "+self.tr("Used DB: ")+str(sizeAll)+" "+tmp[1]+" / "+str(maxSize)+" MB" )  
+            
             
