@@ -530,6 +530,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.do_update_local_data_sources = True
         self.update_local_layers()
         self.activate_upload_button()
+        self.db_size(self.db_connections)
 
     def update_data_sources_table_names(self):
         if self.local_data_sources.count() == 0:
@@ -677,6 +678,10 @@ class QgisCloudPluginDialog(QDockWidget):
             self.ui.lblDbSize.setAutoFillBackground(True);
             self.ui.lblDbSize.setPalette(lblPalette);
             self.ui.lblDbSize.setText(self.tr("Used DB: ")+str(sizeAll)+" "+tmp[1]+" / "+str(maxSize)+" MB" )    
-            self.setWindowTitle("QGIS Cloud - "+self.tr("Used DB: ")+str(sizeAll)+" "+tmp[1]+" / "+str(maxSize)+" MB" )  
+
+            self.ui.lblDbSizeUpload.setAutoFillBackground(True);
+            self.ui.lblDbSizeUpload.setPalette(lblPalette);
+            self.ui.lblDbSizeUpload.setText(self.tr("Used DB: ")+str(sizeAll)+" "+tmp[1]+" / "+str(maxSize)+" MB" )    
+#            self.setWindowTitle("QGIS Cloud - "+self.tr("Used DB: ")+str(sizeAll)+" "+tmp[1]+" / "+str(maxSize)+" MB" )  
             
             

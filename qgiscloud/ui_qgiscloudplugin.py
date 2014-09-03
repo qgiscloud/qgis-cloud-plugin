@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '/home/hdus/dev/qgis/qgis-cloud-plugin/qgiscloud/ui_qgiscloudplugin.ui'
 #
-# Created: Tue Sep  2 13:33:40 2014
+# Created: Wed Sep  3 14:40:08 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -187,6 +187,10 @@ class Ui_QgisCloudPlugin(object):
         self.cbUploadDatabase.setObjectName(_fromUtf8("cbUploadDatabase"))
         self.horizontalLayout_3.addWidget(self.cbUploadDatabase)
         self.verticalLayout_10.addLayout(self.horizontalLayout_3)
+        self.lblDbSizeUpload = QtGui.QLabel(self.upload)
+        self.lblDbSizeUpload.setText(_fromUtf8(""))
+        self.lblDbSizeUpload.setObjectName(_fromUtf8("lblDbSizeUpload"))
+        self.verticalLayout_10.addWidget(self.lblDbSizeUpload)
         self.tblLocalLayers = QtGui.QTableWidget(self.upload)
         self.tblLocalLayers.setObjectName(_fromUtf8("tblLocalLayers"))
         self.tblLocalLayers.setColumnCount(0)

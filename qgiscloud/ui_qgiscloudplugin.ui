@@ -389,6 +389,13 @@ p, li { white-space: pre-wrap; }
          </layout>
         </item>
         <item>
+         <widget class="QLabel" name="lblDbSizeUpload">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QTableWidget" name="tblLocalLayers">
           <attribute name="verticalHeaderVisible">
            <bool>false</bool>
