@@ -40,6 +40,7 @@ import re
 import time
 import platform
 from distutils.version import StrictVersion
+from pyogr.ogrds import OgrDs
 
 
 class QgisCloudPluginDialog(QDockWidget):
@@ -48,6 +49,10 @@ class QgisCloudPluginDialog(QDockWidget):
     COLUMN_TABLE_NAME = 2
     COLUMN_GEOMETRY_TYPE = 3
     COLUMN_SRID = 4
+    
+    FREE_SIZE = 50
+    PRO_SIZE = 500
+    RESELLER_SIZE = 5000
 
     GEOMETRY_TYPES = {
         QGis.WKBUnknown: "Unknown",
@@ -115,7 +120,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.api = API()
         self.db_connections = DbConnections()
         self.local_data_sources = LocalDataSources()
-        self.data_upload = DataUpload(self.iface, self.statusBar(), self.ui.uploadProgressBar, self.api, self.db_connections)
+        self.data_upload = DataUpload(self.iface, self.statusBar(), self.ui.uploadProgressBar, self.api, self.db_connections)        
 
         if self.URL == "":
             self.ui.editServer.setText(self.api.api_url())
@@ -252,6 +257,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 time.sleep(2)
                 self.refresh_databases()
                 self.unsetCursor()
+                
 
     def select_database(self):
         self.ui.btnDbDelete.setEnabled(len(self.ui.tabDatabases.selectedItems()) > 0)
@@ -268,7 +274,9 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.btnLogin.show()
 
     def refresh_databases(self):
+
         if self.clouddb and self.check_login():
+            QApplication.setOverrideCursor(Qt.WaitCursor) 
             db_list = self.api.read_databases()
             if self.show_api_error(db_list):
                 return
@@ -290,6 +298,10 @@ class QgisCloudPluginDialog(QDockWidget):
                 self.ui.tabDatabases.addItem(it)
                 self.ui.cbUploadDatabase.addItem(name)
             self.db_connections.refresh(self.user)
+
+            self.db_size(self.db_connections)
+            QApplication.restoreOverrideCursor() 
+
 
     def api_url(self):
         return unicode(self.ui.editServer.text())
@@ -629,3 +641,26 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def tr_uni(self, str):
         return unicode(self.tr(str))
+        
+    
+    def db_size(self,  db_connections):
+        sizeAll = 0
+        cloud_dbs_from_server = db_connections._dbs.keys()
+        if len(cloud_dbs_from_server) > 0:
+            for db in cloud_dbs_from_server:
+                ogrds = OgrDs('postgresql',  db_connections.db(db).ogr_connection_descr())
+#                db_connections.wait_for_db(db_connections.db(db))
+                size = ogrds.db_size(db)
+                tmp = size[0].split(' ')
+                sizeAll = sizeAll + int(tmp[0])
+
+            login_info = self.api.check_login(version_info=self._version_info())
+            if login_info['plan'] == 'Free':
+                maxSize = 50
+            elif login_info['plan'] == 'Pro' or login_info['plan'] == 'Pro Beta' :
+                maxSize = 500
+            elif login_info['plan'] == 'Enterprise/Reseller' :
+                maxSize = 5000            
+                
+            self.ui.lblDbSize.setText(self.tr("Used DB: ")+str(sizeAll)+" "+tmp[1]+" / "+str(maxSize)+" MB" )           
+            

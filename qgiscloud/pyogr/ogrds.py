@@ -1,4 +1,5 @@
-import ogr
+import ogr,  time
+
 
 class OgrDs:
 
@@ -6,8 +7,17 @@ class OgrDs:
         self.open(format, ds)
 
     def open(self, format, ds):
-        driver = ogr.GetDriverByName(format)
-        self.ds = driver.CreateDataSource(ds)
+        driver = ogr.GetDriverByName(format)        
+        ok = False
+        
+        while not ok:
+            try:
+                self.ds = driver.CreateDataSource(ds)
+                result = self.ds.ExecuteSQL("select 1 as test")
+                ok = True
+            except:
+                ok = False
+                
         return self.ds
 
     def close(self):
@@ -24,6 +34,7 @@ class OgrDs:
             select_values(ds, "SELECT id FROM companies LIMIT 3") => [1,2,3]
         """
         values = []
+
         poResultSet = self.ds.ExecuteSQL( sql_statement, None, None )
         if poResultSet is not None:
             poDefn = poResultSet.GetLayerDefn()
@@ -35,6 +46,7 @@ class OgrDs:
             self.ds.ReleaseResultSet( poResultSet )
         return values
 
+
     def table_exists(self, table):
         exists = True
         try:
@@ -42,3 +54,8 @@ class OgrDs:
         except:
           exists = False
         return exists
+        
+    def db_size(self,  db_name):
+        sql = "SELECT pg_size_pretty(pg_database_size('"+str(db_name)+"'))"
+        return self.select_values(sql )
+                

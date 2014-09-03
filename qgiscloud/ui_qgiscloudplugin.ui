@@ -21,7 +21,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="services">
        <attribute name="title">
@@ -550,7 +550,7 @@ p, li { white-space: pre-wrap; }
           </item>
          </layout>
         </item>
-        <item row="3" column="0">
+        <item row="4" column="0">
          <widget class="QGroupBox" name="groupBoxDatabases">
           <property name="title">
            <string>Databases</string>
@@ -635,6 +635,13 @@ p, li { white-space: pre-wrap; }
             </layout>
            </item>
           </layout>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="lblDbSize">
+          <property name="text">
+           <string/>
+          </property>
          </widget>
         </item>
        </layout>
