@@ -11,7 +11,7 @@ email=pka@sourcepole.ch
 
 changelog=
     0.11.15
-    - Support of server side PostGIS Raster added
+    - Support of server side PostGIS Raster added. Upload raster with raster2pgsql.
     0.11.14
     - Display of total used DB space added
     0.11.13
