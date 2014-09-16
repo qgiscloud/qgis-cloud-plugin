@@ -657,11 +657,11 @@ class QgisCloudPluginDialog(QDockWidget):
 
             login_info = self.api.check_login(version_info=self._version_info())
             if login_info['plan'] == 'Free':
-                maxSize = 50
+                maxSize = self.FREE_SIZE
             elif login_info['plan'] == 'Pro' or login_info['plan'] == 'Pro Beta' :
-                maxSize = 500
+                maxSize = self.PRO_SIZE
             elif login_info['plan'] == 'Enterprise/Reseller' :
-                maxSize = 5000            
+                maxSize = self.RESELLER_SIZE
                 
             lblPalette = QPalette()
             usage = sizeAll/maxSize
@@ -682,6 +682,5 @@ class QgisCloudPluginDialog(QDockWidget):
             self.ui.lblDbSizeUpload.setAutoFillBackground(True);
             self.ui.lblDbSizeUpload.setPalette(lblPalette);
             self.ui.lblDbSizeUpload.setText(self.tr("Used DB: ")+str(sizeAll)+" "+tmp[1]+" / "+str(maxSize)+" MB" )    
-#            self.setWindowTitle("QGIS Cloud - "+self.tr("Used DB: ")+str(sizeAll)+" "+tmp[1]+" / "+str(maxSize)+" MB" )  
             
             

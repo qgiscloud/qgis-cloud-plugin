@@ -21,6 +21,7 @@
 """
 
 from PyQt4.QtCore import *
+from PyQt4.QtGui import *
 from qgis.core import *
 from db_connection_cfg import DbConnectionCfg
 
@@ -47,6 +48,7 @@ class LocalDataSources:
         unsupported_layers = []
         local_layers = []
         for layer in QgsMapLayerRegistry.instance().mapLayers().values():
+#            QMessageBox.information(None, '', str(layer.type()))
             if layer.id() == skip_layer_id:
                 continue
             if layer.type() != QgsMapLayer.PluginLayer:
@@ -61,6 +63,13 @@ class LocalDataSources:
                     else:
                         # geometryless tables not supported
                         unsupported_layers.append(layer)
+                        
+            elif provider == "gdal":
+                if layer.dataProvider().metadata()[0:13] != "PostGISRaster":
+                    if layer.dataProvider().dataSourceUri().host() not in DbConnectionCfg.CLOUD_DB_HOSTS:
+                        unsupported_layers.append(layer)
+                    
+
             elif not provider in ["wms", "openlayers"]:
                 if layer.type() == QgsMapLayer.VectorLayer:
                     local_layers.append(layer)
