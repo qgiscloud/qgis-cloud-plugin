@@ -25,7 +25,7 @@ def name():
 def description():
     return "Publish maps on qgiscloud.com"
 def version():
-    return "0.11.15"
+    return "0.11.16"
 def icon():
     return "icon.png"
 def qgisMinimumVersion():
