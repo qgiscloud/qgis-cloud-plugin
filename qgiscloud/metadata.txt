@@ -3,13 +3,15 @@ name=QGIS Cloud Plugin
 qgisMinimumVersion=1.8
 qgisMaximumVersion=2.99
 description=Publish maps on qgiscloud.com
-version=0.11.17
+version=0.11.18
 author=Pirmin Kalberer, Mathias Walker, Horst Duester
 email=pka@sourcepole.ch
 
 ; Optional items:
 
 changelog=
+    0.11.18
+    - Fix OGR import in Windows
     0.11.17
     - DB server detection fixed
     0.11.16

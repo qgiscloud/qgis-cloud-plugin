@@ -1,4 +1,8 @@
-import ogr,  time
+try:
+    from osgeo import ogr
+except ImportError:
+    import ogr
+import time
 
 
 class OgrDs:
