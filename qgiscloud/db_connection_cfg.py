@@ -21,7 +21,7 @@
 """
 
 from PyQt4.QtCore import *
-from pg8000 import DBAPI
+import psycopg2
 from qgis.core import *
 
 
@@ -121,13 +121,15 @@ class DbConnectionCfg:
         uri.setUseEstimatedMetadata(self.estimatedMetadata)
         return uri
 
-    def dbapi_connection(self, timeout=3):
-        return DBAPI.connect(
-            host=self.host,
-            port=int(self.port),
-            database=self.database,
-            user=self.username,
-            password=self.password,
-            socket_timeout=timeout,  # s
-            ssl=(self.sslmode != QgsDataSourceURI.SSLdisable)
-        )
+    def psycopg_connection(self, timeout=3):
+        try:
+            return psycopg2.connect(
+                database=self.database,
+                user=self.username,
+                password=self.password,
+                host=self.host,
+                port=self.port,
+                connect_timeout=timeout  # s
+            )
+        except:
+            return None

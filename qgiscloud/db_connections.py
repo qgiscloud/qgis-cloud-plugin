@@ -104,7 +104,7 @@ class DbConnections:
         ok = False
         while not ok and retries > 0:
             try:
-                connection = db.dbapi_connection(timeout)
+                connection = db.psycopg_connection(timeout)
                 connection.close()
                 ok = True
             except Exception: # as err:
