@@ -53,7 +53,7 @@ class DataUpload:
 
         # Connect to database
         try:
-            conn = psycopg2.connect(database=db.database, user=db.username, password=db.password, host=db.host, port=db.port)
+            conn = db.psycopg_connection()
         except:
             return False
 
