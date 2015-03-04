@@ -27,9 +27,12 @@ from PyQt4.QtGui import *
 from PyQt4.QtXml import *
 from qgis.core import *
 from db_connections import DbConnections
-from pyogr.ogr2ogr import *
 import os
 import re
+import psycopg2
+from StringIO import StringIO
+import struct
+import binascii
 
 
 class DataUpload:
@@ -43,101 +46,149 @@ class DataUpload:
         pass
 
     def upload(self, db, data_sources_items, do_replace_local_layers):
-        db_name = db.database
-        self.status_bar.showMessage(u"Uploading to database %s ..." % db_name)
-
-        dest_geometry_types = {
-            #QGis.WKBPoint: ogr.wkbMultiPoint,
-            QGis.WKBLineString: ogr.wkbMultiLineString,
-            QGis.WKBPolygon: ogr.wkbMultiPolygon
-        }
-
-        #PG options
-        os.environ['PG_USE_COPY'] = 'YES'
-        os.environ['PG_USE_BASE64'] = 'YES'
-
         import_ok = True
         layers_to_replace = {}
-        for data_source, item in data_sources_items.iteritems():
-            table_name = item['table']
-            qgis_layers = item['layers'] #layers with shared data source
-            data_layer = qgis_layers[0]
-            srcLayer = self._ogrConnectionString(data_layer)
-            #qDebug("ogr2ogr source: %s" % srcLayer)
-            srcUri = QgsDataSourceURI(data_layer.source())
-            papszLayers = []
-            if srcUri.table() != '':
-                papszLayers = [str(srcUri.table())]
-                #qDebug("ogr2ogr layers: " + ' '.join(papszLayers))
-            geometry_column = 'wkb_geometry'
-            eGType = dest_geometry_types.get(data_layer.wkbType()) or -2 #single to multi geom
-            destUri = self.db_connections.cloud_layer_uri(db_name, table_name, geometry_column)
+        self.status_bar.showMessage(u"Uploading to database %s ..." % db.database)
+        self.progress_bar.show()
 
-            self.progress_bar.setFormat("Uploading " + table_name + ": %v%")
-            self.progress_bar.setRange(0, 100)
+        # Connect to database
+        try:
+            conn = psycopg2.connect(database=db.database, user=db.username, password=db.password, host=db.host, port=db.port)
+        except:
+            return False
+
+        for data_source, item in data_sources_items.iteritems():
+            # Layers contains all layers with shared data source
+            layer = item['layers'][0]
+            fields = layer.pendingFields()
+            srid = layer.crs().postgisSrid()
+            geom_column = "wkb_geometry"
+            wkbType = layer.wkbType()
+
+            # If wkbType is LineString or Polygon, upload as MultiLineString and MultiPolygon since
+            # shapefiles of type LineString / Polygon can contain geometries of the corresponding
+            # multitype (the same does not apply for Points however, strangely)
+            convertToMulti = False
+            if QGis.flatType(wkbType) == QGis.WKBLineString or QGis.flatType(wkbType) == QGis.WKBPolygon:
+                wkbType = QGis.multiType(wkbType)
+                convertToMulti = True
+
+            # Create table (pk='' => always generate a new primary key)
+            cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"public\".\"%s\" (%s)" % (
+                db.database, db.host, db.port, db.username, db.password, item['table'], geom_column
+            )
+            # TODO: Ask user for overwriting existing table
+            vectorLayerImport = QgsVectorLayerImport(cloudUri, "postgres", fields, wkbType, layer.crs(), True)
+            if vectorLayerImport.hasError():
+                import_ok &= False
+                continue
+
+            # Create cursor
+            cursor = conn.cursor()
+
+            # Update progress bar
+            self.progress_bar.setFormat("Uploading " + item['table'] + ": %v%")
+            self.progress_bar.setRange(0, 0)
             self.progress_bar.setValue(0)
 
-            ok = ogr2ogr(pszFormat='PostgreSQL',
-                pszDataSource=srcLayer,
-                papszLayers=papszLayers,
-                pszDestDataSource=db.ogr_connection_descr(),
-                pszNewLayerName=table_name,
-                papszLCO = ['LAUNDER=NO'],
-                eGType=eGType,
-                bOverwrite=True, #TODO: Ask user for overwriting existing table
-                bDisplayProgress=True,
-                progress_func=self._progress,
-                errfunc=self._ogrerr)
-            qDebug("ogr2ogr result: %s" % ok)
-            import_ok = import_ok and ok
+            # Build import string
+            attribs = [fields.field(i).name() for i in range(0, fields.count())]
+            count = 0
+            importstr = ""
+            ok = True
 
-            self.progress_bar.hide()
+            for feature in layer.getFeatures(QgsFeatureRequest()):
+                # First field is primary key
+                importstr += "%d" % count
+                count += 1
+
+                # Second field is geometry in EWKB Hex format
+                importstr += "\t" + self._wkbToEWkbHex(feature.geometry().asWkb(), srid, convertToMulti)
+
+                # Finally, copy data attributes
+                for attrib in attribs:
+                    val = feature.attribute(attrib)
+                    if val:
+                        importstr += "\t" + str(val)
+                    else:
+                        importstr += "\t\\N"
+
+                importstr += "\n"
+
+                # Upload in chunks
+                if (count % 500) == 0:
+                    try:
+                        cursor.copy_from(StringIO(importstr), 'public.%s' % item['table'])
+                    except Exception as e:
+                        QgsMessageLog.logMessage(str(e), "QGISCloud")
+                        ok = False
+                        break
+                    importstr = ""
+                    QApplication.processEvents()
+
+            if ok and importstr:
+                try:
+                    cursor.copy_from(StringIO(importstr), 'public.%s' % item['table'])
+                except Exception as e:
+                    QgsMessageLog.logMessage(str(e), "QGISCloud")
+                    ok = False
+
+            cursor.close()
+
+            if ok:
+                try:
+                    conn.commit()
+                except Exception as e:
+                    QgsMessageLog.logMessage(str(e), "QGISCloud")
+                    ok = False
+            else:
+                conn.rollback()
+
+            import_ok &= ok
 
             if ok and do_replace_local_layers:
-                for layer in qgis_layers:
+                for layer in item['layers']:
                     layers_to_replace[layer.id()] = {
                         'layer': layer,
                         'data_source': data_source,
-                        'db_name': db_name,
-                        'table_name': table_name,
-                        'geom_column': geometry_column
+                        'db_name': db.database,
+                        'table_name': item['table'],
+                        'geom_column': geom_column
                     }
 
+        conn.close()
+        self.progress_bar.hide()
         self._replace_local_layers(layers_to_replace)
-
         return import_ok
 
-    #OGR data source connection string (without table/layer)
-    def _ogrConnectionString(self, layer):
-        ogrstr = None
+    def _wkbToEWkbHex(self, wkb, srid, convertToMulti=False):
+        wktType = struct.unpack("=I", wkb[1:5])[0]
+        if not QGis.isMultiType(wktType):
+            wktType = QGis.multiType(wktType)
+            wkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", 1) + wkb
 
-        provider = layer.providerType()
-        if provider == 'spatialite':
-            #dbname='/geodata/osm_ch.sqlite' table="places" (Geometry) sql=
-            regex = re.compile("dbname='(.+)'")
-            r = regex.search(str(layer.source()))
-            ogrstr = r.groups()[0]
-        elif provider == 'postgres':
-            #dbname='geodb' host=localhost port=5432 user='xxxx' password='yyyy' sslmode=disable key='gid' estimatedmetadata=true srid=4326 type=MULTIPOLYGON table="t4" (geom) sql=
-            parts = []
-            for part in str(layer.source()).split():
-                if part.find('=') >= 0:
-                    k,v = part.split('=')
-                    if k in ['dbname', 'host', 'port', 'user', 'password']:
-                        parts.append(part)
-            ogrstr = 'PG:' + ' '.join(parts)
+        # See postgis sources liblwgeom.h.in:
+        # define WKBZOFFSET  0x80000000
+        # define WKBMOFFSET  0x40000000
+        # define WKBSRIDFLAG 0x20000000
+        # define WKBBBOXFLAG 0x10000000
+
+        if wktType >= 1000 and wktType < 2000:
+            # Has Z
+            wktType -= 1000
+            wktType |= 0x80000000 | 0x20000000
+        elif wktType >= 2000 and wktType < 3000:
+            # Has M
+            wktType -= 2000
+            wktType |= 0x40000000 | 0x20000000
+        elif wktType >= 3000 and wktType < 4000:
+            # Has ZM
+            wktType -= 3000
+            wktType |= 0x80000000 | 0x40000000 | 0x20000000
         else:
-            ogrstr = unicode(layer.source())
-        return ogrstr
-
-    def _progress(self, dfComplete, pszMessage, pProgressArg):
-        self.progress_bar.show()
-        self.progress_bar.setValue((int) (dfComplete * 100.0))
-        QApplication.processEvents() # allow progress bar to scale properly
-
-    def _ogrerr(self, text):
-        if text.strip(): #Skip newlines
-            QgsMessageLog.logMessage(text, 'QGISCloud')
+            wktType |= 0x20000000
+        ewkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", srid) + wkb[5:]
+        return binascii.hexlify(ewkb)
 
     def _replace_local_layers(self, layers_to_replace):
         if len(layers_to_replace) > 0:
