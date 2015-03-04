@@ -27,7 +27,6 @@ from qgis.core import *
 from ui_qgiscloudplugin import Ui_QgisCloudPlugin
 from ui_login import Ui_LoginDialog
 from qgiscloudapi.qgiscloudapi import *
-from pyogr.ogr2ogr import ogr_version_info, ogr_version_num
 from db_connections import DbConnections
 from local_data_sources import LocalDataSources
 from data_upload import DataUpload
@@ -40,7 +39,6 @@ import re
 import time
 import platform
 from distutils.version import StrictVersion
-from pyogr.ogrds import OgrDs
 
 
 class QgisCloudPluginDialog(QDockWidget):
@@ -176,7 +174,7 @@ class QgisCloudPluginDialog(QDockWidget):
             self.ui.tabWidget.insertTab(tab_index, self.ui.upload, tab_name)
 
     def _version_info(self):
-        return {'versions': {'plugin': self.version, 'QGIS': QGis.QGIS_VERSION, 'OGR': ogr_version_info(), 'OS': platform.platform(), 'Python': sys.version}}
+        return {'versions': {'plugin': self.version, 'QGIS': QGis.QGIS_VERSION, 'OS': platform.platform(), 'Python': sys.version}}
 
     def _update_versions(self, current_plugin_version):
         version_ok = True
@@ -184,10 +182,6 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.lblVersionPlugin.setText(self.version)
         if StrictVersion(self.version) < StrictVersion(current_plugin_version):
             self.ui.lblVersionPlugin.setPalette(self.palette_red)
-            version_ok = False
-        self.ui.lblVersionOGR.setText(ogr_version_info())
-        if ogr_version_num() < 1900:
-            self.ui.lblVersionOGR.setPalette(self.palette_red)
             version_ok = False
         self.ui.lblVersionPython.setText(sys.version)
         self.ui.lblVersionOS.setText(platform.platform())
@@ -649,9 +643,14 @@ class QgisCloudPluginDialog(QDockWidget):
         cloud_dbs_from_server = db_connections._dbs.keys()
         if len(cloud_dbs_from_server) > 0:
             for db in cloud_dbs_from_server:
-                ogrds = OgrDs('postgresql',  db_connections.db(db).ogr_connection_descr())
-#                db_connections.wait_for_db(db_connections.db(db))
-                size = ogrds.db_size(db)
+                try:
+                    conn = db_connections.db(db).psycopg_connection()
+                except:
+                    continue
+                cursor = conn.cursor()
+                sql = "SELECT pg_size_pretty(pg_database_size('" + str(db) + "'))"
+                cursor.execute(sql)
+                size = cursor.fetchone()
                 tmp = size[0].split(' ')
                 sizeAll = sizeAll + int(tmp[0])
 

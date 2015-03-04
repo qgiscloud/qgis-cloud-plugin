@@ -122,14 +122,11 @@ class DbConnectionCfg:
         return uri
 
     def psycopg_connection(self, timeout=3):
-        try:
-            return psycopg2.connect(
-                database=self.database,
-                user=self.username,
-                password=self.password,
-                host=self.host,
-                port=self.port,
-                connect_timeout=timeout  # s
-            )
-        except:
-            return None
+        return psycopg2.connect(
+            database=self.database,
+            user=self.username,
+            password=self.password,
+            host=self.host,
+            port=self.port,
+            connect_timeout=timeout  # s
+        )

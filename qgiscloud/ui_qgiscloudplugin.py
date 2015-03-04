@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/hdus/dev/qgis/qgis-cloud-plugin/qgiscloud/ui_qgiscloudplugin.ui'
+# Form implementation generated from reading ui file 'ui_qgiscloudplugin.ui'
 #
-# Created: Wed Sep  3 14:40:08 2014
-#      by: PyQt4 UI code generator 4.10.4
+# Created: Wed Mar  4 17:21:34 2015
+#      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -82,13 +82,9 @@ class Ui_QgisCloudPlugin(object):
         font.setWeight(75)
         self.label_13.setFont(font)
         self.label_13.setObjectName(_fromUtf8("label_13"))
-        self.verticalLayout_3.addWidget(self.label_13)
+        self.verticalLayout_3.addWidget(self.label_13, QtCore.Qt.AlignHCenter)
         self.gridLayout_3 = QtGui.QGridLayout()
         self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
-        self.lblVersionQGIS = QtGui.QLabel(self.pageVersions)
-        self.lblVersionQGIS.setText(_fromUtf8(""))
-        self.lblVersionQGIS.setObjectName(_fromUtf8("lblVersionQGIS"))
-        self.gridLayout_3.addWidget(self.lblVersionQGIS, 3, 2, 1, 1)
         self.label_11 = QtGui.QLabel(self.pageVersions)
         self.label_11.setObjectName(_fromUtf8("label_11"))
         self.gridLayout_3.addWidget(self.label_11, 3, 1, 1, 1)
@@ -96,30 +92,27 @@ class Ui_QgisCloudPlugin(object):
         self.lblVersionPlugin.setText(_fromUtf8(""))
         self.lblVersionPlugin.setObjectName(_fromUtf8("lblVersionPlugin"))
         self.gridLayout_3.addWidget(self.lblVersionPlugin, 4, 2, 1, 1)
-        self.label_14 = QtGui.QLabel(self.pageVersions)
-        self.label_14.setObjectName(_fromUtf8("label_14"))
-        self.gridLayout_3.addWidget(self.label_14, 5, 1, 1, 1)
         self.lblVersionPython = QtGui.QLabel(self.pageVersions)
         self.lblVersionPython.setText(_fromUtf8(""))
         self.lblVersionPython.setObjectName(_fromUtf8("lblVersionPython"))
-        self.gridLayout_3.addWidget(self.lblVersionPython, 6, 2, 1, 1)
+        self.gridLayout_3.addWidget(self.lblVersionPython, 5, 2, 1, 1)
         self.label_12 = QtGui.QLabel(self.pageVersions)
         self.label_12.setObjectName(_fromUtf8("label_12"))
         self.gridLayout_3.addWidget(self.label_12, 4, 1, 1, 1)
         self.label_15 = QtGui.QLabel(self.pageVersions)
         self.label_15.setObjectName(_fromUtf8("label_15"))
-        self.gridLayout_3.addWidget(self.label_15, 6, 1, 1, 1)
-        self.lblVersionOGR = QtGui.QLabel(self.pageVersions)
-        self.lblVersionOGR.setText(_fromUtf8(""))
-        self.lblVersionOGR.setObjectName(_fromUtf8("lblVersionOGR"))
-        self.gridLayout_3.addWidget(self.lblVersionOGR, 5, 2, 1, 1)
+        self.gridLayout_3.addWidget(self.label_15, 5, 1, 1, 1)
+        self.lblVersionQGIS = QtGui.QLabel(self.pageVersions)
+        self.lblVersionQGIS.setText(_fromUtf8(""))
+        self.lblVersionQGIS.setObjectName(_fromUtf8("lblVersionQGIS"))
+        self.gridLayout_3.addWidget(self.lblVersionQGIS, 3, 2, 1, 1)
         self.lblVersionOS = QtGui.QLabel(self.pageVersions)
         self.lblVersionOS.setText(_fromUtf8(""))
         self.lblVersionOS.setObjectName(_fromUtf8("lblVersionOS"))
-        self.gridLayout_3.addWidget(self.lblVersionOS, 7, 2, 1, 1)
+        self.gridLayout_3.addWidget(self.lblVersionOS, 6, 2, 1, 1)
         self.label_16 = QtGui.QLabel(self.pageVersions)
         self.label_16.setObjectName(_fromUtf8("label_16"))
-        self.gridLayout_3.addWidget(self.label_16, 7, 1, 1, 1)
+        self.gridLayout_3.addWidget(self.label_16, 6, 1, 1, 1)
         self.verticalLayout_3.addLayout(self.gridLayout_3)
         self.serviceLinks.addWidget(self.pageVersions)
         self.pageLinks = QtGui.QWidget()
@@ -311,7 +304,7 @@ class Ui_QgisCloudPlugin(object):
 
         self.retranslateUi(QgisCloudPlugin)
         self.tabWidget.setCurrentIndex(2)
-        self.serviceLinks.setCurrentIndex(0)
+        self.serviceLinks.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(QgisCloudPlugin)
 
     def retranslateUi(self, QgisCloudPlugin):
@@ -333,7 +326,6 @@ class Ui_QgisCloudPlugin(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://qgiscloud.com/account/sign_up\"><span style=\" text-decoration: underline; color:#0057ae;\">Signup</span></a></p></body></html>", None))
         self.label_13.setText(_translate("QgisCloudPlugin", "Versions", None))
         self.label_11.setText(_translate("QgisCloudPlugin", "QGIS:", None))
-        self.label_14.setText(_translate("QgisCloudPlugin", "OGR/GDAL:", None))
         self.label_12.setText(_translate("QgisCloudPlugin", "Plugin:", None))
         self.label_15.setText(_translate("QgisCloudPlugin", "Python:", None))
         self.label_16.setText(_translate("QgisCloudPlugin", "OS:", None))
@@ -394,13 +386,3 @@ class Ui_QgisCloudPlugin(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.about), _translate("QgisCloudPlugin", "About", None))
 
 import resources_rc
-
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    QgisCloudPlugin = QtGui.QDockWidget()
-    ui = Ui_QgisCloudPlugin()
-    ui.setupUi(QgisCloudPlugin)
-    QgisCloudPlugin.show()
-    sys.exit(app.exec_())
-
