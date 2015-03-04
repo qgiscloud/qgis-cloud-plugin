@@ -65,13 +65,16 @@ class DataUpload:
             geom_column = "wkb_geometry"
             wkbType = layer.wkbType()
 
-            # If wkbType is LineString or Polygon, upload as MultiLineString and MultiPolygon since
-            # shapefiles of type LineString / Polygon can contain geometries of the corresponding
-            # multitype (the same does not apply for Points however, strangely)
+            # For ogr provided layers, if wkbType is LineString or Polygon,
+            # upload as MultiLineString and MultiPolygon since shapefiles of
+            # type LineString / Polygon can contain geometries of the
+            # corresponding multitype (the same does not apply for Points
+            # however, strangely)
             convertToMulti = False
-            if QGis.flatType(wkbType) == QGis.WKBLineString or QGis.flatType(wkbType) == QGis.WKBPolygon:
-                wkbType = QGis.multiType(wkbType)
-                convertToMulti = True
+            if layer.providerType() == "ogr":
+                if QGis.flatType(wkbType) == QGis.WKBLineString or QGis.flatType(wkbType) == QGis.WKBPolygon:
+                    wkbType = QGis.multiType(wkbType)
+                    convertToMulti = True
 
             # Create table (pk='' => always generate a new primary key)
             cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"public\".\"%s\" (%s)" % (
