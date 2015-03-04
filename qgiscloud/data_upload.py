@@ -115,10 +115,10 @@ class DataUpload:
                 # Finally, copy data attributes
                 for attrib in attribs:
                     val = feature.attribute(attrib)
-                    if val:
-                        importstr += "\t" + str(val)
-                    else:
+                    if val.isNull():
                         importstr += "\t\\N"
+                    else:
+                        importstr += "\t" + unicode(val)
 
                 importstr += "\n"
 
