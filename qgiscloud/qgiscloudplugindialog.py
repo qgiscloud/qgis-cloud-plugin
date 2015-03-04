@@ -88,6 +88,7 @@ class QgisCloudPluginDialog(QDockWidget):
 
         self.ui.btnUploadData.setEnabled(False)
         self.ui.uploadProgressBar.hide()
+        self.ui.lblProgress.hide()
         self.ui.btnPublishMapUpload.hide()
         self.ui.btnLogout.hide()
         self.ui.lblLoginStatus.hide()
@@ -118,7 +119,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.api = API()
         self.db_connections = DbConnections()
         self.local_data_sources = LocalDataSources()
-        self.data_upload = DataUpload(self.iface, self.statusBar(), self.ui.uploadProgressBar, self.api, self.db_connections)        
+        self.data_upload = DataUpload(self.iface, self.statusBar(), self.ui.uploadProgressBar, self.ui.lblProgress, self.api, self.db_connections)
 
         if self.URL == "":
             self.ui.editServer.setText(self.api.api_url())
@@ -578,6 +579,7 @@ class QgisCloudPluginDialog(QDockWidget):
             self.do_update_local_data_sources = False
             self.statusBar().showMessage(self.tr("Uploading data..."))
             self.setCursor(Qt.WaitCursor)
+            self.ui.btnUploadData.setEnabled(False)
 
             # Map<data_source, {table: table, layers: layers}>
             data_sources_items = {}
@@ -597,6 +599,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 self._show_log_window()
                 QMessageBox.warning(self, self.tr("Upload data"), self.tr("Data upload error.\nSee Log Messages for more information."))
 
+            self.ui.btnUploadData.setEnabled(True)
             self.unsetCursor()
             self.statusBar().showMessage("")
             self.do_update_local_data_sources = True

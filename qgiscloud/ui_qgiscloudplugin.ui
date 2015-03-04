@@ -430,6 +430,13 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item>
+         <widget class="QLabel" name="lblProgress">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QProgressBar" name="uploadProgressBar">
           <property name="value">
            <number>24</number>

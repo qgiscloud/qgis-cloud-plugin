@@ -37,10 +37,11 @@ import binascii
 
 class DataUpload:
 
-    def __init__(self, iface, status_bar, progress_bar, api, db_connections):
+    def __init__(self, iface, status_bar, progress_bar, progress_label, api, db_connections):
         self.iface = iface
         self.status_bar = status_bar
         self.progress_bar = progress_bar
+        self.progress_label = progress_label
         self.api = api
         self.db_connections = db_connections
         pass
@@ -49,7 +50,12 @@ class DataUpload:
         import_ok = True
         layers_to_replace = {}
         self.status_bar.showMessage(u"Uploading to database %s ..." % db.database)
+        self.progress_bar.setRange(0, 0)
+        self.progress_bar.setValue(0)
         self.progress_bar.show()
+        self.progress_label.setText("")
+        self.progress_label.show()
+        QApplication.processEvents()
 
         # Connect to database
         try:
@@ -80,19 +86,17 @@ class DataUpload:
             cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"public\".\"%s\" (%s)" % (
                 db.database, db.host, db.port, db.username, db.password, item['table'], geom_column
             )
+
+            self.progress_label.setText("Creating table '%s'..." % (item['table']))
+            QApplication.processEvents()
+
             # TODO: Ask user for overwriting existing table
             vectorLayerImport = QgsVectorLayerImport(cloudUri, "postgres", fields, wkbType, layer.crs(), True)
             if vectorLayerImport.hasError():
                 import_ok &= False
                 continue
-
             # Create cursor
             cursor = conn.cursor()
-
-            # Update progress bar
-            self.progress_bar.setFormat("Uploading " + item['table'] + ": %v%")
-            self.progress_bar.setRange(0, 0)
-            self.progress_bar.setValue(0)
 
             # Build import string
             attribs = [fields.field(i).name() for i in range(0, fields.count())]
@@ -119,7 +123,7 @@ class DataUpload:
                 importstr += "\n"
 
                 # Upload in chunks
-                if (count % 500) == 0:
+                if (count % 100) == 0:
                     try:
                         cursor.copy_from(StringIO(importstr), 'public.%s' % item['table'])
                     except Exception as e:
@@ -127,6 +131,10 @@ class DataUpload:
                         ok = False
                         break
                     importstr = ""
+                    self.progress_label.setText("%s: %d features uploaded" % (item['table'], count))
+                    QApplication.processEvents()
+                # Periodically update ui
+                if (count % 10) == 0:
                     QApplication.processEvents()
 
             if ok and importstr:
@@ -161,6 +169,7 @@ class DataUpload:
 
         conn.close()
         self.progress_bar.hide()
+        self.progress_label.hide()
         self._replace_local_layers(layers_to_replace)
         return import_ok
 

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_qgiscloudplugin.ui'
 #
-# Created: Wed Mar  4 17:21:34 2015
+# Created: Wed Mar  4 18:38:43 2015
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -205,6 +205,10 @@ class Ui_QgisCloudPlugin(object):
         self.btnUploadData = QtGui.QPushButton(self.upload)
         self.btnUploadData.setObjectName(_fromUtf8("btnUploadData"))
         self.verticalLayout_10.addWidget(self.btnUploadData)
+        self.lblProgress = QtGui.QLabel(self.upload)
+        self.lblProgress.setText(_fromUtf8(""))
+        self.lblProgress.setObjectName(_fromUtf8("lblProgress"))
+        self.verticalLayout_10.addWidget(self.lblProgress)
         self.uploadProgressBar = QtGui.QProgressBar(self.upload)
         self.uploadProgressBar.setProperty("value", 24)
         self.uploadProgressBar.setObjectName(_fromUtf8("uploadProgressBar"))
