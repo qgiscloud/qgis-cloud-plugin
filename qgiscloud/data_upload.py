@@ -113,10 +113,11 @@ class DataUpload:
                 # Finally, copy data attributes
                 for attrib in attribs:
                     val = feature.attribute(attrib)
-                    if val.isNull():
+                    if val is None or isinstance(val, QPyNullVariant):
                         importstr += "\t\\N"
                     else:
-                        importstr += "\t" + unicode(val)
+                        # Some strings
+                        importstr += "\t" + unicode(val).encode('utf-8').replace('\x00', '?')
 
                 importstr += "\n"
 
