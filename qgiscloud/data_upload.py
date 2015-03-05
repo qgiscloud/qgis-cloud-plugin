@@ -71,14 +71,9 @@ class DataUpload:
             geom_column = "wkb_geometry"
             wkbType = layer.wkbType()
 
-            # For ogr provided layers, if wkbType is LineString or Polygon,
-            # upload as MultiLineString and MultiPolygon since shapefiles of
-            # type LineString / Polygon can contain geometries of the
-            # corresponding multitype (the same does not apply for Points
-            # however, strangely)
+            # Upload single types as multi-types
             convertToMulti = False
-            if layer.providerType() == "ogr":
-                if QGis.flatType(wkbType) == QGis.WKBLineString or QGis.flatType(wkbType) == QGis.WKBPolygon:
+            if QGis.singleType(wkbType) == wkbType:
                     wkbType = QGis.multiType(wkbType)
                     convertToMulti = True
 
