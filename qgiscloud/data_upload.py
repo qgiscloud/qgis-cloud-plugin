@@ -99,7 +99,7 @@ class DataUpload:
             importstr = ""
             ok = True
 
-            self.progress_label.setText("%s: %d features uploaded" % (item['table'], count))
+            self.progress_label.setText("Uploading features...")
             QApplication.processEvents()
 
             for feature in layer.getFeatures(QgsFeatureRequest()):
