@@ -92,12 +92,7 @@ class LocalDataSources:
                 # Spatialite / Postgres
                 ds.setSql("")
                 data_source = str(ds.uri())
-            elif layer.providerType() == "ogr":
-                # OGR
-                f = layer.source().split('|')[0]
-                data_source = unicode(f)
             else:
-                # FIXME: other providers
                 data_source = unicode(layer.source())
 
             # group layers by source
