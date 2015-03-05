@@ -124,7 +124,7 @@ class DataUpload:
                 # Upload in chunks
                 if (count % 100) == 0:
                     try:
-                        cursor.copy_from(StringIO(importstr), 'public.%s' % item['table'])
+                        cursor.copy_from(StringIO(importstr), '"public"."%s"' % item['table'])
                     except Exception as e:
                         QgsMessageLog.logMessage(str(e), "QGISCloud")
                         ok = False
@@ -138,7 +138,7 @@ class DataUpload:
 
             if ok and importstr:
                 try:
-                    cursor.copy_from(StringIO(importstr), 'public.%s' % item['table'])
+                    cursor.copy_from(StringIO(importstr), '"public"."%s"' % item['table'])
                 except Exception as e:
                     QgsMessageLog.logMessage(str(e), "QGISCloud")
                     ok = False
