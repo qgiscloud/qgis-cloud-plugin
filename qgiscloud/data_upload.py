@@ -115,9 +115,18 @@ class DataUpload:
                     val = feature.attribute(attrib)
                     if val is None or isinstance(val, QPyNullVariant):
                         importstr += "\t\\N"
+                    elif isinstance(val, QDate) or isinstance(val, QDateTime):
+                        val = val.toString(Qt.ISODate)
+                        importstr += "\t" + val
                     else:
                         # Some strings
-                        importstr += "\t" + unicode(val).encode('utf-8').replace('\x00', '?')
+                        val = unicode(val).encode('utf-8')
+                        val = val.replace('\x00', '?')
+                        val = val.replace('\t', r"E'\t'")
+                        val = val.replace('\n', r"E'\n'")
+                        val = val.replace('\r', r"E'\r'")
+                        val = val.replace('\\', r"\\")
+                        importstr += "\t" + val
 
                 importstr += "\n"
 
