@@ -34,6 +34,8 @@ from StringIO import StringIO
 import struct
 import binascii
 
+from PGVectorLayerImport import PGVectorLayerImport
+
 
 class DataUpload:
 
@@ -73,8 +75,14 @@ class DataUpload:
 
             # Upload single types as multi-types
             convertToMulti = False
-            if QGis.singleType(wkbType) == wkbType:
+            # Older QGIS versions don't have multiType
+            try:
+                if QGis.multiType(wkbType) != wkbType:
                     wkbType = QGis.multiType(wkbType)
+                    convertToMulti = True
+            except:
+                if self._multiType(wkbType) != wkbType:
+                    wkbType = self._multiType(wkbType)
                     convertToMulti = True
 
             # Create table (pk='' => always generate a new primary key)
@@ -86,8 +94,14 @@ class DataUpload:
             QApplication.processEvents()
 
             # TODO: Ask user for overwriting existing table
-            vectorLayerImport = QgsVectorLayerImport(cloudUri, "postgres", fields, wkbType, layer.crs(), True)
+            # The postgres provider is terribly slow at creating tables with
+            # many attribute columns in QGIS < 2.9.0
+            if QGis.QGIS_VERSION_INT < 20900:
+                vectorLayerImport = PGVectorLayerImport(db, cloudUri, fields, wkbType, layer.crs(), True)
+            else:
+                vectorLayerImport = QgsVectorLayerImport(cloudUri, "postgres", fields, wkbType, layer.crs(), True)
             if vectorLayerImport.hasError():
+                QMessageBox.information(None, "Debug", vectorLayerImport.errorMessage())
                 import_ok &= False
                 continue
             # Create cursor
@@ -180,6 +194,21 @@ class DataUpload:
         self.progress_label.hide()
         self._replace_local_layers(layers_to_replace)
         return import_ok
+
+    def _multiType(self, wkbType):
+        if wkbType == QGis.WKBPoint:
+            return QGis.WKBMultiPoint
+        if wkbType == QGis.WKBLineString:
+            return QGis.WKBMultiLineString
+        if wkbType == QGis.WKBPolygon:
+            return QGis.WKBMultiPolygon
+        if wkbType == QGis.WKBPoint25D:
+            return QGis.WKBMultiPoint25D
+        if wkbType == QGis.WKBLineString25D:
+            return QGis.WKBMultiLineString25D
+        if wkbType == QGis.WKBPolygon25D:
+            return QGis.WKBMultiPolygon25D
+        return wkbType
 
     def _wkbToEWkbHex(self, wkb, srid, convertToMulti=False):
         wktType = struct.unpack("=I", wkb[1:5])[0]
@@ -274,7 +303,11 @@ class DataUpload:
             QMessageBox.warning(None, "Could not copy symbology", error)
 
         # copy scale based visibility
-        target_layer.toggleScaleBasedVisibility(source_layer.hasScaleBasedVisibility())
+        try:
+            target_layer.setScaleBasedVisibility(source_layer.hasScaleBasedVisibility())
+        except:
+            # Fall back to the deprecated function
+            target_layer.toggleScaleBasedVisibility(source_layer.hasScaleBasedVisibility())
         target_layer.setMinimumScale(source_layer.minimumScale())
         target_layer.setMaximumScale(source_layer.maximumScale())
 
