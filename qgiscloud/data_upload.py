@@ -22,6 +22,7 @@
 # NOTE: always convert features in OGR layers or PostGIS layers of type GEOMETRY to MULTI-type geometry, as geometry type detection of e.g. shapefiles is unreliable
 """
 
+import apicompat
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.QtXml import *
@@ -38,7 +39,6 @@ from PGVectorLayerImport import PGVectorLayerImport
 
 
 class DataUpload:
-
     def __init__(self, iface, status_bar, progress_bar, progress_label, api, db_connections):
         self.iface = iface
         self.status_bar = status_bar
@@ -68,22 +68,17 @@ class DataUpload:
         for data_source, item in data_sources_items.iteritems():
             # Layers contains all layers with shared data source
             layer = item['layers'][0]
-            fields = layer.pendingFields()
+            # The QgsFields() is to support the QGIS 1.x API, see apicompat/vectorapi.py
+            fields = QgsFields(layer.pendingFields())
             srid = layer.crs().postgisSrid()
             geom_column = "wkb_geometry"
             wkbType = layer.wkbType()
 
             # Upload single types as multi-types
             convertToMulti = False
-            # Older QGIS versions don't have multiType
-            try:
-                if QGis.multiType(wkbType) != wkbType:
-                    wkbType = QGis.multiType(wkbType)
-                    convertToMulti = True
-            except:
-                if self._multiType(wkbType) != wkbType:
-                    wkbType = self._multiType(wkbType)
-                    convertToMulti = True
+            if not QGis.isMultiType(wkbType):
+                wkbType = QGis.multiType(wkbType)
+                convertToMulti = True
 
             # Create table (pk='' => always generate a new primary key)
             cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"public\".\"%s\" (%s)" % (
@@ -108,7 +103,7 @@ class DataUpload:
             cursor = conn.cursor()
 
             # Build import string
-            attribs = [fields.field(i).name() for i in range(0, fields.count())]
+            attribs = range(0, fields.count())
             count = 0
             importstr = ""
             ok = True
@@ -116,7 +111,7 @@ class DataUpload:
             self.progress_label.setText("Uploading features...")
             QApplication.processEvents()
 
-            for feature in layer.getFeatures(QgsFeatureRequest()):
+            for feature in layer.getFeatures():
                 # First field is primary key
                 importstr += "%d" % count
                 count += 1
@@ -126,21 +121,35 @@ class DataUpload:
 
                 # Finally, copy data attributes
                 for attrib in attribs:
-                    val = feature.attribute(attrib)
-                    if val is None or isinstance(val, QPyNullVariant):
-                        importstr += "\t\\N"
-                    elif isinstance(val, QDate) or isinstance(val, QDateTime):
-                        val = val.toString(Qt.ISODate)
-                        importstr += "\t" + val
+                    val = feature[attrib]
+
+                    if sipv1():
+                        # QGIS 1.x
+                        if val is None or val.type() == QVariant.Invalid or val.isNull():
+                            val = "\\N"
+                        elif val.type() == QVariant.Date or val.type() == QVariant.DateTime:
+                            val = val.toString(Qt.ISODate)
+                        else:
+                            val = unicode(val.toString()).encode('utf-8')
+                            val = val.replace('\x00', '?')
+                            val = val.replace('\t', r"E'\t'")
+                            val = val.replace('\n', r"E'\n'")
+                            val = val.replace('\r', r"E'\r'")
+                            val = val.replace('\\', r"\\")
                     else:
-                        # Some strings
-                        val = unicode(val).encode('utf-8')
-                        val = val.replace('\x00', '?')
-                        val = val.replace('\t', r"E'\t'")
-                        val = val.replace('\n', r"E'\n'")
-                        val = val.replace('\r', r"E'\r'")
-                        val = val.replace('\\', r"\\")
-                        importstr += "\t" + val
+                        # QGIS 2.x
+                        if val is None or isinstance(val, QPyNullVariant):
+                            val = "\\N"
+                        elif isinstance(val, QDate) or isinstance(val, QDateTime):
+                            val = val.toString(Qt.ISODate)
+                        else:
+                            val = unicode(val).encode('utf-8')
+                            val = val.replace('\x00', '?')
+                            val = val.replace('\t', r"E'\t'")
+                            val = val.replace('\n', r"E'\n'")
+                            val = val.replace('\r', r"E'\r'")
+                            val = val.replace('\\', r"\\")
+                    importstr += "\t" + val
 
                 importstr += "\n"
 
@@ -194,21 +203,6 @@ class DataUpload:
         self.progress_label.hide()
         self._replace_local_layers(layers_to_replace)
         return import_ok
-
-    def _multiType(self, wkbType):
-        if wkbType == QGis.WKBPoint:
-            return QGis.WKBMultiPoint
-        if wkbType == QGis.WKBLineString:
-            return QGis.WKBMultiLineString
-        if wkbType == QGis.WKBPolygon:
-            return QGis.WKBMultiPolygon
-        if wkbType == QGis.WKBPoint25D:
-            return QGis.WKBMultiPoint25D
-        if wkbType == QGis.WKBLineString25D:
-            return QGis.WKBMultiLineString25D
-        if wkbType == QGis.WKBPolygon25D:
-            return QGis.WKBMultiPolygon25D
-        return wkbType
 
     def _wkbToEWkbHex(self, wkb, srid, convertToMulti=False):
         wktType = struct.unpack("=I", wkb[1:5])[0]

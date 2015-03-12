@@ -3,11 +3,11 @@
 /***************************************************************************
  ApiCompat
                                  A QGIS plugin
- API compatibility layer
+ QGis class compatibility layer
                               -------------------
-        begin                : 2013-07-02
-        copyright            : (C) 2013 by Pirmin Kalberer, Sourcepole
-        email                : pka@sourcepole.ch
+        begin                : 2015-03-12
+        copyright            : (C) 2015 by Sandro Mani, Sourcepole
+        email                : smani@sourcepole.ch
  ***************************************************************************/
 
 /***************************************************************************
@@ -20,17 +20,29 @@
  ***************************************************************************/
 """
 
-import sip
-import __builtin__
+import qgis.core
+from qgis.core import QGis
 
-def sipv1():
-    return sip.getapi("QVariant") == 1
 
-__builtin__.sipv1 = sipv1
+def multiType(wkbType):
+    if wkbType == QGis.WKBPoint:
+        return QGis.WKBMultiPoint
+    if wkbType == QGis.WKBLineString:
+        return QGis.WKBMultiLineString
+    if wkbType == QGis.WKBPolygon:
+        return QGis.WKBMultiPolygon
+    if wkbType == QGis.WKBPoint25D:
+        return QGis.WKBMultiPoint25D
+    if wkbType == QGis.WKBLineString25D:
+        return QGis.WKBMultiLineString25D
+    if wkbType == QGis.WKBPolygon25D:
+        return QGis.WKBMultiPolygon25D
+    return wkbType
 
-if sipv1():
-    import sipv1.compat
-    import sipv1.vectorapi
-    import sipv1.qgisapi
-else:
-    import sipv2.compat
+
+def isMultiType(wkbType):
+    return multiType(wkbType) == wkbType
+
+
+qgis.core.QGis.multiType = staticmethod(multiType)
+qgis.core.QGis.isMultiType = staticmethod(isMultiType)

@@ -20,16 +20,48 @@
  ***************************************************************************/
 """
 # Import the PyQt and QGIS libraries
+import qgis.core
 from PyQt4.QtCore import *
 from qgis.core import *
 
 
 from decorators import *
 
+
 def vectorapiv1():
-  return not hasattr(QgsVectorLayer, 'getFeatures')
+    return not hasattr(QgsVectorLayer, 'getFeatures')
+
+
+class QgsFields:
+    def __init__(self, fieldmap):
+        self.fieldmap = fieldmap
+
+    def __getitem__(self, idx):
+        return self.fieldmap[idx]
+
+    def field(self, idx):
+        return self.fieldmap[idx]
+
+    def at(self, idx):
+        return self.fieldmap[idx]
+
+    def count(self):
+        return len(self.fieldmap)
+
+    def size(self):
+        return len(self.fieldmap)
+
+qgis.core.QgsFields = QgsFields
+
 
 @add_method(QgsVectorLayer)
 def getFeatures(self):
-    self.select([])
-    return self
+    self.select(self.pendingAllAttributesList())
+    feature = QgsFeature()
+    while self.nextFeature(feature):
+        yield feature
+
+
+@add_method(QgsFeature)
+def __getitem__(self, idx):
+    return self.attributeMap()[idx]
