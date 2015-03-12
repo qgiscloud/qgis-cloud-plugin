@@ -130,9 +130,11 @@ class QgisCloudPluginDialog(QDockWidget):
         self.palette_red.setColor(QPalette.WindowText, QColor('red'))
 
     def __del__(self):
-        QObject.disconnect(self.iface, SIGNAL("newProjectCreated()"), self.reset_load_data)
-        QObject.disconnect(QgsMapLayerRegistry.instance(), SIGNAL("layerWillBeRemoved(QString)"), self.remove_layer)
-        QObject.disconnect(QgsMapLayerRegistry.instance(), SIGNAL("layerWasAdded(QgsMapLayer *)"), self.add_layer)
+        if self.iface:
+            QObject.disconnect(self.iface, SIGNAL("newProjectCreated()"), self.reset_load_data)
+        if QgsMapLayerRegistry.instance():
+            QObject.disconnect(QgsMapLayerRegistry.instance(), SIGNAL("layerWillBeRemoved(QString)"), self.remove_layer)
+            QObject.disconnect(QgsMapLayerRegistry.instance(), SIGNAL("layerWasAdded(QgsMapLayer *)"), self.add_layer)
 
     def statusBar(self):
         return self.iface.mainWindow().statusBar()
