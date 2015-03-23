@@ -33,6 +33,7 @@ class DlgAbout:
         <p><center><b>The developement of QGISCloud-Plugin was supported by the following persons:</b></center></p> 
         <p>Pirmin Kalberer (project manager, developer and support)<br>
         Mathias Walker (developer)<br>
+        Sandro Mani (developer)<br>
         Dr. Marco Hugentobler (developer)<br>
         Dr. Horst Düster (developer and support)<br><br>
         """
