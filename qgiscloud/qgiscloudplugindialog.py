@@ -488,7 +488,8 @@ class QgisCloudPluginDialog(QDockWidget):
             table_name_item = QTableWidgetItem(QgisCloudPluginDialog.launder_pg_name(table_name))
             wkbType = layers[0].wkbType()
             if wkbType not in self.GEOMETRY_TYPES:
-                raise Exception(pystring(self.tr("Unsupported geometry type '%d' in layer '%s'")) % (wkbType, layers[0].name()))
+                QMessageBox.warning(self.iface.mainWindow(), self.tr("Unsupported geometry type"), pystring(self.tr("Unsupported geometry type '{type}' in layer '{layer}'")).format(type=self.__wkbTypeString(wkbType), layer=layers[0].name()))
+                continue
             geometry_type_item = QTableWidgetItem(self.GEOMETRY_TYPES[wkbType])
             if layers[0].providerType() == "ogr":
                 geometry_type_item.setToolTip(self.tr("Note: OGR features will be converted to MULTI-type"))
@@ -512,6 +513,37 @@ class QgisCloudPluginDialog(QDockWidget):
             self.ui.btnUploadData.setEnabled(False)
 
         self.statusBar().showMessage(self.tr("Updated local data sources"))
+
+    def __wkbTypeString(self, wkbType):
+        if wkbType == QGis.WKBUnknown:
+            return "WKBUnknown"
+        elif wkbType == QGis.WKBPoint:
+            return "WKBPoint"
+        elif wkbType == QGis.WKBLineString:
+            return "WKBLineString"
+        elif wkbType == QGis.WKBMultiLineString:
+            return "WKBMultiLineString"
+        elif wkbType == QGis.WKBPolygon:
+            return "WKBPolygon"
+        elif wkbType == QGis.WKBMultiPoint:
+            return "WKBMultiPoint"
+        elif wkbType == QGis.WKBMultiPolygon:
+            return "WKBMultiPolygon"
+        elif wkbType == QGis.WKBNoGeometry:
+            return "WKBNoGeometry"
+        elif wkbType == QGis.WKBPoint25D:
+            return "WKBPoint25D"
+        elif wkbType == QGis.WKBLineString25D:
+            return "WKBLineString25D"
+        elif wkbType == QGis.WKBPolygon25D:
+            return "WKBPolygon25D"
+        elif wkbType == QGis.WKBMultiPoint25D:
+            return "WKBMultiPoint25D"
+        elif wkbType == QGis.WKBMultiLineString25D:
+            return "WKBMultiLineString25D"
+        elif wkbType == QGis.WKBMultiPolygon25D:
+            return "WKBMultiPolygon25D"
+        return self.tr("Unknown type")
 
     @staticmethod
     def launder_pg_name(name):
