@@ -488,7 +488,7 @@ class QgisCloudPluginDialog(QDockWidget):
             table_name_item = QTableWidgetItem(QgisCloudPluginDialog.launder_pg_name(table_name))
             wkbType = layers[0].wkbType()
             if wkbType not in self.GEOMETRY_TYPES:
-                raise Exception(self.tr("Unsupported geometry type '%s' in layer '%s'") % (wkbType, layers[0].name()))
+                raise Exception(pystring(self.tr("Unsupported geometry type '%d' in layer '%s'")) % (wkbType, layers[0].name()))
             geometry_type_item = QTableWidgetItem(self.GEOMETRY_TYPES[wkbType])
             if layers[0].providerType() == "ogr":
                 geometry_type_item.setToolTip(self.tr("Note: OGR features will be converted to MULTI-type"))
