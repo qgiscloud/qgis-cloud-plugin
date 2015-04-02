@@ -781,6 +781,7 @@ class QgisCloudPluginDialog(QDockWidget):
         cloud_dbs_from_server = db_connections._dbs.keys()
         if len(cloud_dbs_from_server) > 0:
             for db in cloud_dbs_from_server:
+                unit = ''
                 try:
                     conn = db_connections.db(db).psycopg_connection()
                 except:
@@ -792,6 +793,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 size = cursor.fetchone()
                 tmp = size[0].split(' ')
                 sizeAll = sizeAll + int(tmp[0])
+                unit = tmp[1]  # TODO: Handle mixed units
 
             login_info = self.api.check_login(
                 version_info=self._version_info())
@@ -817,9 +819,11 @@ class QgisCloudPluginDialog(QDockWidget):
             self.ui.lblDbSize.setAutoFillBackground(True)
             self.ui.lblDbSize.setPalette(lblPalette)
             self.ui.lblDbSize.setText(
-                self.tr("Used DB: ") + str(sizeAll) + " " + tmp[1] + " / " + str(maxSize) + " MB")
+                self.tr("Used DB: ") + str(sizeAll) + " " + unit + " / " +
+                str(maxSize) + " MB")
 
             self.ui.lblDbSizeUpload.setAutoFillBackground(True)
             self.ui.lblDbSizeUpload.setPalette(lblPalette)
             self.ui.lblDbSizeUpload.setText(
-                self.tr("Used DB: ") + str(sizeAll) + " " + tmp[1] + " / " + str(maxSize) + " MB")
+                self.tr("Used DB: ") + str(sizeAll) + " " + unit + " / " +
+                str(maxSize) + " MB")
