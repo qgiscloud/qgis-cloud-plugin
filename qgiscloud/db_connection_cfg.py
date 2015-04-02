@@ -39,6 +39,7 @@ class DbConnectionCfg:
         self.password = password
         self.sslmode = sslmode
         self.estimatedMetadata = estimatedMetadata
+        self.changed = self.migrate_old_connection_params()
 
     @staticmethod
     def conn_name(db_name):
@@ -50,6 +51,17 @@ class DbConnectionCfg:
 
     def key(self):
         return self.connection_key(self.name)
+
+    def migrate_old_connection_params(self):
+        # Update connection parameters from old servers
+        changed = False
+        if self.host == 'spacialdb.com':
+            self.host = 'db.qgiscloud.com'
+            changed = True
+        if self.port == 9999:
+            self.port = 5432
+            changed = True
+        return changed
 
     @classmethod
     def from_settings(cls, conn_name):

@@ -64,10 +64,12 @@ class DbConnections:
             for connection in DbConnectionCfg.get_cloud_db_connections(db_name):
                 DbConnectionCfg.remove_connection(connection)
 
-        # add missing connections
+        # add missing or changed connections
         for db_name in cloud_dbs_from_server:
-            if len(DbConnectionCfg.get_cloud_db_connections(db_name)) == 0:
-                self.db(db_name).store_connection()
+            cfg = self.db(db_name)
+            if len(DbConnectionCfg.get_cloud_db_connections(db_name)) == 0 or \
+                    cfg.changed:
+                cfg.store_connection()
 
         # store cloud db names in settings
         if len(cloud_dbs_from_server) > 0:
