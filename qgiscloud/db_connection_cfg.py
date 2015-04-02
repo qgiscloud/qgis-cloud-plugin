@@ -63,7 +63,9 @@ class DbConnectionCfg:
         password = settings.value("password", type=str)
         sslmode = settings.value("sslmode", type=int)
         estimatedMetadata = settings.value("estimatedMetadata", type=bool)
-        return cls(host, port, database, username, password, sslmode, estimatedMetadata)
+        return cls(
+            host, port, database, username, password,
+            sslmode, estimatedMetadata)
 
     def store_connection(self):
         settings = QSettings()
@@ -76,14 +78,15 @@ class DbConnectionCfg:
         settings.setValue(self.key() + "/saveUsername", True)
         settings.setValue(self.key() + "/savePassword", True)
         settings.setValue(self.key() + "/geometryColumnsOnly", True)
-        settings.setValue(self.key() + "/estimatedMetadata", self.estimatedMetadata)
+        settings.setValue(
+            self.key() + "/estimatedMetadata", self.estimatedMetadata)
 
     @staticmethod
     def remove_connection(conn_name):
         settings = QSettings()
         settings.remove(DbConnectionCfg.connection_key(conn_name))
 
-    #Find matching connections in settings
+    # Find matching connections in settings
     @staticmethod
     def get_cloud_db_connections(db_name):
         connection_names = []
@@ -100,8 +103,9 @@ class DbConnectionCfg:
         return connection_names
 
     def description(self):
-        return unicode(QCoreApplication.translate("QgisCloudPluginDialog",
-                       "host: %s port: %s database: %s username: %s password: %s")) % \
+        return unicode(QCoreApplication.translate(
+            "QgisCloudPluginDialog",
+            "host: %s port: %s database: %s username: %s password: %s")) % \
             (self.host, self.port, self.database, self.username, self.password)
 
     def ogr_connection_descr(self):

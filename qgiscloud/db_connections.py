@@ -27,14 +27,16 @@ from db_connection_cfg import DbConnectionCfg
 import time
 import socket
 
+
 class DbConnections:
 
     def __init__(self):
-        self._dbs = {} # Map<dbname, DbConnectionCfg>
+        self._dbs = {}  # Map<dbname, DbConnectionCfg>
         self._dbs_refreshed = False
 
     def add_from_json(self, db):
-        self._dbs[db['name']] = DbConnectionCfg(db['host'], db['port'], db['name'], db['username'], db['password'])
+        self._dbs[db['name']] = DbConnectionCfg(
+            db['host'], db['port'], db['name'], db['username'], db['password'])
 
     def count(self):
         return len(self._dbs)
@@ -54,7 +56,8 @@ class DbConnections:
 
         cloud_dbs_from_server = self._dbs.keys()
         stored_connections = settings.value(cloud_connections_key) or []
-        cloud_dbs_from_settings = map(lambda conn: str(conn), pystringlist(stored_connections))
+        cloud_dbs_from_settings = map(
+            lambda conn: str(conn), pystringlist(stored_connections))
 
         # remove obsolete connections
         for db_name in (set(cloud_dbs_from_settings) - set(cloud_dbs_from_server)):
@@ -100,14 +103,14 @@ class DbConnections:
 
     # Wait until cloud database is available (creation is asynchronous)
     @staticmethod
-    def wait_for_db(db, timeout = 3, retries = 5, sleeptime = 3):
+    def wait_for_db(db, timeout=3, retries=5, sleeptime=3):
         ok = False
         while not ok and retries > 0:
             try:
                 connection = db.psycopg_connection(timeout)
                 connection.close()
                 ok = True
-            except Exception: # as err:
+            except Exception:  # as err:
                 retries -= 1
                 if retries == 0:
                     raise
