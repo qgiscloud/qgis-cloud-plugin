@@ -3,13 +3,17 @@ name=QGIS Cloud Plugin
 qgisMinimumVersion=1.8
 qgisMaximumVersion=2.99
 description=Publish maps on qgiscloud.com
-version=0.12.0
+version=1.0.0
 author=Pirmin Kalberer, Mathias Walker, Horst Duester
 email=pka@sourcepole.ch
 
 ; Optional items:
 
 changelog=
+    1.0.0
+    - Fix exception in DB size calculation
+    - Allow capital letters in map name
+    - Update connection parameters from old servers
     0.12.0
     - New upload routine improves upload performance and fixes encoding issues
     - Several major and minor bug fixes
