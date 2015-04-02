@@ -167,7 +167,7 @@ class QgisCloudPluginDialog(QDockWidget):
         name = os.path.splitext(
             os.path.basename(unicode(project.fileName())))[0]
         # Allowed chars for QGISCloud map name: /\A[A-Za-z0-9\_\-]*\Z/
-        name = unicode(name).lower().encode(
+        name = unicode(name).encode(
             'ascii', 'replace')  # Replace non-ascii chars
         # Replace withespace
         name = re.compile("\W+", re.UNICODE).sub("_", name)
