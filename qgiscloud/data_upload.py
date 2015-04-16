@@ -39,10 +39,9 @@ from PGVectorLayerImport import PGVectorLayerImport
 
 
 class DataUpload:
-    def __init__(self, iface, status_bar, progress_bar, progress_label, api, db_connections):
+    def __init__(self, iface, status_bar, progress_label, api, db_connections):
         self.iface = iface
         self.status_bar = status_bar
-        self.progress_bar = progress_bar
         self.progress_label = progress_label
         self.api = api
         self.db_connections = db_connections
@@ -52,11 +51,6 @@ class DataUpload:
         import_ok = True
         layers_to_replace = {}
         self.status_bar.showMessage(u"Uploading to database %s ..." % db.database)
-        self.progress_bar.setRange(0, 0)
-        self.progress_bar.setValue(0)
-        self.progress_bar.show()
-        self.progress_label.setText("")
-        self.progress_label.show()
         QApplication.processEvents()
 
         # Connect to database
@@ -199,9 +193,8 @@ class DataUpload:
                     }
 
         conn.close()
-        self.progress_bar.hide()
-        self.progress_label.hide()
         self._replace_local_layers(layers_to_replace)
+        self.progress_label.setText("")
         return import_ok
 
     def _wkbToEWkbHex(self, wkb, srid, convertToMulti=False):
