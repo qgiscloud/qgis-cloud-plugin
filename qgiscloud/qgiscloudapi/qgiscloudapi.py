@@ -462,7 +462,7 @@ class HTTPBasicAuthHandlerLimitRetries(urllib2.HTTPBasicAuthHandler):
     def retry_http_basic_auth(self, host, req, realm):
         user, pw = self.passwd.find_user_password(realm, host)
         if pw is not None:
-            raw = "%s:%s" % (user, pw)
+            raw = ("%s:%s" % (user, pw)).encode('utf8')
             auth = 'Basic %s' % urllib2.base64.b64encode(raw).strip()
             if req.get_header(self.auth_header, None) == auth:
                 return None
