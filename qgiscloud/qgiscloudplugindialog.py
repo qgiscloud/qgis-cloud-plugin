@@ -31,6 +31,7 @@ from db_connections import DbConnections
 from local_data_sources import LocalDataSources
 from data_upload import DataUpload
 from doAbout import DlgAbout
+from openlayers_menu import OpenlayersMenu
 import os.path
 import sys
 import traceback
@@ -106,6 +107,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.widgetServices.hide()
         self.ui.widgetDatabases.setEnabled(False)
 
+        self.ui.btnBackgroundLayer.setMenu(OpenlayersMenu(self.iface))
 
         # map<data source, table name>
         self.data_sources_table_names = {}

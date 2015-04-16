@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_qgiscloudplugin.ui'
 #
-# Created: Thu Apr 16 16:10:17 2015
+# Created: Thu Apr 16 16:10:46 2015
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -45,6 +45,22 @@ class Ui_QgisCloudPlugin(object):
         self.logo_2.setAlignment(QtCore.Qt.AlignCenter)
         self.logo_2.setObjectName(_fromUtf8("logo_2"))
         self.verticalLayout_4.addWidget(self.logo_2)
+        self.btnBackgroundLayer = QtGui.QToolButton(self.mapTab)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.btnBackgroundLayer.sizePolicy().hasHeightForWidth())
+        self.btnBackgroundLayer.setSizePolicy(sizePolicy)
+        self.btnBackgroundLayer.setPopupMode(QtGui.QToolButton.InstantPopup)
+        self.btnBackgroundLayer.setToolButtonStyle(QtCore.Qt.ToolButtonTextOnly)
+        self.btnBackgroundLayer.setArrowType(QtCore.Qt.NoArrow)
+        self.btnBackgroundLayer.setObjectName(_fromUtf8("btnBackgroundLayer"))
+        self.verticalLayout_4.addWidget(self.btnBackgroundLayer)
+        self.line_2 = QtGui.QFrame(self.mapTab)
+        self.line_2.setFrameShape(QtGui.QFrame.HLine)
+        self.line_2.setFrameShadow(QtGui.QFrame.Sunken)
+        self.line_2.setObjectName(_fromUtf8("line_2"))
+        self.verticalLayout_4.addWidget(self.line_2)
         self.btnPublishMap = QtGui.QPushButton(self.mapTab)
         self.btnPublishMap.setObjectName(_fromUtf8("btnPublishMap"))
         self.verticalLayout_4.addWidget(self.btnPublishMap)
@@ -289,6 +305,7 @@ class Ui_QgisCloudPlugin(object):
 
     def retranslateUi(self, QgisCloudPlugin):
         QgisCloudPlugin.setWindowTitle(_translate("QgisCloudPlugin", "QGIS Cloud", None))
+        self.btnBackgroundLayer.setText(_translate("QgisCloudPlugin", "Add background layer", None))
         self.btnPublishMap.setText(_translate("QgisCloudPlugin", "Publish Map", None))
         self.lblMobileMap.setText(_translate("QgisCloudPlugin", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
