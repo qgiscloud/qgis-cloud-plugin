@@ -24,16 +24,15 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from qgis.core import *
 import resources_rc
-from openlayers.openlayers_layer import OpenlayersLayer
-from openlayers.openlayers_plugin_layer_type import OpenlayersPluginLayerType
-from openlayers.weblayers.weblayer_registry import WebLayerTypeRegistry
-from openlayers.weblayers.google_maps import OlGooglePhysicalLayer, OlGoogleStreetsLayer, OlGoogleHybridLayer, OlGoogleSatelliteLayer
-from openlayers.weblayers.osm import OlOpenStreetMapLayer, OlOpenCycleMapLayer, OlOCMLandscapeLayer, OlOCMPublicTransportLayer, OlOSMHumanitarianDataModelLayer
-from openlayers.weblayers.bing_maps import OlBingRoadLayer, OlBingAerialLayer, OlBingAerialLabelledLayer
-from openlayers.weblayers.apple_maps import OlAppleiPhotoMapLayer
-from openlayers.weblayers.osm_stamen import OlOSMStamenTonerLayer, OlOSMStamenWatercolorLayer, OlOSMStamenTerrainLayer
-from openlayers.weblayers.map_quest import OlMapQuestOSMLayer, OlMapQuestOpenAerialLayer
-#import os.path
+from openlayers_plugin.openlayers_layer import OpenlayersLayer
+from openlayers_plugin.openlayers_plugin_layer_type import OpenlayersPluginLayerType
+from openlayers_plugin.weblayers.weblayer_registry import WebLayerTypeRegistry
+from openlayers_plugin.weblayers.google_maps import OlGooglePhysicalLayer, OlGoogleStreetsLayer, OlGoogleHybridLayer, OlGoogleSatelliteLayer
+from openlayers_plugin.weblayers.osm import OlOpenStreetMapLayer, OlOpenCycleMapLayer, OlOCMLandscapeLayer, OlOCMPublicTransportLayer, OlOSMHumanitarianDataModelLayer
+from openlayers_plugin.weblayers.bing_maps import OlBingRoadLayer, OlBingAerialLayer, OlBingAerialLabelledLayer
+from openlayers_plugin.weblayers.apple_maps import OlAppleiPhotoMapLayer
+from openlayers_plugin.weblayers.osm_stamen import OlOSMStamenTonerLayer, OlOSMStamenWatercolorLayer, OlOSMStamenTerrainLayer
+from openlayers_plugin.weblayers.map_quest import OlMapQuestOSMLayer, OlMapQuestOpenAerialLayer
 
 
 class OpenlayersMenu(QMenu):

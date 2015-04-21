@@ -31,7 +31,6 @@ from db_connections import DbConnections
 from local_data_sources import LocalDataSources
 from data_upload import DataUpload
 from doAbout import DlgAbout
-from openlayers_menu import OpenlayersMenu
 import os.path
 import sys
 import traceback
@@ -106,8 +105,19 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.lblLoginStatus.hide()
         self.ui.widgetServices.hide()
         self.ui.widgetDatabases.setEnabled(False)
+        self.ui.labelOpenLayersPlugin.hide()
 
-        self.ui.btnBackgroundLayer.setMenu(OpenlayersMenu(self.iface))
+        try:
+            from openlayers_menu import OpenlayersMenu
+            self.ui.btnBackgroundLayer.setMenu(OpenlayersMenu(self.iface))
+        except:
+            # QGIS 1.x - QGIS-2.2
+            try:
+                from openlayers_menu_compat import OpenlayersMenu
+                self.ui.btnBackgroundLayer.setMenu(OpenlayersMenu(self.iface))
+            except:
+                self.ui.btnBackgroundLayer.hide()
+                self.ui.labelOpenLayersPlugin.show()
 
         # map<data source, table name>
         self.data_sources_table_names = {}
@@ -725,6 +735,8 @@ class QgisCloudPluginDialog(QDockWidget):
             self.unsetCursor()
             self.statusBar().showMessage("")
             self.do_update_local_data_sources = True
+            # Refresh used space after upload
+            self.db_size(self.db_connections)
 
             if success and self.ui.cbReplaceLocalLayers.isChecked():
                 self.update_local_layers()

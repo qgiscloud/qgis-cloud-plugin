@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_qgiscloudplugin.ui'
 #
-# Created: Thu Apr 16 16:10:46 2015
+# Created: Tue Apr 21 12:14:03 2015
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_QgisCloudPlugin(object):
     def setupUi(self, QgisCloudPlugin):
         QgisCloudPlugin.setObjectName(_fromUtf8("QgisCloudPlugin"))
-        QgisCloudPlugin.resize(429, 327)
+        QgisCloudPlugin.resize(390, 377)
         QgisCloudPlugin.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
         self.dockWidgetContents = QtGui.QWidget()
         self.dockWidgetContents.setObjectName(_fromUtf8("dockWidgetContents"))
@@ -56,6 +56,10 @@ class Ui_QgisCloudPlugin(object):
         self.btnBackgroundLayer.setArrowType(QtCore.Qt.NoArrow)
         self.btnBackgroundLayer.setObjectName(_fromUtf8("btnBackgroundLayer"))
         self.verticalLayout_4.addWidget(self.btnBackgroundLayer)
+        self.labelOpenLayersPlugin = QtGui.QLabel(self.mapTab)
+        self.labelOpenLayersPlugin.setWordWrap(True)
+        self.labelOpenLayersPlugin.setObjectName(_fromUtf8("labelOpenLayersPlugin"))
+        self.verticalLayout_4.addWidget(self.labelOpenLayersPlugin)
         self.line_2 = QtGui.QFrame(self.mapTab)
         self.line_2.setFrameShape(QtGui.QFrame.HLine)
         self.line_2.setFrameShadow(QtGui.QFrame.Sunken)
@@ -304,8 +308,9 @@ class Ui_QgisCloudPlugin(object):
         QtCore.QMetaObject.connectSlotsByName(QgisCloudPlugin)
 
     def retranslateUi(self, QgisCloudPlugin):
-        QgisCloudPlugin.setWindowTitle(_translate("QgisCloudPlugin", "QGIS Cloud", None))
+        QgisCloudPlugin.setWindowTitle(_translate("QgisCloudPlugin", "&QGIS Cloud", None))
         self.btnBackgroundLayer.setText(_translate("QgisCloudPlugin", "Add background layer", None))
+        self.labelOpenLayersPlugin.setText(_translate("QgisCloudPlugin", "<i>To add a background layer to the map, install the OpenLayers plugin.</i>", None))
         self.btnPublishMap.setText(_translate("QgisCloudPlugin", "Publish Map", None))
         self.lblMobileMap.setText(_translate("QgisCloudPlugin", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"

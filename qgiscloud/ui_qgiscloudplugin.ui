@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>429</width>
-    <height>327</height>
+    <width>390</width>
+    <height>377</height>
    </rect>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
   </property>
   <property name="windowTitle">
-   <string>QGIS Cloud</string>
+   <string>&amp;QGIS Cloud</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout_6">
@@ -63,6 +63,16 @@
           </property>
           <property name="arrowType">
            <enum>Qt::NoArrow</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="labelOpenLayersPlugin">
+          <property name="text">
+           <string>&lt;i&gt;To add a background layer to the map, install the OpenLayers plugin.&lt;/i&gt;</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -430,7 +440,16 @@ p, li { white-space: pre-wrap; }
            </sizepolicy>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <item>
