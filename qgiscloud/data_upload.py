@@ -110,6 +110,10 @@ class DataUpload:
                 importstr += "%d" % count
                 count += 1
 
+                if not feature.geometry():
+                    QgsMessageLog.logMessage("Feature %s of layer %s has no geometry" % (feature.id(), layer.name()), "QGISCloud")
+                    continue
+
                 # Second field is geometry in EWKB Hex format
                 importstr += "\t" + self._wkbToEWkbHex(feature.geometry().asWkb(), srid, convertToMulti)
 
