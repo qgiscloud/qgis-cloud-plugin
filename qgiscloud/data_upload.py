@@ -47,19 +47,32 @@ class DataUpload:
         self.db_connections = db_connections
         pass
 
-    def upload(self, db, data_sources_items, do_replace_local_layers):
+    def upload(self, db, data_sources_items, do_replace_local_layers, maxSize):
         import_ok = True
         layers_to_replace = {}
         self.status_bar.showMessage(u"Uploading to database %s ..." % db.database)
         QApplication.processEvents()
 
+        upload_count = 0
+
         # Connect to database
         try:
             conn = db.psycopg_connection()
         except:
-            return False
+            return -1
 
         for data_source, item in data_sources_items.iteritems():
+            # Check available space, block if exceded
+            cursor = conn.cursor()
+            sql = "SELECT pg_size_pretty(pg_database_size('" + str(db.database) + "'))"
+            cursor.execute(sql)
+            size = int(cursor.fetchone()[0].split(' ')[0])
+            cursor.close()
+            if size > maxSize:
+                QMessageBox.warning(None, "Database full", "You have exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan.")
+                break
+
+
             # Layers contains all layers with shared data source
             layer = item['layers'][0]
             # The QgsFields() is to support the QGIS 1.x API, see apicompat/vectorapi.py
@@ -90,7 +103,6 @@ class DataUpload:
             else:
                 vectorLayerImport = QgsVectorLayerImport(cloudUri, "postgres", fields, wkbType, layer.crs(), True)
             if vectorLayerImport.hasError():
-                QMessageBox.information(None, "Debug", vectorLayerImport.errorMessage())
                 import_ok &= False
                 continue
             # Create cursor
@@ -178,6 +190,7 @@ class DataUpload:
             if ok:
                 try:
                     conn.commit()
+                    upload_count += 1
                 except Exception as e:
                     QgsMessageLog.logMessage(str(e), "QGISCloud")
                     ok = False
@@ -199,7 +212,10 @@ class DataUpload:
         conn.close()
         self._replace_local_layers(layers_to_replace)
         self.progress_label.setText("")
-        return import_ok
+        if import_ok:
+            return upload_count
+        else:
+            return -1
 
     def _wkbToEWkbHex(self, wkb, srid, convertToMulti=False):
         wktType = struct.unpack("=I", wkb[1:5])[0]

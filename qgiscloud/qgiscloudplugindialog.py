@@ -720,10 +720,18 @@ class QgisCloudPluginDialog(QDockWidget):
                     data_sources_items[data_source] = {
                         'table': table_name, 'layers': layers}
 
-            success = self.data_upload.upload(
+            login_info = self.api.check_login(version_info=self._version_info())
+            if login_info['plan'] == 'Free':
+                maxSize = self.FREE_SIZE
+            elif login_info['plan'] == 'Pro' or login_info['plan'] == 'Pro Beta':
+                maxSize = self.PRO_SIZE
+            elif login_info['plan'] == 'Enterprise/Reseller':
+                maxSize = self.RESELLER_SIZE
+
+            upload_count = self.data_upload.upload(
                 self.db_connections.db(db_name), data_sources_items,
-                self.ui.cbReplaceLocalLayers.isChecked())
-            if not success:
+                self.ui.cbReplaceLocalLayers.isChecked(), maxSize)
+            if upload_count == -1:
                 self._show_log_window()
                 QMessageBox.warning(self, self.tr("Upload data"), self.tr(
                     "Data upload error.\nSee Log Messages for more information."))
@@ -737,7 +745,7 @@ class QgisCloudPluginDialog(QDockWidget):
             # Refresh used space after upload
             self.db_size(self.db_connections)
 
-            if success and self.ui.cbReplaceLocalLayers.isChecked():
+            if upload_count > 0 and self.ui.cbReplaceLocalLayers.isChecked():
                 self.update_local_layers()
 
                 # Switch to map tab
