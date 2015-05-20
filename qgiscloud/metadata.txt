@@ -14,6 +14,7 @@ changelog=
     - Integration of OpenLayer background layers
     - Several bugs fixed
     - German translation improved
+    - New icon and QGIS Cloud logo
     1.0.0
     - Fix exception in DB size calculation
     - Allow capital letters in map name
