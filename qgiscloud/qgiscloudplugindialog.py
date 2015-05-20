@@ -830,11 +830,11 @@ class QgisCloudPluginDialog(QDockWidget):
             self.ui.lblDbSize.setAutoFillBackground(True)
             self.ui.lblDbSize.setPalette(lblPalette)
             self.ui.lblDbSize.setText(
-                self.tr("Used DB: ") + str(sizeAll) + " " + unit + " / " +
+                self.tr("Used DB Storage: ") + str(sizeAll) + " " + unit + " / " +
                 str(maxSize) + " MB")
 
             self.ui.lblDbSizeUpload.setAutoFillBackground(True)
             self.ui.lblDbSizeUpload.setPalette(lblPalette)
             self.ui.lblDbSizeUpload.setText(
-                self.tr("Used DB: ") + str(sizeAll) + " " + unit + " / " +
+                self.tr("Used DB Storage: ") + str(sizeAll) + " " + unit + " / " +
                 str(maxSize) + " MB")

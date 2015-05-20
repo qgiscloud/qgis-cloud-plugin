@@ -30,7 +30,7 @@ class DlgAbout:
     
     def contribString(self):
         return """
-        <p><center><b>The developement of QGISCloud-Plugin was supported by the following persons:</b></center></p> 
+        <p><center><b>The development of QGIS Cloud-Plugin is developed by the following persons:</b></center></p> 
         <p>Pirmin Kalberer (project manager, developer and support)<br>
         Mathias Walker (developer)<br>
         Sandro Mani (developer)<br>
