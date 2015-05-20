@@ -38,8 +38,9 @@ import binascii
 from PGVectorLayerImport import PGVectorLayerImport
 
 
-class DataUpload:
+class DataUpload(QObject):
     def __init__(self, iface, status_bar, progress_label, api, db_connections):
+        QObject.__init__(self)
         self.iface = iface
         self.status_bar = status_bar
         self.progress_label = progress_label
@@ -50,7 +51,7 @@ class DataUpload:
     def upload(self, db, data_sources_items, do_replace_local_layers, maxSize):
         import_ok = True
         layers_to_replace = {}
-        self.status_bar.showMessage(u"Uploading to database %s ..." % db.database)
+        self.status_bar.showMessage(self.tr("Uploading to database %s ...") % db.database)
         QApplication.processEvents()
 
         upload_count = 0
@@ -69,7 +70,7 @@ class DataUpload:
             size = int(cursor.fetchone()[0].split(' ')[0])
             cursor.close()
             if size > maxSize:
-                QMessageBox.warning(None, "Database full", "You have exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan.")
+                QMessageBox.warning(None, self.tr("Database full"), self.tr("You have exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan."))
                 break
 
 
@@ -92,7 +93,7 @@ class DataUpload:
                 db.database, db.host, db.port, db.username, db.password, item['table'], geom_column
             )
 
-            self.progress_label.setText("Creating table '%s'..." % (item['table']))
+            self.progress_label.setText(self.tr("Creating table '%s'...") % (item['table']))
             QApplication.processEvents()
 
             # TODO: Ask user for overwriting existing table
@@ -114,7 +115,7 @@ class DataUpload:
             importstr = ""
             ok = True
 
-            self.progress_label.setText("Uploading features...")
+            self.progress_label.setText(self.tr("Uploading features..."))
             QApplication.processEvents()
 
             for feature in layer.getFeatures():
@@ -123,7 +124,7 @@ class DataUpload:
                 count += 1
 
                 if not feature.geometry():
-                    QgsMessageLog.logMessage("Feature %s of layer %s has no geometry" % (feature.id(), layer.name()), "QGISCloud")
+                    QgsMessageLog.logMessage(self.tr("Feature %s of layer %s has no geometry") % (feature.id(), layer.name()), "QGISCloud")
                     continue
 
                 # Second field is geometry in EWKB Hex format
@@ -172,7 +173,7 @@ class DataUpload:
                         ok = False
                         break
                     importstr = ""
-                    self.progress_label.setText("%s: %d features uploaded" % (item['table'], count))
+                    self.progress_label.setText(self.tr("%s: %d features uploaded") % (item['table'], count))
                     QApplication.processEvents()
                 # Periodically update ui
                 if (count % 10) == 0:

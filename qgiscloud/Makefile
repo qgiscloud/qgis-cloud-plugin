@@ -26,7 +26,8 @@ PLUGIN_UPLOAD = $(CURDIR)/plugin_upload.py
 SOURCES = qgiscloudplugindialog.py \
           ui_login.py  \
           db_connection_cfg.py  \
-          ui_qgiscloudplugin.py
+          ui_qgiscloudplugin.py \
+          data_upload.py
 TRANSLATIONS = i18n/qgiscloudplugin_de.ts
 
 PLUGINNAME = qgiscloud
