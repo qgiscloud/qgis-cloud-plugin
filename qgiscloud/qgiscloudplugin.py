@@ -70,6 +70,7 @@ class QgisCloudPlugin:
         # Remove the plugin menu item and icon
         self.iface.removePluginMenu("&Cloud",self.action)
         self.iface.removeToolBarIcon(self.action)
+        self.iface.removeDockWidget(self.dockWidget)
 
     def showHideDockWidget(self):
         if self.dockWidget.isVisible():
