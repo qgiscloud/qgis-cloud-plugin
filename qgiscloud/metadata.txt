@@ -13,6 +13,7 @@ changelog=
     1.1.0
     - Integration of OpenLayer background layers
     - Several bugs fixed
+    - German translation improved
     1.0.0
     - Fix exception in DB size calculation
     - Allow capital letters in map name
