@@ -63,7 +63,7 @@ class LocalDataSources:
                     else:
                         # geometryless tables not supported
                         unsupported_layers.append(layer)
-                        
+
             elif provider == "gdal":
                 if layer.dataProvider().metadata()[0:13] == "PostGISRaster":
                     # FIXME: Temporary workaround for buggy QgsDataSourceURI parser which fails to parse URI strings starting with PG:
@@ -71,9 +71,11 @@ class LocalDataSources:
                     uri = uri.strip("PG: ")
                     if QgsDataSourceURI(uri).host() not in DbConnectionCfg.CLOUD_DB_HOSTS:
                         unsupported_layers.append(layer)
+                elif layer.customProperty('ol_layer_type', None) is not None:
+                    # GDAL TMS layer from OpenLayers plugin (> 1.3.6)
+                    pass
                 else:
                     unsupported_layers.append(layer)
-                    
 
             elif not provider in ["wms", "openlayers"]:
                 if layer.type() == QgsMapLayer.VectorLayer:
