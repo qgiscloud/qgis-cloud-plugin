@@ -347,7 +347,7 @@ class QgisCloudPluginDialog(QDockWidget):
             self.ui.cbUploadDatabase.setEditable(True)
             self.ui.cbUploadDatabase.lineEdit().setReadOnly(True)
             if self.db_connections.count() == 0:
-                self.ui.cbUploadDatabase.setEditText(self.tr("Create new database"))
+                self.ui.cbUploadDatabase.setEditText(self.tr("No databases"))
             else:
                 for name, db in self.db_connections.iteritems():
                     it = QListWidgetItem(name)
@@ -684,11 +684,8 @@ class QgisCloudPluginDialog(QDockWidget):
                 return
 
             if self.db_connections.count() == 0:
-                # create db
-                self.statusBar().showMessage(self.tr("Create new database..."))
-                QApplication.processEvents()  # refresh status bar
-                self.create_database()
-                self.statusBar().showMessage("")
+                QMessageBox.warning(self, self.tr("No database available"), self.tr("Please create a database in the 'Account' tab."))
+                return
 
             if not self.ui.cbUploadDatabase.currentIndex() >= 0:
                 QMessageBox.warning(self, self.tr("No database selected"), self.tr("Please select a database to upload data."))
