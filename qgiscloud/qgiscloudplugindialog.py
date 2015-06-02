@@ -344,16 +344,20 @@ class QgisCloudPluginDialog(QDockWidget):
             self.ui.tabDatabases.clear()
             self.ui.btnDbDelete.setEnabled(False)
             self.ui.cbUploadDatabase.clear()
+            self.ui.cbUploadDatabase.setEditable(True)
+            self.ui.cbUploadDatabase.lineEdit().setReadOnly(True)
             if self.db_connections.count() == 0:
-                self.ui.cbUploadDatabase.addItem(
-                    self.tr("Create new database"))
-            elif self.db_connections.count() > 1:
-                self.ui.cbUploadDatabase.addItem(self.tr("Select database"))
-            for name, db in self.db_connections.iteritems():
-                it = QListWidgetItem(name)
-                it.setToolTip(db.description())
-                self.ui.tabDatabases.addItem(it)
-                self.ui.cbUploadDatabase.addItem(name)
+                self.ui.cbUploadDatabase.setEditText(self.tr("Create new database"))
+            else:
+                for name, db in self.db_connections.iteritems():
+                    it = QListWidgetItem(name)
+                    it.setToolTip(db.description())
+                    self.ui.tabDatabases.addItem(it)
+                    self.ui.cbUploadDatabase.addItem(name)
+                if self.ui.cbUploadDatabase.count() > 1:
+                    # Display the "Select database" text if more than one db is available
+                    self.ui.cbUploadDatabase.setCurrentIndex(-1)
+                    self.ui.cbUploadDatabase.setEditText(self.tr("Select database"))
             self.db_connections.refresh(self.user)
 
             self.db_size(self.db_connections)
@@ -672,8 +676,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 self.data_sources_table_names[data_source] = table_name
 
     def activate_upload_button(self):
-        self.ui.btnUploadData.setEnabled(
-            self.ui.cbUploadDatabase.currentIndex() >= 0 and self.local_data_sources.count() > 0)
+        self.ui.btnUploadData.setEnabled(self.local_data_sources.count() > 0)
 
     def upload_data(self):
         if self.check_login():
@@ -686,6 +689,10 @@ class QgisCloudPluginDialog(QDockWidget):
                 QApplication.processEvents()  # refresh status bar
                 self.create_database()
                 self.statusBar().showMessage("")
+
+            if not self.ui.cbUploadDatabase.currentIndex() >= 0:
+                QMessageBox.warning(self, self.tr("No database selected"), self.tr("Please select a database to upload data."))
+                return
 
             db_name = self.ui.cbUploadDatabase.currentText()
 
