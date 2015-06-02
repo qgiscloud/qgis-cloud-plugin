@@ -316,7 +316,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="qgiscloudplugindialog.py" line="350"/>
         <source>Create new database</source>
-        <translation>Neue Datenbank anlegen</translation>
+        <translation type="obsolete">Neue Datenbank anlegen</translation>
     </message>
     <message>
         <location filename="qgiscloudplugindialog.py" line="360"/>
@@ -334,7 +334,7 @@ p, li { white-space: pre-wrap; }
         <translation>Das Projekt wurde verändert.</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="766"/>
+        <location filename="qgiscloudplugindialog.py" line="763"/>
         <source>Do you want to save your changes?</source>
         <translation>Möchten Sie die Änderungen speichern?</translation>
     </message>
@@ -417,40 +417,40 @@ Please remove or replace above layers before publishing your map.
     <message>
         <location filename="qgiscloudplugindialog.py" line="689"/>
         <source>Create new database...</source>
-        <translation>Neue Datenbank anlegen</translation>
+        <translation type="obsolete">Neue Datenbank anlegen</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="704"/>
+        <location filename="qgiscloudplugindialog.py" line="701"/>
         <source>Network Error</source>
         <translation>Netzwerk Fehler</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="704"/>
+        <location filename="qgiscloudplugindialog.py" line="701"/>
         <source>Could not connect to database server ({0}) on port {1}. Please contact your system administrator or internet provider</source>
         <translation>Es konnte keine Verbindung zum Datenbank Server ({0}) über den Port {1} ergestellt werden. Bitte nehmen Sie Kontakt mit Ihrem System-Administrator oder Internet-Provider auf</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="711"/>
+        <location filename="qgiscloudplugindialog.py" line="708"/>
         <source>Uploading data...</source>
         <translation>Daten werden hoch geladen...</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="764"/>
+        <location filename="qgiscloudplugindialog.py" line="761"/>
         <source>QGIS Cloud</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="765"/>
+        <location filename="qgiscloudplugindialog.py" line="762"/>
         <source>The project is ready for publishing.</source>
         <translation>Das Projekt kann publiziert werden.</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="788"/>
+        <location filename="qgiscloudplugindialog.py" line="785"/>
         <source>QGIS Cloud Error</source>
         <translation>QGIS Cloud Fehler</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="790"/>
+        <location filename="qgiscloudplugindialog.py" line="787"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
@@ -460,12 +460,12 @@ Please remove or replace above layers before publishing your map.
         <translation>Abgebrochen</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="744"/>
+        <location filename="qgiscloudplugindialog.py" line="741"/>
         <source>Upload data</source>
         <translation>Daten in die Cloud laden</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="744"/>
+        <location filename="qgiscloudplugindialog.py" line="741"/>
         <source>Data upload error.
 See Log Messages for more information.</source>
         <translation>Fehler beim Hochladen der Daten.
@@ -492,19 +492,34 @@ Für weitere Informationen sehen Sie im QGIS Protokoll nach.</translation>
         <translation>Unbekannter Typ</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="841"/>
+        <location filename="qgiscloudplugindialog.py" line="838"/>
         <source>Used DB Storage: </source>
         <translation>Verwendeter Datenbankspeicher: </translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="695"/>
+        <location filename="qgiscloudplugindialog.py" line="692"/>
         <source>No database selected</source>
         <translation>Keine Datenbank ausgewählt</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="695"/>
+        <location filename="qgiscloudplugindialog.py" line="692"/>
         <source>Please select a database to upload data.</source>
         <translation>Bitte wählen Sie eine Datenbank aus um Daten hochzuladen.</translation>
+    </message>
+    <message>
+        <location filename="qgiscloudplugindialog.py" line="350"/>
+        <source>No databases</source>
+        <translation>Keine Datenbanken</translation>
+    </message>
+    <message>
+        <location filename="qgiscloudplugindialog.py" line="688"/>
+        <source>No database available</source>
+        <translation>Keine Datenbanken verfügbar</translation>
+    </message>
+    <message>
+        <location filename="qgiscloudplugindialog.py" line="688"/>
+        <source>Please create a database in the &apos;Account&apos; tab.</source>
+        <translation>Bitte legen Sie eine Datenbank in &apos;Benutzerkonto&apos; Registerkarte an.</translation>
     </message>
 </context>
 </TS>
