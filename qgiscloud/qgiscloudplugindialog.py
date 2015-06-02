@@ -788,53 +788,47 @@ class QgisCloudPluginDialog(QDockWidget):
         return unicode(self.tr(str))
 
     def db_size(self,  db_connections):
-        sizeAll = 0
-        cloud_dbs_from_server = db_connections._dbs.keys()
-        if len(cloud_dbs_from_server) > 0:
-            for db in cloud_dbs_from_server:
-                unit = ''
-                try:
-                    conn = db_connections.db(db).psycopg_connection()
-                except:
-                    continue
-                cursor = conn.cursor()
-                sql = "SELECT pg_size_pretty(pg_database_size('" + \
-                    str(db) + "'))"
-                cursor.execute(sql)
-                size = cursor.fetchone()
-                tmp = size[0].split(' ')
-                sizeAll = sizeAll + int(tmp[0])
-                unit = tmp[1]  # TODO: Handle mixed units
+        usedSpace = 0
+        for db in db_connections._dbs.keys():
+            try:
+                conn = db_connections.db(db).psycopg_connection()
+            except:
+                continue
+            cursor = conn.cursor()
+            sql = "SELECT pg_database_size('" + str(db) + "')"
+            cursor.execute(sql)
+            usedSpace += int(cursor.fetchone()[0])
 
-            login_info = self.api.check_login(
-                version_info=self._version_info())
-            if login_info['plan'] == 'Free':
-                maxSize = self.FREE_SIZE
-            elif login_info['plan'] == 'Pro' or login_info['plan'] == 'Pro Beta':
-                maxSize = self.PRO_SIZE
-            elif login_info['plan'] == 'Enterprise/Reseller':
-                maxSize = self.RESELLER_SIZE
+        # Used space in MB
+        usedSpace /= 1024 * 1024
 
-            lblPalette = QPalette(self.ui.lblDbSize.palette())
-            usage = sizeAll / maxSize
+        login_info = self.api.check_login(
+            version_info=self._version_info())
+        if login_info['plan'] == 'Free':
+            maxSize = self.FREE_SIZE
+        elif login_info['plan'] == 'Pro' or login_info['plan'] == 'Pro Beta':
+            maxSize = self.PRO_SIZE
+        elif login_info['plan'] == 'Enterprise/Reseller':
+            maxSize = self.RESELLER_SIZE
 
-            if usage < 0.8:
-                bg_color = QColor(255, 0, 0, 0)
-            elif usage >= 0.8 and usage < 1:
-                bg_color = QColor(255, 0, 0, 100)
-            elif usage >= 1:
-                bg_color = QColor(255, 0, 0, 255)
+        lblPalette = QPalette(self.ui.lblDbSize.palette())
+        usage = usedSpace / float(maxSize)
 
-            lblPalette.setColor(QPalette.Window, QColor(bg_color))
+        if usage < 0.8:
+            bg_color = QColor(255, 0, 0, 0)
+        elif usage >= 0.8 and usage < 1:
+            bg_color = QColor(255, 0, 0, 100)
+        elif usage >= 1:
+            bg_color = QColor(255, 0, 0, 255)
 
-            self.ui.lblDbSize.setAutoFillBackground(True)
-            self.ui.lblDbSize.setPalette(lblPalette)
-            self.ui.lblDbSize.setText(
-                self.tr("Used DB Storage: ") + str(sizeAll) + " " + unit + " / " +
-                str(maxSize) + " MB")
+        lblPalette.setColor(QPalette.Window, QColor(bg_color))
 
-            self.ui.lblDbSizeUpload.setAutoFillBackground(True)
-            self.ui.lblDbSizeUpload.setPalette(lblPalette)
-            self.ui.lblDbSizeUpload.setText(
-                self.tr("Used DB Storage: ") + str(sizeAll) + " " + unit + " / " +
-                str(maxSize) + " MB")
+        self.ui.lblDbSize.setAutoFillBackground(True)
+        self.ui.lblDbSize.setPalette(lblPalette)
+        self.ui.lblDbSize.setText(
+            self.tr("Used DB Storage: ") + "%d / %d MB" % (usedSpace, maxSize))
+
+        self.ui.lblDbSizeUpload.setAutoFillBackground(True)
+        self.ui.lblDbSizeUpload.setPalette(lblPalette)
+        self.ui.lblDbSizeUpload.setText(
+            self.tr("Used DB Storage: ") + "%d / %d MB" % (usedSpace, maxSize))
