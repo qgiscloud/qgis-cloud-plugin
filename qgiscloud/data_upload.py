@@ -51,7 +51,7 @@ class DataUpload(QObject):
     def upload(self, db, data_sources_items, do_replace_local_layers, maxSize):
         import_ok = True
         layers_to_replace = {}
-        self.status_bar.showMessage(self.tr("Uploading to database %s ...") % db.database)
+        self.status_bar.showMessage(pystring(self.tr("Uploading to database '{db}'...")).format(db=db.database))
         QApplication.processEvents()
 
         upload_count = 0
@@ -94,7 +94,7 @@ class DataUpload(QObject):
                 db.database, db.host, db.port, db.username, db.password, item['table'], geom_column
             )
 
-            self.progress_label.setText(self.tr("Creating table '%s'...") % (item['table']))
+            self.progress_label.setText(pystring(self.tr("Creating table '{table}'...")).format(table=item['table']))
             QApplication.processEvents()
 
             # TODO: Ask user for overwriting existing table
@@ -125,7 +125,8 @@ class DataUpload(QObject):
                 count += 1
 
                 if not feature.geometry():
-                    QgsMessageLog.logMessage(self.tr("Feature %s of layer %s has no geometry") % (feature.id(), layer.name()), "QGISCloud")
+                    QgsMessageLog.logMessage(pystring(self.tr("Feature {id} of layer {layer} has no geometry")).format(
+                        id=feature.id(), layer=layer.name()), "QGISCloud")
                     continue
 
                 # Second field is geometry in EWKB Hex format
@@ -174,7 +175,8 @@ class DataUpload(QObject):
                         ok = False
                         break
                     importstr = ""
-                    self.progress_label.setText(self.tr("%s: %d features uploaded") % (item['table'], count))
+                    self.progress_label.setText(pystring(self.tr("{table}: {count} features uploaded")).format(
+                        table=item['table'], count=count))
                     QApplication.processEvents()
                 # Periodically update ui
                 if (count % 10) == 0:
