@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_qgiscloudplugin.ui'
 #
-# Created: Tue Apr 21 12:14:03 2015
+# Created: Tue Jun  2 11:13:12 2015
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -138,6 +138,7 @@ class Ui_QgisCloudPlugin(object):
         self.lblDbSizeUpload.setObjectName(_fromUtf8("lblDbSizeUpload"))
         self.verticalLayout_6.addWidget(self.lblDbSizeUpload)
         self.tblLocalLayers = QtGui.QTableWidget(self.uploadTab)
+        self.tblLocalLayers.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.tblLocalLayers.setObjectName(_fromUtf8("tblLocalLayers"))
         self.tblLocalLayers.setColumnCount(0)
         self.tblLocalLayers.setRowCount(0)
@@ -243,6 +244,7 @@ class Ui_QgisCloudPlugin(object):
         self.horizontalLayout_2.addWidget(self.lblDbSize)
         self.verticalLayout_3.addLayout(self.horizontalLayout_2)
         self.tabDatabases = QtGui.QListWidget(self.widgetDatabases)
+        self.tabDatabases.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.tabDatabases.setObjectName(_fromUtf8("tabDatabases"))
         self.verticalLayout_3.addWidget(self.tabDatabases)
         self.horizontalLayout = QtGui.QHBoxLayout()
