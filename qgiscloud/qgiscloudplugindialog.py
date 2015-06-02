@@ -330,8 +330,8 @@ class QgisCloudPluginDialog(QDockWidget):
         self.activate_upload_button()
 
     def refresh_databases(self):
+        QApplication.setOverrideCursor(Qt.WaitCursor)
         if self.clouddb:
-            QApplication.setOverrideCursor(Qt.WaitCursor)
             db_list = self.api.read_databases()
             if self.show_api_error(db_list):
                 return
@@ -360,8 +360,8 @@ class QgisCloudPluginDialog(QDockWidget):
                     self.ui.cbUploadDatabase.setEditText(self.tr("Select database"))
             self.db_connections.refresh(self.user)
 
-            self.db_size(self.db_connections)
-            QApplication.restoreOverrideCursor()
+        self.db_size(self.db_connections)
+        QApplication.restoreOverrideCursor()
 
     def api_url(self):
         return unicode(self.ui.editServer.text())
