@@ -60,6 +60,7 @@ class DataUpload(QObject):
         try:
             conn = db.psycopg_connection()
         except:
+            QgsMessageLog.logMessage("Connection to database failed", "QGISCloud")
             return -1
 
         for data_source, item in data_sources_items.iteritems():
@@ -221,7 +222,7 @@ class DataUpload(QObject):
     def _wkbToEWkbHex(self, wkb, srid, convertToMulti=False):
         wktType = struct.unpack("=I", wkb[1:5])[0]
         if not QGis.isMultiType(wktType):
-            wktType = QGis.multiType(wktType)
+            wktType = QGis.multiType(wktType) & 0xffffffff
             wkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", 1) + wkb
 
         # See postgis sources liblwgeom.h.in:
