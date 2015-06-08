@@ -69,7 +69,8 @@ class ErrorReportDialog(QDialog):
                     sys.version.replace("\n", " "),
                     platform.platform(),
                     version())
-        url = QUrl("mailto:support@qgiscloud.com?subject=%s&body=%s" % (
+        url = QUrl()
+        url.setEncodedQuery("mailto:support@qgiscloud.com?subject=%s&body=%s" % (
                 urllib.quote(pystring(self.tr("Data upload error"))),
                 urllib.quote(body)))
         QDesktopServices.openUrl(url)
