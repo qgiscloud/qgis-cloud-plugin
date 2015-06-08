@@ -27,8 +27,11 @@ SOURCES = qgiscloudplugindialog.py \
           ui_login.py  \
           db_connection_cfg.py  \
           ui_qgiscloudplugin.py \
-          data_upload.py
-TRANSLATIONS = i18n/qgiscloudplugin_de.ts
+          data_upload.py \
+          error_report_dialog.py
+
+TRANSLATIONS = i18n/qgiscloudplugin_de.ts \
+               i18n/qgiscloudplugin_it.ts
 
 PLUGINNAME = qgiscloud
 

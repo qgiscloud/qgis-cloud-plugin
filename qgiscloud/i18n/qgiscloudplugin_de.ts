@@ -9,12 +9,12 @@
         <translation type="obsolete">Hochladen in die Datenbank %s ...</translation>
     </message>
     <message>
-        <location filename="data_upload.py" line="74"/>
+        <location filename="data_upload.py" line="76"/>
         <source>Database full</source>
         <translation>Die Datenbanl ist voll</translation>
     </message>
     <message>
-        <location filename="data_upload.py" line="74"/>
+        <location filename="data_upload.py" line="76"/>
         <source>You have exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan.</source>
         <translation>Sie haben das maximale Datenvolumen der Datenbank für Ihren aktuellen QGIS Cloud Plan überschritten. Löschen Sie bitte Daten aus der Datenbank oder führen Sie ein Upgrade auf einen entsprechenden QGIS Cloud Plan durch.</translation>
     </message>
@@ -24,7 +24,7 @@
         <translation type="obsolete">Die Tabelle %s wird erstellt ...</translation>
     </message>
     <message>
-        <location filename="data_upload.py" line="120"/>
+        <location filename="data_upload.py" line="122"/>
         <source>Uploading features...</source>
         <translation>Die Objekte werden hochgeladen ...</translation>
     </message>
@@ -44,17 +44,17 @@
         <translation>Hochladen in die Datenbank &apos;{db}&apos;...</translation>
     </message>
     <message>
-        <location filename="data_upload.py" line="97"/>
+        <location filename="data_upload.py" line="99"/>
         <source>Creating table &apos;{table}&apos;...</source>
         <translation>Die Tabelle &apos;{table}&apos; wird erstellt...</translation>
     </message>
     <message>
-        <location filename="data_upload.py" line="129"/>
+        <location filename="data_upload.py" line="131"/>
         <source>Feature {id} of layer {layer} has no geometry</source>
         <translation>Das Objekt {id} der Ebene {layer} hat keine Geometrie</translation>
     </message>
     <message>
-        <location filename="data_upload.py" line="180"/>
+        <location filename="data_upload.py" line="182"/>
         <source>{table}: {count} features uploaded</source>
         <translation>{table}: {count} Objekte hochgeladen</translation>
     </message>
@@ -299,17 +299,17 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>QgisCloudPluginDialog</name>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="281"/>
+        <location filename="qgiscloudplugindialog.py" line="282"/>
         <source>Login failed</source>
         <translation>Erfolglos angemeldet</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="281"/>
+        <location filename="qgiscloudplugindialog.py" line="282"/>
         <source>Wrong user name or password</source>
         <translation>Falscher Benutzername oder falsches Passwort</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="298"/>
+        <location filename="qgiscloudplugindialog.py" line="299"/>
         <source>Delete QGIS Cloud database.</source>
         <translation>QGIS Cloud Datenbank löschen.</translation>
     </message>
@@ -319,7 +319,7 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">Neue Datenbank anlegen</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="360"/>
+        <location filename="qgiscloudplugindialog.py" line="362"/>
         <source>Select database</source>
         <translation>Datenbank auswählen</translation>
     </message>
@@ -329,7 +329,7 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="404"/>
+        <location filename="qgiscloudplugindialog.py" line="406"/>
         <source>The project has been modified.</source>
         <translation>Das Projekt wurde verändert.</translation>
     </message>
@@ -339,78 +339,78 @@ p, li { white-space: pre-wrap; }
         <translation>Möchten Sie die Änderungen speichern?</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="435"/>
+        <location filename="qgiscloudplugindialog.py" line="437"/>
         <source>Publishing map</source>
         <translation>Die Karte wird publiziert</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="456"/>
+        <location filename="qgiscloudplugindialog.py" line="458"/>
         <source>Map successfully published</source>
         <translation>Die Karte wurde erfolgreich publiziert</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="460"/>
+        <location filename="qgiscloudplugindialog.py" line="462"/>
         <source>Error uploading project</source>
         <translation>Fehler beim Hochladen des Projektes</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="466"/>
+        <location filename="qgiscloudplugindialog.py" line="468"/>
         <source>Do you want to send the exception info to qgiscloud.com?</source>
         <translation>Möchten Sie die Fehlermeldung an qgiscloud.com senden?</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="479"/>
+        <location filename="qgiscloudplugindialog.py" line="481"/>
         <source>Uploading SVG symbols</source>
         <translation>SVG Symbole werden hoch geladen</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="518"/>
+        <location filename="qgiscloudplugindialog.py" line="520"/>
         <source>Error checking local data sources</source>
         <translation>Fehler bei der Prüfung der loalen Datenquellen</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="530"/>
+        <location filename="qgiscloudplugindialog.py" line="532"/>
         <source>Local layers found</source>
         <translation>Lokale Layer wurden gefunden</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="531"/>
+        <location filename="qgiscloudplugindialog.py" line="533"/>
         <source>Some layers are using local data. You can upload local layers to your cloud database in the &apos;Upload Data&apos; tab.
 
 </source>
         <translation>Einige Layer verwenden lokale Daten. Sie können diese Daten in Ihre Cloud Datenbank laden. Öffnen Sie dazu den &apos;Daten in die Cloud Laden&apos; Reiter.</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="535"/>
+        <location filename="qgiscloudplugindialog.py" line="537"/>
         <source>Unsupported layers found</source>
         <translation>Nicht unterstützte Layer wurden gefunden</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="536"/>
+        <location filename="qgiscloudplugindialog.py" line="538"/>
         <source>Raster, plugin or geometryless layers are not supported:
 
 </source>
         <translation>Raster, Plugin oder geometrielose Layer können nicht verarbeitet werden:</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="542"/>
+        <location filename="qgiscloudplugindialog.py" line="544"/>
         <source>
 Please remove or replace above layers before publishing your map.
 </source>
         <translation>Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="544"/>
+        <location filename="qgiscloudplugindialog.py" line="546"/>
         <source>For raster data you can use public WMS layers or the OpenLayers Plugin.</source>
         <translation>Für Raster-Daten können Sie WMS Layer oder das OpenLayers Plugin verwenden.</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="588"/>
+        <location filename="qgiscloudplugindialog.py" line="590"/>
         <source>Note: OGR features will be converted to MULTI-type</source>
         <translation>Hinweis: OGS Geometrien werden zu Multi-Geomtrien konvertiert</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="613"/>
+        <location filename="qgiscloudplugindialog.py" line="615"/>
         <source>Updated local data sources</source>
         <translation>Die lokalen Daten wurden hoch geladen</translation>
     </message>
@@ -420,17 +420,17 @@ Please remove or replace above layers before publishing your map.
         <translation type="obsolete">Neue Datenbank anlegen</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="701"/>
+        <location filename="qgiscloudplugindialog.py" line="703"/>
         <source>Network Error</source>
         <translation>Netzwerk Fehler</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="701"/>
+        <location filename="qgiscloudplugindialog.py" line="703"/>
         <source>Could not connect to database server ({0}) on port {1}. Please contact your system administrator or internet provider</source>
         <translation>Es konnte keine Verbindung zum Datenbank Server ({0}) über den Port {1} ergestellt werden. Bitte nehmen Sie Kontakt mit Ihrem System-Administrator oder Internet-Provider auf</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="708"/>
+        <location filename="qgiscloudplugindialog.py" line="710"/>
         <source>Uploading data...</source>
         <translation>Daten werden hoch geladen...</translation>
     </message>
@@ -445,81 +445,91 @@ Please remove or replace above layers before publishing your map.
         <translation>Das Projekt kann publiziert werden.</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="785"/>
+        <location filename="qgiscloudplugindialog.py" line="781"/>
         <source>QGIS Cloud Error</source>
         <translation>QGIS Cloud Fehler</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="787"/>
+        <location filename="qgiscloudplugindialog.py" line="783"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="432"/>
+        <location filename="qgiscloudplugindialog.py" line="434"/>
         <source>Cancelled</source>
         <translation>Abgebrochen</translation>
     </message>
     <message>
         <location filename="qgiscloudplugindialog.py" line="741"/>
         <source>Upload data</source>
-        <translation>Daten in die Cloud laden</translation>
+        <translation type="obsolete">Daten in die Cloud laden</translation>
     </message>
     <message>
         <location filename="qgiscloudplugindialog.py" line="741"/>
         <source>Data upload error.
 See Log Messages for more information.</source>
-        <translation>Fehler beim Hochladen der Daten.
+        <translation type="obsolete">Fehler beim Hochladen der Daten.
 Für weitere Informationen sehen Sie im QGIS Protokoll nach.</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="275"/>
+        <location filename="qgiscloudplugindialog.py" line="276"/>
         <source>Unsupported versions detected. Please check your versions first!</source>
         <translation>Nicht unterstützte Versionen sind gefunden worden. Bitte prüfen Sie, ob Updates für das Plugin vorliegen!</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="583"/>
+        <location filename="qgiscloudplugindialog.py" line="585"/>
         <source>Unsupported geometry type</source>
         <translation>Nicht unterstützter Geometrietyp</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="583"/>
+        <location filename="qgiscloudplugindialog.py" line="585"/>
         <source>Unsupported geometry type &apos;{type}&apos; in layer &apos;{layer}&apos;</source>
         <translation>Nicht unterstützter Geometrietyp &apos;{type}&apos; in Ebene &apos;{layer}&apos;</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="644"/>
+        <location filename="qgiscloudplugindialog.py" line="646"/>
         <source>Unknown type</source>
         <translation>Unbekannter Typ</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="838"/>
+        <location filename="qgiscloudplugindialog.py" line="834"/>
         <source>Used DB Storage: </source>
         <translation>Verwendeter Datenbankspeicher: </translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="692"/>
+        <location filename="qgiscloudplugindialog.py" line="694"/>
         <source>No database selected</source>
         <translation>Keine Datenbank ausgewählt</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="692"/>
+        <location filename="qgiscloudplugindialog.py" line="694"/>
         <source>Please select a database to upload data.</source>
         <translation>Bitte wählen Sie eine Datenbank aus um Daten hochzuladen.</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="350"/>
+        <location filename="qgiscloudplugindialog.py" line="352"/>
         <source>No databases</source>
         <translation>Keine Datenbanken</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="688"/>
+        <location filename="qgiscloudplugindialog.py" line="690"/>
         <source>No database available</source>
         <translation>Keine Datenbanken verfügbar</translation>
     </message>
     <message>
-        <location filename="qgiscloudplugindialog.py" line="688"/>
+        <location filename="qgiscloudplugindialog.py" line="690"/>
         <source>Please create a database in the &apos;Account&apos; tab.</source>
         <translation>Bitte legen Sie eine Datenbank in &apos;Benutzerkonto&apos; Registerkarte an.</translation>
+    </message>
+    <message>
+        <location filename="qgiscloudplugindialog.py" line="742"/>
+        <source>Upload error</source>
+        <translation>Fehler beim Hochladen</translation>
+    </message>
+    <message>
+        <location filename="qgiscloudplugindialog.py" line="742"/>
+        <source>The data upload failed.</source>
+        <translation>Die Daten konnten nicht hochgeladen werden.</translation>
     </message>
 </context>
 </TS>

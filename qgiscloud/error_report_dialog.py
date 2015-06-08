@@ -59,7 +59,7 @@ class ErrorReportDialog(QDialog):
         self.username = username
 
     def __reportError(self):
-        body = ("Please describe your issue here:\n\n"
+        body = ("Please provide any additional information here:\n\n"
                 "Technical information:\n%s\n\n"
                 "Versions:\n"
                 " QGIS: %s\n"
