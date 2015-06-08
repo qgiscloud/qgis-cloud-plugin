@@ -55,13 +55,14 @@ class DataUpload(QObject):
         QApplication.processEvents()
 
         upload_count = 0
+        messages = ""
 
         # Connect to database
         try:
             conn = db.psycopg_connection()
         except:
-            QgsMessageLog.logMessage("Connection to database failed", "QGISCloud")
-            return -1
+            messages += "Connection to database failed\n"
+            return (-1, messages)
 
         for data_source, item in data_sources_items.iteritems():
             # Check available space, block if exceded
@@ -171,7 +172,7 @@ class DataUpload(QObject):
                     try:
                         cursor.copy_from(StringIO(importstr), '"public"."%s"' % item['table'])
                     except Exception as e:
-                        QgsMessageLog.logMessage(str(e), "QGISCloud")
+                        messages += str(e) + "\n"
                         ok = False
                         break
                     importstr = ""
@@ -186,7 +187,7 @@ class DataUpload(QObject):
                 try:
                     cursor.copy_from(StringIO(importstr), '"public"."%s"' % item['table'])
                 except Exception as e:
-                    QgsMessageLog.logMessage(str(e), "QGISCloud")
+                    messages += str(e) + "\n"
                     ok = False
 
             cursor.close()
@@ -196,7 +197,7 @@ class DataUpload(QObject):
                     conn.commit()
                     upload_count += 1
                 except Exception as e:
-                    QgsMessageLog.logMessage(str(e), "QGISCloud")
+                    messages += str(e) + "\n"
                     ok = False
             else:
                 conn.rollback()
@@ -217,9 +218,9 @@ class DataUpload(QObject):
         self._replace_local_layers(layers_to_replace)
         self.progress_label.setText("")
         if import_ok:
-            return upload_count
+            return (upload_count, messages)
         else:
-            return -1
+            return (-1, messages)
 
     def _wkbToEWkbHex(self, wkb, srid, convertToMulti=False):
         wktType = struct.unpack("=I", wkb[1:5])[0]

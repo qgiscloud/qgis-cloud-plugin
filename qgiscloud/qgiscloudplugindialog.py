@@ -31,6 +31,7 @@ from db_connections import DbConnections
 from local_data_sources import LocalDataSources
 from data_upload import DataUpload
 from doAbout import DlgAbout
+from error_report_dialog import ErrorReportDialog
 import os.path
 import sys
 import traceback
@@ -334,6 +335,7 @@ class QgisCloudPluginDialog(QDockWidget):
         if self.clouddb:
             db_list = self.api.read_databases()
             if self.show_api_error(db_list):
+                QApplication.restoreOverrideCursor()
                 return
             self.db_connections = DbConnections()
             for db in db_list:
@@ -732,13 +734,11 @@ class QgisCloudPluginDialog(QDockWidget):
             elif login_info['plan'] == 'Enterprise/Reseller':
                 maxSize = self.RESELLER_SIZE
 
-            upload_count = self.data_upload.upload(
+            (upload_count, messages) = self.data_upload.upload(
                 self.db_connections.db(db_name), data_sources_items,
                 self.ui.cbReplaceLocalLayers.isChecked(), maxSize)
             if upload_count == -1:
-                self._show_log_window()
-                QMessageBox.warning(self, self.tr("Upload data"), self.tr(
-                    "Data upload error.\nSee Log Messages for more information."))
+                ErrorReportDialog(self.tr("Upload error"), self.tr("The data upload failed."), messages, self).exec_()
 
             self.ui.spinner.stop()
             self.ui.progressWidget.hide()
@@ -767,10 +767,6 @@ class QgisCloudPluginDialog(QDockWidget):
                 ret = msgBox.exec_()
                 if ret == QMessageBox.Save:
                     self.iface.actionSaveProjectAs().trigger()
-
-    def _show_log_window(self):
-        logDock = self.iface.mainWindow().findChild(QDockWidget, 'MessageLog')
-        logDock.show()
 
     def _push_message(self, title, text, level=0, duration=0):
         # QGIS >= 2.0
