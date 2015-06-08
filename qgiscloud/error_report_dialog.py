@@ -69,8 +69,7 @@ class ErrorReportDialog(QDialog):
                     sys.version.replace("\n", " "),
                     platform.platform(),
                     version())
-        QDesktopServices.openUrl(QUrl(
-            "mailto:support@qgiscloud.com?subject=%s&body=%s" % (
-                urllib.quote_plus(pystring(self.tr("Data upload error"))),
-                urllib.quote_plus(body))
-        ))
+        url = QUrl("mailto:support@qgiscloud.com?subject=%s&body=%s" % (
+                urllib.quote(pystring(self.tr("Data upload error"))),
+                urllib.quote(body)))
+        QDesktopServices.openUrl(url)
