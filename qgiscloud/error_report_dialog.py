@@ -32,7 +32,7 @@ import platform
 
 
 class ErrorReportDialog(QDialog):
-    def __init__(self, title, message, errors, parent=None):
+    def __init__(self, title, message, errors, username, parent=None):
         QDialog.__init__(self, parent)
         self.setWindowTitle(title)
 
@@ -56,6 +56,8 @@ class ErrorReportDialog(QDialog):
         self.buttonBox.accepted.connect(self.accept)
         self.buttonBox.rejected.connect(self.reject)
 
+        self.username = username
+
     def __reportError(self):
         body = ("Please describe your issue here:\n\n"
                 "Technical information:\n%s\n\n"
@@ -63,14 +65,16 @@ class ErrorReportDialog(QDialog):
                 " QGIS: %s\n"
                 " Python: %s\n"
                 " OS: %s\n"
-                " QGIS Cloud Plugin: %s\n") % (
+                " QGIS Cloud Plugin: %s\n\n"
+                "Username: %s\n") % (
                     self.plainTextEdit.toPlainText(),
                     QGis.QGIS_VERSION,
                     sys.version.replace("\n", " "),
                     platform.platform(),
-                    version())
+                    version(),
+                    self.username)
         url = QUrl()
-        url.setEncodedQuery("mailto:support@qgiscloud.com?subject=%s&body=%s" % (
+        url.setEncodedUrl("mailto:support@qgiscloud.com?subject=%s&body=%s" % (
                 urllib.quote(pystring(self.tr("Data upload error"))),
                 urllib.quote(body)))
         QDesktopServices.openUrl(url)

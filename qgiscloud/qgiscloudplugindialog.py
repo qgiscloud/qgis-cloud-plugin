@@ -738,7 +738,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 self.db_connections.db(db_name), data_sources_items,
                 self.ui.cbReplaceLocalLayers.isChecked(), maxSize)
             if upload_count == -1:
-                ErrorReportDialog(self.tr("Upload error"), self.tr("The data upload failed."), messages, self).exec_()
+                ErrorReportDialog(self.tr("Upload error"), self.tr("The data upload failed."), messages, self.user, self).exec_()
 
             self.ui.spinner.stop()
             self.ui.progressWidget.hide()
