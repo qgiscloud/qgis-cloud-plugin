@@ -739,7 +739,7 @@ class QgisCloudPluginDialog(QDockWidget):
                     self.db_connections.db(db_name), data_sources_items,
                     self.ui.cbReplaceLocalLayers.isChecked(), maxSize)
             except Exception as e:
-                ErrorReportDialog(self.tr("Upload error"), self.tr("The data upload failed."), str(e), self.user, self).exec_()
+                ErrorReportDialog(self.tr("Upload error"), self.tr("The data upload failed."), str(e) + "\n" + traceback.format_exc(), self.user, self).exec_()
                 upload_count = 0
 
             self.ui.spinner.stop()
