@@ -49,6 +49,7 @@ class DataUpload(QObject):
         pass
 
     def upload(self, db, data_sources_items, do_replace_local_layers, maxSize):
+        x = y
         import_ok = True
         layers_to_replace = {}
         self.status_bar.showMessage(pystring(self.tr("Uploading to database '{db}'...")).format(db=db.database))
@@ -61,8 +62,7 @@ class DataUpload(QObject):
         try:
             conn = db.psycopg_connection()
         except:
-            messages += "Connection to database failed\n"
-            return (-1, messages)
+            raise RuntimeError("Connection to database failed")
 
         for data_source, item in data_sources_items.iteritems():
             # Check available space, block if exceded
@@ -218,9 +218,9 @@ class DataUpload(QObject):
         self._replace_local_layers(layers_to_replace)
         self.progress_label.setText("")
         if import_ok:
-            return (upload_count, messages)
+            return upload_count
         else:
-            return (-1, messages)
+            raise RuntimeError(messages)
 
     def _wkbToEWkbHex(self, wkb, srid, convertToMulti=False):
         wktType = struct.unpack("=I", wkb[1:5])[0]
