@@ -734,11 +734,13 @@ class QgisCloudPluginDialog(QDockWidget):
             elif login_info['plan'] == 'Enterprise/Reseller':
                 maxSize = self.RESELLER_SIZE
 
-            (upload_count, messages) = self.data_upload.upload(
-                self.db_connections.db(db_name), data_sources_items,
-                self.ui.cbReplaceLocalLayers.isChecked(), maxSize)
-            if upload_count == -1:
-                ErrorReportDialog(self.tr("Upload error"), self.tr("The data upload failed."), messages, self.user, self).exec_()
+            try:
+                upload_count = self.data_upload.upload(
+                    self.db_connections.db(db_name), data_sources_items,
+                    self.ui.cbReplaceLocalLayers.isChecked(), maxSize)
+            except Exception as e:
+                ErrorReportDialog(self.tr("Upload error"), self.tr("The data upload failed."), str(e), self.user, self).exec_()
+                upload_count = 0
 
             self.ui.spinner.stop()
             self.ui.progressWidget.hide()
