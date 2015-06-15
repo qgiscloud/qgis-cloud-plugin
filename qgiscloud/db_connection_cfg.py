@@ -137,12 +137,11 @@ class DbConnectionCfg:
         uri.setUseEstimatedMetadata(self.estimatedMetadata)
         return uri
 
-    def psycopg_connection(self, timeout=3):
+    def psycopg_connection(self):
         return psycopg2.connect(
             database=self.database,
             user=self.username,
             password=self.password,
             host=self.host,
-            port=self.port,
-            connect_timeout=timeout  # s
+            port=self.port
         )

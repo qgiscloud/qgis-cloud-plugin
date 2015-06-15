@@ -61,8 +61,8 @@ class DataUpload(QObject):
         # Connect to database
         try:
             conn = db.psycopg_connection()
-        except:
-            raise RuntimeError("Connection to database failed")
+        except Exception as e:
+            raise RuntimeError("Connection to database failed %s" % str(e))
 
         for data_source, item in data_sources_items.iteritems():
             # Check available space, block if exceded
@@ -223,7 +223,7 @@ class DataUpload(QObject):
             raise RuntimeError(messages)
 
     def _wkbToEWkbHex(self, wkb, srid, convertToMulti=False):
-        wktType = struct.unpack("=I", wkb[1:5])[0]
+        wktType = struct.unpack("=i", wkb[1:5])[0]
         if not QGis.isMultiType(wktType):
             wktType = QGis.multiType(wktType) & 0xffffffff
             wkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", 1) + wkb

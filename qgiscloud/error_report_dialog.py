@@ -59,7 +59,8 @@ class ErrorReportDialog(QDialog):
         self.username = username
 
     def __reportError(self):
-        body = ("Please provide any additional information here:\n\n"
+        body = ("Please provide any additional information here:\n\n\n"
+                "If you encountered an upload error, if possible please attach a zip file containing a minimal extract of the dataset, as well as the QGIS project file.\n\n\n"
                 "Technical information:\n%s\n\n"
                 "Versions:\n"
                 " QGIS: %s\n"
@@ -75,6 +76,7 @@ class ErrorReportDialog(QDialog):
                     self.username)
         url = QUrl()
         url.setEncodedUrl("mailto:support@qgiscloud.com?subject=%s&body=%s" % (
-                urllib.quote(pystring(self.tr("Data upload error"))),
-                urllib.quote(body)))
+                urllib.quote(pystring(self.windowTitle())),
+                urllib.quote(body)),
+        )
         QDesktopServices.openUrl(url)
