@@ -457,25 +457,9 @@ class QgisCloudPluginDialog(QDockWidget):
                     "Map successfully published"), level=0, duration=2)
                 self.statusBar().showMessage(
                     self.tr("Map successfully published"))
-            except Exception:
+            except Exception as e:
                 self.statusBar().showMessage("")
-                self._exception_message(self.tr("Error uploading project"))
-
-    def _exception_message(self, title):
-        stack = traceback.format_exc().splitlines()
-        msgBox = QMessageBox()
-        msgBox.setText(self.tr_uni("An error occurred: %s") % stack[-1])
-        msgBox.setInformativeText(
-            self.tr("Do you want to send the exception info to qgiscloud.com?")
-        )
-        msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-        msgBox.setIcon(QMessageBox.Question)
-        ret = msgBox.exec_()
-        if ret == QMessageBox.Ok:
-            project_fname = unicode(QgsProject.instance().fileName())
-            self.api.create_exception(
-                str(traceback.format_exc()),
-                self._version_info(), project_fname)
+                ErrorReportDialog(self.tr("Error uploading project"), self.tr("An error occured."), str(e) + "\n" + traceback.format_exc(), self.user, self).exec_()
 
     def publish_symbols(self, missingSvgSymbols):
         self.statusBar().showMessage(self.tr("Uploading SVG symbols"))
@@ -516,9 +500,8 @@ class QgisCloudPluginDialog(QDockWidget):
             skip_layer_id)
         try:
             self.update_local_data_sources(local_layers)
-        except:
-            self._exception_message(
-                self.tr("Error checking local data sources"))
+        except Exception as e:
+            ErrorReportDialog(self.tr("Error checking local data sources"), self.tr("An error occured."), str(e) + "\n" + traceback.format_exc(), self.user, self).exec_()
 
         return local_layers, unsupported_layers
 
