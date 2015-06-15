@@ -6,6 +6,7 @@ description=Publish maps on qgiscloud.com
 version=1.1.2
 author=Pirmin Kalberer, Mathias Walker, Horst Duester
 email=pka@sourcepole.ch
+about=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich, Switzerland
 
 ; Optional items:
 
