@@ -60,8 +60,8 @@ class DataUpload(QObject):
         # Connect to database
         try:
             conn = db.psycopg_connection()
-        except:
-            raise RuntimeError("Connection to database failed")
+        except Exception as e:
+            raise RuntimeError("Connection to database failed %s" % str(e))
 
         for data_source, item in data_sources_items.iteritems():
             # Check available space, block if exceded
