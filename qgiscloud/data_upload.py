@@ -49,7 +49,6 @@ class DataUpload(QObject):
         pass
 
     def upload(self, db, data_sources_items, do_replace_local_layers, maxSize):
-        x = y
         import_ok = True
         layers_to_replace = {}
         self.status_bar.showMessage(pystring(self.tr("Uploading to database '{db}'...")).format(db=db.database))
