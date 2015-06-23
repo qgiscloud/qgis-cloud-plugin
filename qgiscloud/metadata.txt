@@ -3,7 +3,7 @@ name=QGIS Cloud Plugin
 qgisMinimumVersion=1.8
 qgisMaximumVersion=2.99
 description=Publish maps on qgiscloud.com
-version=1.1.3
+version=1.1.4
 author=Pirmin Kalberer, Mathias Walker, Horst Duester
 email=pka@sourcepole.ch
 about=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich, Switzerland
@@ -11,6 +11,8 @@ about=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich
 ; Optional items:
 
 changelog=
+    1.1.4
+    - Don't fail upload when dataset contains invalid date values
     1.1.3
     - bugfixes
     1.1.2
