@@ -106,6 +106,7 @@ class DataUpload(QObject):
                 vectorLayerImport = QgsVectorLayerImport(cloudUri, "postgres", fields, wkbType, layer.crs(), True)
             if vectorLayerImport.hasError():
                 import_ok &= False
+                messages += vectorLayerImport.errorMessage() + "\n"
                 continue
             # Create cursor
             cursor = conn.cursor()
