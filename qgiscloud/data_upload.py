@@ -143,6 +143,8 @@ class DataUpload(QObject):
                             val = "\\N"
                         elif val.type() == QVariant.Date or val.type() == QVariant.DateTime:
                             val = val.toString(Qt.ISODate)
+                            if not val:
+                                val = "\\N"
                         else:
                             val = unicode(val.toString()).encode('utf-8')
                             val = val.replace('\x00', '?')
@@ -156,6 +158,8 @@ class DataUpload(QObject):
                             val = "\\N"
                         elif isinstance(val, QDate) or isinstance(val, QDateTime):
                             val = val.toString(Qt.ISODate)
+                            if not val:
+                                val = "\\N"
                         else:
                             val = unicode(val).encode('utf-8')
                             val = val.replace('\x00', '?')
