@@ -13,6 +13,7 @@ about=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich
 changelog=
     1.1.4
     - Don't fail upload when dataset contains invalid date values
+    - Don't fail uploading SVG symbols with non-ascii characters in path
     1.1.3
     - bugfixes
     1.1.2
