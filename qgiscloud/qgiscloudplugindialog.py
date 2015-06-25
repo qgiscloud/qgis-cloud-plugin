@@ -463,7 +463,6 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def publish_symbols(self, missingSvgSymbols):
         self.statusBar().showMessage(self.tr("Uploading SVG symbols"))
-        qDebug("publish_symbols: %s" % missingSvgSymbols)
         search_paths = QgsApplication.svgPaths()
         if hasattr(QgsProject.instance(), 'homePath'):
             search_paths += [QgsProject.instance().homePath()]
@@ -476,7 +475,6 @@ class QgisCloudPluginDialog(QDockWidget):
                 for path in search_paths:
                     fullpath = os.path.join(unicode(path), sym)
                     if os.path.isfile(fullpath):
-                        qDebug("api.create_graphic: %s" % fullpath)
                         self.api.create_graphic(sym, fullpath)
         self.statusBar().showMessage("")
 
