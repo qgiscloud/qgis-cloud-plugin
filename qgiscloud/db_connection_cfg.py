@@ -106,10 +106,14 @@ class DbConnectionCfg:
         settings.beginGroup(u"/PostgreSQL/connections")
         for name in settings.childGroups():
             settings.beginGroup(name)
-            db = settings.value("database", type=str)
-            host = settings.value("host", type=str)
-            if db == db_name and host in DbConnectionCfg.CLOUD_DB_HOSTS:
-                connection_names.append(name)
+            # host might be NoneType, which causes str conversion to fail
+            try:
+                db = settings.value("database", type=str)
+                host = settings.value("host", type=str)
+                if db == db_name and host in DbConnectionCfg.CLOUD_DB_HOSTS:
+                    connection_names.append(name)
+            except:
+                pass
             settings.endGroup()
         settings.endGroup()
         return connection_names
