@@ -228,7 +228,8 @@ class DataUpload(QObject):
 
     def _wkbToEWkbHex(self, wkb, srid, convertToMulti=False):
         wktType = struct.unpack("=i", wkb[1:5])[0] & 0xffffffff
-        if not QGis.isMultiType(wktType):
+        if convertToMulti:
+            wktType = QGis.multiType(wktType)
             wkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", 1) + wkb
 
         # See postgis sources liblwgeom.h.in:
