@@ -223,13 +223,13 @@ class API():
         self.requires_auth()
         resource = '/databases/%s/tables.json' % (db_name)
         data = {
-            'table': {
+            'table': json.dumps({
                 'overwrite': overwrite_table,
                 'name': table,
                 'columns': [],
                 'srid': srid,
                 'geometry_type': geometry_type
-            },
+            }),
             'provider': provider
         }
         data['table']['columns'] = columns
@@ -252,10 +252,10 @@ class API():
         file = open(mapfile, "rb")
         encoded_file = file.read()
         data = {
-                'map': {
-                    'name' : unicode(name).encode('utf-8'),
+                'map': json.dumps({
+                    'name' : name,
                     'config': config
-                },
+                }),
                 'file': encoded_file
         }
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
@@ -301,9 +301,9 @@ class API():
         file = open(symbol, "rb")
         encoded_file = file.read()
         data = {
-                'graphic': {
-                    'name' : unicode(name).encode('utf-8'),
-                },
+                'graphic': json.dumps({
+                    'name' : name,
+                }),
                 'file': encoded_file
         }
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
