@@ -3,7 +3,7 @@ name=QGIS Cloud Plugin
 qgisMinimumVersion=1.8
 qgisMaximumVersion=2.99
 description=Publish maps on qgiscloud.com
-version=1.1.4
+version=1.1.5
 author=Pirmin Kalberer, Mathias Walker, Horst Duester
 email=pka@sourcepole.ch
 about=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich, Switzerland
@@ -11,6 +11,10 @@ about=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich
 ; Optional items:
 
 changelog=
+    1.1.5
+    - Fix upload error due to uploading single-type geometries in multi-type layer
+    - Fix upload issue with 25D geometries
+    - Fix svg symbols with non-ascii characters in filename not being displayed in web viewer
     1.1.4
     - Don't fail upload when dataset contains invalid date values
     - Don't fail uploading SVG symbols with non-ascii characters in path
