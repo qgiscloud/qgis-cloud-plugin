@@ -82,12 +82,8 @@ class DataUpload(QObject):
             srid = layer.crs().postgisSrid()
             geom_column = "wkb_geometry"
             wkbType = layer.wkbType()
-
-            # Upload single types as multi-types
-            convertToMulti = False
             if not QGis.isMultiType(wkbType):
                 wkbType = QGis.multiType(wkbType)
-                convertToMulti = True
 
             # Create table (pk='' => always generate a new primary key)
             cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"public\".\"%s\" (%s)" % (
@@ -131,7 +127,7 @@ class DataUpload(QObject):
                     continue
 
                 # Second field is geometry in EWKB Hex format
-                importstr += "\t" + self._wkbToEWkbHex(feature.geometry().asWkb(), srid, convertToMulti)
+                importstr += "\t" + self._wkbToEWkbHex(feature.geometry().asWkb(), srid)
 
                 # Finally, copy data attributes
                 for attrib in attribs:
@@ -228,7 +224,7 @@ class DataUpload(QObject):
 
     def _wkbToEWkbHex(self, wkb, srid, convertToMulti=False):
         wktType = struct.unpack("=i", wkb[1:5])[0] & 0xffffffff
-        if convertToMulti:
+        if not QGis.isMultiType(wktType):
             wktType = QGis.multiType(wktType)
             wkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", 1) + wkb
 
