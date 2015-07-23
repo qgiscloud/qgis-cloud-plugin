@@ -398,39 +398,26 @@ class QgisCloudPluginDialog(QDockWidget):
             self.api.read_maps()
 
     def check_project_saved(self):
-        cancel = False
         project = QgsProject.instance()
-        fname = unicode(project.fileName())
+        fname = project.fileName()
         if project.isDirty() or fname == '':
             msgBox = QMessageBox()
+            msgBox.setWindowTitle(self.tr("Project Modified"))
             msgBox.setText(self.tr("The project has been modified."))
             msgBox.setInformativeText(
-                self.tr("Do you want to save your changes?"))
-            if not fname:
-                msgBox.setStandardButtons(
-                    QMessageBox.Save | QMessageBox.Cancel)
-            else:
-                msgBox.setStandardButtons(
-                    QMessageBox.Save | QMessageBox.Ignore | QMessageBox.Cancel)
+                self.tr("The project needs to be saved before it can be published. Proceed?"))
+            msgBox.setStandardButtons(QMessageBox.Save | QMessageBox.Cancel)
             msgBox.setDefaultButton(QMessageBox.Save)
-            ret = msgBox.exec_()
-            if ret == QMessageBox.Save:
-                if not fname:
-                    project.setFileName(
-                        QFileDialog.getSaveFileName(
-                            self, "Save Project", "",
-                            "QGIS Project Files  (*.qgs)"))
-                if not unicode(project.fileName()):
-                    cancel = True
-                else:
-                    project.write()
-            elif ret == QMessageBox.Cancel:
-                cancel = True
-        return cancel
+            if msgBox.exec_() == QMessageBox.Save:
+                self.iface.actionSaveProject().trigger()
+                return not project.isDirty()
+            else:
+                return False
+        return True
 
     def publish_map(self):
-        cancel = self.check_project_saved()
-        if cancel:
+        saved = self.check_project_saved()
+        if not saved:
             self.statusBar().showMessage(self.tr("Cancelled"))
             return
         if self.check_login() and self.check_layers():
