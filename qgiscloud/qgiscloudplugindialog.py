@@ -741,14 +741,14 @@ class QgisCloudPluginDialog(QDockWidget):
                 # show save project dialog
                 msgBox = QMessageBox()
                 msgBox.setWindowTitle(self.tr("QGIS Cloud"))
-                msgBox.setText(self.tr("The project is ready for publishing."))
+                msgBox.setText(self.tr("The project is ready for publishing. The local layers in the project were replaced with the layers on the qgiscloud database."))
                 msgBox.setInformativeText(
-                    self.tr("Do you want to save your changes?"))
-                msgBox.setStandardButtons(
-                    QMessageBox.Save | QMessageBox.Cancel)
-                msgBox.setDefaultButton(QMessageBox.Save)
-                ret = msgBox.exec_()
-                if ret == QMessageBox.Save:
+                    self.tr("Do you want to save the changes to the project?"))
+                btnSave = msgBox.addButton(self.tr("Save"), QMessageBox.AcceptRole)
+                btnDiscard = msgBox.addButton(self.tr("Discard changes"), QMessageBox.AcceptRole)
+                msgBox.setDefaultButton(btnSave)
+                msgBox.exec_()
+                if msgBox.clickedButton() == btnSave:
                     self.iface.actionSaveProjectAs().trigger()
 
     def _push_message(self, title, text, level=0, duration=0):
