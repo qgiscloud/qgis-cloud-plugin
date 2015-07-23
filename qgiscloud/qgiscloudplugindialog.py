@@ -735,21 +735,34 @@ class QgisCloudPluginDialog(QDockWidget):
             self.db_size(self.db_connections)
 
             if upload_ok:
+                # Show save project dialog
+                save_dialog = QDialog(self)
+                save_dialog.setWindowTitle(self.tr("Save Project"))
+                save_dialog.setLayout(QVBoxLayout())
+                header = QWidget()
+                header.setLayout(QVBoxLayout())
+                label = QLabel(self.tr("Upload complete. The local layers in the project were replaced with the layers uploaded to the qgiscloud database."))
+                label.setWordWrap(True)
+                header.layout().addWidget(label)
+                label = QLabel(self.tr("Choose were to save the modified project:"))
+                label.setWordWrap(True)
+                header.layout().addWidget(label)
+                save_dialog.layout().addWidget(header)
+                fd = QFileDialog(save_dialog, self.tr("Save Project"), QgsProject.instance().fileName(), "%s (*.qgs)" % self.tr("QGIS Project Files"))
+                fd.setWindowFlags(Qt.Widget)
+                fd.setAcceptMode(QFileDialog.AcceptSave)
+                save_dialog.layout().addWidget(fd)
+                header.layout().setContentsMargins(fd.layout().contentsMargins())
+                fd.accepted.connect(save_dialog.accept)
+                fd.rejected.connect(save_dialog.reject)
+                if save_dialog.exec_() == QDialog.Accepted:
+                    files = list(fd.selectedFiles())
+                    if files:
+                        QgsProject.instance().setFileName(files[0])
+                        self.iface.actionSaveProject().trigger()
+
                 # Switch to map tab
                 self.ui.tabWidget.setCurrentWidget(self.ui.mapTab)
-
-                # show save project dialog
-                msgBox = QMessageBox()
-                msgBox.setWindowTitle(self.tr("QGIS Cloud"))
-                msgBox.setText(self.tr("The project is ready for publishing. The local layers in the project were replaced with the layers on the qgiscloud database."))
-                msgBox.setInformativeText(
-                    self.tr("Do you want to save the changes to the project?"))
-                btnSave = msgBox.addButton(self.tr("Save"), QMessageBox.AcceptRole)
-                btnDiscard = msgBox.addButton(self.tr("Discard changes"), QMessageBox.AcceptRole)
-                msgBox.setDefaultButton(btnSave)
-                msgBox.exec_()
-                if msgBox.clickedButton() == btnSave:
-                    self.iface.actionSaveProjectAs().trigger()
 
     def _push_message(self, title, text, level=0, duration=0):
         # QGIS >= 2.0
