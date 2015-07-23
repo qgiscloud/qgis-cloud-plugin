@@ -13,6 +13,8 @@ about=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich
 changelog=
     1.1.6
     - Fix upload errors with multi-type features in single-type layer
+    - Always refresh local layers after upload
+    - Remove 'Replace local layers' checkbox, improve dialog asking user whether to save the changed project
     1.1.5
     - Fix upload error due to uploading single-type geometries in multi-type layer
     - Fix upload issue with 25D geometries
