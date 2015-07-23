@@ -48,7 +48,7 @@ class DataUpload(QObject):
         self.db_connections = db_connections
         pass
 
-    def upload(self, db, data_sources_items, do_replace_local_layers, maxSize):
+    def upload(self, db, data_sources_items, maxSize):
         import_ok = True
         layers_to_replace = {}
         self.status_bar.showMessage(pystring(self.tr("Uploading to database '{db}'...")).format(db=db.database))
@@ -204,7 +204,7 @@ class DataUpload(QObject):
 
             import_ok &= ok
 
-            if ok and do_replace_local_layers:
+            if ok:
                 for layer in item['layers']:
                     layers_to_replace[layer.id()] = {
                         'layer': layer,

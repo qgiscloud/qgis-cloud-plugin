@@ -717,8 +717,7 @@ class QgisCloudPluginDialog(QDockWidget):
 
             try:
                 upload_count = self.data_upload.upload(
-                    self.db_connections.db(db_name), data_sources_items,
-                    self.ui.cbReplaceLocalLayers.isChecked(), maxSize)
+                    self.db_connections.db(db_name), data_sources_items, maxSize)
             except Exception as e:
                 ErrorReportDialog(self.tr("Upload error"), self.tr("The data upload failed."), str(e) + "\n" + traceback.format_exc(), self.user, self).exec_()
                 upload_count = 0
@@ -732,7 +731,7 @@ class QgisCloudPluginDialog(QDockWidget):
             # Refresh used space after upload
             self.db_size(self.db_connections)
 
-            if upload_count > 0 and self.ui.cbReplaceLocalLayers.isChecked():
+            if upload_count > 0:
                 self.update_local_layers()
 
                 # Switch to map tab
