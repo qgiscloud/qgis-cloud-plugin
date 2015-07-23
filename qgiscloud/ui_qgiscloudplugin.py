@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'ui_qgiscloudplugin.ui'
 #
-# Created: Tue Jun  2 11:13:12 2015
-#      by: PyQt4 UI code generator 4.11.3
+# Created: Thu Jul 16 10:25:56 2015
+#      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -153,10 +153,6 @@ class Ui_QgisCloudPlugin(object):
         self.btnRefreshLocalLayers.setObjectName(_fromUtf8("btnRefreshLocalLayers"))
         self.horizontalLayout_7.addWidget(self.btnRefreshLocalLayers)
         self.verticalLayout_6.addLayout(self.horizontalLayout_7)
-        self.cbReplaceLocalLayers = QtGui.QCheckBox(self.uploadTab)
-        self.cbReplaceLocalLayers.setChecked(True)
-        self.cbReplaceLocalLayers.setObjectName(_fromUtf8("cbReplaceLocalLayers"))
-        self.verticalLayout_6.addWidget(self.cbReplaceLocalLayers)
         self.btnUploadData = QtGui.QPushButton(self.uploadTab)
         self.btnUploadData.setObjectName(_fromUtf8("btnUploadData"))
         self.verticalLayout_6.addWidget(self.btnUploadData)
@@ -347,7 +343,6 @@ class Ui_QgisCloudPlugin(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.mapTab), _translate("QgisCloudPlugin", "Map", None))
         self.label_10.setText(_translate("QgisCloudPlugin", "Database:", None))
         self.btnRefreshLocalLayers.setText(_translate("QgisCloudPlugin", "Refresh layers", None))
-        self.cbReplaceLocalLayers.setText(_translate("QgisCloudPlugin", "Replace local layers in project", None))
         self.btnUploadData.setText(_translate("QgisCloudPlugin", "Upload data", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.uploadTab), _translate("QgisCloudPlugin", "Upload Data", None))
         self.label_2.setText(_translate("QgisCloudPlugin", "Server:", None))

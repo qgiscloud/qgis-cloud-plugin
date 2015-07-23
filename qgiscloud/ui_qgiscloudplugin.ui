@@ -296,16 +296,6 @@ p, li { white-space: pre-wrap; }
          </layout>
         </item>
         <item>
-         <widget class="QCheckBox" name="cbReplaceLocalLayers">
-          <property name="text">
-           <string>Replace local layers in project</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QPushButton" name="btnUploadData">
           <property name="text">
            <string>Upload data</string>
