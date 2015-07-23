@@ -54,7 +54,6 @@ class DataUpload(QObject):
         self.status_bar.showMessage(pystring(self.tr("Uploading to database '{db}'...")).format(db=db.database))
         QApplication.processEvents()
 
-        upload_count = 0
         messages = ""
 
         # Connect to database
@@ -195,7 +194,6 @@ class DataUpload(QObject):
             if ok:
                 try:
                     conn.commit()
-                    upload_count += 1
                 except Exception as e:
                     messages += str(e) + "\n"
                     ok = False
@@ -217,9 +215,7 @@ class DataUpload(QObject):
         conn.close()
         self._replace_local_layers(layers_to_replace)
         self.progress_label.setText("")
-        if import_ok:
-            return upload_count
-        else:
+        if not import_ok:
             raise RuntimeError(messages)
 
     def _wkbToEWkbHex(self, wkb, srid, convertToMulti=False):

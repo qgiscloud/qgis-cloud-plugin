@@ -716,24 +716,25 @@ class QgisCloudPluginDialog(QDockWidget):
                 maxSize = self.RESELLER_SIZE
 
             try:
-                upload_count = self.data_upload.upload(
+                self.data_upload.upload(
                     self.db_connections.db(db_name), data_sources_items, maxSize)
+                upload_ok = True
             except Exception as e:
-                ErrorReportDialog(self.tr("Upload error"), self.tr("The data upload failed."), str(e) + "\n" + traceback.format_exc(), self.user, self).exec_()
-                upload_count = 0
+                ErrorReportDialog(self.tr("Upload errors occurred"), self.tr("Upload errors occurred. Not all data could be uploaded."), str(e) + "\n" + traceback.format_exc(), self.user, self).exec_()
+                upload_ok = False
 
             self.ui.spinner.stop()
             self.ui.progressWidget.hide()
             self.ui.btnUploadData.show()
             self.unsetCursor()
             self.statusBar().showMessage("")
+            # Refresh local layers
             self.do_update_local_data_sources = True
+            self.update_local_layers()
             # Refresh used space after upload
             self.db_size(self.db_connections)
 
-            if upload_count > 0:
-                self.update_local_layers()
-
+            if upload_ok:
                 # Switch to map tab
                 self.ui.tabWidget.setCurrentWidget(self.ui.mapTab)
 
