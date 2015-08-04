@@ -3,7 +3,7 @@ name=QGIS Cloud Plugin
 qgisMinimumVersion=1.8
 qgisMaximumVersion=2.99
 description=Publish maps on qgiscloud.com
-version=1.1.6
+version=1.1.7
 author=Pirmin Kalberer, Mathias Walker, Horst Duester, Sandro Mani
 email=pka@sourcepole.ch
 about=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich, Switzerland
@@ -11,6 +11,10 @@ about=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich
 ; Optional items:
 
 changelog=
+    1.1.7
+    - Fix int/long conversion issue on Windows
+    - Make connection failure dialog contain more useful error messages
+    - Fix project save dialog after upload shown twice on some platforms
     1.1.6
     - Fix upload errors with multi-type features in single-type layer
     - Always refresh local layers after upload
