@@ -219,10 +219,18 @@ class DataUpload(QObject):
             raise RuntimeError(messages)
 
     def _wkbToEWkbHex(self, wkb, srid, convertToMulti=False):
-        wktType = struct.unpack("=i", wkb[1:5])[0] & 0xffffffff
-        if not QGis.isMultiType(wktType):
-            wktType = QGis.multiType(wktType) & 0xffffffff
-            wkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", 1) + wkb
+        try:
+            wktType = struct.unpack("=i", wkb[1:5])[0] & 0xffffffff
+            if not QGis.isMultiType(wktType):
+                wktType = QGis.multiType(wktType) & 0xffffffff
+                wkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", 1) + wkb
+        except:
+            # Some platforms (Windows) complain when a long is passed to QGis.isMultiType
+            # And some other platforms complain if not a long is passed...
+            wktType = struct.unpack("=i", wkb[1:5])[0]
+            if not QGis.isMultiType(wktType):
+                wktType = QGis.multiType(wktType) & 0xffffffff
+                wkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", 1) + wkb
 
         # See postgis sources liblwgeom.h.in:
         # define WKBZOFFSET  0x80000000
