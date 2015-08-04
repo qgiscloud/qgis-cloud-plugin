@@ -528,8 +528,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.local_data_sources.update_local_data_sources(local_layers)
 
         # update GUI
-        while self.ui.tblLocalLayers.rowCount() > 0:
-            self.ui.tblLocalLayers.removeRow(0)
+        self.ui.tblLocalLayers.setRowCount(0)
 
         for data_source, layers in self.local_data_sources.iteritems():
             layer_names = []

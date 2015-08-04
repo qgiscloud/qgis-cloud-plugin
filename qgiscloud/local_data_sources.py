@@ -77,7 +77,7 @@ class LocalDataSources:
                 else:
                     unsupported_layers.append(layer)
 
-            elif not provider in ["wms", "openlayers"]:
+            elif provider not in ["wms", "openlayers"]:
                 if layer.type() == QgsMapLayer.VectorLayer:
                     local_layers.append(layer)
                 else:
