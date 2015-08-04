@@ -278,10 +278,15 @@ class QgisCloudPluginDialog(QDockWidget):
                         version_ok = False
                         self.ui.tabWidget.setCurrentWidget(self.ui.aboutTab)
                     login_ok = True
-                except (UnauthorizedError, TokenRequiredError, ConnectionException):
+                except UnauthorizedError:
                     QMessageBox.critical(
                         self, self.tr("Login failed"),
                         self.tr("Wrong user name or password"))
+                    login_ok = False
+                except (TokenRequiredError, ConnectionException) as e:
+                    QMessageBox.critical(
+                        self, self.tr("Login failed"),
+                        self.tr("Login failed: %s") % str(e))
                     login_ok = False
         return version_ok
 

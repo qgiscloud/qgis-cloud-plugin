@@ -617,7 +617,7 @@ class Request():
                 time.sleep(1)
                 # if we tried for the fifth time we give up - and cry a little
                 if i == 5:
-                    raise ConnectionException('Could not connect to API...')
+                    raise ConnectionException('Connection to server failed: %s' % str(e))
             else:
                 #
                 # 200 OK, 201 CREATED and 204 DELETED result in returning the actual
