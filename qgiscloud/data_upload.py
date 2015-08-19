@@ -109,7 +109,7 @@ class DataUpload(QObject):
             # Build import string
             attribs = range(0, fields.count())
             count = 0
-            importstr = ""
+            importstr = bytearray()
             ok = True
 
             self.progress_label.setText(self.tr("Uploading features..."))
@@ -135,13 +135,13 @@ class DataUpload(QObject):
                     if sipv1():
                         # QGIS 1.x
                         if val is None or val.type() == QVariant.Invalid or val.isNull():
-                            val = "\\N"
+                            val = b"\\N"
                         elif val.type() == QVariant.Date or val.type() == QVariant.DateTime:
-                            val = val.toString(Qt.ISODate)
+                            val = bytearray(val.toString(Qt.ISODate).encode('utf-8'))
                             if not val:
-                                val = "\\N"
+                                val = b"\\N"
                         else:
-                            val = unicode(val.toString()).encode('utf-8')
+                            val = bytearray(unicode(val.toString()).encode('utf-8'))
                             val = val.replace('\x00', '?')
                             val = val.replace('\t', r"E'\t'")
                             val = val.replace('\n', r"E'\n'")
@@ -150,21 +150,21 @@ class DataUpload(QObject):
                     else:
                         # QGIS 2.x
                         if val is None or isinstance(val, QPyNullVariant):
-                            val = "\\N"
+                            val = b"\\N"
                         elif isinstance(val, QDate) or isinstance(val, QDateTime):
-                            val = val.toString(Qt.ISODate)
+                            val = bytearray(val.toString(Qt.ISODate).encode('utf-8'))
                             if not val:
-                                val = "\\N"
+                                val = b"\\N"
                         else:
-                            val = unicode(val).encode('utf-8')
+                            val = bytearray(unicode(val).encode('utf-8'))
                             val = val.replace('\x00', '?')
                             val = val.replace('\t', r"E'\t'")
                             val = val.replace('\n', r"E'\n'")
                             val = val.replace('\r', r"E'\r'")
                             val = val.replace('\\', r"\\")
-                    importstr += "\t" + val
+                    importstr += b"\t" + val
 
-                importstr += "\n"
+                importstr += b"\n"
 
                 # Upload in chunks
                 if (count % 100) == 0:
