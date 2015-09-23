@@ -96,7 +96,7 @@ class LocalDataSources:
             if len(ds.connectionInfo()) > 0:
                 # Spatialite / Postgres
                 ds.setSql("")
-                data_source = str(ds.uri())
+                data_source = unicode(ds.uri())
             else:
                 data_source = unicode(layer.source())
 
