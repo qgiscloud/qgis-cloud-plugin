@@ -421,6 +421,24 @@ class QgisCloudPluginDialog(QDockWidget):
         return True
 
     def publish_map(self):
+        canvas = self.iface.mapCanvas()
+        mapRenderer = canvas.mapRenderer()
+        srs=mapRenderer.destinationCrs()
+        
+        if "USER" in srs.authid():
+            QMessageBox.warning(None, self.tr('Warning!'),  self.tr("The project has a user defined CRS. The use of user defined CRS is not supported. Please correct the project CRS before publishing!"))
+            return 
+            
+        layers = self.iface.legendInterface().layers()
+        layerList = ''
+        for layer in layers:
+            if "USER" in layer.crs().authid():
+                 layerList += "'"+layer.name()+"' "
+        
+        if len(layerList) > 0:
+            QMessageBox.warning(None, self.tr('Warning!'),  self.tr("The layer(s) {layerlist}have user defined CRS. The use of user defined CRS is not supported. Please correct the CRS before publishing!").format(layerlist=layerList))
+            return
+                 
         saved = self.check_project_saved()
         if not saved:
             self.statusBar().showMessage(self.tr("Cancelled"))
