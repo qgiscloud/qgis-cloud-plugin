@@ -4,3 +4,5 @@
 qgiscloud.zip
 createdist.sh
 exclude.lst
+.eric6project
+*.e4p
