@@ -823,16 +823,20 @@ class QgisCloudPluginDialog(QDockWidget):
 
         lblPalette = QPalette(self.ui.lblDbSize.palette())
         usage = usedSpace / float(maxSize)
-
+    
         if usage < 0.8:
             bg_color = QColor(255, 0, 0, 0)
+            text_color = QColor(Qt.black)
         elif usage >= 0.8 and usage < 1:
             bg_color = QColor(255, 0, 0, 100)
+            text_color = QColor(Qt.white)
         elif usage >= 1:
             bg_color = QColor(255, 0, 0, 255)
+            text_color = QColor(Qt.white)
 
         lblPalette.setColor(QPalette.Window, QColor(bg_color))
-
+        lblPalette.setColor(QPalette.Foreground,QColor(text_color))
+        
         self.ui.lblDbSize.setAutoFillBackground(True)
         self.ui.lblDbSize.setPalette(lblPalette)
         self.ui.lblDbSize.setText(
