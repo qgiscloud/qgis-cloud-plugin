@@ -12,6 +12,7 @@ about=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich
 
 changelog=
     1.1.11
+    - Geometryi ndex creation after upload
     - GUI improvements
     - German translations added
     1.1.10
