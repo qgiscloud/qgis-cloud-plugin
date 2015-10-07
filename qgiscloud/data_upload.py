@@ -212,9 +212,9 @@ class DataUpload(QObject):
                         'geom_column': geom_column
                     }
 
-        sql = 'create index geo_idx on "public"."%s" using gist ("%s");' % (item['table'], geom_column)
-        cursor.execute(sql)     
-        conn.commit()
+            sql = 'create index %s_%s_idx on "public"."%s" using gist ("%s");' % (item['table'],  geom_column,  item['table'], geom_column)
+            cursor.execute(sql)     
+            conn.commit()
         
         cursor.close()
         conn.close()
