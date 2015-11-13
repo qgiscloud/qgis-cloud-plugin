@@ -189,7 +189,6 @@ class DataUpload(QObject):
                     messages += str(e) + "\n"
                     ok = False
 
-
             if ok:
                 try:
                     conn.commit()
@@ -201,8 +200,7 @@ class DataUpload(QObject):
 
             import_ok &= ok
 
-            if ok:           
-
+            if ok:
                 for layer in item['layers']:
                     layers_to_replace[layer.id()] = {
                         'layer': layer,
