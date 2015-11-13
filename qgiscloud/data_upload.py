@@ -202,7 +202,7 @@ class DataUpload(QObject):
             import_ok &= ok
 
             if ok:           
-                
+
                 for layer in item['layers']:
                     layers_to_replace[layer.id()] = {
                         'layer': layer,
@@ -212,10 +212,10 @@ class DataUpload(QObject):
                         'geom_column': geom_column
                     }
 
-            sql = 'create index %s_%s_idx on "public"."%s" using gist ("%s");' % (item['table'],  geom_column,  item['table'], geom_column)
-            cursor.execute(sql)     
+            sql = 'create index "%s_%s_idx" on "public"."%s" using gist ("%s");' % (item['table'],  geom_column,  item['table'], geom_column)
+            cursor.execute(sql)
             conn.commit()
-        
+
         cursor.close()
         conn.close()
         self._replace_local_layers(layers_to_replace)
