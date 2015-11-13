@@ -257,7 +257,10 @@ class DataUpload(QObject):
             wktType |= 0x80000000 | 0x40000000 | 0x20000000
         else:
             wktType |= 0x20000000
-        ewkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", srid) + wkb[5:]
+        try:
+            ewkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", srid) + wkb[5:]
+        except:
+            ewkb = wkb[0] + struct.pack("=I", (wktType & 0xffffffff)) + struct.pack("=I", srid) + wkb[5:]
         return binascii.hexlify(ewkb)
 
     def _replace_local_layers(self, layers_to_replace):
