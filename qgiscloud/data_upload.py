@@ -68,7 +68,6 @@ class DataUpload(QObject):
             sql = "SELECT pg_size_pretty(pg_database_size('" + str(db.database) + "'))"
             cursor.execute(sql)
             size = int(cursor.fetchone()[0].split(' ')[0])
-            cursor.close()
             if size > maxSize:
                 QMessageBox.warning(None, self.tr("Database full"), self.tr("You have exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan."))
                 break
@@ -91,6 +90,23 @@ class DataUpload(QObject):
 
             self.progress_label.setText(pystring(self.tr("Creating table '{table}'...")).format(table=item['table']))
             QApplication.processEvents()
+
+            # Check if SRID is known on database, otherwise create record
+            cursor.execute("SELECT srid FROM public.spatial_ref_sys WHERE srid = %s" % layer.crs().postgisSrid())
+            if not cursor.fetchone():
+                try:
+                    cursor.execute("INSERT INTO public.spatial_ref_sys VALUES ({srid},'EPSG',{srid},'{wktstr}','{projstr}')".format(
+                        srid = layer.crs().postgisSrid(),
+                        wktstr = layer.crs().toWkt(),
+                        projstr = layer.crs().toProj4()))
+                    conn.commit()
+                except Exception as e:
+                    conn.rollback()
+                    import_ok &= False
+                    messages += "Failed to create SRS record on database: " + str(e) + "\n"
+                    continue
+
+            cursor.close()
 
             # TODO: Ask user for overwriting existing table
             # The postgres provider is terribly slow at creating tables with
