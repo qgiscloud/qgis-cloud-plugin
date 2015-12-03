@@ -229,8 +229,8 @@ class DataUpload(QObject):
             sql = 'create index "%s_%s_idx" on "public"."%s" using gist ("%s");' % (item['table'],  geom_column,  item['table'], geom_column)
             cursor.execute(sql)
             conn.commit()
+            cursor.close()
 
-        cursor.close()
         conn.close()
         self._replace_local_layers(layers_to_replace)
         self.progress_label.setText("")
