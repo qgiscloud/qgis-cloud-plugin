@@ -814,12 +814,9 @@ class QgisCloudPluginDialog(QDockWidget):
 
         login_info = self.api.check_login(
             version_info=self._version_info())
-        if login_info['plan'] == 'Free':
-            maxSize = self.FREE_SIZE
-        elif login_info['plan'] == 'Pro' or login_info['plan'] == 'Pro Beta':
-            maxSize = self.PRO_SIZE
-        elif login_info['plan'] == 'Enterprise/Reseller':
-            maxSize = self.RESELLER_SIZE
+            
+        maxSize = login_info['max_storage']
+        maxDBs = login_info['max_dbs']
 
         lblPalette = QPalette(self.ui.lblDbSize.palette())
         usage = usedSpace / float(maxSize)
