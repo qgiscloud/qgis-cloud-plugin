@@ -112,13 +112,15 @@ class DataUpload(QObject):
             # The postgres provider is terribly slow at creating tables with
             # many attribute columns in QGIS < 2.9.0
             if QGis.QGIS_VERSION_INT < 20900:
-                vectorLayerImport = PGVectorLayerImport(db, cloudUri, fields, wkbType, layer.crs(), True)
+               vectorLayerImport = PGVectorLayerImport(db, cloudUri, fields, wkbType, layer.crs(), True)
             else:
                 vectorLayerImport = QgsVectorLayerImport(cloudUri, "postgres", fields, wkbType, layer.crs(), True)
             if vectorLayerImport.hasError():
                 import_ok &= False
                 messages += vectorLayerImport.errorMessage() + "\n"
                 continue
+                
+            vectorLayerImport = None
             # Create cursor
             cursor = conn.cursor()
 
