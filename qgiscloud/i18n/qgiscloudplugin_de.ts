@@ -4,17 +4,17 @@
 <context>
     <name>DataUpload</name>
     <message>
-        <location filename="../data_upload.py" line="74"/>
+        <location filename="../data_upload.py" line="73"/>
         <source>Database full</source>
         <translation>Die Datenbanl ist voll</translation>
     </message>
     <message>
-        <location filename="../data_upload.py" line="74"/>
+        <location filename="../data_upload.py" line="73"/>
         <source>You have exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan.</source>
         <translation>Sie haben das maximale Datenvolumen der Datenbank für Ihren aktuellen QGIS Cloud Plan überschritten. Löschen Sie bitte Daten aus der Datenbank oder führen Sie ein Upgrade auf einen entsprechenden QGIS Cloud Plan durch.</translation>
     </message>
     <message>
-        <location filename="../data_upload.py" line="116"/>
+        <location filename="../data_upload.py" line="132"/>
         <source>Uploading features...</source>
         <translation>Die Objekte werden hochgeladen ...</translation>
     </message>
@@ -24,17 +24,17 @@
         <translation>Hochladen in die Datenbank &apos;{db}&apos;...</translation>
     </message>
     <message>
-        <location filename="../data_upload.py" line="93"/>
+        <location filename="../data_upload.py" line="92"/>
         <source>Creating table &apos;{table}&apos;...</source>
         <translation>Die Tabelle &apos;{table}&apos; wird erstellt...</translation>
     </message>
     <message>
-        <location filename="../data_upload.py" line="125"/>
+        <location filename="../data_upload.py" line="141"/>
         <source>Feature {id} of layer {layer} has no geometry</source>
         <translation>Das Objekt {id} der Ebene {layer} hat keine Geometrie</translation>
     </message>
     <message>
-        <location filename="../data_upload.py" line="180"/>
+        <location filename="../data_upload.py" line="196"/>
         <source>{table}: {count} features uploaded</source>
         <translation>{table}: {count} Objekte hochgeladen</translation>
     </message>
@@ -438,7 +438,7 @@ Please remove or replace above layers before publishing your map.
         <translation>Unbekannter Typ</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="845"/>
+        <location filename="../qgiscloudplugindialog.py" line="850"/>
         <source>Used DB Storage: </source>
         <translation>Verwendeter Datenbankspeicher: </translation>
     </message>
@@ -531,6 +531,11 @@ Please remove or replace above layers before publishing your map.
         <location filename="../qgiscloudplugindialog.py" line="440"/>
         <source>The layer(s) {layerlist}have user defined CRS. The use of user defined CRS is not supported. Please correct the CRS before publishing!</source>
         <translation>Die Layer {layerlist} haben benutzerdefinierte KBS. QGIS Cloud unterstützt keine benutzerdefinierten KBS. Bitte korrigieren Sie das KBS vor der Publikation!</translation>
+    </message>
+    <message>
+        <location filename="../qgiscloudplugindialog.py" line="299"/>
+        <source>Number of %s permitted databases exceeded! Please upgrade your account!</source>
+        <translation>Die Anzahl der %s erlaubten Datenbanken ist überschritten! Bitte kaufen Sie weitere Datenbanken hinzu!</translation>
     </message>
 </context>
 </TS>

@@ -291,12 +291,12 @@ class QgisCloudPluginDialog(QDockWidget):
         return version_ok
 
     def create_database(self):
-        db = self.api.create_database()
-        # {u'username': u'jhzgpfwi_qgiscloud',
-        # u'host': u'beta.spacialdb.com', u'password': u'11d7338c',
-        # u'name': u'jhzgpfwi_qgiscloud', u'port': 9999}
-        self.show_api_error(db)
-        self.refresh_databases()
+        if self.numDbs < self.maxDBs:
+            db = self.api.create_database()
+            self.show_api_error(db)
+            self.refresh_databases()
+        else:
+            QMessageBox.warning(None, self.tr('Warning!'),  self.tr('Number of %s permitted databases exceeded! Please upgrade your account!') % self.maxDBs)
 
     def delete_database(self):
         name = self.ui.tabDatabases.currentItem().text()
@@ -799,6 +799,7 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def db_size(self,  db_connections):
         usedSpace = 0
+        self.numDbs = len(db_connections._dbs.keys())
         for db in db_connections._dbs.keys():
             try:
                 conn = db_connections.db(db).psycopg_connection()
@@ -812,11 +813,14 @@ class QgisCloudPluginDialog(QDockWidget):
         # Used space in MB
         usedSpace /= 1024 * 1024
 
-        login_info = self.api.check_login(
-            version_info=self._version_info())
-            
-        maxSize = login_info['max_storage']
-        maxDBs = login_info['max_dbs']
+        login_info = self.api.check_login(version_info=self._version_info())
+        
+        try:            
+            maxSize = login_info['max_storage']
+            self.maxDBs = login_info['max_dbs']
+        except:
+            maxSize = 50
+            self.maxDBs = 5
 
         lblPalette = QPalette(self.ui.lblDbSize.palette())
         usage = usedSpace / float(maxSize)
