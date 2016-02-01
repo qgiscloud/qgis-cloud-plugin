@@ -717,16 +717,16 @@ class QgisCloudPluginDialog(QDockWidget):
                         'table': table_name, 'layers': layers}
 
             login_info = self.api.check_login(version_info=self._version_info())
-            if login_info['plan'] == 'Free':
-                maxSize = self.FREE_SIZE
-            elif login_info['plan'] == 'Pro' or login_info['plan'] == 'Pro Beta':
-                maxSize = self.PRO_SIZE
-            elif login_info['plan'] == 'Enterprise/Reseller':
-                maxSize = self.RESELLER_SIZE
+            try:            
+                self.maxSize = login_info['max_storage']
+                self.maxDBs = login_info['max_dbs']
+            except:
+                self.maxSize = 50
+                self.maxDBs = 5
 
             try:
                 self.data_upload.upload(
-                    self.db_connections.db(db_name), data_sources_items, maxSize)
+                    self.db_connections.db(db_name), data_sources_items, self.maxSize)
                 upload_ok = True
             except Exception as e:
                 ErrorReportDialog(self.tr("Upload errors occurred"), self.tr("Upload errors occurred. Not all data could be uploaded."), str(e) + "\n" + traceback.format_exc(), self.user, self).exec_()
@@ -816,14 +816,14 @@ class QgisCloudPluginDialog(QDockWidget):
         login_info = self.api.check_login(version_info=self._version_info())
         
         try:            
-            maxSize = login_info['max_storage']
+            self.maxSize = login_info['max_storage']
             self.maxDBs = login_info['max_dbs']
         except:
-            maxSize = 50
+            self.maxSize = 50
             self.maxDBs = 5
 
         lblPalette = QPalette(self.ui.lblDbSize.palette())
-        usage = usedSpace / float(maxSize)
+        usage = usedSpace / float(self.maxSize)
     
         if usage < 0.8:
             bg_color = QColor(255, 0, 0, 0)
@@ -841,9 +841,9 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.lblDbSize.setAutoFillBackground(True)
         self.ui.lblDbSize.setPalette(lblPalette)
         self.ui.lblDbSize.setText(
-            self.tr("Used DB Storage: ") + "%d / %d MB" % (usedSpace, maxSize))
+            self.tr("Used DB Storage: ") + "%d / %d MB" % (usedSpace, self.maxSize))
 
         self.ui.lblDbSizeUpload.setAutoFillBackground(True)
         self.ui.lblDbSizeUpload.setPalette(lblPalette)
         self.ui.lblDbSizeUpload.setText(
-            self.tr("Used DB Storage: ") + "%d / %d MB" % (usedSpace, maxSize))
+            self.tr("Used DB Storage: ") + "%d / %d MB" % (usedSpace, self.maxSize))
