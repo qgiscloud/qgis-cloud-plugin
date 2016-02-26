@@ -163,8 +163,11 @@ class PGVectorLayerImport:
         dsUri = QgsDataSourceURI(uri)
         schemaName = dsUri.schema()
         tableName = dsUri.table()
-
-        geometryColumn = dsUri.geometryColumn()
+        
+        if wkbType == QGis.WKBNoGeometry:
+            geometryColumn = ""
+        else:
+            geometryColumn = dsUri.geometryColumn()
 
         primaryKey = dsUri.keyColumn()
         primaryKeyType = ""
