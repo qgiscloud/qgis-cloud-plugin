@@ -118,14 +118,14 @@ class DataUpload(QObject):
             # TODO: Ask user for overwriting existing table
             # The postgres provider is terribly slow at creating tables with
             # many attribute columns in QGIS < 2.9.0
-            if QGis.QGIS_VERSION_INT < 20900:
-               vectorLayerImport = PGVectorLayerImport(db, cloudUri, fields, wkbType, layer.crs(), True)
-            else:
-                vectorLayerImport = QgsVectorLayerImport(cloudUri, "postgres", fields, wkbType, layer.crs(), True)
-                
+#            if QGis.QGIS_VERSION_INT < 20900:
+            vectorLayerImport = PGVectorLayerImport(db, cloudUri, fields, wkbType, layer.crs(), True)
+#            else:
+#                vectorLayerImport = QgsVectorLayerImport(cloudUri, "postgres", fields, wkbType, layer.crs(), True)
+            
             if vectorLayerImport.hasError():
                 import_ok &= False
-                messages += vectorLayerImport.errorMessage() + "\n"
+                messages += "VectorLayerImport-Error: "+vectorLayerImport.errorMessage() + "\n"
                 continue
                 
             vectorLayerImport = None
@@ -148,8 +148,6 @@ class DataUpload(QObject):
                 if not feature.geometry():
                     QgsMessageLog.logMessage(pystring(self.tr("Feature {id} of layer {layer} has no geometry")).format(
                         id=feature.id(), layer=layer.name()), "QGISCloud")
-                    
-                    
                 else:
 
                 # Second field is geometry in EWKB Hex format

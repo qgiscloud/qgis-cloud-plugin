@@ -49,28 +49,51 @@ class QgisCloudPluginDialog(QDockWidget):
     COLUMN_GEOMETRY_TYPE = 3
     COLUMN_SRID = 4
 
-    FREE_SIZE = 50
-    PRO_SIZE = 500
-    RESELLER_SIZE = 5000
+    if QGis.QGIS_VERSION_INT < 21200:
+        GEOMETRY_TYPES = {
+            QGis.WKBUnknown: "Unknown",
+            QGis.WKBPoint: "Point",
+            QGis.WKBMultiPoint: "MultiPoint",
+            QGis.WKBLineString: "LineString",
+            QGis.WKBMultiLineString: "MultiLineString",
+            QGis.WKBPolygon: "Polygon",
+            QGis.WKBMultiPolygon: "MultiPolygon",
+            # Workaround (missing Python binding?): QGis.WKBNoGeometry /
+            # ogr.wkbNone
+            100: "No geometry",
+            QGis.WKBPoint25D: "Point",
+            QGis.WKBLineString25D: "LineString",
+            QGis.WKBPolygon25D: "Polygon",
+            QGis.WKBMultiPoint25D: "MultiPoint",
+            QGis.WKBMultiLineString25D: "MultiLineString",
+            QGis.WKBMultiPolygon25D: "MultiPolygon", 
+            QGis.WKBMultiPolygon25D: "MultiPolygon", 
+            QGis.WKBMultiPolygon25D: "MultiPolygon", 
+     }
+    else:
+        GEOMETRY_TYPES = {
+            QGis.WKBUnknown: "Unknown",
+            QGis.WKBPoint: "Point",
+            QGis.WKBMultiPoint: "MultiPoint",
+            QGis.WKBLineString: "LineString",
+            QGis.WKBMultiLineString: "MultiLineString",
+            QGis.WKBPolygon: "Polygon",
+            QGis.WKBMultiPolygon: "MultiPolygon",
+            # Workaround (missing Python binding?): QGis.WKBNoGeometry /
+            # ogr.wkbNone
+            100: "No geometry",
+            QGis.WKBPoint25D: "Point",
+            QGis.WKBLineString25D: "LineString",
+            QGis.WKBPolygon25D: "Polygon",
+            QGis.WKBMultiPoint25D: "MultiPoint",
+            QGis.WKBMultiLineString25D: "MultiLineString",
+            QGis.WKBMultiPolygon25D: "MultiPolygon", 
+            QGis.WKBMultiPolygon25D: "MultiPolygon", 
+            QGis.WKBMultiPolygon25D: "MultiPolygon", 
+            QgsWKBTypes.LineStringZM: "LineStringZM",          
+     }
+    
 
-    GEOMETRY_TYPES = {
-        QGis.WKBUnknown: "Unknown",
-        QGis.WKBPoint: "Point",
-        QGis.WKBMultiPoint: "MultiPoint",
-        QGis.WKBLineString: "LineString",
-        QGis.WKBMultiLineString: "MultiLineString",
-        QGis.WKBPolygon: "Polygon",
-        QGis.WKBMultiPolygon: "MultiPolygon",
-        # Workaround (missing Python binding?): QGis.WKBNoGeometry /
-        # ogr.wkbNone
-        100: "No geometry",
-        QGis.WKBPoint25D: "Point",
-        QGis.WKBLineString25D: "LineString",
-        QGis.WKBPolygon25D: "Polygon",
-        QGis.WKBMultiPoint25D: "MultiPoint",
-        QGis.WKBMultiLineString25D: "MultiLineString",
-        QGis.WKBMultiPolygon25D: "MultiPolygon"
-    }
 
     def __init__(self, iface, version):
         QDockWidget.__init__(self, None)
@@ -624,14 +647,19 @@ class QgisCloudPluginDialog(QDockWidget):
             return "WKBPoint25D"
         elif wkbType == QGis.WKBLineString25D:
             return "WKBLineString25D"
+        elif wkbType == QgsWKBTypes.LineStringZM:
+            return "WKBLineStringZM"            
         elif wkbType == QGis.WKBPolygon25D:
             return "WKBPolygon25D"
         elif wkbType == QGis.WKBMultiPoint25D:
             return "WKBMultiPoint25D"
         elif wkbType == QGis.WKBMultiLineString25D:
             return "WKBMultiLineString25D"
+        elif wkbType == QgsWKBTypes.MultiLineStringZM:
+            return "WKBMultiLineStringZM"            
         elif wkbType == QGis.WKBMultiPolygon25D:
             return "WKBMultiPolygon25D"
+        
         return self.tr("Unknown type")
 
     @staticmethod

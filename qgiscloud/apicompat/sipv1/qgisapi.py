@@ -21,7 +21,7 @@
 """
 
 import qgis.core
-from qgis.core import QGis
+from qgis.core import *
 
 
 def multiType(wkbType):
