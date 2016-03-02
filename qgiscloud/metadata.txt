@@ -3,7 +3,7 @@ name=QGIS Cloud Plugin
 qgisMinimumVersion=1.8
 qgisMaximumVersion=2.99
 description=Publish maps on qgiscloud.com
-version=1.2.1
+version=1.2.2
 author=Pirmin Kalberer, Mathias Walker, Horst Duester, Sandro Mani
 email=pka@sourcepole.ch
 about=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich, Switzerland
@@ -11,6 +11,8 @@ about=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich
 ; Optional items:
 
 changelog=
+    1.2.2
+    - Upload of Z, M, ZM and 25D layers from QGIS 2.14 due to bugs in QGIS 2.12 and QGIS Enterprise 15
     1.2.1
     - Upload of Z, M, ZM and 25D layers added (Starting with QGIS 2.12 and QGIS Enterprise 15)
     1.2.0

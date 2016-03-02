@@ -28,6 +28,7 @@ from PyQt4.QtGui import *
 from PyQt4.QtXml import *
 from qgis.core import *
 from db_connections import DbConnections
+from osgeo import ogr
 import os
 import re
 import psycopg2
@@ -209,7 +210,6 @@ class DataUpload(QObject):
 
             if ok and importstr:
                 try:
-                    print "%s \n" % (importstr)
                     cursor.copy_from(StringIO(importstr), '"public"."%s"' % item['table'])
                 except Exception as e:
                     messages += str(e) + "\n"
@@ -282,9 +282,6 @@ class DataUpload(QObject):
             wktType |= 0x80000000 | 0x40000000 | 0x20000000
         else:
             wktType |= 0x20000000
-            
-        QMessageBox.information(None, '', str(wkb[0]))
-        
         try:
             ewkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", srid) + wkb[5:]
         except:
