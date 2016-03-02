@@ -49,7 +49,7 @@ class QgisCloudPluginDialog(QDockWidget):
     COLUMN_GEOMETRY_TYPE = 3
     COLUMN_SRID = 4
 
-    if QGis.QGIS_VERSION_INT < 21200:
+    if QGis.QGIS_VERSION_INT < 21400:
         GEOMETRY_TYPES = {
             QGis.WKBUnknown: "Unknown",
             QGis.WKBPoint: "Point",
@@ -104,7 +104,6 @@ class QgisCloudPluginDialog(QDockWidget):
             QgsWKBTypes.MultiPolygonZM: "MultiPolygonZM", 
             QgsWKBTypes.Polygon25D: "Polygon25D",            
             QgsWKBTypes.MultiPolygon25D: "MultiPolygon25D", 
-            
      }
     
 
@@ -315,6 +314,7 @@ class QgisCloudPluginDialog(QDockWidget):
                         version_ok = False
                         self.ui.tabWidget.setCurrentWidget(self.ui.aboutTab)
                     login_ok = True
+                    self.update_local_layers()
                 except UnauthorizedError:
                     QMessageBox.critical(
                         self, self.tr("Login failed"),
@@ -607,27 +607,28 @@ class QgisCloudPluginDialog(QDockWidget):
             table_name_item = QTableWidgetItem(
                 QgisCloudPluginDialog.launder_pg_name(table_name))
             wkbType = layers[0].wkbType()
-            if wkbType not in self.GEOMETRY_TYPES:
-                QMessageBox.warning(self.iface.mainWindow(), self.tr("Unsupported geometry type"), pystring(self.tr(
-                    "Unsupported geometry type '{type}' in layer '{layer}'")).format(type=self.__wkbTypeString(wkbType), layer=layers[0].name()))
-                continue
-            geometry_type_item = QTableWidgetItem(self.GEOMETRY_TYPES[wkbType])
-            if layers[0].providerType() == "ogr":
-                geometry_type_item.setToolTip(
-                    self.tr("Note: OGR features will be converted to MULTI-type"))
-            srid_item = QTableWidgetItem(layers[0].crs().authid())
-
-            row = self.ui.tblLocalLayers.rowCount()
-            self.ui.tblLocalLayers.insertRow(row)
-            self.ui.tblLocalLayers.setItem(
-                row, self.COLUMN_LAYERS, layers_item)
-            self.ui.tblLocalLayers.setItem(
-                row, self.COLUMN_DATA_SOURCE, data_source_item)
-            self.ui.tblLocalLayers.setItem(
-                row, self.COLUMN_TABLE_NAME, table_name_item)
-            self.ui.tblLocalLayers.setItem(
-                row, self.COLUMN_GEOMETRY_TYPE, geometry_type_item)
-            self.ui.tblLocalLayers.setItem(row, self.COLUMN_SRID, srid_item)
+            if self.api.check_auth():
+                if wkbType not in self.GEOMETRY_TYPES:
+                    QMessageBox.warning(self.iface.mainWindow(), self.tr("Unsupported geometry type"), pystring(self.tr(
+                        "Unsupported geometry type '{type}' in layer '{layer}'")).format(type=self.__wkbTypeString(wkbType), layer=layers[0].name()))
+                    continue
+                geometry_type_item = QTableWidgetItem(self.GEOMETRY_TYPES[wkbType])
+                if layers[0].providerType() == "ogr":
+                    geometry_type_item.setToolTip(
+                        self.tr("Note: OGR features will be converted to MULTI-type"))
+                srid_item = QTableWidgetItem(layers[0].crs().authid())
+    
+                row = self.ui.tblLocalLayers.rowCount()
+                self.ui.tblLocalLayers.insertRow(row)
+                self.ui.tblLocalLayers.setItem(
+                    row, self.COLUMN_LAYERS, layers_item)
+                self.ui.tblLocalLayers.setItem(
+                    row, self.COLUMN_DATA_SOURCE, data_source_item)
+                self.ui.tblLocalLayers.setItem(
+                    row, self.COLUMN_TABLE_NAME, table_name_item)
+                self.ui.tblLocalLayers.setItem(
+                    row, self.COLUMN_GEOMETRY_TYPE, geometry_type_item)
+                self.ui.tblLocalLayers.setItem(row, self.COLUMN_SRID, srid_item)
 
         if self.local_data_sources.count() > 0:
             self.ui.tblLocalLayers.resizeColumnsToContents()

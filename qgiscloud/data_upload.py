@@ -209,6 +209,7 @@ class DataUpload(QObject):
 
             if ok and importstr:
                 try:
+                    print "%s \n" % (importstr)
                     cursor.copy_from(StringIO(importstr), '"public"."%s"' % item['table'])
                 except Exception as e:
                     messages += str(e) + "\n"
@@ -250,6 +251,7 @@ class DataUpload(QObject):
     def _wkbToEWkbHex(self, wkb, srid, convertToMulti=False):
         try:
             wktType = struct.unpack("=i", wkb[1:5])[0] & 0xffffffff
+            
             if not QGis.isMultiType(wktType):
                 wktType = QGis.multiType(wktType) & 0xffffffff
                 wkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", 1) + wkb
@@ -266,7 +268,6 @@ class DataUpload(QObject):
         # define WKBMOFFSET  0x40000000
         # define WKBSRIDFLAG 0x20000000
         # define WKBBBOXFLAG 0x10000000
-
         if wktType >= 1000 and wktType < 2000:
             # Has Z
             wktType -= 1000
@@ -281,6 +282,9 @@ class DataUpload(QObject):
             wktType |= 0x80000000 | 0x40000000 | 0x20000000
         else:
             wktType |= 0x20000000
+            
+        QMessageBox.information(None, '', str(wkb[0]))
+        
         try:
             ewkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", srid) + wkb[5:]
         except:

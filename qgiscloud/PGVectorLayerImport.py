@@ -95,7 +95,7 @@ class PGVectorLayerImport:
 
     def __postgisWkbType(self, wkbType):
         
-        if QGis.QGIS_VERSION_INT < 21200:
+        if QGis.QGIS_VERSION_INT < 21400:
             if wkbType == QGis.WKBPoint25D:
                 return ("POINT", 3)
             elif wkbType == QGis.WKBPoint:
