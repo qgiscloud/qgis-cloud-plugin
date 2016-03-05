@@ -47,6 +47,7 @@ class LocalDataSources:
     def local_layers(self, skip_layer_id=None):
         unsupported_layers = []
         local_layers = []
+        local_raster_layers = []
         for layer in QgsMapLayerRegistry.instance().mapLayers().values():
 #            QMessageBox.information(None, '', str(layer.type()))
             if layer.id() == skip_layer_id:
@@ -65,6 +66,7 @@ class LocalDataSources:
                         unsupported_layers.append(layer)
 
             elif provider == "gdal":
+                QMessageBox.information(None, '',  layer.dataProvider().metadata()[0:5])
                 if layer.dataProvider().metadata()[0:13] == "PostGISRaster":
                     # FIXME: Temporary workaround for buggy QgsDataSourceURI parser which fails to parse URI strings starting with PG:
                     uri = layer.dataProvider().dataSourceUri()
@@ -74,6 +76,8 @@ class LocalDataSources:
                 elif layer.customProperty('ol_layer_type', None) is not None:
                     # GDAL TMS layer from OpenLayers plugin (> 1.3.6)
                     pass
+                elif layer.dataProvider().metadata()[0:5] == "GTiff":
+                    local_raster_layers.append(layer)
                 else:
                     unsupported_layers.append(layer)
 
@@ -83,7 +87,7 @@ class LocalDataSources:
                 else:
                     unsupported_layers.append(layer)
 
-        return local_layers, unsupported_layers
+        return local_layers, unsupported_layers,  local_raster_layers
 
     def update_local_data_sources(self, local_layers):
         # get unique local data sources

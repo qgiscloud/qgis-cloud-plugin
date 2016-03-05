@@ -541,10 +541,10 @@ class QgisCloudPluginDialog(QDockWidget):
             self.activate_upload_button()
 
     def update_local_layers(self, skip_layer_id=None):
-        local_layers, unsupported_layers = self.local_data_sources.local_layers(
+        local_layers, unsupported_layers,  local_raster_layers = self.local_data_sources.local_layers(
             skip_layer_id)
         try:
-            self.update_local_data_sources(local_layers)
+            self.update_local_data_sources(local_layers,  local_raster_layers)
         except Exception as e:
             ErrorReportDialog(self.tr("Error checking local data sources"), self.tr("An error occured."), str(e) + "\n" + traceback.format_exc(), self.user, self).exec_()
 
@@ -581,7 +581,7 @@ class QgisCloudPluginDialog(QDockWidget):
 
         return True
 
-    def update_local_data_sources(self, local_layers):
+    def update_local_data_sources(self, local_layers,  local_raster_layers):
         # update table names lookup
         self.update_data_sources_table_names()
 
