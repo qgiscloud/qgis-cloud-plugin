@@ -214,7 +214,7 @@ class PGVectorLayerImport:
                     self.__quotedIdentifier(field.comment()))
                 cursor.execute(sql)
 
-    def __init__(self, db, uri, fields, wkbType, srs, overwrite):
+    def __init__(self, db, conn, cursor,  uri, fields, wkbType, srs, overwrite):
         self._errorMessage = ""
         self._hasError = False
 
@@ -236,8 +236,6 @@ class PGVectorLayerImport:
             schemaTableName += self.__quotedIdentifier(schemaName) + "."
         schemaTableName += self.__quotedIdentifier(tableName)
         # Create the table
-        conn = db.psycopg_connection()
-        cursor = conn.cursor()
 
         # get the pk's name and type
         if not primaryKey:
@@ -357,6 +355,7 @@ class PGVectorLayerImport:
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                 self._errorMessage = "Creation of fields failed: %s (%s:%d)" % (str(e), fname, exc_tb.tb_lineno)
                 self._hasError = True
+
 
     def hasError(self):
         return self._hasError

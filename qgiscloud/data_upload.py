@@ -60,12 +60,13 @@ class DataUpload(QObject):
         # Connect to database
         try:
             conn = db.psycopg_connection()
+            cursor = conn.cursor()
         except Exception as e:
             raise RuntimeError("Connection to database failed %s" % str(e))
 
         for data_source, item in data_sources_items.iteritems():
             # Check available space, block if exceded
-            cursor = conn.cursor()
+            
             sql = "SELECT pg_size_pretty(pg_database_size('" + str(db.database) + "'))"
             cursor.execute(sql)
             size = int(cursor.fetchone()[0].split(' ')[0])
@@ -114,13 +115,13 @@ class DataUpload(QObject):
                         messages += "Failed to create SRS record on database: " + str(e) + "\n"
                         continue
     
-                cursor.close()
+#                cursor.close()
 
             # TODO: Ask user for overwriting existing table
             # The postgres provider is terribly slow at creating tables with
             # many attribute columns in QGIS < 2.9.0
 #            if QGis.QGIS_VERSION_INT < 20900:
-            vectorLayerImport = PGVectorLayerImport(db, cloudUri, fields, wkbType, layer.crs(), True)
+            vectorLayerImport = PGVectorLayerImport(db, conn,  cursor, cloudUri, fields, wkbType, layer.crs(), True)
 #            else:
 #                vectorLayerImport = QgsVectorLayerImport(cloudUri, "postgres", fields, wkbType, layer.crs(), True)
             
@@ -131,7 +132,7 @@ class DataUpload(QObject):
                 
             vectorLayerImport = None
             # Create cursor
-            cursor = conn.cursor()
+#            cursor = conn.cursor()
             
             # Build import string
             attribs = range(0, fields.count())
@@ -240,8 +241,8 @@ class DataUpload(QObject):
                 sql = 'create index "%s_%s_idx" on "public"."%s" using gist ("%s");' % (item['table'],  geom_column,  item['table'], geom_column)
                 cursor.execute(sql)
                 conn.commit()
-            cursor.close()
-
+                
+        cursor.close()
         conn.close()
         self._replace_local_layers(layers_to_replace)
         self.progress_label.setText("")

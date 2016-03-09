@@ -541,8 +541,7 @@ class QgisCloudPluginDialog(QDockWidget):
             self.activate_upload_button()
 
     def update_local_layers(self, skip_layer_id=None):
-        local_layers, unsupported_layers = self.local_data_sources.local_layers(
-            skip_layer_id)
+        local_layers, unsupported_layers = self.local_data_sources.local_layers(skip_layer_id)
         try:
             self.update_local_data_sources(local_layers)
         except Exception as e:
@@ -852,6 +851,8 @@ class QgisCloudPluginDialog(QDockWidget):
             sql = "SELECT pg_database_size('" + str(db) + "')"
             cursor.execute(sql)
             usedSpace += int(cursor.fetchone()[0])
+            cursor.close()
+            conn.close
 
         # Used space in MB
         usedSpace /= 1024 * 1024
