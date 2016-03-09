@@ -732,7 +732,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 host = str(uri.host())
                 port = uri.port()
                 QMessageBox.critical(self, self.tr("Network Error"),
-                                     self.tr("Could not connect to database server ({0}) on port {1}. Please contact your system administrator or internet provider".format(host, port)))
+                                     self.tr("Could not connect to database server ({0}) on port {1}. Please contact your system administrator or internet provider to open port {1} in the firewall".format(host, port)))
                 return
 
             # disable update of local data sources during upload, as there are
