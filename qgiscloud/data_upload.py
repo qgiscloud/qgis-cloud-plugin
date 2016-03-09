@@ -120,10 +120,7 @@ class DataUpload(QObject):
             # TODO: Ask user for overwriting existing table
             # The postgres provider is terribly slow at creating tables with
             # many attribute columns in QGIS < 2.9.0
-#            if QGis.QGIS_VERSION_INT < 20900:
             vectorLayerImport = PGVectorLayerImport(db, conn,  cursor, cloudUri, fields, wkbType, layer.crs(), True)
-#            else:
-#                vectorLayerImport = QgsVectorLayerImport(cloudUri, "postgres", fields, wkbType, layer.crs(), True)
             
             if vectorLayerImport.hasError():
                 import_ok &= False
@@ -131,8 +128,6 @@ class DataUpload(QObject):
                 continue
                 
             vectorLayerImport = None
-            # Create cursor
-#            cursor = conn.cursor()
             
             # Build import string
             attribs = range(0, fields.count())
@@ -244,7 +239,7 @@ class DataUpload(QObject):
                 
         cursor.close()
         conn.close()
-        self._replace_local_layers(layers_to_replace)
+#        self._replace_local_layers(layers_to_replace)
         self.progress_label.setText("")
         if not import_ok:
             raise RuntimeError(messages)
