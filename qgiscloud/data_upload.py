@@ -239,7 +239,7 @@ class DataUpload(QObject):
                 
         cursor.close()
         conn.close()
-#        self._replace_local_layers(layers_to_replace)
+        self._replace_local_layers(layers_to_replace)
         self.progress_label.setText("")
         if not import_ok:
             raise RuntimeError(messages)
