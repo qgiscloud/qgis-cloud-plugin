@@ -104,6 +104,26 @@ class QgisCloudPluginDialog(QDockWidget):
             QgsWKBTypes.MultiPolygonZM: "MultiPolygonZM", 
             QgsWKBTypes.Polygon25D: "Polygon25D",            
             QgsWKBTypes.MultiPolygon25D: "MultiPolygon25D", 
+            QgsWKBTypes.CircularString: "CircularString",
+            QgsWKBTypes.CompoundCurve: "CompoundCurve",
+            QgsWKBTypes.CurvePolygon: "CurvePolygon", 
+            QgsWKBTypes.MultiCurve: "MultiCurve",
+            QgsWKBTypes.MultiSurface: "MultiSurface",
+            QgsWKBTypes.CircularStringZ: "CircularStringZ",
+            QgsWKBTypes.CompoundCurveZ: "CompoundCurveZ",
+            QgsWKBTypes.CurvePolygonZ: "CurvePolygonZ", 
+            QgsWKBTypes.MultiCurveZ: "MultiCurveZ",
+            QgsWKBTypes.MultiSurfaceZ: "MultiSurfaceZ",
+            QgsWKBTypes.CircularStringM: "CircularStringM",
+            QgsWKBTypes.CompoundCurveM: "CompoundCurveM",
+            QgsWKBTypes.CurvePolygonM: "CurvePolygonM", 
+            QgsWKBTypes.MultiCurveM: "MultiCurveM",
+            QgsWKBTypes.MultiSurfaceM: "MultiSurfaceM",
+            QgsWKBTypes.CircularStringZM: "CircularStringZM",
+            QgsWKBTypes.CompoundCurveZM: "CompoundCurveZM",
+            QgsWKBTypes.CurvePolygonZM: "CurvePolygonZM", 
+            QgsWKBTypes.MultiCurveZM: "MultiCurveZM",
+            QgsWKBTypes.MultiSurfaceZM: "MultiSurfaceZM",
      }
     
 
@@ -287,13 +307,13 @@ class QgisCloudPluginDialog(QDockWidget):
                 try:
                     login_info = self.api.check_login(
                         version_info=self._version_info())
-                    #{u'paid_until': None, u'plan': u'Free'
-                    # u'current_plugin': u'0.8.0'}
+
                     self.user = login_dialog.ui.editUser.text()
                     self._update_clouddb_mode(login_info['clouddb'])
                     version_ok = StrictVersion(self.version) >= StrictVersion(login_info['current_plugin'])
                     if not version_ok:
                         self.ui.lblVersionPlugin.setPalette(self.palette_red)
+                        QMessageBox.information(None, self.tr('New Version'),  self.tr('New plugin release {version} is available! Please upgrade the QGIS Cloud plugin.').format(version=login_info['current_plugin']))
                     self.store_settings()
                     self.ui.btnLogin.hide()
                     self.ui.lblSignup.hide()
@@ -315,9 +335,15 @@ class QgisCloudPluginDialog(QDockWidget):
                         self.ui.tabWidget.setCurrentWidget(self.ui.aboutTab)
                     login_ok = True
                     self.update_local_layers()
+            
+                except ForbiddenError:
+                    QMessageBox.critical(
+                        self, self.tr("Account Disabled"),
+                        self.tr("Account {username} is disabled! Please contact support@qgiscloud.com").format(username=login_dialog.ui.editUser.text()))
+                    login_ok = False                    
                 except UnauthorizedError:
                     QMessageBox.critical(
-                        self, self.tr("Login failed"),
+                        self, self.tr("Login for user {username} failed").format(username=login_dialog.ui.editUser.text()),
                         self.tr("Wrong user name or password"))
                     login_ok = False
                 except (TokenRequiredError, ConnectionException) as e:
@@ -337,6 +363,28 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def delete_database(self):
         name = self.ui.tabDatabases.currentItem().text()
+        
+        answer = False
+        
+        for layer in QgsMapLayerRegistry.instance().mapLayers().values():            
+            if QgsDataSourceURI(layer.publicSource()).database() == name:
+                
+                if not answer:
+                    answer = QMessageBox.question(
+                        self,
+                        self.tr("Warning"),
+                        self.tr("You have layers from database {name} loaded in your project! Do you want to remove them before you delete database {name}.").format(name=name),
+                        QMessageBox.StandardButtons(
+                            QMessageBox.Cancel |
+                            QMessageBox.Yes))
+
+                if answer == QMessageBox.Yes:
+                     QgsMapLayerRegistry.instance().removeMapLayer(layer.id())
+                     
+        if answer == QMessageBox.Cancel:
+            QMessageBox.warning(None,  self.tr('Warning'),  self.tr('Deletion of database {name} interrupted!').format(name=name))
+            return
+            
         msgBox = QMessageBox()
         msgBox.setText(self.tr("Delete QGIS Cloud database."))
         msgBox.setInformativeText(
@@ -345,6 +393,7 @@ class QgisCloudPluginDialog(QDockWidget):
         msgBox.setDefaultButton(QMessageBox.Cancel)
         msgBox.setIcon(QMessageBox.Question)
         ret = msgBox.exec_()
+        
         if ret == QMessageBox.Ok:
             self.setCursor(Qt.WaitCursor)
             result = self.api.delete_database(name)

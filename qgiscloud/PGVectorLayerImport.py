@@ -185,6 +185,56 @@ class PGVectorLayerImport:
                 return ("MULTILINESTRING",  3)
             elif wkbType ==  QgsWKBTypes.MultiPolygon25D:
                 return ("MULTIPOLYGON",  3)
+            elif wkbType ==  QgsWKBTypes.CircularString:
+                return ("CIRCULARSTRING",  2)
+            elif wkbType ==  QgsWKBTypes.CompoundCurve:
+                return ("COMPOUNDCURVE",  2)      
+            elif wkbType ==  QgsWKBTypes.CurvePolygon:
+                return ("CURVEPOLYGON",  2)
+            elif wkbType ==  QgsWKBTypes.MultiCurve:
+                return ("MULTICURVE",  2)                          
+            elif wkbType ==  QgsWKBTypes.MultiSurface:
+                return ("MULTISURFACE",  2)                
+            elif wkbType ==  QgsWKBTypes.CircularStringZ:
+                return ("CIRCULARSTRING",  3)
+            elif wkbType ==  QgsWKBTypes.CompoundCurveZ:
+                return ("COMPOUNDCURVE",  3)
+            elif wkbType ==  QgsWKBTypes.MultiCurveZ:
+                return ("MULTICURVE",  3)                          
+            elif wkbType ==  QgsWKBTypes.MultiSurfaceZ:
+                return ("MULTISURFACE",  3)                     
+            elif wkbType ==  QgsWKBTypes.CurvePolygonZ:
+                return ("CURVEPOLYGON",  3)
+            elif wkbType ==  QgsWKBTypes.CircularStringM:
+                return ("CIRCULARSTRING",  3)
+            elif wkbType ==  QgsWKBTypes.CompoundCurveM:
+                return ("COMPOUNDCURVE",  3)
+            elif wkbType ==  QgsWKBTypes.MultiCurveM:
+                return ("MULTICURVE",  3)                          
+            elif wkbType ==  QgsWKBTypes.MultiSurfaceM:
+                return ("MULTISURFACE",  3)                     
+            elif wkbType ==  QgsWKBTypes.CurvePolygonM:
+                return ("CURVEPOLYGON",  3)
+            elif wkbType ==  QgsWKBTypes.CircularStringZM:
+                return ("CIRCULARSTRING",  4)
+            elif wkbType ==  QgsWKBTypes.CompoundCurveZM:
+                return ("COMPOUNDCURVE",  4)
+            elif wkbType ==  QgsWKBTypes.CurvePolygonZM:
+                return ("CURVEPOLYGON",  4)
+            elif wkbType ==  QgsWKBTypes.MultiCurveZM:
+                return ("MULTICURVE",  4)                          
+            elif wkbType ==  QgsWKBTypes.MultiSurfaceZM:
+                return ("MULTISURFACE",  4)                     
+            elif wkbType ==  QgsWKBTypes.CircularString25D:
+                return ("CIRCULARSTRING",  3)
+            elif wkbType ==  QgsWKBTypes.CompoundCurve25D:
+                return ("COMPOUNDCURVE",  3)
+            elif wkbType ==  QgsWKBTypes.CurvePolygon25D:
+                return ("CURVEPOLYGON",  3)
+            elif wkbType ==  QgsWKBTypes.MultiCurve25D:
+                return ("MULTICURVE",  3)                          
+            elif wkbType ==  QgsWKBTypes.MultiSurface25D:
+                return ("MULTISURFACE",  3)                  
             elif wkbType ==  QgsWKBTypes.NoGeometry:
                 return ("",  0) 
 
