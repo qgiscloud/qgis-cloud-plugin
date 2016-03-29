@@ -541,21 +541,22 @@ class QgisCloudPluginDialog(QDockWidget):
             self.activate_upload_button()
 
     def update_local_layers(self, skip_layer_id=None):
-        local_layers, unsupported_layers,  local_raster_layers = self.local_data_sources.local_layers(
-            skip_layer_id)
+        local_layers, unsupported_layers,  local_raster_layers = self.local_data_sources.local_layers(skip_layer_id)
         try:
             self.update_local_data_sources(local_layers,  local_raster_layers)
         except Exception as e:
             ErrorReportDialog(self.tr("Error checking local data sources"), self.tr("An error occured."), str(e) + "\n" + traceback.format_exc(), self.user, self).exec_()
 
-        return local_layers, unsupported_layers
+        return local_layers, unsupported_layers,  local_raster_layers
 
     def check_layers(self):
-        local_layers, unsupported_layers = self.update_local_layers()
-        if (local_layers and self.clouddb) or unsupported_layers:
+        local_layers, unsupported_layers,  local_raster_layers = self.update_local_layers()
+        
+        
+        if ((local_layers or local_raster_layers) and self.clouddb) or unsupported_layers:
             message = ""
 
-            if local_layers:
+            if local_layers or local_raster_layers:
                 title = self.tr("Local layers found")
                 message += self.tr(
                     "Some layers are using local data. You can upload local layers to your cloud database in the 'Upload Data' tab.\n\n")
@@ -583,13 +584,14 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def update_local_data_sources(self, local_layers,  local_raster_layers):
         # update table names lookup
+        local_layers += local_raster_layers
         self.update_data_sources_table_names()
-
+        
         self.local_data_sources.update_local_data_sources(local_layers)
 
         # update GUI
         self.ui.tblLocalLayers.setRowCount(0)
-
+        
         for data_source, layers in self.local_data_sources.iteritems():
             layer_names = []
             for layer in layers:
@@ -604,19 +606,23 @@ class QgisCloudPluginDialog(QDockWidget):
             if data_source in self.data_sources_table_names:
                 # use current table name if available to keep changes by user
                 table_name = self.data_sources_table_names[data_source]
-            table_name_item = QTableWidgetItem(
-                QgisCloudPluginDialog.launder_pg_name(table_name))
-            wkbType = layers[0].wkbType()
-            if wkbType not in self.GEOMETRY_TYPES:
-                QMessageBox.warning(self.iface.mainWindow(), self.tr("Unsupported geometry type"), pystring(self.tr(
-                    "Unsupported geometry type '{type}' in layer '{layer}'")).format(type=self.__wkbTypeString(wkbType), layer=layers[0].name()))
-                continue
-            geometry_type_item = QTableWidgetItem(self.GEOMETRY_TYPES[wkbType])
-            if layers[0].providerType() == "ogr":
-                geometry_type_item.setToolTip(
-                    self.tr("Note: OGR features will be converted to MULTI-type"))
+            table_name_item = QTableWidgetItem(QgisCloudPluginDialog.launder_pg_name(table_name))
+            
+            if layers[0].providerType() == 'gdal':
+                geometry_type_item = QTableWidgetItem('GTiff')
+            else:
+                wkbType = layers[0].wkbType()
+                if wkbType not in self.GEOMETRY_TYPES:
+                    QMessageBox.warning(self.iface.mainWindow(), self.tr("Unsupported geometry type"), pystring(self.tr(
+                        "Unsupported geometry type '{type}' in layer '{layer}'")).format(type=self.__wkbTypeString(wkbType), layer=layers[0].name()))
+                    continue
+                geometry_type_item = QTableWidgetItem(self.GEOMETRY_TYPES[wkbType])
+                if layers[0].providerType() == "ogr":
+                    geometry_type_item.setToolTip(
+                        self.tr("Note: OGR features will be converted to MULTI-type"))
+                        
             srid_item = QTableWidgetItem(layers[0].crs().authid())
-
+    
             row = self.ui.tblLocalLayers.rowCount()
             self.ui.tblLocalLayers.insertRow(row)
             self.ui.tblLocalLayers.setItem(
