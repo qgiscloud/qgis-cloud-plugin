@@ -82,19 +82,23 @@ class RasterUpload():
         opts.create_table = 1
         opts.drop_table = 1
         opts.overview_level = 1
+        opts.block_size = '100x100'
+        opts.create_raster_overviews_table = 1
          
         self.upload_string = 'BEGIN;\n'
         
-        # If overviews requested, CREATE TABLE raster_overviews
-        if opts.create_raster_overviews_table:
-            sql = self.make_sql_create_raster_overviews(opts)
-            self.upload_string += sql
+
 
         i = 0
 
         gt = None
         for infile in raster:
             opts.table = os.path.splitext(os.path.basename(infile))[0]
+            
+        # If overviews requested, CREATE TABLE raster_overviews
+            if opts.create_raster_overviews_table:
+                sql = self.make_sql_create_raster_overviews(opts)
+                self.upload_string += sql            
         # Base raster schema
             if opts.overview_level == 1:
                 # DROP TABLE
@@ -428,42 +432,43 @@ class RasterUpload():
         return sql;
     
     
-    def make_sql_addrastercolumn(self,  options, pixeltypes, nodata, pixelsize, blocksize, extent):
-        assert len(pixeltypes) > 0, "No pixel types given"
+    def make_sql_addrastercolumn(self,  options): #, pixeltypes, nodata, pixelsize, blocksize, extent):
+#        assert len(pixeltypes) > 0, "No pixel types given"
         ts = self.make_sql_schema_table_names(options.table)
-        pt = self.make_sql_value_array(pixeltypes)
+#        pt = self.make_sql_value_array(pixeltypes)
     
-        nd = 'null'
-        if nodata is not None and len(nodata) > 0:
-            nd = self.make_sql_value_array(nodata)
-    
-        odb = 'false'
-        if options.register:
-            odb = 'true'
-    
-        rb = 'false'
-        extgeom = 'null'
-        bs = ( 'null', 'null' )
+#        nd = 'null'
+##        if nodata is not None and len(nodata) > 0:
+##            nd = self.make_sql_value_array(nodata)
+#    
+#        odb = 'false'
+#        if options.register:
+#            odb = 'true'
+#    
+#        rb = 'false'
+#        extgeom = 'null'
+#        bs = ( 'null', 'null' )
         # Check if regular blocking mode requested
-        if options.block_size is not None:
-            assert pixelsize is not None, "Pixel size is none, but regular blocking requested"
-            assert blocksize is not None, "Block size is none, but regular blocking requested"
-            assert extent is not None, "Extent is none, but regular blocking requested"
-            assert len(pixelsize) == 2, "Invalid pixel size, two values expected"
-            assert len(blocksize) == 2, "Invalid block size, two values expected"
-            assert len(extent) == 4, "Invalid extent, four coordinates expected"
-            assert len(extent[0]) == len(extent[3]) == 2, "Invalid extent, pair of X and Y pair expected"
-            rb = 'true'
-            bs = ( blocksize[0], blocksize[1] )
-            extgeom = "ST_Envelope(ST_SetSRID('POLYGON((%.15f %.15f,%.15f %.15f,%.15f %.15f,%.15f %.15f,%.15f %.15f))'::geometry, %d))" % \
-                      (extent[0][0], extent[0][1], extent[1][0], extent[1][1],
-                       extent[2][0], extent[2][1], extent[3][0], extent[3][1],
-                       extent[0][0], extent[0][1], options.srid)
+#        if options.block_size is not None:
+#            assert pixelsize is not None, "Pixel size is none, but regular blocking requested"
+#            assert blocksize is not None, "Block size is none, but regular blocking requested"
+#            assert extent is not None, "Extent is none, but regular blocking requested"
+#            assert len(pixelsize) == 2, "Invalid pixel size, two values expected"
+#            assert len(blocksize) == 2, "Invalid block size, two values expected"
+#            assert len(extent) == 4, "Invalid extent, four coordinates expected"
+#            assert len(extent[0]) == len(extent[3]) == 2, "Invalid extent, pair of X and Y pair expected"
+#            rb = 'true'
+#            bs = ( blocksize[0], blocksize[1] )
+#            extgeom = "ST_Envelope(ST_SetSRID('POLYGON((%.15f %.15f,%.15f %.15f,%.15f %.15f,%.15f %.15f,%.15f %.15f))'::geometry, %d))" % \
+#                      (extent[0][0], extent[0][1], extent[1][0], extent[1][1],
+#                       extent[2][0], extent[2][1], extent[3][0], extent[3][1],
+#                       extent[0][0], extent[0][1], options.srid)
     
-        sql = "SELECT AddRasterColumn('%s','%s','%s',%d, %s, %s, %s, %s, %.15f, %.15f, %s, %s, %s);\n" % \
-               (ts[0], ts[1], options.column, options.srid, pt, odb, rb, nd,
-                pixelsize[0], pixelsize[1], bs[0], bs[1], extgeom)
-    
+#        sql = "SELECT AddRasterConstraints('%s','%s','%s',%d, %s, %s, %s, %s, %.15f, %.15f, %s, %s, %s);\n" % \
+#               (ts[0], ts[1], options.column, options.srid, pt, odb, rb, nd,
+#                pixelsize[0], pixelsize[1], bs[0], bs[1], extgeom)
+        sql = "SELECT AddRasterConstraints('%s','%s');\n" %  (ts[1], options.column)
+
         self.logit("SQL: %s" % sql)
         return sql
     
@@ -476,6 +481,7 @@ class RasterUpload():
     def make_sql_create_raster_overviews(self,  options):
         schema = self.make_sql_schema_table_names(options.table)[0]
         table = self.make_sql_full_table_name(schema + '.raster_overviews')
+        sql = "SELECT ST_CreateOverview"
         sql = 'CREATE TABLE ' + table + ' ( ' \
               'o_table_catalog character varying(256) NOT NULL, ' \
               'o_table_schema character varying(256) NOT NULL, ' \
@@ -489,7 +495,7 @@ class RasterUpload():
               'overview_factor integer NOT NULL, ' \
               'CONSTRAINT raster_overviews_pk ' \
               'PRIMARY KEY (o_table_catalog, o_table_schema, o_table_name, o_column, overview_factor));\n'
-        
+        QMessageBox.information(None, '',  sql)
         return sql
     
     
@@ -845,7 +851,7 @@ class RasterUpload():
             if target_padding_size[0] > 0 or target_padding_size[1] > 0:
     
                 ysize_read_pixels = len(pixels)
-                nodata_value = fetch_band_nodata(band)
+                nodata_value = self.fetch_band_nodata(band)
     
                 # Apply columns padding
                 pad_cols = numpy.array([nodata_value] * target_padding_size[0])
@@ -868,23 +874,21 @@ class RasterUpload():
         return hexwkb
     
     def wkblify_raster_level(self,  options, ds, level, band_range, infile, i):
-#        assert ds is not None
-#        assert level >= 1
-#        assert len(band_range) == 2
+
     
         band_from = band_range[0]
         band_to = band_range[1]
         
         # Collect raster and block dimensions
         raster_size = ( ds.RasterXSize, ds.RasterYSize )
-#        if options.block_size is not None:
-#            block_size = parse_block_size(options)
-#            read_block_size = ( block_size[0] * level, block_size[1] * level)
-#            grid_size = calculate_grid_size(raster_size, read_block_size)
-#        else:
-        block_size = raster_size # Whole raster as a single block
-        read_block_size = block_size
-        grid_size = (1, 1)
+        if options.block_size is not None:
+            block_size = self.parse_block_size(options)
+            read_block_size = ( block_size[0] * level, block_size[1] * level)
+            grid_size = self.calculate_grid_size(raster_size, read_block_size)
+        else:
+            block_size = raster_size # Whole raster as a single block
+            read_block_size = block_size
+            grid_size = (1, 1)
 #        end else
         
     
@@ -899,8 +903,8 @@ class RasterUpload():
                 pixel_types = self.collect_pixel_types(ds, band_from, band_to)
                 nodata_values = self.collect_nodata_values(ds, band_from, band_to)
                 extent = self.calculate_bounding_box(ds, gt)
-                sql = self.make_sql_addrastercolumn(options, pixel_types, nodata_values,
-                                               pixel_size, block_size, extent)
+#                sql = self.make_sql_addrastercolumn(options, pixel_types, nodata_values,
+#                                               pixel_size, block_size, extent)
 #                self.upload_string += sql
             gen_table = options.table
             
@@ -953,7 +957,7 @@ class RasterUpload():
                 self.upload_string += sql
                 
                 tile_count = tile_count + 1
-    
+                
         return (gen_table, tile_count)
     
     def wkblify_raster(self, options,  infile, i, previous_gt = None):
@@ -975,6 +979,8 @@ class RasterUpload():
     
         # Generate requested overview level (base raster if level = 1)
         summary = self.wkblify_raster_level(options, ds, options.overview_level, band_range, infile, i)
+        sql = self.make_sql_addrastercolumn(options)
+        self.upload_string += sql
         
         # Cleanup
         ds = None
