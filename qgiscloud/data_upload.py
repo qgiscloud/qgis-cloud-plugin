@@ -28,6 +28,7 @@ from PyQt4.QtGui import *
 from PyQt4.QtXml import *
 from qgis.core import *
 from db_connections import DbConnections
+from osgeo import ogr
 import os
 import re
 import psycopg2
@@ -59,12 +60,13 @@ class DataUpload(QObject):
         # Connect to database
         try:
             conn = db.psycopg_connection()
+            cursor = conn.cursor()
         except Exception as e:
             raise RuntimeError("Connection to database failed %s" % str(e))
 
         for data_source, item in data_sources_items.iteritems():
             # Check available space, block if exceded
-            cursor = conn.cursor()
+            
             sql = "SELECT pg_size_pretty(pg_database_size('" + str(db.database) + "'))"
             cursor.execute(sql)
             size = int(cursor.fetchone()[0].split(' ')[0])
@@ -75,172 +77,168 @@ class DataUpload(QObject):
 
             # Layers contains all layers with shared data source
             layer = item['layers'][0]
-            # The QgsFields() is to support the QGIS 1.x API, see apicompat/vectorapi.py
-            fields = QgsFields(layer.pendingFields())
-            srid = layer.crs().postgisSrid()
-            geom_column = "wkb_geometry"
-            wkbType = layer.wkbType()
-            
-            if wkbType == QGis.WKBNoGeometry:
-                cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"public\".\"%s\"" % (
-                db.database, db.host, db.port, db.username, db.password, item['table'])
-                geom_column = ""
-            else:
-                if not QGis.isMultiType(wkbType):
-                    wkbType = QGis.multiType(wkbType)
-    
-                # Create table (pk='' => always generate a new primary key)
-                cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"public\".\"%s\" (%s)" % (
-                    db.database, db.host, db.port, db.username, db.password, item['table'], geom_column
-                )
-
-            self.progress_label.setText(pystring(self.tr("Creating table '{table}'...")).format(table=item['table']))
-            QApplication.processEvents()
-
-            if wkbType != QGis.WKBNoGeometry:
-                # Check if SRID is known on database, otherwise create record
-                cursor.execute("SELECT srid FROM public.spatial_ref_sys WHERE srid = %s" % layer.crs().postgisSrid())
-                if not cursor.fetchone():
-                    try:
-                        cursor.execute("INSERT INTO public.spatial_ref_sys VALUES ({srid},'EPSG',{srid},'{wktstr}','{projstr}')".format(
-                            srid = layer.crs().postgisSrid(),
-                            wktstr = layer.crs().toWkt(),
-                            projstr = layer.crs().toProj4()))
-                        conn.commit()
-                    except Exception as e:
-                        conn.rollback()
-                        import_ok &= False
-                        messages += "Failed to create SRS record on database: " + str(e) + "\n"
-                        continue
-    
-                cursor.close()
-
-            # TODO: Ask user for overwriting existing table
-            # The postgres provider is terribly slow at creating tables with
-            # many attribute columns in QGIS < 2.9.0
-#            if QGis.QGIS_VERSION_INT < 20900:
-            vectorLayerImport = PGVectorLayerImport(db, cloudUri, fields, wkbType, layer.crs(), True)
-#            else:
-#                vectorLayerImport = QgsVectorLayerImport(cloudUri, "postgres", fields, wkbType, layer.crs(), True)
-            
-            if vectorLayerImport.hasError():
-                import_ok &= False
-                messages += "VectorLayerImport-Error: "+vectorLayerImport.errorMessage() + "\n"
-                continue
+            if layer.type() == QgsMapLayer.VectorLayer:
+                # The QgsFields() is to support the QGIS 1.x API, see apicompat/vectorapi.py
+                fields = QgsFields(layer.pendingFields())
+                srid = layer.crs().postgisSrid()
+                geom_column = "wkb_geometry"
+                wkbType = layer.wkbType()
                 
-            vectorLayerImport = None
-            # Create cursor
-            cursor = conn.cursor()
-            
-            # Build import string
-            attribs = range(0, fields.count())
-            count = 0
-            importstr = bytearray()
-            ok = True
-
-            self.progress_label.setText(self.tr("Uploading features..."))
-            QApplication.processEvents()
-            for feature in layer.getFeatures():
-                # First field is primary key
-                importstr += "%d" % count
-                count += 1
-
-                if not feature.geometry():
-                    QgsMessageLog.logMessage(pystring(self.tr("Feature {id} of layer {layer} has no geometry")).format(
-                        id=feature.id(), layer=layer.name()), "QGISCloud")
+                if wkbType == QGis.WKBNoGeometry:
+                    cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"public\".\"%s\"" % (
+                    db.database, db.host, db.port, db.username, db.password, item['table'])
+                    geom_column = ""
                 else:
-
-                # Second field is geometry in EWKB Hex format
-                    importstr += "\t" + self._wkbToEWkbHex(feature.geometry().asWkb(), srid)
-
-                # Finally, copy data attributes
-                for attrib in attribs:
-                    val = feature[attrib]
-
-                    if sipv1():
-                        # QGIS 1.x
-                        if val is None or val.type() == QVariant.Invalid or val.isNull():
-                            val = b"\\N"
-                        elif val.type() == QVariant.Date or val.type() == QVariant.DateTime:
-                            val = bytearray(val.toString(Qt.ISODate).encode('utf-8'))
-                            if not val:
-                                val = b"\\N"
-                        else:
-                            val = bytearray(unicode(val.toString()).encode('utf-8'))
-                            val = val.replace('\x00', '?')
-                            val = val.replace('\t', r"E'\t'")
-                            val = val.replace('\n', r"E'\n'")
-                            val = val.replace('\r', r"E'\r'")
-                            val = val.replace('\\', r"\\")
-                    else:
-                        # QGIS 2.x
-                        if val is None or isinstance(val, QPyNullVariant):
-                            val = b"\\N"
-                        elif isinstance(val, QDate) or isinstance(val, QDateTime):
-                            val = bytearray(val.toString(Qt.ISODate).encode('utf-8'))
-                            if not val:
-                                val = b"\\N"
-                        else:
-                            val = bytearray(unicode(val).encode('utf-8'))
-                            val = val.replace('\x00', '?')
-                            val = val.replace('\t', r"E'\t'")
-                            val = val.replace('\n', r"E'\n'")
-                            val = val.replace('\r', r"E'\r'")
-                            val = val.replace('\\', r"\\")
-                    importstr += b"\t" + val
-
-                importstr += b"\n"
+                    if not QGis.isMultiType(wkbType):
+                        wkbType = QGis.multiType(wkbType)
+        
+                    # Create table (pk='' => always generate a new primary key)
+                    cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"public\".\"%s\" (%s)" % (
+                        db.database, db.host, db.port, db.username, db.password, item['table'], geom_column
+                    )
+    
+                self.progress_label.setText(pystring(self.tr("Creating table '{table}'...")).format(table=item['table']))
+                QApplication.processEvents()
+    
+                if wkbType != QGis.WKBNoGeometry:
+                    # Check if SRID is known on database, otherwise create record
+                    cursor.execute("SELECT srid FROM public.spatial_ref_sys WHERE srid = %s" % layer.crs().postgisSrid())
+                    if not cursor.fetchone():
+                        try:
+                            cursor.execute("INSERT INTO public.spatial_ref_sys VALUES ({srid},'EPSG',{srid},'{wktstr}','{projstr}')".format(
+                                srid = layer.crs().postgisSrid(),
+                                wktstr = layer.crs().toWkt(),
+                                projstr = layer.crs().toProj4()))
+                            conn.commit()
+                        except Exception as e:
+                            conn.rollback()
+                            import_ok &= False
+                            messages += "Failed to create SRS record on database: " + str(e) + "\n"
+                            continue
+        
+    #                cursor.close()
+    
+                # TODO: Ask user for overwriting existing table
+                # The postgres provider is terribly slow at creating tables with
+                # many attribute columns in QGIS < 2.9.0
+                vectorLayerImport = PGVectorLayerImport(db, conn,  cursor, cloudUri, fields, wkbType, layer.crs(), True)
                 
-                # Upload in chunks
-                if (count % 100) == 0:
+                if vectorLayerImport.hasError():
+                    import_ok &= False
+                    messages += "VectorLayerImport-Error: "+vectorLayerImport.errorMessage() + "\n"
+                    continue
+                    
+                vectorLayerImport = None
+                
+                # Build import string
+                attribs = range(0, fields.count())
+                count = 0
+                importstr = bytearray()
+                ok = True
+    
+                self.progress_label.setText(self.tr("Uploading features..."))
+                QApplication.processEvents()
+                for feature in layer.getFeatures():
+                    # First field is primary key
+                    importstr += "%d" % count
+                    count += 1
+    
+                    if not feature.geometry():
+                        QgsMessageLog.logMessage(pystring(self.tr("Feature {id} of layer {layer} has no geometry")).format(
+                            id=feature.id(), layer=layer.name()), "QGISCloud")
+                    else:
+    
+                    # Second field is geometry in EWKB Hex format
+                        importstr += "\t" + self._wkbToEWkbHex(feature.geometry().asWkb(), srid)
+    
+                    # Finally, copy data attributes
+                    for attrib in attribs:
+                        val = feature[attrib]
+    
+                        if sipv1():
+                            # QGIS 1.x
+                            if val is None or val.type() == QVariant.Invalid or val.isNull():
+                                val = b"\\N"
+                            elif val.type() == QVariant.Date or val.type() == QVariant.DateTime:
+                                val = bytearray(val.toString(Qt.ISODate).encode('utf-8'))
+                                if not val:
+                                    val = b"\\N"
+                            else:
+                                val = bytearray(unicode(val.toString()).encode('utf-8'))
+                                val = val.replace('\x00', '?')
+                                val = val.replace('\t', r"E'\t'")
+                                val = val.replace('\n', r"E'\n'")
+                                val = val.replace('\r', r"E'\r'")
+                                val = val.replace('\\', r"\\")
+                        else:
+                            # QGIS 2.x
+                            if val is None or isinstance(val, QPyNullVariant):
+                                val = b"\\N"
+                            elif isinstance(val, QDate) or isinstance(val, QDateTime):
+                                val = bytearray(val.toString(Qt.ISODate).encode('utf-8'))
+                                if not val:
+                                    val = b"\\N"
+                            else:
+                                val = bytearray(unicode(val).encode('utf-8'))
+                                val = val.replace('\x00', '?')
+                                val = val.replace('\t', r"E'\t'")
+                                val = val.replace('\n', r"E'\n'")
+                                val = val.replace('\r', r"E'\r'")
+                                val = val.replace('\\', r"\\")
+                        importstr += b"\t" + val
+    
+                    importstr += b"\n"
+                    
+                    # Upload in chunks
+                    if (count % 100) == 0:
+                        try:
+                            cursor.copy_from(StringIO(importstr), '"public"."%s"' % item['table'])
+                        except Exception as e:
+                            messages += str(e) + "\n"
+                            ok = False
+                            break
+                        importstr = ""
+                        self.progress_label.setText(pystring(self.tr("{table}: {count} features uploaded")).format(
+                            table=item['table'], count=count))
+                        QApplication.processEvents()
+                    # Periodically update ui
+                    if (count % 10) == 0:
+                        QApplication.processEvents()
+    
+                if ok and importstr:
                     try:
                         cursor.copy_from(StringIO(importstr), '"public"."%s"' % item['table'])
                     except Exception as e:
                         messages += str(e) + "\n"
                         ok = False
-                        break
-                    importstr = ""
-                    self.progress_label.setText(pystring(self.tr("{table}: {count} features uploaded")).format(
-                        table=item['table'], count=count))
-                    QApplication.processEvents()
-                # Periodically update ui
-                if (count % 10) == 0:
-                    QApplication.processEvents()
-
-            if ok and importstr:
-                try:
-                    cursor.copy_from(StringIO(importstr), '"public"."%s"' % item['table'])
-                except Exception as e:
-                    messages += str(e) + "\n"
-                    ok = False
-
-            if ok:
-                try:
+    
+                if ok:
+                    try:
+                        conn.commit()
+                    except Exception as e:
+                        messages += str(e) + "\n"
+                        ok = False
+                else:
+                    conn.rollback()
+    
+                import_ok &= ok
+    
+                if ok:
+                    for layer in item['layers']:
+                        layers_to_replace[layer.id()] = {
+                            'layer': layer,
+                            'data_source': data_source,
+                            'db_name': db.database,
+                            'table_name': item['table'],
+                            'geom_column': geom_column
+                        }
+    
+                if wkbType != QGis.WKBNoGeometry:
+                    sql = 'create index "%s_%s_idx" on "public"."%s" using gist ("%s");' % (item['table'],  geom_column,  item['table'], geom_column)
+                    cursor.execute(sql)
                     conn.commit()
-                except Exception as e:
-                    messages += str(e) + "\n"
-                    ok = False
-            else:
-                conn.rollback()
-
-            import_ok &= ok
-
-            if ok:
-                for layer in item['layers']:
-                    layers_to_replace[layer.id()] = {
-                        'layer': layer,
-                        'data_source': data_source,
-                        'db_name': db.database,
-                        'table_name': item['table'],
-                        'geom_column': geom_column
-                    }
-
-            if wkbType != QGis.WKBNoGeometry:
-                sql = 'create index "%s_%s_idx" on "public"."%s" using gist ("%s");' % (item['table'],  geom_column,  item['table'], geom_column)
-                cursor.execute(sql)
-                conn.commit()
-            cursor.close()
-
+                
+        cursor.close()
         conn.close()
         self._replace_local_layers(layers_to_replace)
         self.progress_label.setText("")
@@ -250,6 +248,7 @@ class DataUpload(QObject):
     def _wkbToEWkbHex(self, wkb, srid, convertToMulti=False):
         try:
             wktType = struct.unpack("=i", wkb[1:5])[0] & 0xffffffff
+            
             if not QGis.isMultiType(wktType):
                 wktType = QGis.multiType(wktType) & 0xffffffff
                 wkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", 1) + wkb
@@ -266,7 +265,6 @@ class DataUpload(QObject):
         # define WKBMOFFSET  0x40000000
         # define WKBSRIDFLAG 0x20000000
         # define WKBBBOXFLAG 0x10000000
-
         if wktType >= 1000 and wktType < 2000:
             # Has Z
             wktType -= 1000
