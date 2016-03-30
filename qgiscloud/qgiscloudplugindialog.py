@@ -575,7 +575,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.statusBar().showMessage("")
 
     def reset_load_data(self):
-        self.update_local_data_sources([])
+        self.update_local_data_sources([],  [])
         self.ui.btnUploadData.setEnabled(False)
 
     def remove_layer(self, layer_id):

@@ -35,6 +35,7 @@ import psycopg2
 from StringIO import StringIO
 import struct
 import binascii
+from raster.raster_upload import RasterUpload
 
 from PGVectorLayerImport import PGVectorLayerImport
 
@@ -238,6 +239,10 @@ class DataUpload(QObject):
                     sql = 'create index "%s_%s_idx" on "public"."%s" using gist ("%s");' % (item['table'],  geom_column,  item['table'], geom_column)
                     cursor.execute(sql)
                     conn.commit()
+            elif layer.type() == QgsMapLayer.RasterLayer:
+                raster_source_list = [] 
+                raster_source_list.append(layer.source())
+                RasterUpload(conn,  cursor,  raster_source_list)
                 
         cursor.close()
         conn.close()
