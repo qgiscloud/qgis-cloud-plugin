@@ -38,6 +38,15 @@ def multiType(wkbType):
     if wkbType == QGis.WKBPolygon25D:
         return QGis.WKBMultiPolygon25D
     return wkbType
+#    
+#            QgsWKBTypes.MultiCurve: "MultiCurve",
+#            QgsWKBTypes.MultiSurface: "MultiSurface",
+#            QgsWKBTypes.MultiCurveZ: "MultiCurveZ",
+#            QgsWKBTypes.MultiSurfaceZ: "MultiSurfaceZ",
+#            QgsWKBTypes.MultiCurveM: "MultiCurveM",
+#            QgsWKBTypes.MultiSurfaceM: "MultiSurfaceM",
+#            QgsWKBTypes.MultiCurveZM: "MultiCurveZM",
+#            QgsWKBTypes.MultiSurfaceZM: "MultiSurfaceZM",    
 
 
 def isMultiType(wkbType):

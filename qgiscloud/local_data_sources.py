@@ -49,7 +49,6 @@ class LocalDataSources:
         local_layers = []
         local_raster_layers = []
         for layer in QgsMapLayerRegistry.instance().mapLayers().values():
-#            QMessageBox.information(None, '', str(layer.type()))
             if layer.id() == skip_layer_id:
                 continue
             if layer.type() != QgsMapLayer.PluginLayer:

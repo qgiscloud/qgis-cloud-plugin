@@ -146,6 +146,7 @@ class DataUpload(QObject):
                     if not feature.geometry():
                         QgsMessageLog.logMessage(pystring(self.tr("Feature {id} of layer {layer} has no geometry")).format(
                             id=feature.id(), layer=layer.name()), "QGISCloud")
+
                     else:
     
                     # Second field is geometry in EWKB Hex format
