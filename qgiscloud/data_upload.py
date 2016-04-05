@@ -243,6 +243,13 @@ class DataUpload(QObject):
                 raster_source_list = [] 
                 raster_source_list.append(layer.source())
                 RasterUpload(conn,  cursor,  raster_source_list)
+                layers_to_replace[layer.id()] = {
+                            'layer': layer,
+                            'data_source': layer.source(),
+                            'db_name': db.database,
+                            'table_name': item['table'],
+                            'geom_column': 'rast'
+                        }
                 
         cursor.close()
         conn.close()
@@ -298,8 +305,9 @@ class DataUpload(QObject):
             layers.reverse()
             for layer in layers:
                 layer_id = layer.id()
+                
                 if layer_id in layers_to_replace:
-                    # replace local layer
+                    # replace local layers
                     layer_info = layers_to_replace[layer_id]
                     self.replace_local_layer(
                         layer_info['layer'],
@@ -318,17 +326,23 @@ class DataUpload(QObject):
                             QgsMapLayerRegistry.instance().addMapLayer(target_layer)
                             self.iface.legendInterface().setLayerVisible(target_layer, self.iface.legendInterface().isLayerVisible(source_layer))
                             QgsMapLayerRegistry.instance().removeMapLayer(layer_id)
+                    elif source_layer.type() == QgsMapLayer.RasterLayer:
+                        QMessageBox.information(None, '', 'Hallo')
 
     def replace_local_layer(self, local_layer, data_source, db_name, table_name, geom_column):
         self.status_bar.showMessage(u"Replace layer %s ..." % local_layer.name())
-
-        # create remote layer
+        
+#        if local_layer.type() == QgsMapLayer.VectorLayer:
+            # create remote layer
         uri = self.db_connections.cloud_layer_uri(db_name, table_name, geom_column)
         
         #Workaround for loading geometryless layers
         uri2 = QgsDataSourceURI(uri.uri().replace(' ()',  ''))
         
         remote_layer = QgsVectorLayer(uri2.uri(), local_layer.name(), 'postgres')
+#        elif local_layer.type() == QgsMapLayer.RasterLayer:
+#           pass
+        
         if remote_layer.isValid():
             self.copy_layer_settings(local_layer, remote_layer)
 

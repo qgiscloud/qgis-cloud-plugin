@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project QGIS Cloud Plugin -->
-<!-- Saved: 2016-03-30, 09:07:43 -->
+<!-- Saved: 2016-04-04, 18:23:10 -->
 <!-- Copyright (C) 2016 ,  -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -68,7 +68,9 @@
     <Resource>resources.qrc</Resource>
   </Resources>
   <Interfaces/>
-  <Others/>
+  <Others>
+    <Other>metadata.txt</Other>
+  </Others>
   <MainScript>qgiscloudplugin.py</MainScript>
   <Vcs>
     <VcsType>None</VcsType>

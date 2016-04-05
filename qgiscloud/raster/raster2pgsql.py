@@ -412,7 +412,7 @@ def make_sql_addrastercolumn(options, pixeltypes, nodata, pixelsize, blocksize, 
                    extent[2][0], extent[2][1], extent[3][0], extent[3][1],
                    extent[0][0], extent[0][1], options.srid)
 
-    sql = "SELECT AddRasterConstraints('%s','%s','%s',%d, %s, %s, %s, %s, %.15f, %.15f, %s, %s, %s);\n" % \
+    sql = "SELECT AddRasterColumn('%s','%s','%s',%d, %s, %s, %s, %s, %.15f, %.15f, %s, %s, %s);\n" % \
            (ts[0], ts[1], options.column, options.srid, pt, odb, rb, nd,
             pixelsize[0], pixelsize[1], bs[0], bs[1], extgeom)
 
