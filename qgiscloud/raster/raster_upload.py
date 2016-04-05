@@ -85,7 +85,6 @@ class RasterUpload():
 #        opts.create_raster_overviews_table = 1
         opts.vacuum = 1
         opts.index = 1
-        opts.table = os.path.splitext(os.path.basename(raster[0]))[0] 
         
         self.upload_string = 'BEGIN;\n'
                   
@@ -94,7 +93,9 @@ class RasterUpload():
     
         # Burn all specified input raster files into single WKTRaster table
         gt = None
-        for infile in raster:
+        for inLayer in raster:
+            opts.srid = inLayer.dataProvider().crs().postgisSrid()
+            infile = inLayer.source()
             opts.table = os.path.splitext(os.path.basename(infile))[0]
             
    # If overviews requested, CREATE TABLE raster_overviews
@@ -121,11 +122,16 @@ class RasterUpload():
         if opts.index  is not None:
             sql = self.make_sql_create_gist(opts.table,  opts.column)
             self.upload_string += sql
+            
+        sql = self.make_sql_addrastercolumn(opts)
+        self.upload_string += sql
+            
         
         # COMMIT
         self.upload_string += 'END;\n'
             
-#        QMessageBox.information(None, '',  self.upload_string)
+#        print self.upload_string
+        
         cursor.execute(self.upload_string)
         conn.commit
         
@@ -437,37 +443,12 @@ class RasterUpload():
         return sql;
     
     
-    def make_sql_addrastercolumn(self,  options, pixeltypes, nodata, pixelsize, blocksize, extent):
+    def make_sql_addrastercolumn(self,  options):
         ts = self.make_sql_schema_table_names(options.table)
-        pt = self.make_sql_value_array(pixeltypes)
-    
-        nd = 'null'
-        if nodata is not None and len(nodata) > 0:
-            nd = self.make_sql_value_array(nodata)
-    
-        odb = 'false'
-        if options.register:
-            odb = 'true'
-    
-        rb = 'false'
-        extgeom = 'null'
-        bs = ( 'null', 'null' )
-        # Check if regular blocking mode requested
-        if options.block_size is not None:
-            rb = 'true'
-            bs = ( blocksize[0], blocksize[1] )
-            extgeom = "ST_Envelope(ST_SetSRID('POLYGON((%.15f %.15f,%.15f %.15f,%.15f %.15f,%.15f %.15f,%.15f %.15f))'::geometry, %d))" % \
-                      (extent[0][0], extent[0][1], extent[1][0], extent[1][1],
-                       extent[2][0], extent[2][1], extent[3][0], extent[3][1],
-                       extent[0][0], extent[0][1], options.srid)
-    
-            sql = "SELECT AddRasterConstraints('%s','%s','%s',%d, %s, %s, %s, %s, %.15f, %.15f, %s, %s, %s);\n" % \
-                   (ts[0], ts[1], options.column, options.srid, pt, odb, rb, nd,
-                    pixelsize[0], pixelsize[1], bs[0], bs[1], extgeom)
                 
-#        sql = "SELECT AddRasterConstraints('%s','%s','%s',TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,TRUE,TRUE,TRUE,TRUE,FALSE);" \
-#                   % (ts[0],  ts[1],  options.column)
-        QMessageBox.information(None, '', sql)
+        sql = "SELECT AddRasterConstraints('%s','%s','%s',TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE);" \
+                   % (ts[0],  ts[1],  options.column)
+
         return sql
     
     def make_sql_insert_raster(self,  table, rast, hexwkb):
@@ -677,8 +658,8 @@ class RasterUpload():
                             r = float (dimY) /  float (i)
                             
                         r = r -  float (d)
-                        print i,  r,  _r
-                        if  abs(_r   -  (-1)) <= 0.01 or r < _r  or  abs(_r   -  r ) <= 0.01:
+#                        print i,  r,  _r
+                        if  abs(_r   -  (-1)) <= 0.001 or r < _r  or  abs(_r   -  r ) <= 0.001:
                             _r = r
                             _i = i
                                 
@@ -895,9 +876,6 @@ class RasterUpload():
                 pixel_types = self.collect_pixel_types(ds, band_from, band_to)
                 nodata_values = self.collect_nodata_values(ds, band_from, band_to)
                 extent = self.calculate_bounding_box(ds, gt)
-                sql = self.make_sql_addrastercolumn(options, pixel_types, nodata_values,
-                                               pixel_size, block_size, extent)
-                self.upload_string += sql
             gen_table = options.table
             
         else:

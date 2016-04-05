@@ -240,9 +240,9 @@ class DataUpload(QObject):
                     cursor.execute(sql)
                     conn.commit()
             elif layer.type() == QgsMapLayer.RasterLayer:
-                raster_source_list = [] 
-                raster_source_list.append(layer.source())
-                RasterUpload(conn,  cursor,  raster_source_list)
+                raster_layer_list = [] 
+                raster_layer_list.append(layer)
+                RasterUpload(conn,  cursor,  raster_layer_list)
                 layers_to_replace[layer.id()] = {
                             'layer': layer,
                             'data_source': layer.source(),
@@ -332,24 +332,29 @@ class DataUpload(QObject):
     def replace_local_layer(self, local_layer, data_source, db_name, table_name, geom_column):
         self.status_bar.showMessage(u"Replace layer %s ..." % local_layer.name())
         
-#        if local_layer.type() == QgsMapLayer.VectorLayer:
+        if local_layer.type() == QgsMapLayer.VectorLayer:
             # create remote layer
-        uri = self.db_connections.cloud_layer_uri(db_name, table_name, geom_column)
-        
-        #Workaround for loading geometryless layers
-        uri2 = QgsDataSourceURI(uri.uri().replace(' ()',  ''))
-        
-        remote_layer = QgsVectorLayer(uri2.uri(), local_layer.name(), 'postgres')
-#        elif local_layer.type() == QgsMapLayer.RasterLayer:
-#           pass
+            uri = self.db_connections.cloud_layer_uri(db_name, table_name, geom_column)
+            
+            #Workaround for loading geometryless layers
+            uri2 = QgsDataSourceURI(uri.uri().replace(' ()',  ''))
+            
+            remote_layer = QgsVectorLayer(uri2.uri(), local_layer.name(), 'postgres')
+        elif local_layer.type() == QgsMapLayer.RasterLayer:
+            uri = self.db_connections.cloud_layer_uri(db_name, table_name, geom_column)
+            connString = "PG: dbname=%s host=%s user=%s password=%s port=%s mode=2 schema=public column=rast table=%s" \
+                  % (uri.database(), uri.host(),  uri.database(),  uri.password(),  uri.port(),  local_layer.name() )
+
+            remote_layer = QgsRasterLayer( connString, local_layer.name() )   
         
         if remote_layer.isValid():
             self.copy_layer_settings(local_layer, remote_layer)
 
             # add remote layer
             QgsMapLayerRegistry.instance().addMapLayer(remote_layer)
-            remote_layer.updateExtents()
-            self.iface.legendInterface().setLayerVisible(remote_layer, self.iface.legendInterface().isLayerVisible(local_layer))
+            if remote_layer.type() == QgsVectorLayer:
+                remote_layer.updateExtents()
+                self.iface.legendInterface().setLayerVisible(remote_layer, self.iface.legendInterface().isLayerVisible(local_layer))
 
             # remove local layer
             QgsMapLayerRegistry.instance().removeMapLayer(local_layer.id())
@@ -358,7 +363,9 @@ class DataUpload(QObject):
 
     def copy_layer_settings(self, source_layer, target_layer):
         # copy filter
-        target_layer.setSubsetString(source_layer.subsetString())
+        
+        if target_layer.type() == QgsVectorLayer:
+            target_layer.setSubsetString(source_layer.subsetString())
 
         # copy symbology
         error = ""
