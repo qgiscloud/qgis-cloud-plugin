@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project QGIS Cloud Plugin -->
-<!-- Saved: 2016-04-05, 13:36:55 -->
+<!-- Saved: 2016-04-05, 16:27:14 -->
 <!-- Copyright (C) 2016 ,  -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -41,7 +41,6 @@
     <Source>qgiscloudplugin.py</Source>
     <Source>qgiscloudplugindialog.py</Source>
     <Source>raster/__init__.py</Source>
-    <Source>raster/raster2pgsql.py</Source>
     <Source>raster/raster_upload.py</Source>
     <Source>resources_rc.py</Source>
     <Source>simplejson/__init__.py</Source>

@@ -430,8 +430,6 @@ class QgisCloudPluginDialog(QDockWidget):
                 return
             self.db_connections = DbConnections()
             for db in db_list:
-                # db example:
-                # {"host":"spacialdb.com","connection_string":"postgres://sekpjr_jpyled:d787b609@spacialdb.com:9999/sekpjr_jpyled","name":"sekpjr_jpyled","username":"sekpjr_jpyled","port":9999,"password":"d787b609"}
                 self.db_connections.add_from_json(db)
 
             self.ui.tabDatabases.clear()
@@ -767,7 +765,10 @@ class QgisCloudPluginDialog(QDockWidget):
                 self.data_sources_table_names[data_source] = table_name
 
     def activate_upload_button(self):
-        self.ui.btnUploadData.setEnabled(self.local_data_sources.count() > 0)
+        if not self.storage_exceeded:
+            self.ui.btnUploadData.setEnabled(self.local_data_sources.count() > 0)
+        else:
+            self.ui.btnUploadData.setDisabled(self.storage_exceeded)
 
     def upload_data(self):
         if self.check_login():
@@ -925,6 +926,7 @@ class QgisCloudPluginDialog(QDockWidget):
 
         lblPalette = QPalette(self.ui.lblDbSize.palette())
         usage = usedSpace / float(self.maxSize)
+        self.storage_exceeded = False
     
         if usage < 0.8:
             bg_color = QColor(255, 0, 0, 0)
@@ -935,6 +937,7 @@ class QgisCloudPluginDialog(QDockWidget):
         elif usage >= 1:
             bg_color = QColor(255, 0, 0, 255)
             text_color = QColor(Qt.white)
+            self.storage_exceeded = True
 
         lblPalette.setColor(QPalette.Window, QColor(bg_color))
         lblPalette.setColor(QPalette.Foreground,QColor(text_color))
@@ -948,3 +951,4 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.lblDbSizeUpload.setPalette(lblPalette)
         self.ui.lblDbSizeUpload.setText(
             self.tr("Used DB Storage: ") + "%d / %d MB" % (usedSpace, self.maxSize))
+        self.ui.btnUploadData.setDisabled(self.storage_exceeded)

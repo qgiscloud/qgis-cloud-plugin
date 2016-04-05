@@ -49,7 +49,7 @@ class DbConnections:
 
     def refreshed(self):
         return self._dbs_refreshed
-
+        
     def refresh(self, user):
         cloud_connections_key = u"/qgiscloud/connections/%s" % user
         settings = QSettings()
