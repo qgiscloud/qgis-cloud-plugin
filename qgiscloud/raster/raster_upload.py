@@ -34,6 +34,7 @@ from osgeo import gdal
 from osgeo import osr
 import osgeo.gdalconst as gdalc
 from optparse import OptionParser, OptionGroup
+from StringIO import StringIO
 import binascii
 import glob
 import math
@@ -70,8 +71,11 @@ VERBOSE = False
 SUMMARY = []
 
 class RasterUpload():
-    def __init__(self,  conn,  cursor,  raster):
-    
+    def __init__(self,  conn,  cursor,  raster,  progress_label):
+        self.cursor = cursor
+        self.conn = conn
+        self.progress_label = progress_label
+        
         (opts, args) = self.parse_options()
         
         opts.version = g_rt_version
@@ -80,13 +84,13 @@ class RasterUpload():
         opts.create_table = 1
         opts.drop_table = 1
         opts.overview_level = 1
-#        opts.register = 1
         opts.block_size = 'auto'
 #        opts.create_raster_overviews_table = 1
-        opts.vacuum = 1
+#        opts.vacuum = 1
         opts.index = 1
         
-        self.upload_string = 'BEGIN;\n'
+#        self.upload_string = 'BEGIN;\n'
+        self.upload_string = ""
                   
         # INSERT
         i = 0
@@ -114,31 +118,29 @@ class RasterUpload():
                 if opts.create_table and opts.overview_level == 1:
                     sql = self.make_sql_create_table(opts,  opts.table)
                     self.upload_string += sql      
-                
+                    
+                    
+            self.progress_label.setText(pystring("Creating table '{table}'...").format(table=opts.table))
+            QApplication.processEvents()
+
+            self.cursor.execute(self.upload_string)
+            self.conn.commit
+        
             gt = self.wkblify_raster(opts,  infile.replace( '\\', '/') , i, gt)
             i += 1
     
         # INDEX
         if opts.index  is not None:
-            sql = self.make_sql_create_gist(opts.table,  opts.column)
-            self.upload_string += sql
+            self.cursor.execute(self.make_sql_create_gist(opts.table,  opts.column))
+            self.conn.commit()
             
-        sql = self.make_sql_addrastercolumn(opts)
-        self.upload_string += sql
-            
-        
-        # COMMIT
-        self.upload_string += 'END;\n'
-            
-#        print self.upload_string
-        
-        cursor.execute(self.upload_string)
-        conn.commit
+        self.cursor.execute(self.make_sql_addrastercolumn(opts))
+        self.conn.commit()
         
                 # VACUUM
-        if opts.vacuum is not None:
-            cursor.execute(self.make_sql_vacuum(opts.table))
-            conn.commit
+#        if opts.vacuum is not None:
+#            self.cursor.execute(self.make_sql_vacuum(opts.table))
+#            self.conn.commit
         
         
 
@@ -223,64 +225,6 @@ class RasterUpload():
         
         (opts, args) = prs.parse_args()
         return opts,  args
-
-        
-        
-#        # Validate options
-#        if opts.create_table and opts.drop_table and opts.append_table:
-#            prs.error("options -c, -a and -d are mutually exclusive")
-#        if opts.create_table and opts.drop_table:
-#            prs.error("options -c and -d are mutually exclusive")
-#        if opts.create_table and opts.append_table:
-#            prs.error("options -c and -a are mutually exclusive")
-#        if opts.append_table and opts.drop_table:
-#            prs.error("options -a and -d are mutually exclusive")
-#        if (not opts.create_table and not opts.drop_table and not opts.append_table) or opts.drop_table:
-#            opts.create_table = True
-#    
-#        if opts.raster is None:
-#            prs.error("use option -r to specify at least one input raster. Wildcards (?,*) are accepted.")
-#    
-#        if opts.block_size is not None and len(opts.raster) != 1:
-#            prs.error("regular blocking supports single-raster input only")
-#    
-#        if opts.block_size is not None:
-#            if len(opts.block_size.split('x')) != 2 and len(opts.block_size.split('X')) != 2:
-#                prs.error("invalid format of block size, expected WIDTHxHEIGHT")
-#    
-#        if opts.overview_level > 1 and opts.block_size is None:
-#            prs.error("regular blocking mode required to enable overviews support (level > 1)")
-#    
-#        if opts.create_raster_overviews_table and opts.overview_level <= 1:
-#            prs.error('create table for RASTER_OVERVIEWS available only if overviews import requested')
-#    
-#        # XXX: Now, if --band=Nth, then only Nth band of all specified rasters is dumped/imported
-#        #      This behavior can be changed to support only single-raster input if --band option used.
-#        #if opts.band is not None and len(opts.raster) > 1:
-#        #    prs.error("option -b requires single input raster only, specify -r option only once")
-#    
-#        if opts.table is None:
-#            prs.error("use option -t to specify raster destination table")
-#        if len(opts.table.split('.')) > 2:
-#            prs.error("invalid format of table name specified with option -t, expected [<schema>.]table")
-#    
-#        if opts.output is None:
-#            prs.error("failed to initialise output file, try to use option -o explicitly")
-#    
-#        if opts.version is not None:
-#            if opts.version != g_rt_version:
-#                prs.error("invalid version of WKT Raster protocol specified, only version 0 is supported")
-#        else:
-#            prs.error("use option -w to specify version of WKT Raster protocol")
-#    
-#        if opts.endian is not None:
-#            if opts.endian != NDR and opts.endian != XDR:
-#                prs.error("invalid endianness value, valid ones are 0 for NDR or 1 for XDR")
-#        else:
-#            prs.error("use option -e to specify endianness of binary output")
-#    
-#        QMessageBox.information(None,  '',  str(opts))
-#        return (opts, args)
     
     
     def logit(self,  msg):
@@ -454,12 +398,18 @@ class RasterUpload():
     def make_sql_insert_raster(self,  table, rast, hexwkb):
         sql = "INSERT INTO %s ( %s ) VALUES ( (\'%s\')::raster );\n" \
                   % (self.make_sql_full_table_name(table), rast, hexwkb)
+
+#        sql = "COPY %s ( %s ) FROM stdin;\n" \
+#                  % (self.make_sql_full_table_name(table), hexwkb)                  
         return sql
         
     def make_sql_create_raster_overviews(self,  options):
-        schema = self.make_sql_schema_table_names(options.table)[0]
-        ov_table = 'o_'+str(options.overview_level)+'_'+options.table
-        sql = "CREATE TABLE %s.%s (rid serial, %s raster); \n" % (schema,  ov_table,  options.column)
+
+        sql = ""
+
+        for level in options.overview_level.split(","):
+          sql += "select st_createoverview('%s'::regclass, '%s'::name, %s);\n" % (options.table,  'rast',  level)
+          
         return sql
     
     
@@ -565,7 +515,6 @@ class RasterUpload():
     
     def calculate_grid_size(self,  raster_size, block_size):
         """Dimensions of grid made up with blocks of requested size"""
-    
         # Exact number of grid dimensions
         nx = float(raster_size[0]) / float(block_size[0])
         ny = float(raster_size[1]) / float(block_size[1])
@@ -668,7 +617,7 @@ class RasterUpload():
                 else:
                    tileY = _i
                        
-        return tileX,  tileY
+        return int (tileX),  int (tileY)
 
 
 
@@ -895,7 +844,10 @@ class RasterUpload():
         # Write (original) raster to hex binary output
         tile_count = 0
         hexwkb = ''
-    
+#        sql = "COPY %s ( %s ) FROM stdin;\n" % (self.make_sql_full_table_name(gen_table), options.column)       
+#        self.upload_string += sql
+        self.progress_label.setText("Uploading tiles...")
+        
         for ycell in range(0, grid_size[1]):
             for xcell in range(0, grid_size[0]):
     
@@ -916,12 +868,25 @@ class RasterUpload():
                     hexwkb += self.wkblify_band(options, band, level, xoff, yoff, read_block_size, block_size, infile, b)
     
                 # INSERT INTO
-                self.check_hex(hexwkb) # TODO: Remove to not to decrease performance
-                sql = self.make_sql_insert_raster(gen_table, options.column, hexwkb)
-                self.upload_string += sql
+#                self.check_hex(hexwkb) # TODO: Remove to not to decrease performance
+#                sql = self.make_sql_insert_raster(gen_table, options.column, hexwkb)
+                
+                self.cursor.copy_from(StringIO(str(tile_count)+"\t"+hexwkb), '"public"."%s"' % gen_table)
+                
+#                self.upload_string += sql
                 
                 tile_count = tile_count + 1
+                
+#                self.progress_label.setText(pystring("{table}: {count} tiles uploaded").format(
+#                    table=gen_table, count=tile_count))
+#                QApplication.processEvents()
+            # Periodically update ui
+                if (tile_count % 50) == 0:
+                    self.progress_label.setText(pystring("{table}: {count} of {sum_tiles} tiles uploaded").format(
+                        table=gen_table, count=tile_count,  sum_tiles= grid_size[0]*grid_size[1]))                
+                    QApplication.processEvents()
     
+        self.conn.commit()
         return (gen_table, tile_count)
     
     def wkblify_raster(self,  options, infile, i, previous_gt = None):

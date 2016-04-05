@@ -190,7 +190,6 @@ class DataUpload(QObject):
                         importstr += b"\t" + val
     
                     importstr += b"\n"
-                    
                     # Upload in chunks
                     if (count % 100) == 0:
                         try:
@@ -242,7 +241,7 @@ class DataUpload(QObject):
             elif layer.type() == QgsMapLayer.RasterLayer:
                 raster_layer_list = [] 
                 raster_layer_list.append(layer)
-                RasterUpload(conn,  cursor,  raster_layer_list)
+                RasterUpload(conn,  cursor,  raster_layer_list,  self.progress_label)
                 layers_to_replace[layer.id()] = {
                             'layer': layer,
                             'data_source': layer.source(),

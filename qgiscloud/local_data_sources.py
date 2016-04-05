@@ -65,6 +65,7 @@ class LocalDataSources:
                         unsupported_layers.append(layer)
 
             elif provider == "gdal":
+                print layer.dataProvider().metadata()
                 if layer.dataProvider().metadata()[0:13] == "PostGISRaster":
                     # FIXME: Temporary workaround for buggy QgsDataSourceURI parser which fails to parse URI strings starting with PG:
                     uri = layer.dataProvider().dataSourceUri()
@@ -75,6 +76,8 @@ class LocalDataSources:
                     # GDAL TMS layer from OpenLayers plugin (> 1.3.6)
                     pass
                 elif layer.dataProvider().metadata()[0:5] == "GTiff":
+                    local_raster_layers.append(layer)
+                elif layer.dataProvider().metadata()[0:3] == "VRT":
                     local_raster_layers.append(layer)
                 else:
                     unsupported_layers.append(layer)

@@ -657,9 +657,9 @@ class QgisCloudPluginDialog(QDockWidget):
                 table_name = self.data_sources_table_names[data_source]
                 
             table_name_item = QTableWidgetItem(QgisCloudPluginDialog.launder_pg_name(table_name))
-            
+        
             if layers[0].providerType() == 'gdal':
-                geometry_type_item = QTableWidgetItem('GTiff')
+                geometry_type_item = QTableWidgetItem('Raster')
             else:
                 wkbType = layers[0].wkbType()
                 
