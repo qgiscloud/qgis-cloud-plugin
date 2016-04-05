@@ -847,6 +847,7 @@ class RasterUpload():
 #        sql = "COPY %s ( %s ) FROM stdin;\n" % (self.make_sql_full_table_name(gen_table), options.column)       
 #        self.upload_string += sql
         self.progress_label.setText("Uploading tiles...")
+        importString = ""
         
         for ycell in range(0, grid_size[1]):
             for xcell in range(0, grid_size[0]):
@@ -867,25 +868,19 @@ class RasterUpload():
                     hexwkb += self.wkblify_band_header(options, band)
                     hexwkb += self.wkblify_band(options, band, level, xoff, yoff, read_block_size, block_size, infile, b)
     
-                # INSERT INTO
-#                self.check_hex(hexwkb) # TODO: Remove to not to decrease performance
-#                sql = self.make_sql_insert_raster(gen_table, options.column, hexwkb)
-                
-                self.cursor.copy_from(StringIO(str(tile_count)+"\t"+hexwkb), '"public"."%s"' % gen_table)
-                
-#                self.upload_string += sql
-                
+                # Creating COPY String
+                importString += str(tile_count)+"\t"+hexwkb+"\n"
                 tile_count = tile_count + 1
                 
-#                self.progress_label.setText(pystring("{table}: {count} tiles uploaded").format(
-#                    table=gen_table, count=tile_count))
-#                QApplication.processEvents()
             # Periodically update ui
-                if (tile_count % 50) == 0:
+                if (tile_count % 1000) == 0:
+                    self.cursor.copy_from(StringIO(importString), '"public"."%s"' % gen_table)
+                    importString = ""
                     self.progress_label.setText(pystring("{table}: {count} of {sum_tiles} tiles uploaded").format(
                         table=gen_table, count=tile_count,  sum_tiles= grid_size[0]*grid_size[1]))                
                     QApplication.processEvents()
-    
+
+        self.cursor.copy_from(StringIO(importString), '"public"."%s"' % gen_table)
         self.conn.commit()
         return (gen_table, tile_count)
     
