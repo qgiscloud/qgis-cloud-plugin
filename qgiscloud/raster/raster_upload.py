@@ -402,14 +402,6 @@ class RasterUpload(QObject):
                    % (ts[0],  ts[1],  options.column)
 
         return sql
-    
-    def make_sql_insert_raster(self,  table, rast, hexwkb):
-        sql = "INSERT INTO %s ( %s ) VALUES ( (\'%s\')::raster );\n" \
-                  % (self.make_sql_full_table_name(table), rast, hexwkb)
-
-#        sql = "COPY %s ( %s ) FROM stdin;\n" \
-#                  % (self.make_sql_full_table_name(table), hexwkb)                  
-        return sql
         
     def make_sql_create_raster_overviews(self,  options):
 
