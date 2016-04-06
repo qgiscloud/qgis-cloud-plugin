@@ -1,16 +1,9 @@
-# This is a simple utility used to dump GDAL dataset into HEX WKB stream.
-# It's considered as a prototype of raster2pgsql tool planned to develop
-# in future.
-# For more details about raster2pgsql tool, see Specification page:
-# http://trac.osgeo.org/postgis/wiki/WKTRaster
-#
-# The script requires Python bindings for GDAL.
-# Available at http://trac.osgeo.org/gdal/wiki/GdalOgrInPython
-#
 ################################################################################
 # Copyright (C) 2009-2010 Mateusz Loskot <mateusz@loskot.net>
 # Copyright (C) 2009-2011 Pierre Racine <pierre.racine@sbf.ulaval.ca>
 # Copyright (C) 2009-2010 Jorge Arevalo <jorge.arevalo@deimos-space.com>
+#
+# Modified for QGIS Cloud Plugin April 2016 by Horst Duester <horst.duester@sourcepole.ch>
 # 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -70,14 +63,26 @@ g_rt_schema = 'public'
 VERBOSE = False
 SUMMARY = []
 
-class RasterUpload():
+class RasterUpload(QObject):
     def __init__(self,  conn,  cursor,  raster,  progress_label):
+        QObject.__init__(self)
         self.cursor = cursor
         self.conn = conn
         self.progress_label = progress_label
+        self.messages = ""
         
         (opts, args) = self.parse_options()
         
+        
+#            for layer in layers:
+#                layer_id = layer.id()
+#                layer_info = raster[layer_id]
+#                layer_info['layer'],
+#                layer_info['data_source'],
+#                layer_info['db_name'],
+#                layer_info['table_name'],
+#                layer_info['geom_column']
+                        
         opts.version = g_rt_version
         opts.endian = NDR
         opts.column = 'rast'
@@ -89,7 +94,6 @@ class RasterUpload():
 #        opts.vacuum = 1
         opts.index = 1
         
-#        self.upload_string = 'BEGIN;\n'
         self.upload_string = ""
                   
         # INSERT
@@ -97,16 +101,14 @@ class RasterUpload():
     
         # Burn all specified input raster files into single WKTRaster table
         gt = None
-        for inLayer in raster:
-            opts.srid = inLayer.dataProvider().crs().postgisSrid()
-            infile = inLayer.source()
-            opts.table = os.path.splitext(os.path.basename(infile))[0]
-            
-   # If overviews requested, CREATE TABLE raster_overviews
-            if opts.create_raster_overviews_table:
-                sql = self.make_sql_create_raster_overviews(opts)
-                self.upload_string += sql
         
+        for layer_id in raster.keys():
+#            layer_id = inLayer.id()
+            layer_info = raster[layer_id]
+            opts.srid = layer_info['layer'].dataProvider().crs().postgisSrid()
+            infile = layer_info['data_source']
+            opts.table = layer_info['table_name']
+                    
             # Base raster schema
             if opts.overview_level == 1:
                 # DROP TABLE
@@ -117,10 +119,9 @@ class RasterUpload():
                 # CREATE TABLE
                 if opts.create_table and opts.overview_level == 1:
                     sql = self.make_sql_create_table(opts,  opts.table)
-                    self.upload_string += sql      
+                    self.upload_string += sql                          
                     
-                    
-            self.progress_label.setText(pystring("Creating table '{table}'...").format(table=opts.table))
+            self.progress_label.setText(pystring(self.tr("Creating table '{table}'...").format(table=opts.table)))
             QApplication.processEvents()
 
             self.cursor.execute(self.upload_string)
@@ -128,7 +129,14 @@ class RasterUpload():
         
             gt = self.wkblify_raster(opts,  infile.replace( '\\', '/') , i, gt)
             i += 1
-    
+
+   # If overviews requested,create raster_overviews
+        if opts.create_raster_overviews_table:
+            self.progress_label.setText(pystring(self.tr("Creating overviews for table '{table}'...").format(table=opts.table)))
+            QApplication.processEvents()
+            self.cursor.execute(self.make_sql_create_raster_overviews(opts))
+            self.conn.commit()
+                
         # INDEX
         if opts.index  is not None:
             self.cursor.execute(self.make_sql_create_gist(opts.table,  opts.column))
@@ -145,8 +153,8 @@ class RasterUpload():
         
 
     
-    ################################################################################
-    
+    ################################################################################ 
+        
     def is_nan(self,  x):
         if sys.hexversion < 0x02060000:
             return str(float(x)).lower() == 'nan'
@@ -623,16 +631,12 @@ class RasterUpload():
 
     def dump_block_numpy(self,  pixels):
         assert pixels.ndim == 2
-    #    print 'BEGIN BLOCK SCANLINES (numpy): (%d, %d)' % (len(pixels[0]), len(pixels))
     
         i = 0
         for row in range (0, len(pixels)):
             s = binascii.hexlify(pixels[row])
-    #        print '%d (%d)\t%s' % (i, (len(s) / 2), s)
             i = i + 1
-    
-    #    print 'END BLOCK SCANLINES'
-    
+        
     def fetch_band_nodata(self,  band, default = 0):
         assert band is not None
     
@@ -652,12 +656,7 @@ class RasterUpload():
         # Binary to HEX
         fmt_little = '<' +fmt
         hexstr = binascii.hexlify(struct.pack(fmt_little, data)).upper()
-    
-        # String'ify raw value for log
-        valfmt = '\'' + self.fmt2printfmt(fmt[len(fmt) - 1]) + '\''
-        val = valfmt % data
 
-    
         return hexstr
     
     def wkblify_raster_header(self,  options, ds, level, ulp, xsize = None, ysize = None):
@@ -674,10 +673,6 @@ class RasterUpload():
         rt_ip = ( ul[0], ul[1] )
         rt_skew = ( gt[2], gt[4] )
         rt_scale = ( gt[1] * level, gt[5] * level )
-        
-        # TODO: Any way to lookup for SRID based on SRS in WKT?
-        #srs = osr.SpatialReference()
-        #srs.ImportFromWkt(ds.GetProjection())
     
         # Burn input raster as WKTRaster WKB format
         hexwkb = ''
@@ -690,7 +685,7 @@ class RasterUpload():
             hexwkb += self.wkblify('H', 1)
         else:
             hexwkb += self.wkblify('H', ds.RasterCount)
-        self.check_hex(hexwkb, 5)
+#        self.check_hex(hexwkb, 5)
         ### Georeference
         hexwkb += self.wkblify('d', rt_scale[0])
         hexwkb += self.wkblify('d', rt_scale[1])
@@ -699,11 +694,11 @@ class RasterUpload():
         hexwkb += self.wkblify('d', rt_skew[0])
         hexwkb += self.wkblify('d', rt_skew[1])
         hexwkb += self.wkblify('i', options.srid)
-        self.check_hex(hexwkb, 57)
+#        self.check_hex(hexwkb, 57)
         ### Number of columns and rows
         hexwkb += self.wkblify('H', xsize)
         hexwkb += self.wkblify('H', ysize)
-        self.check_hex(hexwkb, 61)
+#        self.check_hex(hexwkb, 61)
     
         return hexwkb
     
@@ -732,7 +727,7 @@ class RasterUpload():
         # Encode nodata value (or Zero, if nodata unavailable) 
         hexwkb += self.wkblify(self.pt2fmt(pixtype), nodata)
     
-        self.check_hex(hexwkb)
+#        self.check_hex(hexwkb)
         return hexwkb
     
     def wkblify_band(self,  options, band, level, xoff, yoff, read_block_size, block_size, infile, bandidx):
@@ -741,11 +736,6 @@ class RasterUpload():
         hexwkb = ''
         
         if options.register:
-            # Off-db raster
-            # TODO: Do we want to handle options.overview_level? --mloskot
-            # ANSWER: 
-            # TODO: Where bandidx and ds come from? --mloskot
-            # ANSWER: Provided by caller method --jorgearevalo
             hexwkb += self.wkblify('B', bandidx - 1)
             filepath = os.path.abspath(infile.replace('\\', '\\\\'))
             hexwkb += self.wkblify(str(len(filepath)) + 's', filepath)
@@ -771,8 +761,6 @@ class RasterUpload():
             pixels = band.ReadAsArray(xoff, yoff, valid_read_block_size[0], valid_read_block_size[1],
                                       target_block_size[0], target_block_size[1])
     
-            # XXX: Use for debugging only
-            #dump_block_numpy(pixels)
     
             out_pixels = numpy.zeros((block_size[1], block_size[0]), self.pt2numpy(band.DataType))
     
@@ -793,12 +781,9 @@ class RasterUpload():
             else:
                 out_pixels = pixels
     
-            # XXX: Use for debugging only
-            #dump_block_numpy(out_pixels)
-    
             hexwkb = binascii.hexlify(out_pixels)
     
-        self.check_hex(hexwkb)
+#        self.check_hex(hexwkb)
         return hexwkb
     
     def wkblify_raster_level(self,  options, ds, level, band_range, infile, i):
@@ -819,12 +804,12 @@ class RasterUpload():
     
         # Register base raster in RASTER_COLUMNS - SELECT AddRasterColumn();
         if level == 1:
-            if i == 0 and options.create_table:
-                gt = self.get_gdal_geotransform(ds)
-                pixel_size = ( gt[1], gt[5] )
-                pixel_types = self.collect_pixel_types(ds, band_from, band_to)
-                nodata_values = self.collect_nodata_values(ds, band_from, band_to)
-                extent = self.calculate_bounding_box(ds, gt)
+#            if i == 0 and options.create_table:
+#                gt = self.get_gdal_geotransform(ds)
+#                pixel_size = ( gt[1], gt[5] )
+#                pixel_types = self.collect_pixel_types(ds, band_from, band_to)
+#                nodata_values = self.collect_nodata_values(ds, band_from, band_to)
+#                extent = self.calculate_bounding_box(ds, gt)
             gen_table = options.table
             
         else:
@@ -844,9 +829,7 @@ class RasterUpload():
         # Write (original) raster to hex binary output
         tile_count = 0
         hexwkb = ''
-#        sql = "COPY %s ( %s ) FROM stdin;\n" % (self.make_sql_full_table_name(gen_table), options.column)       
-#        self.upload_string += sql
-        self.progress_label.setText("Uploading tiles...")
+        self.progress_label.setText(self.tr("Uploading tiles..."))
         importString = ""
         
         for ycell in range(0, grid_size[1]):
@@ -873,15 +856,16 @@ class RasterUpload():
                 tile_count = tile_count + 1
                 
             # Periodically update ui
-                if (tile_count % 1000) == 0:
+                if (tile_count % 100) == 0:
                     self.cursor.copy_from(StringIO(importString), '"public"."%s"' % gen_table)
                     importString = ""
-                    self.progress_label.setText(pystring("{table}: {count} of {sum_tiles} tiles uploaded").format(
-                        table=gen_table, count=tile_count,  sum_tiles= grid_size[0]*grid_size[1]))                
+                    self.progress_label.setText(pystring(self.tr("{table}: {count} of {sum_tiles} tiles uploaded").format(
+                        table=gen_table, count=tile_count,  sum_tiles= grid_size[0]*grid_size[1])))                
                     QApplication.processEvents()
 
         self.cursor.copy_from(StringIO(importString), '"public"."%s"' % gen_table)
         self.conn.commit()
+        
         return (gen_table, tile_count)
     
     def wkblify_raster(self,  options, infile, i, previous_gt = None):
@@ -891,11 +875,11 @@ class RasterUpload():
         # Open source raster file
         ds = gdal.Open(infile, gdalc.GA_ReadOnly);
         if ds is None:
-            sys.exit('Error: Cannot open input file: ' + str(infile))
+            QMessageBox.critical(None,'Error:','Cannot open input file: ' + str(infile))
     
-        # By default, translate all raster bands
-    
-        # Calculate range for single-band request
+# By default, translate all raster bands
+
+# Calculate range for single-band request
         if options.band is not None and options.band > 0:
             band_range = ( options.band, options.band + 1 )
         else:
@@ -905,7 +889,7 @@ class RasterUpload():
         current_gt = self.get_gdal_geotransform(ds)
         if previous_gt is not None:
             if previous_gt[1] != current_gt[1] or previous_gt[5] != current_gt[5]:
-                sys.exit('Error: Cannot load raster with different pixel size in the same raster table')
+                QMessageBox.critical(None,'Error:', 'Cannot load raster with different pixel size in the same raster table')
     
         # Generate requested overview level (base raster if level = 1)
         summary = self.wkblify_raster_level(options, ds, options.overview_level, band_range, infile, i)

@@ -53,6 +53,8 @@ class DataUpload(QObject):
     def upload(self, db, data_sources_items, maxSize):
         import_ok = True
         layers_to_replace = {}
+        raster_to_upload = {}
+        
         self.status_bar.showMessage(pystring(self.tr("Uploading to database '{db}'...")).format(db=db.database))
         QApplication.processEvents()
 
@@ -241,16 +243,16 @@ class DataUpload(QObject):
                     cursor.execute(sql)
                     conn.commit()
             elif layer.type() == QgsMapLayer.RasterLayer:
-                raster_layer_list = [] 
-                raster_layer_list.append(layer)
-                RasterUpload(conn,  cursor,  raster_layer_list,  self.progress_label)
-                layers_to_replace[layer.id()] = {
+                raster_to_upload[layer.id()] = {
                             'layer': layer,
                             'data_source': layer.source(),
                             'db_name': db.database,
                             'table_name': item['table'],
                             'geom_column': 'rast'
                         }
+                RasterUpload(conn,  cursor,  raster_to_upload,  self.progress_label)
+                layers_to_replace[layer.id()] = raster_to_upload[layer.id()]
+
                 
         cursor.close()
         conn.close()
@@ -344,10 +346,11 @@ class DataUpload(QObject):
         elif local_layer.type() == QgsMapLayer.RasterLayer:
             uri = self.db_connections.cloud_layer_uri(db_name, table_name, geom_column)
             connString = "PG: dbname=%s host=%s user=%s password=%s port=%s mode=2 schema=public column=rast table=%s" \
-                  % (uri.database(), uri.host(),  uri.database(),  uri.password(),  uri.port(),  local_layer.name() )
-
+                  % (uri.database(), uri.host(),  uri.database(),  uri.password(),  uri.port(),  table_name )
+            
             remote_layer = QgsRasterLayer( connString, local_layer.name() )   
-        
+            print remote_layer.isValid()
+    
         if remote_layer.isValid():
             self.copy_layer_settings(local_layer, remote_layer)
 

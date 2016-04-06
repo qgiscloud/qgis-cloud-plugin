@@ -136,6 +136,7 @@ class QgisCloudPluginDialog(QDockWidget):
         # Set up the user interface from Designer.
         self.ui = Ui_QgisCloudPlugin()
         self.ui.setupUi(self)
+        self.storage_exceeded = True
 
         myAbout = DlgAbout()
         self.ui.aboutText.setText(
@@ -157,6 +158,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.tblLocalLayers.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
         self.ui.btnUploadData.setEnabled(False)
+        self.ui.btnPublishMap.setEnabled(False)
         self.ui.progressWidget.hide()
         self.ui.btnLogout.hide()
         self.ui.lblLoginStatus.hide()
@@ -736,7 +738,13 @@ class QgisCloudPluginDialog(QDockWidget):
         # OGRPGDataSource::LaunderName
         # return re.sub(r"[#'-]", '_', unicode(name).lower())
         input_string = unicode(name).lower().encode('ascii', 'replace')
-        return re.compile("\W+", re.UNICODE).sub("_", input_string)
+        input_string = re.compile("\W+", re.UNICODE).sub("_", input_string)    
+
+        # check if tabke_name starts with number
+        if re.search("^\d", input_string):
+           input_string = '_'+input_string 
+           
+        return input_string
 
     def refresh_local_data_sources(self):
         self.do_update_local_data_sources = True
@@ -767,8 +775,10 @@ class QgisCloudPluginDialog(QDockWidget):
     def activate_upload_button(self):
         if not self.storage_exceeded:
             self.ui.btnUploadData.setEnabled(self.local_data_sources.count() > 0)
+            self.ui.btnPublishMap.setDisabled(self.storage_exceeded)
         else:
             self.ui.btnUploadData.setDisabled(self.storage_exceeded)
+            self.ui.btnPublishMap.setDisabled(self.storage_exceeded)
 
     def upload_data(self):
         if self.check_login():
@@ -952,3 +962,4 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.lblDbSizeUpload.setText(
             self.tr("Used DB Storage: ") + "%d / %d MB" % (usedSpace, self.maxSize))
         self.ui.btnUploadData.setDisabled(self.storage_exceeded)
+        self.ui.btnPublishMap.setDisabled(self.storage_exceeded)
