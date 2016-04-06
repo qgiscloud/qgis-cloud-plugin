@@ -46,6 +46,26 @@ class DbConnections:
 
     def db(self, dbname):
         return self._dbs[unicode(dbname)]
+        
+        
+    def db_size(self):
+        usedSpace = 0
+        self.numDbs = len(self._dbs.keys())
+        for db in self._dbs.keys():
+            try:
+                conn = self.db(db).psycopg_connection()
+            except:
+                continue
+            cursor = conn.cursor()
+            sql = "SELECT pg_database_size('" + str(db) + "')"
+            cursor.execute(sql)
+            usedSpace += int(cursor.fetchone()[0])
+            cursor.close()
+            conn.close
+
+        # Used space in MB
+        usedSpace /= 1024 * 1024
+        return usedSpace
 
     def refreshed(self):
         return self._dbs_refreshed
