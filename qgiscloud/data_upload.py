@@ -330,7 +330,7 @@ class DataUpload(QObject):
                             self.iface.legendInterface().setLayerVisible(target_layer, self.iface.legendInterface().isLayerVisible(source_layer))
                             QgsMapLayerRegistry.instance().removeMapLayer(layer_id)
                     elif source_layer.type() == QgsMapLayer.RasterLayer:
-                        QMessageBox.information(None, '', 'Hallo')
+                        pass
 
     def replace_local_layer(self, local_layer, data_source, db_name, table_name, geom_column):
         self.status_bar.showMessage(u"Replace layer %s ..." % local_layer.name())

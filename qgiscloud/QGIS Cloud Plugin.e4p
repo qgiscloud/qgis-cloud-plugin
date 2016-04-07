@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project QGIS Cloud Plugin -->
-<!-- Saved: 2016-04-05, 16:27:14 -->
+<!-- Saved: 2016-04-06, 16:52:41 -->
 <!-- Copyright (C) 2016 ,  -->
 <Project version="5.1">
   <Language>en_US</Language>
   <Hash>4584268f1310e9451dfad8eab257ce4f239686ae</Hash>
   <ProgLanguage mixed="0">Python2</ProgLanguage>
-  <ProjectType>PyQt5</ProjectType>
+  <ProjectType>Qt4</ProjectType>
   <Description></Description>
   <Version>0.1</Version>
   <Author></Author>
