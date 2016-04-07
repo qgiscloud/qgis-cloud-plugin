@@ -141,7 +141,9 @@ class RasterUpload(QObject):
         if opts.index  is not None:
             self.cursor.execute(self.make_sql_create_gist(opts.table,  opts.column))
             self.conn.commit()
-            
+
+        self.progress_label.setText(pystring(self.tr("Registering raster columns of table '{table}'...").format(table=opts.table)))
+        QApplication.processEvents()
         self.cursor.execute(self.make_sql_addrastercolumn(opts))
         self.conn.commit()
         
