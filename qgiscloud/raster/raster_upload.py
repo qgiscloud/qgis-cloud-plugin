@@ -825,6 +825,14 @@ class RasterUpload(QObject):
         hexwkb = ''
         self.progress_label.setText(self.tr("Uploading tiles..."))
         importString = ""
+        sum_tiles = grid_size[0]*grid_size[1]
+        
+        if sum_tiles < 10000:
+            copy_size = 100
+        elif sumtiles >= 10000 and sumtiles < 20000: 
+            copy_size = 200
+        else:
+            copy_size = 500
         
         for ycell in range(0, grid_size[1]):
             for xcell in range(0, grid_size[0]):
@@ -850,11 +858,11 @@ class RasterUpload(QObject):
                 tile_count = tile_count + 1
                 
             # Periodically update ui
-                if (tile_count % 100) == 0:
+                if (tile_count % copy_size) == 0:
                     self.cursor.copy_from(StringIO(importString), '"public"."%s"' % gen_table)
                     importString = ""
                     self.progress_label.setText(pystring(self.tr("{table}: {count} of {sum_tiles} tiles uploaded").format(
-                        table=gen_table, count=tile_count,  sum_tiles= grid_size[0]*grid_size[1])))                
+                        table=gen_table, count=tile_count,  sum_tiles= sum_tiles)))                
                     QApplication.processEvents()
 
         self.cursor.copy_from(StringIO(importString), '"public"."%s"' % gen_table)

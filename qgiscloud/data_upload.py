@@ -69,9 +69,6 @@ class DataUpload(QObject):
 
         for data_source, item in data_sources_items.iteritems():
             # Check available space, block if exceded
-            
-#            sql = "SELECT pg_size_pretty(pg_database_size('" + str(db.database) + "'))"
-#            cursor.execute(sql)
             size = DbConnections().db_size()
             print size,  maxSize
             
