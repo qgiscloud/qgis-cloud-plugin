@@ -72,16 +72,7 @@ class RasterUpload(QObject):
         self.messages = ""
         
         (opts, args) = self.parse_options()
-        
-        
-#            for layer in layers:
-#                layer_id = layer.id()
-#                layer_info = raster[layer_id]
-#                layer_info['layer'],
-#                layer_info['data_source'],
-#                layer_info['db_name'],
-#                layer_info['table_name'],
-#                layer_info['geom_column']
+
                         
         opts.version = g_rt_version
         opts.endian = NDR
@@ -90,20 +81,16 @@ class RasterUpload(QObject):
         opts.drop_table = 1
         opts.overview_level = 1
         opts.block_size = 'auto'
-#        opts.create_raster_overviews_table = 1
-#        opts.vacuum = 1
         opts.index = 1
         
         self.upload_string = ""
                   
-        # INSERT
         i = 0
     
         # Burn all specified input raster files into single WKTRaster table
         gt = None
         
         for layer_id in raster.keys():
-#            layer_id = inLayer.id()
             layer_info = raster[layer_id]
             opts.srid = layer_info['layer'].dataProvider().crs().postgisSrid()
             infile = layer_info['data_source']
@@ -130,11 +117,21 @@ class RasterUpload(QObject):
             gt = self.wkblify_raster(opts,  infile.replace( '\\', '/') , i, gt)
             i += 1
 
-   # If overviews requested,create raster_overviews
-        if opts.create_raster_overviews_table:
-            self.progress_label.setText(pystring(self.tr("Creating overviews for table '{table}'...").format(table=opts.table)))
+   # create raster overviews
+        for level in [4, 8, 16, 32]:
+            
+            sql = 'drop table if exists o_%d_%s' %(level,  opts.table)
+            self.cursor.execute(sql)
+            self.conn.commit()
+            
+            sql = "select st_createoverview_qgiscloud('%s'::regclass, '%s'::name, %d)" % (opts.table,  opts.column,  level)
+            self.progress_label.setText(pystring(self.tr("Creating overview-level {level} for table '{table}'...").format(level=level,  table=opts.table)))
             QApplication.processEvents()
-            self.cursor.execute(self.make_sql_create_raster_overviews(opts))
+            self.cursor.execute(sql)
+            self.conn.commit()
+            
+            index_table = 'o_'+str(level)+'_'+opts.table
+            self.cursor.execute(self.make_sql_create_gist(index_table,  opts.column))
             self.conn.commit()
                 
         # INDEX
@@ -146,6 +143,7 @@ class RasterUpload(QObject):
         QApplication.processEvents()
         self.cursor.execute(self.make_sql_addrastercolumn(opts))
         self.conn.commit()
+        
         
                 # VACUUM
 #        if opts.vacuum is not None:
@@ -797,28 +795,28 @@ class RasterUpload(QObject):
             grid_size = (1, 1)
     
         # Register base raster in RASTER_COLUMNS - SELECT AddRasterColumn();
-        if level == 1:
+#        if level == 1:
 #            if i == 0 and options.create_table:
 #                gt = self.get_gdal_geotransform(ds)
 #                pixel_size = ( gt[1], gt[5] )
 #                pixel_types = self.collect_pixel_types(ds, band_from, band_to)
 #                nodata_values = self.collect_nodata_values(ds, band_from, band_to)
 #                extent = self.calculate_bounding_box(ds, gt)
-            gen_table = options.table
+        gen_table = options.table
             
-        else:
-            # Create overview table and register in RASTER_OVERVIEWS
-    
-            # CREATE TABLE o_<LEVEL>_<NAME> ( rid serial, options.column RASTER )
-            schema_table_names = self.make_sql_schema_table_names(options.table)
-            level_table_name = 'o_' + str(level) + '_' + schema_table_names[1] 
-            level_table = schema_table_names[0] + '.' + level_table_name       
-            if i == 0:
-                sql = self.make_sql_create_table(options, level_table, True)
-                self.upload_string += sql
-                sql = self.make_sql_register_overview(options, level_table_name, level)
-                self.upload_string += sql
-            gen_table = level_table
+#        else:
+#            # Create overview table and register in RASTER_OVERVIEWS
+#    
+#            # CREATE TABLE o_<LEVEL>_<NAME> ( rid serial, options.column RASTER )
+#            schema_table_names = self.make_sql_schema_table_names(options.table)
+#            level_table_name = 'o_' + str(level) + '_' + schema_table_names[1] 
+#            level_table = schema_table_names[0] + '.' + level_table_name       
+#            if i == 0:
+#                sql = self.make_sql_create_table(options, level_table, True)
+#                self.upload_string += sql
+#                sql = self.make_sql_register_overview(options, level_table_name, level)
+#                self.upload_string += sql
+#            gen_table = level_table
     
         # Write (original) raster to hex binary output
         tile_count = 0
@@ -829,7 +827,7 @@ class RasterUpload(QObject):
         
         if sum_tiles < 10000:
             copy_size = 100
-        elif sumtiles >= 10000 and sumtiles < 20000: 
+        elif sum_tiles >= 10000 and sum_tiles < 20000: 
             copy_size = 200
         else:
             copy_size = 500
@@ -866,6 +864,9 @@ class RasterUpload(QObject):
                     QApplication.processEvents()
 
         self.cursor.copy_from(StringIO(importString), '"public"."%s"' % gen_table)
+        self.conn.commit()
+        
+        self.cursor.execute(self.make_sql_addrastercolumn(options))
         self.conn.commit()
         
         return (gen_table, tile_count)
