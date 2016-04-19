@@ -247,7 +247,7 @@ class DataUpload(QObject):
                             'table_name': item['table'],
                             'geom_column': 'rast'
                         }
-                RasterUpload(conn,  cursor,  raster_to_upload,  self.progress_label)
+                RasterUpload(conn,  cursor,  raster_to_upload,  maxSize,  self.progress_label)
                 layers_to_replace[layer.id()] = raster_to_upload[layer.id()]
 
                 

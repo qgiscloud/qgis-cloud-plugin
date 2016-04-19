@@ -28,6 +28,7 @@ from osgeo import osr
 import osgeo.gdalconst as gdalc
 from optparse import OptionParser, OptionGroup
 from StringIO import StringIO
+from qgiscloud.db_connections import DbConnections
 import binascii
 import glob
 import math
@@ -64,7 +65,7 @@ VERBOSE = False
 SUMMARY = []
 
 class RasterUpload(QObject):
-    def __init__(self,  conn,  cursor,  raster,  progress_label):
+    def __init__(self,  conn,  cursor,  raster,  max_size,  progress_label):
         QObject.__init__(self)
         self.cursor = cursor
         self.conn = conn
@@ -83,10 +84,18 @@ class RasterUpload(QObject):
         opts.block_size = 'auto'
         opts.index = 1
         
+        # Create PostGIS Raster Tool Functions          
+        raster_tools = QFileInfo(QgsApplication.qgisUserDbFilePath()).path() + "/python/plugins/qgiscloud/raster/raster_tools.sql"
+        sql = open(str(raster_tools)).read().encode('ascii',errors='ignore')
+        print sql
+        self.cursor.execute(sql)
+        self.conn.commit()              
+
+            
         self.upload_string = ""
                   
         i = 0
-    
+         
         # Burn all specified input raster files into single WKTRaster table
         gt = None
         
@@ -94,6 +103,17 @@ class RasterUpload(QObject):
             layer_info = raster[layer_id]
             opts.srid = layer_info['layer'].dataProvider().crs().postgisSrid()
             infile = layer_info['data_source']
+            
+            file_info = QFileInfo(infile)
+            file_size = file_info.size()
+            size = DbConnections().db_size()
+            file_size /= 1024 * 1024
+            size = size + file_size
+            
+            if size > max_size:
+                QMessageBox.warning(None, self.tr("Database full"), self.tr("Upload would exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan."))
+                break
+            
             opts.table = layer_info['table_name']
                     
             # Base raster schema
@@ -117,40 +137,40 @@ class RasterUpload(QObject):
             gt = self.wkblify_raster(opts,  infile.replace( '\\', '/') , i, gt)
             i += 1
 
-   # create raster overviews
-        for level in [4, 8, 16, 32]:
-            
-            sql = 'drop table if exists o_%d_%s' %(level,  opts.table)
-            self.cursor.execute(sql)
-            self.conn.commit()
-            
-            sql = "select st_createoverview_qgiscloud('%s'::regclass, '%s'::name, %d)" % (opts.table,  opts.column,  level)
-            self.progress_label.setText(pystring(self.tr("Creating overview-level {level} for table '{table}'...").format(level=level,  table=opts.table)))
-            QApplication.processEvents()
-            self.cursor.execute(sql)
-            self.conn.commit()
-            
-            index_table = 'o_'+str(level)+'_'+opts.table
-            self.cursor.execute(self.make_sql_create_gist(index_table,  opts.column))
-            self.conn.commit()
+       # create raster overviews
+            for level in [4, 8, 16, 32]:
                 
-        # INDEX
-        if opts.index  is not None:
-            self.cursor.execute(self.make_sql_create_gist(opts.table,  opts.column))
+                sql = 'drop table if exists o_%d_%s' %(level,  opts.table)
+                self.cursor.execute(sql)
+                self.conn.commit()
+                
+                sql = "select st_createoverview_qgiscloud('%s'::regclass, '%s'::name, %d)" % (opts.table,  opts.column,  level)
+                self.progress_label.setText(pystring(self.tr("Creating overview-level {level} for table '{table}'...").format(level=level,  table=opts.table)))
+                QApplication.processEvents()
+                self.cursor.execute(sql)
+                self.conn.commit()
+                
+                index_table = 'o_'+str(level)+'_'+opts.table
+                self.cursor.execute(self.make_sql_create_gist(index_table,  opts.column))
+                self.conn.commit()
+                    
+            # INDEX
+            if opts.index  is not None:
+                self.cursor.execute(self.make_sql_create_gist(opts.table,  opts.column))
+                self.conn.commit()
+    
+            self.progress_label.setText(pystring(self.tr("Registering raster columns of table '{table}'...").format(table=opts.table)))
+            QApplication.processEvents()
+            self.cursor.execute(self.make_sql_addrastercolumn(opts))
             self.conn.commit()
-
-        self.progress_label.setText(pystring(self.tr("Registering raster columns of table '{table}'...").format(table=opts.table)))
-        QApplication.processEvents()
-        self.cursor.execute(self.make_sql_addrastercolumn(opts))
-        self.conn.commit()
-        
-        
-                # VACUUM
-#        if opts.vacuum is not None:
-#            self.cursor.execute(self.make_sql_vacuum(opts.table))
-#            self.conn.commit
-        
-        
+            
+            
+                    # VACUUM
+    #        if opts.vacuum is not None:
+    #            self.cursor.execute(self.make_sql_vacuum(opts.table))
+    #            self.conn.commit
+            
+            
 
     
     ################################################################################ 
