@@ -87,13 +87,10 @@ class RasterUpload(QObject):
         # Create PostGIS Raster Tool Functions          
         raster_tools = QFileInfo(QgsApplication.qgisUserDbFilePath()).path() + "/python/plugins/qgiscloud/raster/raster_tools.sql"
         sql = open(str(raster_tools)).read().encode('ascii',errors='ignore')
-        print sql
         self.cursor.execute(sql)
         self.conn.commit()              
 
-            
-        self.upload_string = ""
-                  
+        self.upload_string = ""                  
         i = 0
          
         # Burn all specified input raster files into single WKTRaster table
