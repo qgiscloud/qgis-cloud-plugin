@@ -4,17 +4,17 @@
 <context>
     <name>DataUpload</name>
     <message>
-        <location filename="../data_upload.py" line="80"/>
+        <location filename="../data_upload.py" line="77"/>
         <source>Database full</source>
         <translation>Die Datenbanl ist voll</translation>
     </message>
     <message>
-        <location filename="../data_upload.py" line="80"/>
+        <location filename="../data_upload.py" line="77"/>
         <source>You have exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan.</source>
         <translation>Sie haben das maximale Datenvolumen der Datenbank für Ihren aktuellen QGIS Cloud Plan überschritten. Löschen Sie bitte Daten aus der Datenbank oder führen Sie ein Upgrade auf einen entsprechenden QGIS Cloud Plan durch.</translation>
     </message>
     <message>
-        <location filename="../data_upload.py" line="146"/>
+        <location filename="../data_upload.py" line="143"/>
         <source>Uploading features...</source>
         <translation>Die Objekte werden hochgeladen ...</translation>
     </message>
@@ -24,17 +24,17 @@
         <translation>Hochladen in die Datenbank &apos;{db}&apos;...</translation>
     </message>
     <message>
-        <location filename="../data_upload.py" line="107"/>
+        <location filename="../data_upload.py" line="104"/>
         <source>Creating table &apos;{table}&apos;...</source>
         <translation>Die Tabelle &apos;{table}&apos; wird erstellt...</translation>
     </message>
     <message>
-        <location filename="../data_upload.py" line="154"/>
+        <location filename="../data_upload.py" line="151"/>
         <source>Feature {id} of layer {layer} has no geometry</source>
         <translation>Das Objekt {id} der Ebene {layer} hat keine Geometrie</translation>
     </message>
     <message>
-        <location filename="../data_upload.py" line="209"/>
+        <location filename="../data_upload.py" line="206"/>
         <source>{table}: {count} features uploaded</source>
         <translation>{table}: {count} Objekte hochgeladen</translation>
     </message>
@@ -581,24 +581,39 @@ Please remove or replace above layers before publishing your map.
 <context>
     <name>RasterUpload</name>
     <message>
-        <location filename="../raster/raster_upload.py" line="127"/>
+        <location filename="../raster/raster_upload.py" line="130"/>
         <source>Creating table &apos;{table}&apos;...</source>
         <translation>Die Tabelle &apos;{table}&apos; wird erstellt...</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="872"/>
+        <location filename="../raster/raster_upload.py" line="888"/>
         <source>{table}: {count} of {sum_tiles} tiles uploaded</source>
         <translation>{table}: {count} von {sum_tiles} Kacheln hochgeladen</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="138"/>
-        <source>Creating overviews for table &apos;{table}&apos;...</source>
-        <translation>Erstelle Übersichten zur Tabelle {table}</translation>
-    </message>
-    <message>
-        <location filename="../raster/raster_upload.py" line="840"/>
+        <location filename="../raster/raster_upload.py" line="848"/>
         <source>Uploading tiles...</source>
         <translation>Kacheln werden hochgeladen...</translation>
+    </message>
+    <message>
+        <location filename="../raster/raster_upload.py" line="113"/>
+        <source>Database full</source>
+        <translation>Die Datenbank ist voll</translation>
+    </message>
+    <message>
+        <location filename="../raster/raster_upload.py" line="113"/>
+        <source>Upload would exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan.</source>
+        <translation>Der Upload würde die maximale Datenbankgrösse Ihres aktuellen QGIS Cloud Abos überschreiten. Bitte machen Sie Platz in der DB oder bestellen Sie QGIS Cloud Pro.</translation>
+    </message>
+    <message>
+        <location filename="../raster/raster_upload.py" line="147"/>
+        <source>Creating overview-level {level} for table &apos;{table}&apos;...</source>
+        <translation>Erstelle Übersicht-Level {level} für die Tabelle &apos;{table}&apos;...</translation>
+    </message>
+    <message>
+        <location filename="../raster/raster_upload.py" line="161"/>
+        <source>Registering raster columns of table &apos;{table}&apos;...</source>
+        <translation>Registrieren der Rasterspalten der Tabelle &apos;{table&apos;}...</translation>
     </message>
 </context>
 </TS>

@@ -156,7 +156,7 @@ class RasterUpload(QObject):
                 self.cursor.execute(self.make_sql_create_gist(opts.table,  opts.column))
                 self.conn.commit()
     
-            self.progress_label.setText(pystring(self.tr("Registering raster columns of table '{table}'...").format(table=opts.table)))
+            self.progress_label.setText(pystring(self.tr("Registering raster columns of table '%s'..." % (opts.table))))
             QApplication.processEvents()
             self.cursor.execute(self.make_sql_addrastercolumn(opts))
             self.conn.commit()
@@ -333,7 +333,6 @@ class RasterUpload(QObject):
     # SQL OPERATIONS
     
     def quote_sql_value(self,  value):
-        assert value is not None, "None value given"
     
         if len(value) > 0 and value[0] != "'" and value[:-1] != "'":
             sql = "'" + str(value) + "'"
@@ -364,7 +363,6 @@ class RasterUpload(QObject):
         if len(st) == 1:
             # TODO: Should we warn user that public is used implicitly?
             st.insert(0, "public")
-        assert len(st) == 2, "Invalid format of table name, expected [<schema>.]table"
         return (st[0], st[1])
     
     def make_sql_full_table_name(self,  schema_table):
@@ -374,7 +372,6 @@ class RasterUpload(QObject):
     
     def make_sql_table_name(self,  schema_table):
         st = schema_table.split('.')
-        assert len(st) == 1 or len(st) == 2, "Invalid format of table name, expected [<schema>.]table"
         if len(st) == 2:
             return st[1]
         return st[0]
@@ -448,87 +445,21 @@ class RasterUpload(QObject):
     # RASTER OPERATIONS
     
     def calculate_overviews(self,  ds, band_from = None, band_to = None):
-        assert ds is not None
     
         if band_from is None:
             band_from = 0
         if band_to is None:
             band_to = ds.RasterCount
     
-        assert band_to <= ds.RasterCount,'Failed checking band_to=%d <= RasterCount=%d' % (band_to,ds.RasterCount)
-        assert band_from <= band_to
-    
         nov = 0
         for i in range(band_from, band_to + 1):
             n = ds.GetRasterBand(i).GetOverviewCount()
             if 0 == nov:
                 nov = n
-            assert n == nov, 'Number of raster overviews is not the same for all bands'
     
         return nov
-    
-    def calculate_overview_factor(self,  ds, overview):
-        assert ds is not None
-    
-    
-        # Assume all bands have same layout of overviews        
-        band = ds.GetRasterBand(1)
-        assert band is not None
-        assert overview < band.GetOverviewCount()
-        
-        ov_band = band.GetOverview(overview)
-        assert ov_band is not None
-        
-        ovf = int(0.5 + ds.RasterXSize / float(ov_band.XSize))
-        self.logit('MSG: Overview factor = %d\n' % ovf)
-    
-        return ovf
             
-        
-    def collect_pixel_types(self,  ds, band_from, band_to):
-        """Collect pixel types of bands in requested range.
-           Use names of pixel types in format as returned
-           by rt_core function rt_pixtype_name()"""
-    
-        pt =[]
-        for i in range(band_from, band_to):
-            band = ds.GetRasterBand(i)
-            pixel_type = self.gdt2pt(band.DataType)['name'][3:]
-            pt.append(pixel_type)
-        
-        return pt
-    
-    def collect_nodata_values(self,  ds, band_from, band_to):
-        """Collect nodata values of bands in requested range"""
-    
-        nd = []
-        for i in range(band_from, band_to):
-            band = ds.GetRasterBand(i)
-            nodata = band.GetNoDataValue()
-            if nodata is not None and not self.is_nan(nodata):
-                nd.append(nodata)
-    
-        return nd
-    
-    def calculate_block_size(self,  ds, band_from, band_to):
-        """Size of natural block reported by GDAL for bands of given dataset"""
-    
-        block_dims = None
-        for i in range(band_from, band_to):
-            band = ds.GetRasterBand(i)
-            assert band is not None, "Cannot access raster band %d" % i
-            dims = band.GetBlockSize()
-    
-            # Assume bands with common block size
-            if i == band_from:
-                block_dims = dims
-    
-            # Validate dimensions of bands block
-            if block_dims != dims:
-                self.logit("MSG: Block sizes don't match: %s != %s\n" % (str(block_dims), str(dims)))
-        
-        assert block_dims is not None, "Failed to calculate block size"
-        return (int(block_dims[0]), int(block_dims[1]))
+
     
     def calculate_grid_size(self,  raster_size, block_size):
         """Dimensions of grid made up with blocks of requested size"""
@@ -539,9 +470,7 @@ class RasterUpload(QObject):
         return ( int(math.ceil(nx)), int(math.ceil(ny)))
     
     def calculate_block_pad_size(self,  band, xoff, yoff, block_size):
-        """Calculates number of columns [0] and rows [1] of padding""" 
-        assert band is not None
-    
+        """Calculates number of columns [0] and rows [1] of padding"""     
         xpad = 0
         ypad= 0
         block_bound = ( xoff + block_size[0], yoff + block_size[1] )
@@ -554,15 +483,11 @@ class RasterUpload(QObject):
         return (xpad, ypad)
     
     def get_gdal_geotransform(self,  ds):
-        assert ds is not None
         gt = list(ds.GetGeoTransform())
         return tuple(gt)
     
     def calculate_geoxy(self,  gt, xy):
         """Calculate georeferenced coordinate from given x and y"""
-        assert gt is not None
-        assert xy is not None
-        assert len(xy) == 2
     
         xgeo = gt[0] + gt[1] * xy[0] + gt[2] * xy[1];
         ygeo = gt[3] + gt[4] * xy[0] + gt[5] * xy[1];
@@ -578,7 +503,6 @@ class RasterUpload(QObject):
     
     def calculate_bounding_box(self,  ds, gt):
         """Calculate georeferenced coordinates of spatial extent of raster dataset"""
-        assert ds is not None
     
         # UL, LL, UR, LR
         dim = ( (0,0),(0,ds.RasterYSize),(ds.RasterXSize,0),(ds.RasterXSize,ds.RasterYSize) )
@@ -589,19 +513,15 @@ class RasterUpload(QObject):
         return ext
     
     def check_hex(self,  hex, bytes_size = None):
-        assert hex is not None, "Error: Missing hex string"
         size = len(hex)
-        assert size > 0, "Error: hex string is empty"
-        assert size % 2 == 0, "Error: invalid size of hex string"
         if bytes_size is not None:
             n = int(size / 2)
-            assert n == bytes_size, "Error: invalid number of bytes %d, expected %d" % (n, bytes_size)
     
     def calc_tile_size(self,  ds):
         dimX = ds.RasterXSize 
         dimY = ds.RasterYSize
         min = 30
-        max = 100
+        max = 256
         
         for j in range(0, 2): 
                 _i = 0
@@ -639,7 +559,6 @@ class RasterUpload(QObject):
 
 
     def dump_block_numpy(self,  pixels):
-        assert pixels.ndim == 2
     
         i = 0
         for row in range (0, len(pixels)):
@@ -647,7 +566,6 @@ class RasterUpload(QObject):
             i = i + 1
         
     def fetch_band_nodata(self,  band, default = 0):
-        assert band is not None
     
         nodata = default
         try:
@@ -672,7 +590,6 @@ class RasterUpload(QObject):
         """Writes WKT Raster header based on given GDAL into HEX-encoded WKB."""
     
         if xsize is None or ysize is None:
-            assert xsize is None and ysize is None
             xsize = ds.RasterXSize
             ysize = ds.RasterYSize
     
