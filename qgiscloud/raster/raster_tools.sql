@@ -1,4 +1,4 @@
-﻿CREATE OR REPLACE FUNCTION st_createoverview_qgiscloud(
+CREATE OR REPLACE FUNCTION st_createoverview_qgiscloud(
     tab regclass,
     col name,
     factor integer,
