@@ -107,17 +107,19 @@ BEGIN
                              ipx + (tx+1) *  tw  * sfx,
                              ipy + (ty+1) *  th  * sfy,
                              srid);
-      sql := 'SELECT count(*), ST_CLIP(ST_SnapToGrid(ST_Rescale(ST_Union(ST_Clip(' || quote_ident(col)
-          || ', st_expand($3, greatest($1,$2)))),$1, $2, $6), $4, $5, $1, $2), $3) g FROM ' || tab::text
-          || ' WHERE ST_Intersects(' || quote_ident(col) || ', $3)';
 
-      FOR rec IN EXECUTE sql USING sfx, sfy, te, ipx, ipy, algo LOOP
+      sql := 'with 
+                tile as 
+                (select ' || quote_ident(col) || ' from ' || tab::text  ||' where st_intersects(' || quote_ident(col) ||', $3))
+                select st_rescale(st_union(tile.rast), $1, $2, $4) as rast from tile';
 
-        IF rec.g IS NULL THEN
+      FOR rec IN EXECUTE sql USING sfx, sfy, te, algo LOOP
+
+        IF rec.rast IS NULL THEN
           RAISE WARNING 'No source tiles cover target tile %,% with extent %',
             tx, ty, te::box2d;
         ELSE
-          RETURN NEXT rec.g;
+          RETURN NEXT rec.rast;
         END IF;
       END LOOP;
     END LOOP;

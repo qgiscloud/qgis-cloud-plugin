@@ -521,7 +521,7 @@ class RasterUpload(QObject):
         dimX = ds.RasterXSize 
         dimY = ds.RasterYSize
         min = 30
-        max = 256
+        max = 100
         
         for j in range(0, 2): 
                 _i = 0
@@ -759,12 +759,12 @@ class RasterUpload(QObject):
         importString = ""
         sum_tiles = grid_size[0]*grid_size[1]
         
-        if sum_tiles < 10000:
-            copy_size = 100
-        elif sum_tiles >= 10000 and sum_tiles < 20000: 
-            copy_size = 200
-        else:
-            copy_size = 500
+#        if sum_tiles < 10000:
+#            copy_size = 100
+#        elif sum_tiles >= 10000 and sum_tiles < 20000: 
+#            copy_size = 200
+#        else:
+        copy_size = 500
         
         for ycell in range(0, grid_size[1]):
             for xcell in range(0, grid_size[0]):
