@@ -133,6 +133,9 @@ class RasterUpload(QObject):
         
             gt = self.wkblify_raster(opts,  infile.replace( '\\', '/') , i, gt)
             i += 1
+            
+            self.cursor.execute(self.make_sql_create_gist(opts.table,  opts.column))
+            self.conn.commit()            
 
        # create raster overviews
             for level in [4, 8, 16, 32]:
@@ -151,10 +154,6 @@ class RasterUpload(QObject):
                 self.cursor.execute(self.make_sql_create_gist(index_table,  opts.column))
                 self.conn.commit()
                     
-            # INDEX
-            if opts.index  is not None:
-                self.cursor.execute(self.make_sql_create_gist(opts.table,  opts.column))
-                self.conn.commit()
     
             self.progress_label.setText(pystring(self.tr("Registering raster columns of table '%s'..." % (opts.table))))
             QApplication.processEvents()

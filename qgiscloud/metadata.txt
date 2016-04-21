@@ -11,6 +11,8 @@ about=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich
 ; Optional items:
 
 changelog=
+    1.3.3
+    - Raster Index creation improved
     1.3.2
     - Overlay creation improved
     1.3.1
