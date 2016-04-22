@@ -26,7 +26,6 @@ from qgis.core import *
 from osgeo import gdal
 from osgeo import osr
 import osgeo.gdalconst as gdalc
-from optparse import OptionParser, OptionGroup
 from StringIO import StringIO
 from qgiscloud.db_connections import DbConnections
 import binascii
@@ -42,20 +41,9 @@ import sys
 # Endianness enumeration
 NDR = 1 # Little-endian
 XDR = 0 # Big-endian
-
-# Default version of WKTRaster protocol.
-# WARNING: Currently, this is the only valid value
-# and option -w, --raster-version is ignored, if specified.
 g_rt_version = 0
-
-# Default format of binary output is little-endian (NDR)
-# WARNING: Currently, big-endian (XDR) output is not supported
-# and option -e, --endian is ignored, if specified.
 g_rt_endian = NDR
-
-# Default name of column, overriden with -f, --field option.
 g_rt_column = 'rast'
-
 g_rt_catalog = ''
 g_rt_schema = 'public'
 
@@ -71,26 +59,24 @@ class RasterUpload(QObject):
         self.conn = conn
         self.progress_label = progress_label
         self.messages = ""
-        
-        (opts, args) = self.parse_options()
 
-                        
-        opts.version = g_rt_version
-        opts.endian = NDR
-        opts.column = 'rast'
-        opts.create_table = 1
-        opts.drop_table = 1
-        opts.overview_level = 1
-        opts.block_size = 'auto'
-        opts.index = 1
+        opts = {}
+        opts['version'] = g_rt_version
+        opts['endian'] = NDR
+        opts['column'] = 'rast'
+        opts['create_table'] = 1
+        opts['drop_table'] = 1
+        opts['overview_level'] = 1
+        opts['block_size'] = 'auto'
+        opts['band'] = None
+        opts['register'] = None
         
         # Create PostGIS Raster Tool Functions          
         raster_tools = QFileInfo(QgsApplication.qgisUserDbFilePath()).path() + "/python/plugins/qgiscloud/raster/raster_tools.sql"
         sql = open(str(raster_tools)).read().encode('ascii',errors='ignore')
         self.cursor.execute(sql)
         self.conn.commit()              
-
-        self.upload_string = ""                  
+         
         i = 0
          
         # Burn all specified input raster files into single WKTRaster table
@@ -98,7 +84,7 @@ class RasterUpload(QObject):
         
         for layer_id in raster.keys():
             layer_info = raster[layer_id]
-            opts.srid = layer_info['layer'].dataProvider().crs().postgisSrid()
+            opts['srid'] = layer_info['layer'].dataProvider().crs().postgisSrid()
             infile = layer_info['data_source']
             
             file_info = QFileInfo(infile)
@@ -111,60 +97,50 @@ class RasterUpload(QObject):
                 QMessageBox.warning(None, self.tr("Database full"), self.tr("Upload would exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan."))
                 break
             
-            opts.table = layer_info['table_name']
-                    
-            # Base raster schema
-            if opts.overview_level == 1:
-                # DROP TABLE
-                if opts.drop_table:
-                    sql = self.make_sql_drop_raster_table(opts.table)
-                    self.upload_string += sql
-        
-                # CREATE TABLE
-                if opts.create_table and opts.overview_level == 1:
-                    sql = self.make_sql_create_table(opts,  opts.table)
-                    self.upload_string += sql                          
-                    
-            self.progress_label.setText(pystring(self.tr("Creating table '{table}'...").format(table=opts.table)))
+            opts['table'] = layer_info['table_name']
+                
+            self.progress_label.setText(pystring(self.tr("Creating table '{table}'...").format(table=opts['table'])))
             QApplication.processEvents()
-
-            self.cursor.execute(self.upload_string)
-            self.conn.commit
+            
+            self.cursor.execute(self.make_sql_drop_raster_table(opts['table']))
+            self.conn.commit()
+            
+            self.cursor.execute(self.make_sql_create_table(opts,  opts['table']))
+            self.conn.commit()
         
             gt = self.wkblify_raster(opts,  infile.replace( '\\', '/') , i, gt)
             i += 1
             
-            self.cursor.execute(self.make_sql_create_gist(opts.table,  opts.column))
+            self.cursor.execute(self.make_sql_create_gist(opts['table'],  opts['column']))
             self.conn.commit()            
 
        # create raster overviews
             for level in [4, 8, 16, 32]:
                 
-                sql = 'drop table if exists o_%d_%s' %(level,  opts.table)
+                sql = 'drop table if exists o_%d_%s' %(level,  opts['table'])
                 self.cursor.execute(sql)
                 self.conn.commit()
                 
-                sql = "select st_createoverview_qgiscloud('%s'::regclass, '%s'::name, %d)" % (opts.table,  opts.column,  level)
-                self.progress_label.setText(pystring(self.tr("Creating overview-level {level} for table '{table}'...").format(level=level,  table=opts.table)))
+                sql = "select st_createoverview_qgiscloud('%s'::regclass, '%s'::name, %d)" % (opts['table'],  opts['column'],  level)
+                self.progress_label.setText(pystring(self.tr("Creating overview-level {level} for table '{table}'...").format(level=level,  table=opts['table'])))
                 QApplication.processEvents()
                 self.cursor.execute(sql)
                 self.conn.commit()
                 
-                index_table = 'o_'+str(level)+'_'+opts.table
-                self.cursor.execute(self.make_sql_create_gist(index_table,  opts.column))
+                index_table = 'o_'+str(level)+'_'+opts['table']
+                self.cursor.execute(self.make_sql_create_gist(index_table,  opts['column']))
                 self.conn.commit()
                     
     
-            self.progress_label.setText(pystring(self.tr("Registering raster columns of table '%s'..." % (opts.table))))
+            self.progress_label.setText(pystring(self.tr("Registering raster columns of table '%s'..." % (opts['table']))))
             QApplication.processEvents()
             self.cursor.execute(self.make_sql_addrastercolumn(opts))
             self.conn.commit()
             
             
                     # VACUUM
-    #        if opts.vacuum is not None:
-    #            self.cursor.execute(self.make_sql_vacuum(opts.table))
-    #            self.conn.commit
+#            self.cursor.execute(self.make_sql_vacuum(opts['table']))
+#            self.conn.commit
             
             
 
@@ -176,80 +152,6 @@ class RasterUpload(QObject):
             return str(float(x)).lower() == 'nan'
         else:
             return math.isnan(x)
-    
-    def parse_options(self):
-        """Collects, parses and validates command line arguments."""
-    
-        prs = OptionParser(version="%prog $Revision$")
-    
-        # Mandatory parameters
-        grp0 = OptionGroup(prs, "Source and destination",
-               "*** Mandatory parameters always required ***")
-        grp0.add_option("-r", "--raster", dest="raster", action="append", default=None,
-             help="append raster to list of input files, at least one raster "
-                        "file required. You may use wildcards (?,*) for specifying multiple files.")
-        grp0.add_option("-t", "--table", dest="table", action="store", default=None,
-             help="raster destination in form of [<schema>.]<table> or base raster table for overview level>1, required")
-        prs.add_option_group(grp0);
-    
-        # Optional parameters - raster manipulation
-        grp_r = OptionGroup(prs, "Raster processing",
-                "Optional parameters used to manipulate input raster dataset")
-        grp_r.add_option("-s", "--srid", dest="srid", action="store", type="int", default=-1, 
-              help="assign output raster with specified SRID")
-        grp_r.add_option("-b", "--band", dest="band", action="store", type="int", default=None,
-                         help="specify number of the band to be extracted from raster file")
-        grp_r.add_option("-k", "--block-size", dest="block_size", action="store", default=None,
-                         help="cut raster(s) into tiles to be inserted one by table row."
-                         "BLOCK_SIZE is expressed as WIDTHxHEIGHT. Incomplete tiles are completed with nodata values")
-        grp_r.add_option("-R", "--register", dest="register", action="store_true", default=False, 
-                         help="register the raster as a filesystem (out-db) raster")
-        grp_r.add_option("-l", "--overview-level", dest="overview_level", action="store", type="int", default=1,
-                         help='create overview tables named as o_<LEVEL>_<RASTER_TABLE> and '
-                         'populate with GDAL-provided overviews (regular blocking only)')
-        prs.add_option_group(grp_r);
-    
-        # Optional parameters - database/table manipulation
-        grp_t = OptionGroup(prs, 'Database processing',
-                            'Optional parameters used to manipulate database objects')
-        grp_t.add_option('-c', '--create', dest='create_table', action='store_true', default=False, 
-                         help='create new table and populate it with raster(s), this is the default mode')
-        grp_t.add_option('-a', '--append', dest='append_table', action='store_true', default=False, 
-                         help='append raster(s) to an existing table')
-        grp_t.add_option("-d", "--drop", dest="drop_table", action="store_true", default=False, 
-                         help="drop table, create new one and populate it with raster(s)")
-        grp_t.add_option("-f", "--field", dest="column", action="store", default=g_rt_column, 
-                         help="specify name of destination raster column, default is 'rast'")
-        grp_t.add_option("-F", "--filename", dest="filename", action="store_true", default=False, 
-                         help="add a column with the name of the file")
-        grp_t.add_option("-I", "--index", dest="index", action="store_true", default=False, 
-                         help="create a GiST index on the raster column")
-        grp_t.add_option("-M", "--vacuum", dest="vacuum", action="store_true", default=False, 
-                         help="issue VACUUM command against all generated tables")
-        grp_t.add_option('-V', '--create-raster-overviews', dest='create_raster_overviews_table',
-                         action='store_true', default=False,
-                         help='create RASTER_OVERVIEWS table used to store overviews metadata')
-        prs.add_option_group(grp_t);
-    
-        # Other optional parameters
-        grp_u = OptionGroup(prs, "Miscellaneous", "Other optional parameters")
-        grp_u.add_option("-e", "--endian", dest="endian", action="store", type="int", default=g_rt_endian, 
-                         help="control endianness of generated binary output of raster; "
-                         "specify 0 for XDR and 1 for NDR (default); "
-                         "only NDR output is supported now")
-        grp_u.add_option("-w", "--raster-version", dest="version",
-                         action="store", type="int", default=g_rt_version, 
-                         help="specify version of raster protocol, default is 0; "
-                         "only value of zero is supported now")
-        grp_u.add_option("-o", "--output", dest="output", action="store", default=sys.stdout,
-                         help="specify output file, otherwise send to stdout")
-        grp_u.add_option("-v", "--verbose", dest="verbose", action="store_true", default=False,
-                         help="verbose mode. Useful for debugging")
-        prs.add_option_group(grp_u);
-        
-        (opts, args) = prs.parse_args()
-        return opts,  args
-    
     
     def logit(self,  msg):
         """If verbose mode requested, sends extra progress information to stderr"""
@@ -318,13 +220,13 @@ class RasterUpload(QObject):
         return fmttypes.get(fmt, 'f')
     
     def parse_block_size(self,  options,  ds):
-        if options.block_size == 'auto':
+        if options['block_size'] == 'auto':
             return self.calc_tile_size(ds)
             
         else:
-          wh = options.block_size.split('x')
+          wh = options['block_size'].split('x')
           if len(wh) != 2:
-              wh = options.block_size.split('X')
+              wh = options['block_size'].split('X')
     
           return ( int(wh[0]), int(wh[1]) )
         
@@ -394,7 +296,7 @@ class RasterUpload(QObject):
     
     def make_sql_create_table(self,  options, table,  is_overview = False):
         sql = "CREATE TABLE %s (rid serial PRIMARY KEY, %s RASTER);\n" \
-              % (self.make_sql_full_table_name(table), self.quote_sql_name(options.column))
+              % (self.make_sql_full_table_name(table), self.quote_sql_name(options['column']))
         return sql
     
     
@@ -409,10 +311,10 @@ class RasterUpload(QObject):
     
     
     def make_sql_addrastercolumn(self,  options):
-        ts = self.make_sql_schema_table_names(options.table)
+        ts = self.make_sql_schema_table_names(options['table'])
                 
         sql = "SELECT AddRasterConstraints('%s','%s','%s',TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE);" \
-                   % (ts[0],  ts[1],  options.column)
+                   % (ts[0],  ts[1],  options['column'])
 
         return sql
         
@@ -420,19 +322,19 @@ class RasterUpload(QObject):
 
         sql = ""
 
-        for level in options.overview_level.split(","):
-          sql += "select st_createoverview('%s'::regclass, '%s'::name, %s);\n" % (options.table,  'rast',  level)
+        for level in options['overview_level'].split(","):
+          sql += "select st_createoverview('%s'::regclass, '%s'::name, %s);\n" % (options['table'],  'rast',  level)
           
         return sql
     
     
     def make_sql_register_overview(self,  options, ov_table, ov_factor):
 
-        schema = self.make_sql_schema_table_names(options.table)[0]
+        schema = self.make_sql_schema_table_names(options['table'])[0]
         r_table = self.make_sql_table_name(ov_table)
     
         sql = "SELECT AddOverviewConstraints('%s','%s', '%s', '%s','%s','%s',%d);" \
-            % (schema,  r_table,  options.column,  schema,  options.table,  options.column,  ov_factor)
+            % (schema,  r_table,  options['column'],  schema,  options['table'],  options['column'],  ov_factor)
         
         return sql
     
@@ -602,11 +504,11 @@ class RasterUpload(QObject):
         # Burn input raster as WKTRaster WKB format
         hexwkb = ''
         ### Endiannes
-        hexwkb += self.wkblify('B', options.endian)
+        hexwkb += self.wkblify('B', options['endian'])
         ### Version
-        hexwkb += self.wkblify('H', options.version)
+        hexwkb += self.wkblify('H', options['version'])
         ### Number of bands
-        if options.band is not None and options.band > 0:
+        if options['band'] is not None and options['band'] > 0:
             hexwkb += self.wkblify('H', 1)
         else:
             hexwkb += self.wkblify('H', ds.RasterCount)
@@ -618,7 +520,7 @@ class RasterUpload(QObject):
         hexwkb += self.wkblify('d', rt_ip[1])
         hexwkb += self.wkblify('d', rt_skew[0])
         hexwkb += self.wkblify('d', rt_skew[1])
-        hexwkb += self.wkblify('i', options.srid)
+        hexwkb += self.wkblify('i', options['srid'])
 #        self.check_hex(hexwkb, 57)
         ### Number of columns and rows
         hexwkb += self.wkblify('H', xsize)
@@ -635,8 +537,8 @@ class RasterUpload(QObject):
         first4bits = 0
         
         # If the register option is enabled, set the first bit to 1
-        if options.register:
-            first4bits = 128
+#        if options['register']:
+#            first4bits = 128
             
         nodata = band.GetNoDataValue()
         # If there is no nodata value, set it to 0. Otherwise set the HasNodata bit to 1
@@ -660,7 +562,7 @@ class RasterUpload(QObject):
     
         hexwkb = ''
         
-        if options.register:
+        if options['register']:
             hexwkb += self.wkblify('B', bandidx - 1)
             filepath = os.path.abspath(infile.replace('\\', '\\\\'))
             hexwkb += self.wkblify(str(len(filepath)) + 's', filepath)
@@ -718,7 +620,7 @@ class RasterUpload(QObject):
         
         # Collect raster and block dimensions
         raster_size = ( ds.RasterXSize, ds.RasterYSize )
-        if options.block_size is not None:
+        if options['block_size'] is not None:
             block_size = self.parse_block_size(options,  ds)
             read_block_size = ( block_size[0] * level, block_size[1] * level)
             grid_size = self.calculate_grid_size(raster_size, read_block_size)
@@ -727,29 +629,7 @@ class RasterUpload(QObject):
             read_block_size = block_size
             grid_size = (1, 1)
     
-        # Register base raster in RASTER_COLUMNS - SELECT AddRasterColumn();
-#        if level == 1:
-#            if i == 0 and options.create_table:
-#                gt = self.get_gdal_geotransform(ds)
-#                pixel_size = ( gt[1], gt[5] )
-#                pixel_types = self.collect_pixel_types(ds, band_from, band_to)
-#                nodata_values = self.collect_nodata_values(ds, band_from, band_to)
-#                extent = self.calculate_bounding_box(ds, gt)
-        gen_table = options.table
-            
-#        else:
-#            # Create overview table and register in RASTER_OVERVIEWS
-#    
-#            # CREATE TABLE o_<LEVEL>_<NAME> ( rid serial, options.column RASTER )
-#            schema_table_names = self.make_sql_schema_table_names(options.table)
-#            level_table_name = 'o_' + str(level) + '_' + schema_table_names[1] 
-#            level_table = schema_table_names[0] + '.' + level_table_name       
-#            if i == 0:
-#                sql = self.make_sql_create_table(options, level_table, True)
-#                self.upload_string += sql
-#                sql = self.make_sql_register_overview(options, level_table_name, level)
-#                self.upload_string += sql
-#            gen_table = level_table
+        gen_table = options['table']
     
         # Write (original) raster to hex binary output
         tile_count = 0
@@ -757,12 +637,7 @@ class RasterUpload(QObject):
         self.progress_label.setText(self.tr("Uploading tiles..."))
         importString = ""
         sum_tiles = grid_size[0]*grid_size[1]
-        
-#        if sum_tiles < 10000:
-#            copy_size = 100
-#        elif sum_tiles >= 10000 and sum_tiles < 20000: 
-#            copy_size = 200
-#        else:
+
         copy_size = 500
         
         for ycell in range(0, grid_size[1]):
@@ -771,7 +646,7 @@ class RasterUpload(QObject):
                 xoff = xcell * read_block_size[0]
                 yoff = ycell * read_block_size[1]
     
-                if options.block_size is not None:
+                if options['block_size'] is not None:
                     hexwkb = '' # Reset buffer as single INSERT per tile is generated
                     hexwkb += self.wkblify_raster_header(options, ds, level, (xoff, yoff),
                                                     block_size[0], block_size[1])
@@ -816,8 +691,8 @@ class RasterUpload(QObject):
 # By default, translate all raster bands
 
 # Calculate range for single-band request
-        if options.band is not None and options.band > 0:
-            band_range = ( options.band, options.band + 1 )
+        if options['band'] is not None and options['band'] > 0:
+            band_range = ( options['band'], options['band'] + 1 )
         else:
             band_range = ( 1, ds.RasterCount + 1 )
     
@@ -828,7 +703,7 @@ class RasterUpload(QObject):
                 QMessageBox.critical(None,'Error:', 'Cannot load raster with different pixel size in the same raster table')
     
         # Generate requested overview level (base raster if level = 1)
-        summary = self.wkblify_raster_level(options, ds, options.overview_level, band_range, infile, i)
+        summary = self.wkblify_raster_level(options, ds, options['overview_level'], band_range, infile, i)
         SUMMARY.append( summary )
         
         # Cleanup
