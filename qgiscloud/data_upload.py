@@ -300,36 +300,63 @@ class DataUpload(QObject):
 
     def _replace_local_layers(self, layers_to_replace):
         if len(layers_to_replace) > 0:
-            # replace local layers while keeping layer order
-            layers = self.iface.legendInterface().layers()
-            layers.reverse()
-            for layer in layers:
-                layer_id = layer.id()
-                
-                if layer_id in layers_to_replace:
-                    # replace local layers
-                    layer_info = layers_to_replace[layer_id]
-                    self.replace_local_layer(
-                        layer_info['layer'],
-                        layer_info['data_source'],
-                        layer_info['db_name'],
-                        layer_info['table_name'],
-                        layer_info['geom_column']
-                    )
-                else:
-                    # move remote vector layer
-                    source_layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
-                    if source_layer.type() == QgsMapLayer.VectorLayer:
-                        target_layer = QgsVectorLayer(source_layer.source(), source_layer.name(), source_layer.providerType())
-                        if target_layer.isValid():
-                            self.copy_layer_settings(source_layer, target_layer)
-                            QgsMapLayerRegistry.instance().addMapLayer(target_layer)
-                            self.iface.legendInterface().setLayerVisible(target_layer, self.iface.legendInterface().isLayerVisible(source_layer))
-                            QgsMapLayerRegistry.instance().removeMapLayer(layer_id)
-                    elif source_layer.type() == QgsMapLayer.RasterLayer:
-                        pass
+            if QGis.QGIS_VERSION_INT >= 20600:
+                root = QgsProject.instance().layerTreeRoot()
+                self._replace_local_layers_in_layer_tree(root, layers_to_replace)
+            else:
+                # using old legendInterface API
 
-    def replace_local_layer(self, local_layer, data_source, db_name, table_name, geom_column):
+                # replace local layers while keeping layer order
+                layers = self.iface.legendInterface().layers()
+                layers.reverse()
+                for layer in layers:
+                    layer_id = layer.id()
+                    
+                    if layer_id in layers_to_replace:
+                        # replace local layers
+                        layer_info = layers_to_replace[layer_id]
+                        self.replace_local_layer(
+                            None,
+                            layer_info['layer'],
+                            layer_info['data_source'],
+                            layer_info['db_name'],
+                            layer_info['table_name'],
+                            layer_info['geom_column']
+                        )
+                    else:
+                        # move remote vector layer
+                        source_layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
+                        if source_layer.type() == QgsMapLayer.VectorLayer:
+                            target_layer = QgsVectorLayer(source_layer.source(), source_layer.name(), source_layer.providerType())
+                            if target_layer.isValid():
+                                self.copy_layer_settings(source_layer, target_layer)
+                                QgsMapLayerRegistry.instance().addMapLayer(target_layer)
+                                self.iface.legendInterface().setLayerVisible(target_layer, self.iface.legendInterface().isLayerVisible(source_layer))
+                                QgsMapLayerRegistry.instance().removeMapLayer(layer_id)
+                        elif source_layer.type() == QgsMapLayer.RasterLayer:
+                            pass
+
+    # recursive layer tree traversal
+    def _replace_local_layers_in_layer_tree(self, node, layers_to_replace):
+        if QgsLayerTree.isGroup(node):
+            # traverse children of layer group
+            for child_node in node.children():
+                self._replace_local_layers_in_layer_tree(child_node, layers_to_replace)
+        else:
+            # layer node
+            layer_id = node.layerId()
+            if layer_id in layers_to_replace:
+                layer_info = layers_to_replace[layer_id]
+                self.replace_local_layer(
+                    node,
+                    layer_info['layer'],
+                    layer_info['data_source'],
+                    layer_info['db_name'],
+                    layer_info['table_name'],
+                    layer_info['geom_column']
+                )
+
+    def replace_local_layer(self, node, local_layer, data_source, db_name, table_name, geom_column):
         self.status_bar.showMessage(u"Replace layer %s ..." % local_layer.name())
         
         if local_layer.type() == QgsMapLayer.VectorLayer:
@@ -346,19 +373,32 @@ class DataUpload(QObject):
                   % (uri.database(), uri.host(),  uri.database(),  uri.password(),  uri.port(),  table_name )
             
             remote_layer = QgsRasterLayer( connString, local_layer.name() )   
-            print remote_layer.isValid()
-    
+
         if remote_layer.isValid():
             self.copy_layer_settings(local_layer, remote_layer)
 
-            # add remote layer
-            QgsMapLayerRegistry.instance().addMapLayer(remote_layer)
-            if remote_layer.type() == QgsVectorLayer:
-                remote_layer.updateExtents()
-                self.iface.legendInterface().setLayerVisible(remote_layer, self.iface.legendInterface().isLayerVisible(local_layer))
+            if QGis.QGIS_VERSION_INT >= 20600:
+                group_node = node.parent()
 
-            # remove local layer
-            QgsMapLayerRegistry.instance().removeMapLayer(local_layer.id())
+                # add remote layer
+                QgsMapLayerRegistry.instance().addMapLayer(remote_layer, False)
+                idx = group_node.children().index(node)
+                remote_layer_node = group_node.insertLayer(idx, remote_layer)
+                remote_layer_node.setVisible(node.isVisible())
+
+                # remove local layer
+                group_node.removeChildNode(node)
+            else:
+                # using old legendInterface API
+
+                # add remote layer
+                QgsMapLayerRegistry.instance().addMapLayer(remote_layer)
+                if remote_layer.type() == QgsVectorLayer:
+                    remote_layer.updateExtents()
+                    self.iface.legendInterface().setLayerVisible(remote_layer, self.iface.legendInterface().isLayerVisible(local_layer))
+
+                # remove local layer
+                QgsMapLayerRegistry.instance().removeMapLayer(local_layer.id())
 
             self.status_bar.showMessage(u"Replaced layer %s" % remote_layer.name())
 
