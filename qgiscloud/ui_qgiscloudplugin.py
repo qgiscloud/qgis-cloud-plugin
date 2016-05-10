@@ -2,8 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_qgiscloudplugin.ui'
 #
-# Created: Thu Jul 16 10:25:56 2015
-#      by: PyQt4 UI code generator 4.10.4
+# Created by: PyQt4 UI code generator 4.11.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -76,7 +75,6 @@ class Ui_QgisCloudPlugin(object):
         self.widgetServices = QtGui.QWidget(self.mapTab)
         self.widgetServices.setObjectName(_fromUtf8("widgetServices"))
         self.gridLayout = QtGui.QGridLayout(self.widgetServices)
-        self.gridLayout.setMargin(0)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.lblMobileMap = QtGui.QLabel(self.widgetServices)
         self.lblMobileMap.setEnabled(True)
@@ -159,7 +157,6 @@ class Ui_QgisCloudPlugin(object):
         self.progressWidget = QtGui.QWidget(self.uploadTab)
         self.progressWidget.setObjectName(_fromUtf8("progressWidget"))
         self.horizontalLayout_6 = QtGui.QHBoxLayout(self.progressWidget)
-        self.horizontalLayout_6.setMargin(0)
         self.horizontalLayout_6.setObjectName(_fromUtf8("horizontalLayout_6"))
         self.spinner = Spinner(self.progressWidget)
         self.spinner.setObjectName(_fromUtf8("spinner"))

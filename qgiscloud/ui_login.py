@@ -2,8 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_login.ui'
 #
-# Created: Sat Jul 23 23:29:53 2011
-#      by: PyQt4 UI code generator 4.8.3
+# Created by: PyQt4 UI code generator 4.11.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +11,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_LoginDialog(object):
     def setupUi(self, LoginDialog):
@@ -53,7 +61,7 @@ class Ui_LoginDialog(object):
         QtCore.QMetaObject.connectSlotsByName(LoginDialog)
 
     def retranslateUi(self, LoginDialog):
-        LoginDialog.setWindowTitle(QtGui.QApplication.translate("LoginDialog", "Login", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_5.setText(QtGui.QApplication.translate("LoginDialog", "User:", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_6.setText(QtGui.QApplication.translate("LoginDialog", "Password:", None, QtGui.QApplication.UnicodeUTF8))
+        LoginDialog.setWindowTitle(_translate("LoginDialog", "Login", None))
+        self.label_5.setText(_translate("LoginDialog", "User:", None))
+        self.label_6.setText(_translate("LoginDialog", "Password:", None))
 
