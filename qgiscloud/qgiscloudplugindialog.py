@@ -225,7 +225,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.palette_red = QPalette(self.ui.lblVersionPlugin.palette())
         self.palette_red.setColor(QPalette.WindowText, Qt.red)
 
-    def __del__(self):
+    def unload(self):
         self.do_update_local_data_sources = False
         if self.iface:
             QObject.disconnect(
