@@ -144,7 +144,7 @@ class QgisCloudPluginDialog(QDockWidget):
             myAbout.contribString() +
             myAbout.licenseString() +
             "<p>Versions:<ul>" +
-            "<li>QGIS: %s</li>" % QGis.QGIS_VERSION +
+            "<li>QGIS: %s</li>" % unicode(QGis.QGIS_VERSION).encode("utf-8") +
             "<li>Python: %s</li>" % sys.version.replace("\n", " ") +
             "<li>OS: %s</li>" % platform.platform() +
             "</ul></p>")
