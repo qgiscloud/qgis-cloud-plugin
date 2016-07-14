@@ -718,18 +718,19 @@ class QgisCloudPluginDialog(QDockWidget):
             return "WKBPoint25D"
         elif wkbType == QGis.WKBLineString25D:
             return "WKBLineString25D"
-        elif wkbType == QgsWKBTypes.LineStringZM:
-            return "WKBLineStringZM"            
         elif wkbType == QGis.WKBPolygon25D:
             return "WKBPolygon25D"
         elif wkbType == QGis.WKBMultiPoint25D:
             return "WKBMultiPoint25D"
         elif wkbType == QGis.WKBMultiLineString25D:
             return "WKBMultiLineString25D"
-        elif wkbType == QgsWKBTypes.MultiLineStringZM:
-            return "WKBMultiLineStringZM"            
         elif wkbType == QGis.WKBMultiPolygon25D:
             return "WKBMultiPolygon25D"
+        elif QGis.QGIS_VERSION_INT >= 21400:
+            if wkbType == QgsWKBTypes.LineStringZM:
+                return "WKBLineStringZM"
+            elif wkbType == QgsWKBTypes.MultiLineStringZM:
+                return "WKBMultiLineStringZM"
         
         return self.tr("Unknown type")
 
