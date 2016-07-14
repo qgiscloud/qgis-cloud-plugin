@@ -54,7 +54,7 @@ class DataUpload(QObject):
         import_ok = True
         layers_to_replace = {}
         raster_to_upload = {}
-        
+
         self.status_bar.showMessage(pystring(self.tr("Uploading to database '{db}'...")).format(db=db.database))
         QApplication.processEvents()
 
@@ -71,7 +71,7 @@ class DataUpload(QObject):
             # Check available space, block if exceded
             size = DbConnections().db_size()
             print size,  maxSize
-            
+
             if size > maxSize:
                 QMessageBox.warning(None, self.tr("Database full"), self.tr("You have exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan."))
                 break
@@ -85,7 +85,7 @@ class DataUpload(QObject):
                 srid = layer.crs().postgisSrid()
                 geom_column = "wkb_geometry"
                 wkbType = layer.wkbType()
-                
+
                 if wkbType == QGis.WKBNoGeometry:
                     cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"public\".\"%s\"" % (
                     db.database, db.host, db.port, db.username, db.password, item['table'])
@@ -93,15 +93,15 @@ class DataUpload(QObject):
                 else:
                     if not QGis.isMultiType(wkbType):
                         wkbType = QGis.multiType(wkbType)
-        
+
                     # Create table (pk='' => always generate a new primary key)
                     cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"public\".\"%s\" (%s)" % (
                         db.database, db.host, db.port, db.username, db.password, item['table'], geom_column
                     )
-    
+
                 self.progress_label.setText(pystring(self.tr("Creating table '{table}'...")).format(table=item['table']))
                 QApplication.processEvents()
-    
+
                 if wkbType != QGis.WKBNoGeometry:
                     # Check if SRID is known on database, otherwise create record
                     cursor.execute("SELECT srid FROM public.spatial_ref_sys WHERE srid = %s" % layer.crs().postgisSrid())
@@ -117,47 +117,48 @@ class DataUpload(QObject):
                             import_ok &= False
                             messages += "Failed to create SRS record on database: " + str(e) + "\n"
                             continue
-        
+
     #                cursor.close()
-    
+
                 # TODO: Ask user for overwriting existing table
                 # The postgres provider is terribly slow at creating tables with
                 # many attribute columns in QGIS < 2.9.0
                 vectorLayerImport = PGVectorLayerImport(db, conn,  cursor, cloudUri, fields, wkbType, layer.crs(), True)
-                
+
                 if vectorLayerImport.hasError():
                     import_ok &= False
                     messages += "VectorLayerImport-Error: "+vectorLayerImport.errorMessage() + "\n"
                     continue
-                    
+
                 vectorLayerImport = None
-                
+
                 # Build import string
                 attribs = range(0, fields.count())
                 count = 0
                 importstr = bytearray()
                 ok = True
-    
+
                 self.progress_label.setText(self.tr("Uploading features..."))
                 QApplication.processEvents()
                 for feature in layer.getFeatures():
                     # First field is primary key
                     importstr += "%d" % count
                     count += 1
-    
-                    if not feature.geometry():
-                        QgsMessageLog.logMessage(pystring(self.tr("Feature {id} of layer {layer} has no geometry")).format(
-                            id=feature.id(), layer=layer.name()), "QGISCloud")
 
+                    if not feature.geometry():
+                        QgsMessageLog.logMessage(pystring(self.tr("Feature {id} of layer {layer} has no geometry")).format(id=feature.id(), layer=layer.name()), "QGISCloud")
+                        importstr += "\t" + b"\\N"
+                    elif QGis.multiType(feature.geometry().wkbType()) != wkbType:
+                        QgsMessageLog.logMessage(pystring(self.tr("Feature {id} of layer {layer} has wrong geometry type {type}")).format(id=feature.id(), layer=layer.name(), type=QGis.featureType(feature.geometry().wkbType())), "QGISCloud")
+                        importstr += "\t" + b"\\N"
                     else:
-    
-                    # Second field is geometry in EWKB Hex format
+                        # Second field is geometry in EWKB Hex format
                         importstr += "\t" + self._wkbToEWkbHex(feature.geometry().asWkb(), srid)
-    
+
                     # Finally, copy data attributes
                     for attrib in attribs:
                         val = feature[attrib]
-    
+
                         if sipv1():
                             # QGIS 1.x
                             if val is None or val.type() == QVariant.Invalid or val.isNull():
@@ -189,7 +190,7 @@ class DataUpload(QObject):
                                 val = val.replace('\r', r"E'\r'")
                                 val = val.replace('\\', r"\\")
                         importstr += b"\t" + val
-    
+
                     importstr += b"\n"
                     # Upload in chunks
                     if (count % 100) == 0:
@@ -206,14 +207,14 @@ class DataUpload(QObject):
                     # Periodically update ui
                     if (count % 10) == 0:
                         QApplication.processEvents()
-    
+
                 if ok and importstr:
                     try:
                         cursor.copy_from(StringIO(importstr), '"public"."%s"' % item['table'])
                     except Exception as e:
                         messages += str(e) + "\n"
                         ok = False
-    
+
                 if ok:
                     try:
                         conn.commit()
@@ -222,9 +223,9 @@ class DataUpload(QObject):
                         ok = False
                 else:
                     conn.rollback()
-    
+
                 import_ok &= ok
-    
+
                 if ok:
                     for layer in item['layers']:
                         layers_to_replace[layer.id()] = {
@@ -234,7 +235,7 @@ class DataUpload(QObject):
                             'table_name': item['table'],
                             'geom_column': geom_column
                         }
-    
+
                 if wkbType != QGis.WKBNoGeometry:
                     sql = 'create index "%s_%s_idx" on "public"."%s" using gist ("%s");' % (item['table'],  geom_column,  item['table'], geom_column)
                     cursor.execute(sql)
@@ -250,7 +251,7 @@ class DataUpload(QObject):
                 RasterUpload(conn,  cursor,  raster_to_upload,  maxSize,  self.progress_label)
                 layers_to_replace[layer.id()] = raster_to_upload[layer.id()]
 
-                
+
         cursor.close()
         conn.close()
         self._replace_local_layers(layers_to_replace)
@@ -261,7 +262,7 @@ class DataUpload(QObject):
     def _wkbToEWkbHex(self, wkb, srid, convertToMulti=False):
         try:
             wktType = struct.unpack("=i", wkb[1:5])[0] & 0xffffffff
-            
+
             if not QGis.isMultiType(wktType):
                 wktType = QGis.multiType(wktType) & 0xffffffff
                 wkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", 1) + wkb
@@ -311,7 +312,7 @@ class DataUpload(QObject):
                 layers.reverse()
                 for layer in layers:
                     layer_id = layer.id()
-                    
+
                     if layer_id in layers_to_replace:
                         # replace local layers
                         layer_info = layers_to_replace[layer_id]
@@ -358,21 +359,21 @@ class DataUpload(QObject):
 
     def replace_local_layer(self, node, local_layer, data_source, db_name, table_name, geom_column):
         self.status_bar.showMessage(u"Replace layer %s ..." % local_layer.name())
-        
+
         if local_layer.type() == QgsMapLayer.VectorLayer:
             # create remote layer
             uri = self.db_connections.cloud_layer_uri(db_name, table_name, geom_column)
-            
+
             #Workaround for loading geometryless layers
             uri2 = QgsDataSourceURI(uri.uri().replace(' ()',  ''))
-            
+
             remote_layer = QgsVectorLayer(uri2.uri(), local_layer.name(), 'postgres')
         elif local_layer.type() == QgsMapLayer.RasterLayer:
             uri = self.db_connections.cloud_layer_uri(db_name, table_name, geom_column)
             connString = "PG: dbname=%s host=%s user=%s password=%s port=%s mode=2 schema=public column=rast table=%s" \
                   % (uri.database(), uri.host(),  uri.database(),  uri.password(),  uri.port(),  table_name )
-            
-            remote_layer = QgsRasterLayer( connString, local_layer.name() )   
+
+            remote_layer = QgsRasterLayer( connString, local_layer.name() )
 
         if remote_layer.isValid():
             self.copy_layer_settings(local_layer, remote_layer)
@@ -404,7 +405,7 @@ class DataUpload(QObject):
 
     def copy_layer_settings(self, source_layer, target_layer):
         # copy filter
-        
+
         if target_layer.type() == QgsVectorLayer:
             target_layer.setSubsetString(source_layer.subsetString())
 
