@@ -3,11 +3,7 @@ name=QGIS Cloud Plugin
 qgisMinimumVersion=1.8
 qgisMaximumVersion=2.99
 description=Publish maps on qgiscloud.com
-<<<<<<< HEAD
-version=1.3.4
-=======
-version=1.3.5
->>>>>>> 559753844e8856768de3687d4d032f5399b04fe6
+version=1.3.6
 author=Pirmin Kalberer, Mathias Walker, Horst Duester, Sandro Mani
 email=pka@sourcepole.ch
 about=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich, Switzerland
@@ -15,6 +11,9 @@ about=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich
 ; Optional items:
 
 changelog=
+    1.3.6
+    - Fix data upload with missing or incorrect geometry type
+    - Handle QGIS release names with unicode chars
     1.3.5
     - Fix raster upload on windows
     1.3.4
