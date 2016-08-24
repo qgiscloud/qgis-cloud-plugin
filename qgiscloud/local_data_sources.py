@@ -76,7 +76,7 @@ class LocalDataSources:
                     pass
                 elif layer.dataProvider().metadata()[0:5] == "GTiff":
                     local_raster_layers.append(layer)
-                elif layer.dataProvider().metadata()[0:3] == "VRT":
+                elif layer.dataProvider().metadata()[0:3] in ["JP2","VRT","ECW"]:
                     local_raster_layers.append(layer)
                 else:
                     unsupported_layers.append(layer)
