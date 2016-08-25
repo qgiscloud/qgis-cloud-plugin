@@ -74,12 +74,13 @@ class LocalDataSources:
                 elif layer.customProperty('ol_layer_type', None) is not None:
                     # GDAL TMS layer from OpenLayers plugin (> 1.3.6)
                     pass
-                elif layer.dataProvider().metadata()[0:5] == "GTiff":
-                    local_raster_layers.append(layer)
-                elif layer.dataProvider().metadata()[0:3] in ["JP2","VRT","ECW"]:
-                    local_raster_layers.append(layer)
+#                elif layer.dataProvider().metadata()[0:5] == "GTiff":
+#                    local_raster_layers.append(layer)
+#                elif layer.dataProvider().metadata()[0:3] in ["JP2","VRT","ECW"]:
+#                    local_raster_layers.append(layer)
                 else:
-                    unsupported_layers.append(layer)
+#                    unsupported_layers.append(layer)
+                    local_raster_layers.append(layer)
 
             elif provider not in ["wms", "openlayers"]:
                 if layer.type() == QgsMapLayer.VectorLayer:
