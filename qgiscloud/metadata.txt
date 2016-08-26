@@ -11,6 +11,8 @@ about=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich
 ; Optional items:
 
 changelog=
+    1.3.8
+    - raster support improved
     1.3.7
     - support of all current gdal raster formats added
     1.3.6
