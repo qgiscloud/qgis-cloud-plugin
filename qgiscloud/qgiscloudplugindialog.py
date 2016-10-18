@@ -919,7 +919,7 @@ class QgisCloudPluginDialog(QDockWidget):
             cursor = conn.cursor()
             sql = "SELECT pg_database_size('" + str(db) + "')"
             cursor.execute(sql)
-            usedSpace += int(cursor.fetchone()[0])
+            usedSpace += int(cursor.fetchone()[0])-(11*1024*1024)
             cursor.close()
             conn.close
 
