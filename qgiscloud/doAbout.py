@@ -32,7 +32,7 @@ class DlgAbout:
         return """
         <p><center><b>The development of QGIS Cloud-Plugin is developed by the following persons:</b></center></p> 
         <p>Pirmin Kalberer (project manager, developer and support)<br>
-        Dr. Horst Düster (developer and support)<br>
+        Dr. Horst Düster (product manager, developer and support)<br>
         Sandro Mani (developer)<br>
         Mathias Walker (developer)<br>
         Dr. Marco Hugentobler (developer)<br><br>

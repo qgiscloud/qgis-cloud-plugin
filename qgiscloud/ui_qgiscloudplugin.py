@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui_qgiscloudplugin.ui'
+# Form implementation generated from reading ui file '/home/hdus/dev/qgis/qgis-cloud-plugin/qgiscloud/ui_qgiscloudplugin.ui'
 #
-# Created by: PyQt4 UI code generator 4.11.4
+# Created: Mon Dec 19 15:57:12 2016
+#      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -25,7 +26,7 @@ except AttributeError:
 class Ui_QgisCloudPlugin(object):
     def setupUi(self, QgisCloudPlugin):
         QgisCloudPlugin.setObjectName(_fromUtf8("QgisCloudPlugin"))
-        QgisCloudPlugin.resize(390, 377)
+        QgisCloudPlugin.resize(422, 446)
         QgisCloudPlugin.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
         self.dockWidgetContents = QtGui.QWidget()
         self.dockWidgetContents.setObjectName(_fromUtf8("dockWidgetContents"))
@@ -75,37 +76,38 @@ class Ui_QgisCloudPlugin(object):
         self.widgetServices = QtGui.QWidget(self.mapTab)
         self.widgetServices.setObjectName(_fromUtf8("widgetServices"))
         self.gridLayout = QtGui.QGridLayout(self.widgetServices)
+        self.gridLayout.setMargin(0)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.lblMobileMap = QtGui.QLabel(self.widgetServices)
         self.lblMobileMap.setEnabled(True)
         self.lblMobileMap.setOpenExternalLinks(True)
         self.lblMobileMap.setObjectName(_fromUtf8("lblMobileMap"))
-        self.gridLayout.addWidget(self.lblMobileMap, 1, 1, 1, 1)
+        self.gridLayout.addWidget(self.lblMobileMap, 2, 1, 1, 1)
         self.label = QtGui.QLabel(self.widgetServices)
         self.label.setObjectName(_fromUtf8("label"))
-        self.gridLayout.addWidget(self.label, 2, 0, 1, 1)
+        self.gridLayout.addWidget(self.label, 3, 0, 1, 1)
         self.lblWMS = QtGui.QLabel(self.widgetServices)
         self.lblWMS.setOpenExternalLinks(True)
         self.lblWMS.setObjectName(_fromUtf8("lblWMS"))
-        self.gridLayout.addWidget(self.lblWMS, 2, 1, 1, 1)
+        self.gridLayout.addWidget(self.lblWMS, 3, 1, 1, 1)
         self.label_5 = QtGui.QLabel(self.widgetServices)
         self.label_5.setObjectName(_fromUtf8("label_5"))
-        self.gridLayout.addWidget(self.label_5, 3, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_5, 4, 0, 1, 1)
         self.lblMaps = QtGui.QLabel(self.widgetServices)
         self.lblMaps.setOpenExternalLinks(True)
         self.lblMaps.setObjectName(_fromUtf8("lblMaps"))
-        self.gridLayout.addWidget(self.lblMaps, 3, 1, 1, 1)
+        self.gridLayout.addWidget(self.lblMaps, 4, 1, 1, 1)
         self.label_8 = QtGui.QLabel(self.widgetServices)
         self.label_8.setObjectName(_fromUtf8("label_8"))
-        self.gridLayout.addWidget(self.label_8, 4, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_8, 5, 0, 1, 1)
         self.lblMobileMap_2 = QtGui.QLabel(self.widgetServices)
         self.lblMobileMap_2.setEnabled(True)
         self.lblMobileMap_2.setOpenExternalLinks(True)
         self.lblMobileMap_2.setObjectName(_fromUtf8("lblMobileMap_2"))
-        self.gridLayout.addWidget(self.lblMobileMap_2, 4, 1, 1, 1)
+        self.gridLayout.addWidget(self.lblMobileMap_2, 5, 1, 1, 1)
         self.label_4 = QtGui.QLabel(self.widgetServices)
         self.label_4.setObjectName(_fromUtf8("label_4"))
-        self.gridLayout.addWidget(self.label_4, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_4, 2, 0, 1, 1)
         self.label_3 = QtGui.QLabel(self.widgetServices)
         self.label_3.setObjectName(_fromUtf8("label_3"))
         self.gridLayout.addWidget(self.label_3, 0, 0, 1, 1)
@@ -113,6 +115,13 @@ class Ui_QgisCloudPlugin(object):
         self.lblWebmap.setOpenExternalLinks(True)
         self.lblWebmap.setObjectName(_fromUtf8("lblWebmap"))
         self.gridLayout.addWidget(self.lblWebmap, 0, 1, 1, 1)
+        self.label_7 = QtGui.QLabel(self.widgetServices)
+        self.label_7.setObjectName(_fromUtf8("label_7"))
+        self.gridLayout.addWidget(self.label_7, 1, 0, 1, 1)
+        self.lblQwc2 = QtGui.QLabel(self.widgetServices)
+        self.lblQwc2.setOpenExternalLinks(True)
+        self.lblQwc2.setObjectName(_fromUtf8("lblQwc2"))
+        self.gridLayout.addWidget(self.lblQwc2, 1, 1, 1, 1)
         self.verticalLayout_4.addWidget(self.widgetServices)
         spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         self.verticalLayout_4.addItem(spacerItem)
@@ -157,6 +166,7 @@ class Ui_QgisCloudPlugin(object):
         self.progressWidget = QtGui.QWidget(self.uploadTab)
         self.progressWidget.setObjectName(_fromUtf8("progressWidget"))
         self.horizontalLayout_6 = QtGui.QHBoxLayout(self.progressWidget)
+        self.horizontalLayout_6.setMargin(0)
         self.horizontalLayout_6.setObjectName(_fromUtf8("horizontalLayout_6"))
         self.spinner = Spinner(self.progressWidget)
         self.spinner.setObjectName(_fromUtf8("spinner"))
@@ -337,6 +347,12 @@ class Ui_QgisCloudPlugin(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://qgiscloud.com/user/map\"><span style=\" font-family:\'Ubuntu\'; text-decoration: underline; color:#0057ae;\">http://qgiscloud.com/user/map</span></a></p></body></html>", None))
+        self.label_7.setText(_translate("QgisCloudPlugin", "QWC2 Webmap (beta)", None))
+        self.lblQwc2.setText(_translate("QgisCloudPlugin", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://qgiscloud.com/user/map/qwc2/\"><span style=\" font-family:\'Ubuntu\'; text-decoration: underline; color:#0057ae;\">http://qgiscloud.com/user/map/qwc2/</span></a></p></body></html>", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.mapTab), _translate("QgisCloudPlugin", "Map", None))
         self.label_10.setText(_translate("QgisCloudPlugin", "Database:", None))
         self.btnRefreshLocalLayers.setText(_translate("QgisCloudPlugin", "Refresh layers", None))
@@ -364,3 +380,13 @@ class Ui_QgisCloudPlugin(object):
 
 from spinner import Spinner
 import resources_rc
+
+if __name__ == "__main__":
+    import sys
+    app = QtGui.QApplication(sys.argv)
+    QgisCloudPlugin = QtGui.QDockWidget()
+    ui = Ui_QgisCloudPlugin()
+    ui.setupUi(QgisCloudPlugin)
+    QgisCloudPlugin.show()
+    sys.exit(app.exec_())
+
