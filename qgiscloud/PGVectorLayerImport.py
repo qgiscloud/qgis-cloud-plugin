@@ -327,7 +327,8 @@ class PGVectorLayerImport:
                 primaryKeyType=primaryKeyType)
 
             cursor.execute(sql)
-
+            
+            
             # get geometry type, dim and srid
             (geometryType, dim) = self.__postgisWkbType(wkbType)
             srid = srs.postgisSrid()
