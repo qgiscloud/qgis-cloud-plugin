@@ -70,7 +70,6 @@ class DataUpload(QObject):
         for data_source, item in data_sources_items.iteritems():
             # Check available space, block if exceded
             size = DbConnections().db_size()
-            print size,  maxSize
 
             if size > maxSize:
                 QMessageBox.warning(None, self.tr("Database full"), self.tr("You have exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan."))
@@ -252,7 +251,7 @@ class DataUpload(QObject):
                 layers_to_replace[layer.id()] = raster_to_upload[layer.id()]
 
         sql = "SELECT 'SELECT SETVAL(' || quote_literal(quote_ident(PGT.schemaname) || '.' || quote_ident(S.relname)) ||  \
-        ', COALESCE(MAX(' ||quote_ident(C.attname)|| '), 1) ) \
+        ', COALESCE(MAX(' ||quote_ident(C.attname)|| ')+1, 1) ) \
             FROM ' || quote_ident(PGT.schemaname)|| '.' ||quote_ident(T.relname)|| ';' \
     FROM pg_class AS S,      pg_depend AS D,      pg_class AS T,      pg_attribute AS C,      \
          pg_tables AS PGT \

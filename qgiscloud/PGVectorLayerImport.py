@@ -247,10 +247,10 @@ class PGVectorLayerImport:
 
         for field in attributes:
             if field.comment():
-                sql = "COMMENT ON COLUMN %1.%2 IS %3" % (
+                sql = "COMMENT ON COLUMN %s.%s IS %s" % (
                     query,
                     self.__quotedIdentifier(field.name()),
-                    self.__quotedIdentifier(field.comment()))
+                    self.__quotedValue(field.comment()))
                 cursor.execute(sql)
 
     def __init__(self, db, conn, cursor,  uri, fields, wkbType, srs, overwrite):
@@ -386,15 +386,15 @@ class PGVectorLayerImport:
                 if tableName:
                     query += self.__quotedIdentifier(tableName)
 
-            try:
-                self.__addAttributes(flist, query, cursor)
-                conn.commit()
-            except Exception as e:
-                conn.rollback()
-                exc_type, exc_obj, exc_tb = sys.exc_info()
-                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                self._errorMessage = "Creation of fields failed: %s (%s:%d)" % (str(e), fname, exc_tb.tb_lineno)
-                self._hasError = True
+#            try:
+            self.__addAttributes(flist, query, cursor)
+            conn.commit()
+#            except Exception as e:
+#                conn.rollback()
+#                exc_type, exc_obj, exc_tb = sys.exc_info()
+#                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+#                self._errorMessage = "Creation of fields failed: %s (%s:%d)" % (str(e), fname, exc_tb.tb_lineno)
+#                self._hasError = True
 
 
     def hasError(self):
