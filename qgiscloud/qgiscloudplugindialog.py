@@ -511,12 +511,14 @@ class QgisCloudPluginDialog(QDockWidget):
         return True
 
     def publish_map(self):
+        QApplication.setOverrideCursor(Qt.WaitCursor)
         canvas = self.iface.mapCanvas()
         mapRenderer = canvas.mapRenderer()
         srs=mapRenderer.destinationCrs()
         
         if "USER" in srs.authid():
             QMessageBox.warning(None, self.tr('Warning!'),  self.tr("The project has a user defined CRS. The use of user defined CRS is not supported. Please correct the project CRS before publishing!"))
+            QApplication.restoreOverrideCursor()
             return 
             
         layers = self.iface.legendInterface().layers()
@@ -527,11 +529,13 @@ class QgisCloudPluginDialog(QDockWidget):
         
         if len(layerList) > 0:
             QMessageBox.warning(None, self.tr('Warning!'),  self.tr("The layer(s) {layerlist}have user defined CRS. The use of user defined CRS is not supported. Please correct the CRS before publishing!").format(layerlist=layerList))
+            QApplication.restoreOverrideCursor()
             return
                  
         saved = self.check_project_saved()
         if not saved:
             self.statusBar().showMessage(self.tr("Cancelled"))
+            QApplication.restoreOverrideCursor()
             return
         if self.check_login() and self.check_layers():
             self.statusBar().showMessage(self.tr("Publishing map"))
@@ -557,9 +561,11 @@ class QgisCloudPluginDialog(QDockWidget):
                     "Map successfully published"), level=0, duration=2)
                 self.statusBar().showMessage(
                     self.tr("Map successfully published"))
+                QApplication.restoreOverrideCursor()
             except Exception as e:
                 self.statusBar().showMessage("")
                 ErrorReportDialog(self.tr("Error uploading project"), self.tr("An error occured."), str(e) + "\n" + traceback.format_exc(), self.user, self).exec_()
+                QApplication.restoreOverrideCursor()
 
     def publish_symbols(self, missingSvgSymbols):
         self.statusBar().showMessage(self.tr("Uploading SVG symbols"))
