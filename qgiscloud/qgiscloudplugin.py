@@ -51,16 +51,23 @@ class QgisCloudPlugin:
         self.plugin_dir = QFileInfo(QgsApplication.qgisUserDbFilePath()).path() + "/python/plugins/qgiscloud"
         # initialize locale
         localePath = ""
-        locale = QSettings().value("locale/userLocale", type=str)[0:2]
-        if QFileInfo(self.plugin_dir).exists():
-            localePath = self.plugin_dir + "/i18n/qgiscloudplugin_" + locale + ".qm"
+        locale_short = QSettings().value("locale/userLocale", type=str)[0:2]
+        locale_long = QSettings().value("locale/userLocale", type=str)
+                
+        if QFileInfo(self.plugin_dir).exists():            
+            if QFileInfo(self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_short + ".qm").exists():
+                self.translator = QTranslator()
+                self.translator.load( self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_short + ".qm")            
+                if qVersion() > '4.3.3':
+                    QCoreApplication.installTranslator(self.translator)
+            elif QFileInfo(self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_long + ".qm").exists():
+                self.translator = QTranslator()
+                self.translator.load( self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_long + ".qm")          
+                if qVersion() > '4.3.3':
+                    QCoreApplication.installTranslator(self.translator)                
+            
 
-        if QFileInfo(localePath).exists():
-            self.translator = QTranslator()
-            self.translator.load(localePath)            
 
-            if qVersion() > '4.3.3':
-                QCoreApplication.installTranslator(self.translator)
                 
         # dock widget
         self.dockWidget = QgisCloudPluginDialog(self.iface, self.version)

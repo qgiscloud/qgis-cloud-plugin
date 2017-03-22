@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project QGIS Cloud Plugin -->
-<!-- Saved: 2017-03-21, 08:09:51 -->
+<!-- Saved: 2017-03-22, 09:03:29 -->
 <!-- Copyright (C) 2017 ,  -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -60,6 +60,8 @@
     <Translation>i18n/qgiscloudplugin_de.ts</Translation>
     <Translation>i18n/qgiscloudplugin_it.qm</Translation>
     <Translation>i18n/qgiscloudplugin_it.ts</Translation>
+    <Translation>i18n/qgiscloudplugin_pt_BR.qm</Translation>
+    <Translation>i18n/qgiscloudplugin_pt_BR.ts</Translation>
   </Translations>
   <Resources>
     <Resource>resources.qrc</Resource>
