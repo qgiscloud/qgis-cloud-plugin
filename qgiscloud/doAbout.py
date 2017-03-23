@@ -39,7 +39,8 @@ class DlgAbout:
         </p>
         <p><b>Translations:</b</p><br>
         Italian - Sandro Mani <br>
-        Portuguese (Brazil) - Rodrigo Smarzaro<br><br>
+        Portuguese (Brazil) - Rodrigo Smarzaro<br>
+        Portuguese (Europeu) - Nelson Silva<br><br>
         """
         
     def licenseString(self):
