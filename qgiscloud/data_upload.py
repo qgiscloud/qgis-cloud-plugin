@@ -145,8 +145,9 @@ class DataUpload(QObject):
                     count += 1
 
                     if not feature.geometry():
-                        QgsMessageLog.logMessage(pystring(self.tr("Feature {id} of layer {layer} has no geometry")).format(id=feature.id(), layer=layer.name()), "QGISCloud")
-                        importstr += "\t" + b"\\N"
+                        if layer.hasGeometryType():
+                            QgsMessageLog.logMessage(pystring(self.tr("Feature {id} of layer {layer} has no geometry")).format(id=feature.id(), layer=layer.name()), "QGISCloud")
+                            importstr += "\t" + b"\\N"
                     elif QGis.multiType(feature.geometry().wkbType()) != wkbType:
                         QgsMessageLog.logMessage(pystring(self.tr("Feature {id} of layer {layer} has wrong geometry type {type}")).format(id=feature.id(), layer=layer.name(), type=QGis.featureType(feature.geometry().wkbType())), "QGISCloud")
                         importstr += "\t" + b"\\N"
