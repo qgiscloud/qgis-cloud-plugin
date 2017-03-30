@@ -31,17 +31,17 @@
     <message>
         <location filename="../data_upload.py" line="150"/>
         <source>Feature {id} of layer {layer} has no geometry</source>
-        <translation>יישות {id} בשכבה {layer} היא ללא גיאומטריה</translation>
+        <translation>ישות {id} בשכבה {layer} היא ללא גיאומטריה</translation>
     </message>
     <message>
         <location filename="../data_upload.py" line="153"/>
         <source>Feature {id} of layer {layer} has wrong geometry type {type}</source>
-        <translation>יישות {id} בשכבה {layer} היא בעלת סוג גיאומטריה שגוי {type}</translation>
+        <translation>ישות {id} בשכבה {layer} היא בעלת סוג גיאומטריה שגוי {type}</translation>
     </message>
     <message>
         <location filename="../data_upload.py" line="206"/>
         <source>{table}: {count} features uploaded</source>
-        <translation>{table}:{count} יישויות עלו</translation>
+        <translation>{table}:{count} ישויות עלו</translation>
     </message>
 </context>
 <context>
@@ -433,7 +433,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../qgiscloudplugindialog.py" line="453"/>
         <source>Select database</source>
-        <translation>מחר מסד נתונים</translation>
+        <translation>בחר מסד נתונים</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="500"/>
@@ -458,7 +458,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../qgiscloudplugindialog.py" line="532"/>
         <source>The layer(s) {layerlist}have user defined CRS. The use of user defined CRS is not supported. Please correct the CRS before publishing!</source>
-        <translation>השכבות {layerlist} הן בעלות רשת מרבחית מותאמת אישית. השימוש ברשת מותאמת אישית אינו נתמך. אנא שנה את הרשת המרחבית לפני פרסום!</translation>
+        <translation>השכבות {layerlist} הן בעלות רשת מרחבית מותאמת אישית. השימוש ברשת מותאמת אישית אינו נתמך. אנא שנה את הרשת המרחבית לפני פרסום!</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="538"/>
@@ -505,7 +505,7 @@ p, li { white-space: pre-wrap; }
         <source>Some layers are using local data. You can upload local layers to your cloud database in the &apos;Upload Data&apos; tab.
 
 </source>
-        <translation>מספר שכבות עושות שימוש במקור נתונים מקומי. ניתן להעלות שכבות מקומיות למסד הנתונים הלשונית &apos;העלאת נתונים&apos;.
+        <translation>מספר שכבות עושות שימוש במקור נתונים מקומי. ניתן להעלות שכבות מקומיות למסד הנתונים בלשונית &apos;העלאת נתונים&apos;.
 
 </translation>
     </message>
@@ -526,7 +526,7 @@ p, li { white-space: pre-wrap; }
         <source>
 Please remove or replace above layers before publishing your map.
 </source>
-        <translation>אנא הסר או שנה את השכבות הנ&quot;ל לפני פרסום המפה.</translation>
+        <translation>אנא הסר או שנה את השכבות לעיל לפני פרסום המפה.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="635"/>

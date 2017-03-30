@@ -38,6 +38,7 @@ class DlgAbout:
         Dr. Marco Hugentobler (developer)
         </p>
         <p><b>Translations:</b</p><br>
+        Hebrew - Harel Dan <br>
         Italian - Sandro Mani <br>
         Portuguese (Brazil) - Rodrigo Smarzaro<br>
         Portuguese (Europeu) - Nelson Silva<br><br>

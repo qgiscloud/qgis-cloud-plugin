@@ -11,6 +11,8 @@ about=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich
 ; Optional items:
 
 changelog=
+    1.4.7
+    - Hebrew translation added 
     1.4.6
     - Fix geomeryless csv upload 
     1.4.5
