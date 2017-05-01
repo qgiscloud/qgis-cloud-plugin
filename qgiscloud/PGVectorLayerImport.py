@@ -279,11 +279,11 @@ class PGVectorLayerImport:
         # get the pk's name and type
         if not primaryKey:
             index = 0
-            pk = "id"
-            primaryKey = "id"
+            pk = "qc_id"
+            primaryKey = "qc_id"
             fldIdx = 0
             while fldIdx < fields.count():
-                if fields[fldIdx].name() == primaryKey:
+                if fields[fldIdx].name().lower() == primaryKey:
                     # it already exists, try again with a new name
                     primaryKey = "%s_%d" % (pk, index)
                     index += 1
