@@ -239,6 +239,7 @@ class DataUpload(QObject):
                 if wkbType != QGis.WKBNoGeometry:
                     sql = 'create index "%s_%s_idx" on "public"."%s" using gist ("%s");' % (item['table'],  geom_column,  item['table'], geom_column)
                     cursor.execute(sql)
+                    conn.commit()
                     
             elif layer.type() == QgsMapLayer.RasterLayer:
                 raster_to_upload[layer.id()] = {
