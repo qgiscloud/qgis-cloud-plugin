@@ -13,6 +13,7 @@ about=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich
 changelog=
     1.4.10
     - Set QWC2 as default Web Client
+    - all column names set to lower case during import of vector data
     1.4.9
     - Primary Key generation during upload fixed 
     1.4.8

@@ -239,7 +239,7 @@ class PGVectorLayerImport:
             elif type == "numeric" or type == "decimal":
                 if field.length() > 0 and field.precision() >= 0:
                     type = "%s(%d,%d)" % (type, field.length(), field.precision())
-            sql += "%sADD COLUMN %s %s" % (delim, self.__quotedIdentifier(field.name()), type)
+            sql += "%sADD COLUMN %s %s" % (delim, self.__quotedIdentifier(field.name().lower()), type)
             delim = ","
 
         # send sql statement and do error handling
