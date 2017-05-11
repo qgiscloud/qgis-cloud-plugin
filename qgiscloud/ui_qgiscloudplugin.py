@@ -85,11 +85,11 @@ class Ui_QgisCloudPlugin(object):
         self.gridLayout.addWidget(self.lblMobileMap, 2, 1, 1, 1)
         self.label = QtGui.QLabel(self.widgetServices)
         self.label.setObjectName(_fromUtf8("label"))
-        self.gridLayout.addWidget(self.label, 3, 0, 1, 1)
+        self.gridLayout.addWidget(self.label, 2, 0, 1, 1)
         self.lblWMS = QtGui.QLabel(self.widgetServices)
         self.lblWMS.setOpenExternalLinks(True)
         self.lblWMS.setObjectName(_fromUtf8("lblWMS"))
-        self.gridLayout.addWidget(self.lblWMS, 3, 1, 1, 1)
+        self.gridLayout.addWidget(self.lblWMS, 2, 1, 1, 1)
         self.label_5 = QtGui.QLabel(self.widgetServices)
         self.label_5.setObjectName(_fromUtf8("label_5"))
         self.gridLayout.addWidget(self.label_5, 4, 0, 1, 1)
@@ -105,9 +105,6 @@ class Ui_QgisCloudPlugin(object):
         self.lblMobileMap_2.setOpenExternalLinks(True)
         self.lblMobileMap_2.setObjectName(_fromUtf8("lblMobileMap_2"))
         self.gridLayout.addWidget(self.lblMobileMap_2, 5, 1, 1, 1)
-        self.label_4 = QtGui.QLabel(self.widgetServices)
-        self.label_4.setObjectName(_fromUtf8("label_4"))
-        self.gridLayout.addWidget(self.label_4, 2, 0, 1, 1)
         self.label_3 = QtGui.QLabel(self.widgetServices)
         self.label_3.setObjectName(_fromUtf8("label_3"))
         self.gridLayout.addWidget(self.label_3, 0, 0, 1, 1)
@@ -118,10 +115,10 @@ class Ui_QgisCloudPlugin(object):
         self.label_7 = QtGui.QLabel(self.widgetServices)
         self.label_7.setObjectName(_fromUtf8("label_7"))
         self.gridLayout.addWidget(self.label_7, 1, 0, 1, 1)
-        self.lblQwc2 = QtGui.QLabel(self.widgetServices)
-        self.lblQwc2.setOpenExternalLinks(True)
-        self.lblQwc2.setObjectName(_fromUtf8("lblQwc2"))
-        self.gridLayout.addWidget(self.lblQwc2, 1, 1, 1, 1)
+        self.lblQwc1 = QtGui.QLabel(self.widgetServices)
+        self.lblQwc1.setOpenExternalLinks(True)
+        self.lblQwc1.setObjectName(_fromUtf8("lblQwc1"))
+        self.gridLayout.addWidget(self.lblQwc1, 1, 1, 1, 1)
         self.verticalLayout_4.addWidget(self.widgetServices)
         spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         self.verticalLayout_4.addItem(spacerItem)
@@ -317,12 +314,7 @@ class Ui_QgisCloudPlugin(object):
         self.btnBackgroundLayer.setText(_translate("QgisCloudPlugin", "Add background layer", None))
         self.labelOpenLayersPlugin.setText(_translate("QgisCloudPlugin", "<i>To add a background layer to the map, install the OpenLayers plugin.</i>", None))
         self.btnPublishMap.setText(_translate("QgisCloudPlugin", "Publish Map", None))
-        self.lblMobileMap.setText(_translate("QgisCloudPlugin", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://m.qgiscloud.com/user/map\"><span style=\" font-family:\'Ubuntu\'; text-decoration: underline; color:#0057ae;\">http://m.qgiscloud.com/user/map</span></a></p></body></html>", None))
-        self.label.setText(_translate("QgisCloudPlugin", "Public WMS", None))
+        self.label.setText(_translate("QgisCloudPlugin", "WMS (WFS/WCS) URL", None))
         self.lblWMS.setText(_translate("QgisCloudPlugin", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -340,19 +332,18 @@ class Ui_QgisCloudPlugin(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"mailto:support@qgiscloud.com?subject=QGISCloud support\"><span style=\" font-family:\'Ubuntu\'; text-decoration: underline; color:#0057ae;\">support@qgiscloud.com</span></a></p></body></html>", None))
-        self.label_4.setText(_translate("QgisCloudPlugin", "Mobile map", None))
         self.label_3.setText(_translate("QgisCloudPlugin", "Webmap", None))
         self.lblWebmap.setText(_translate("QgisCloudPlugin", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://qgiscloud.com/user/map\"><span style=\" font-family:\'Ubuntu\'; text-decoration: underline; color:#0057ae;\">http://qgiscloud.com/user/map</span></a></p></body></html>", None))
-        self.label_7.setText(_translate("QgisCloudPlugin", "QWC2 Webmap (beta)", None))
-        self.lblQwc2.setText(_translate("QgisCloudPlugin", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.label_7.setText(_translate("QgisCloudPlugin", "QWC1 Webmap (old)", None))
+        self.lblQwc1.setText(_translate("QgisCloudPlugin", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://qgiscloud.com/user/map/qwc2/\"><span style=\" font-family:\'Ubuntu\'; text-decoration: underline; color:#0057ae;\">http://qgiscloud.com/user/map/qwc2/</span></a></p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://qgiscloud.com/user/map/qwc1/\"><span style=\" font-family:\'Ubuntu\'; text-decoration: underline; color:#0057ae;\">http://qgiscloud.com/user/map/qwc1/</span></a></p></body></html>", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.mapTab), _translate("QgisCloudPlugin", "Map", None))
         self.label_10.setText(_translate("QgisCloudPlugin", "Database:", None))
         self.btnRefreshLocalLayers.setText(_translate("QgisCloudPlugin", "Refresh layers", None))

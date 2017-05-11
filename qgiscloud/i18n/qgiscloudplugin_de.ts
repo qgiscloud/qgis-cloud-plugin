@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="de_CH" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="de_CH">
 <context>
     <name>DataUpload</name>
     <message>
@@ -28,19 +29,19 @@
         <translation>Die Tabelle &apos;{table}&apos; wird erstellt...</translation>
     </message>
     <message>
-        <location filename="../data_upload.py" line="150"/>
+        <location filename="../data_upload.py" line="151"/>
         <source>Feature {id} of layer {layer} has no geometry</source>
         <translation>Das Objekt {id} der Ebene {layer} hat keine Geometrie</translation>
     </message>
     <message>
-        <location filename="../data_upload.py" line="206"/>
+        <location filename="../data_upload.py" line="207"/>
         <source>{table}: {count} features uploaded</source>
         <translation>{table}: {count} Objekte hochgeladen</translation>
     </message>
     <message>
-        <location filename="../data_upload.py" line="153"/>
+        <location filename="../data_upload.py" line="154"/>
         <source>Feature {id} of layer {layer} has wrong geometry type {type}</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Objekt {id} des Layers {layer} hat einen falschen Geometrie-Typ {type}</translation>
     </message>
 </context>
 <context>
@@ -131,7 +132,7 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui_qgiscloudplugin.py" line="325"/>
+        <location filename="../ui_qgiscloudplugin.ui" line="123"/>
         <source>Public WMS</source>
         <translation>Öffentlicher WMS</translation>
     </message>
@@ -283,18 +284,18 @@ p, li { white-space: pre-wrap; }
         <translation>&lt;b&gt;Plugin-Version:&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../ui_qgiscloudplugin.py" line="350"/>
+        <location filename="../ui_qgiscloudplugin.ui" line="217"/>
         <source>QWC2 Webmap (beta)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../ui_qgiscloudplugin.py" line="351"/>
+        <location filename="../ui_qgiscloudplugin.ui" line="224"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://qgiscloud.com/user/map/qwc2/&quot;&gt;&lt;span style=&quot; font-family:&apos;Ubuntu&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;http://qgiscloud.com/user/map/qwc2/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="326"/>
@@ -303,7 +304,12 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://wms.qgiscloud.com/user/map/&quot;&gt;&lt;span style=&quot; font-family:&apos;Ubuntu&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;http://wms.qgiscloud.com/user/map/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui_qgiscloudplugin.py" line="325"/>
+        <source>WMS (WFS/WCS) URL</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -640,7 +646,7 @@ Please remove or replace above layers before publishing your map.
     <message>
         <location filename="../raster/raster_upload.py" line="137"/>
         <source>Registering raster columns of table &apos;%s&apos;...</source>
-        <translation type="unfinished"></translation>
+        <translation>Registrieren der Raster-Spalten der Tabelle &apos;%s&apos;...</translation>
     </message>
 </context>
 </TS>
