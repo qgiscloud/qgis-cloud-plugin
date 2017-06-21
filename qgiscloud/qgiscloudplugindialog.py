@@ -190,6 +190,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.btnPublishMap.clicked.connect(self.publish_map)
         self.ui.btnRefreshLocalLayers.clicked.connect(self.refresh_local_data_sources)
         self.iface.newProjectCreated.connect(self.reset_load_data)
+        self.iface.projectRead.connect(self.reset_load_data)
         QgsMapLayerRegistry.instance().layerWillBeRemoved.connect(self.remove_layer)
         QgsMapLayerRegistry.instance().layerWasAdded.connect(self.add_layer)
         self.ui.cbUploadDatabase.currentIndexChanged.connect(lambda idx: self.activate_upload_button())
@@ -218,6 +219,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.do_update_local_data_sources = False
         if self.iface:
             self.iface.newProjectCreated.disconnect(self.reset_load_data)
+            self.iface.projectRead.disconnect(self.reset_load_data)
         if QgsMapLayerRegistry.instance():
             QgsMapLayerRegistry.instance().layerWillBeRemoved.disconnect(self.remove_layer)
             QgsMapLayerRegistry.instance().layerWasAdded.disconnect(self.add_layer)
