@@ -362,7 +362,7 @@ class QgisCloudPluginDialog(QDockWidget):
                     answer = QMessageBox.question(
                         self,
                         self.tr("Warning"),
-                        self.tr("You have layers from database {name} loaded in your project! Do you want to remove them before you delete database {name}.").format(name=name),
+                        self.tr("You have layers from database {name} loaded in your project! Do you want to remove them before you delete database {name}?").format(name=name),
                         QMessageBox.StandardButtons(
                             QMessageBox.Cancel |
                             QMessageBox.Yes))
