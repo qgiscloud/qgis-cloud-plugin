@@ -572,6 +572,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.statusBar().showMessage("")
 
     def reset_load_data(self):
+        self.ui.widgetServices.hide()
         self.update_local_data_sources([],  [])
         self.ui.btnUploadData.setEnabled(False)
 
