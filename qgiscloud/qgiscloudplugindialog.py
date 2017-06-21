@@ -522,9 +522,7 @@ class QgisCloudPluginDialog(QDockWidget):
         saved = self.check_project_saved()
         if not saved:
             self.statusBar().showMessage(self.tr("Cancelled"))
-            QApplication.restoreOverrideCursor()
-            return
-        if self.check_login() and self.check_layers():
+        elif self.check_login() and self.check_layers():
             self.statusBar().showMessage(self.tr("Publishing map"))
             try:
                 fullExtent = self.iface.mapCanvas().fullExtent()
@@ -548,11 +546,10 @@ class QgisCloudPluginDialog(QDockWidget):
                     "Map successfully published"), level=0, duration=2)
                 self.statusBar().showMessage(
                     self.tr("Map successfully published"))
-                QApplication.restoreOverrideCursor()
             except Exception as e:
                 self.statusBar().showMessage("")
                 ErrorReportDialog(self.tr("Error uploading project"), self.tr("An error occured."), str(e) + "\n" + traceback.format_exc(), self.user, self).exec_()
-                QApplication.restoreOverrideCursor()
+        QApplication.restoreOverrideCursor()
 
     def publish_symbols(self, missingSvgSymbols):
         self.statusBar().showMessage(self.tr("Uploading SVG symbols"))
