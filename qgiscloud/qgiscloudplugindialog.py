@@ -603,7 +603,7 @@ class QgisCloudPluginDialog(QDockWidget):
             if local_layers or local_raster_layers:
                 title = self.tr("Local layers found")
                 message += self.tr(
-                    "Some layers are using local data. You can upload local layers to your cloud database in the 'Upload Data' tab.\n\n")
+                    "Some layers are using local data. Please upload local layers to your cloud database in the 'Upload Data' tab before publishing.\n\n")
 
             if unsupported_layers:
                 title = self.tr("Unsupported layers found")
@@ -618,7 +618,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 message += self.tr(
                     "For raster data you can use public WMS layers or the OpenLayers Plugin.")
 
-            QMessageBox.information(self, title, message)
+            QMessageBox.warning(self, title, message)
 
             self.refresh_databases()
             self.ui.tabWidget.setCurrentWidget(self.ui.uploadTab)
