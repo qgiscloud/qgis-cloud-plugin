@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="pt_BR" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="pt_BR">
 <context>
     <name>DataUpload</name>
     <message>
@@ -87,7 +88,7 @@
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="316"/>
         <source>&amp;QGIS Cloud</source>
-        <translation>&amp;QGIS Cloud</translation>
+        <translation>&amp;GGIS Cloud</translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="356"/>
@@ -409,6 +410,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../qgiscloudplugindialog.py" line="375"/>
         <source>You have layers from database {name} loaded in your project! Do you want to remove them before you delete database {name}.</source>
+        <translatorcomment>I think it must have a &quot;?&quot; at the end</translatorcomment>
         <translation>Você tem camadas do banco de dados {name} carregados em seu projeto! Você deseja removê-los antes de apagar o banco de dados {name}.</translation>
     </message>
     <message>
@@ -449,12 +451,14 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../qgiscloudplugindialog.py" line="520"/>
         <source>The project has a user defined CRS. The use of user defined CRS is not supported. Please correct the project CRS before publishing!</source>
-        <translation>Este projeto possui um CRS definido pelo usuário. O uso de CRS definidos pelo usuário não é suportado. Por favor corrija o CRS do projeto antes de publicá-lo!</translation>
+        <translatorcomment>The term &quot;SRC&quot; is used in portuguese interface of QGIS.</translatorcomment>
+        <translation>Este projeto possui um SRC definido pelo usuário. O uso de SRC definidos pelo usuário não é suportado. Por favor corrija o SRC do projeto antes de publicá-lo!</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="532"/>
         <source>The layer(s) {layerlist}have user defined CRS. The use of user defined CRS is not supported. Please correct the CRS before publishing!</source>
-        <translation>A camada(s) {layerlist} possuem CRS definidos pelo usuário. O uso de CRS definidos pelo usuário não é suportado. Por favor corrija o CRS do projeto antes de publicá-lo!</translation>
+        <translatorcomment>I think it lackd a space after {layerlist} on original string. The term &quot;SRC&quot; is used in portuguese interface of QGIS.</translatorcomment>
+        <translation>A camada(s) {layerlist} possuem SRC definidos pelo usuário. O uso de SRC definidos pelo usuário não é suportado. Por favor corrija o SRC do projeto antes de publicá-lo!</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="538"/>
