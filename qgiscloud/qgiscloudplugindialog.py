@@ -166,16 +166,16 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.widgetDatabases.setEnabled(False)
         self.ui.labelOpenLayersPlugin.hide()
 
-        try:
-            if QGis.QGIS_VERSION_INT >= 20300:
-                from openlayers_menu import OpenlayersMenu
-            else:
-                # QGIS 1.x - QGIS-2.2
-                from openlayers_menu_compat import OpenlayersMenu
-            self.ui.btnBackgroundLayer.setMenu(OpenlayersMenu(self.iface))
-        except:
-            self.ui.btnBackgroundLayer.hide()
-            self.ui.labelOpenLayersPlugin.show()
+#        try:
+        if QGis.QGIS_VERSION_INT >= 20300:
+            from openlayers_menu import OpenlayersMenu
+        else:
+            # QGIS 1.x - QGIS-2.2
+            from openlayers_menu_compat import OpenlayersMenu
+        self.ui.btnBackgroundLayer.setMenu(OpenlayersMenu(self.iface))
+#        except:
+#            self.ui.btnBackgroundLayer.hide()
+#            self.ui.labelOpenLayersPlugin.show()
 
         # map<data source, table name>
         self.data_sources_table_names = {}

@@ -368,6 +368,7 @@ class RasterUpload(QObject):
         nx = float(raster_size[0]) / float(block_size[0])
         ny = float(raster_size[1]) / float(block_size[1])
     
+        print  int(math.ceil(nx)), int(math.ceil(ny))
         return ( int(math.ceil(nx)), int(math.ceil(ny)))
     
     def calculate_block_pad_size(self,  band, xoff, yoff, block_size):
@@ -445,7 +446,6 @@ class RasterUpload(QObject):
                             r = float (dimY) /  float (i)
                             
                         r = r -  float (d)
-#                        print i,  r,  _r
                         if  abs(_r   -  (-1)) <= 0.001 or r < _r  or  abs(_r   -  r ) <= 0.001:
                             _r = r
                             _i = i
@@ -454,7 +454,7 @@ class RasterUpload(QObject):
                    tileX = _i
                 else:
                    tileY = _i
-                       
+        
         return int (tileX),  int (tileY)
 
 

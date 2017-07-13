@@ -28,11 +28,12 @@ from openlayers_plugin.openlayers_layer import OpenlayersLayer
 from openlayers_plugin.openlayers_plugin_layer_type import OpenlayersPluginLayerType
 from openlayers_plugin.weblayers.weblayer_registry import WebLayerTypeRegistry
 from openlayers_plugin.weblayers.google_maps import OlGooglePhysicalLayer, OlGoogleStreetsLayer, OlGoogleHybridLayer, OlGoogleSatelliteLayer
-from openlayers_plugin.weblayers.osm import OlOpenStreetMapLayer, OlOpenCycleMapLayer, OlOCMLandscapeLayer, OlOCMPublicTransportLayer, OlOSMHumanitarianDataModelLayer
+#from openlayers_plugin.weblayers.osm import OlOpenStreetMapLayer, OlOpenCycleMapLayer, OlOCMLandscapeLayer, OlOCMPublicTransportLayer, OlOSMHumanitarianDataModelLayer
+from openlayers_plugin.weblayers.osm import OlOpenStreetMapLayer, OlOSMHumanitarianDataModelLayer
 from openlayers_plugin.weblayers.bing_maps import OlBingRoadLayer, OlBingAerialLayer, OlBingAerialLabelledLayer
 from openlayers_plugin.weblayers.apple_maps import OlAppleiPhotoMapLayer
 from openlayers_plugin.weblayers.osm_stamen import OlOSMStamenTonerLayer, OlOSMStamenWatercolorLayer, OlOSMStamenTerrainLayer
-from openlayers_plugin.weblayers.map_quest import OlMapQuestOSMLayer, OlMapQuestOpenAerialLayer
+#from openlayers_plugin.weblayers.map_quest import OlMapQuestOSMLayer, OlMapQuestOpenAerialLayer
 
 
 class OpenlayersMenu(QMenu):
@@ -47,9 +48,9 @@ class OpenlayersMenu(QMenu):
         self._olLayerTypeRegistry.register(OlGoogleSatelliteLayer())
 
         self._olLayerTypeRegistry.register(OlOpenStreetMapLayer())
-        self._olLayerTypeRegistry.register(OlOpenCycleMapLayer())
-        self._olLayerTypeRegistry.register(OlOCMLandscapeLayer())
-        self._olLayerTypeRegistry.register(OlOCMPublicTransportLayer())
+#        self._olLayerTypeRegistry.register(OlOpenCycleMapLayer())
+#        self._olLayerTypeRegistry.register(OlOCMLandscapeLayer())
+#        self._olLayerTypeRegistry.register(OlOCMPublicTransportLayer())
         self._olLayerTypeRegistry.register(OlOSMHumanitarianDataModelLayer())
 
         self._olLayerTypeRegistry.register(OlBingRoadLayer())
@@ -60,8 +61,8 @@ class OpenlayersMenu(QMenu):
         self._olLayerTypeRegistry.register(OlOSMStamenWatercolorLayer())
         self._olLayerTypeRegistry.register(OlOSMStamenTerrainLayer())
 
-        self._olLayerTypeRegistry.register(OlMapQuestOSMLayer())
-        self._olLayerTypeRegistry.register(OlMapQuestOpenAerialLayer())
+#        self._olLayerTypeRegistry.register(OlMapQuestOSMLayer())
+#        self._olLayerTypeRegistry.register(OlMapQuestOpenAerialLayer())
 
         self._olLayerTypeRegistry.register(OlAppleiPhotoMapLayer())
 
