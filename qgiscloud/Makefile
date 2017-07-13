@@ -31,7 +31,10 @@ SOURCES = qgiscloudplugindialog.py \
           error_report_dialog.py
 
 TRANSLATIONS = i18n/qgiscloudplugin_de.ts \
-               i18n/qgiscloudplugin_it.ts
+	i18n/qgiscloudplugin_he.ts \
+	i18n/qgiscloudplugin_it.ts \
+	i18n/qgiscloudplugin_pt_BR.ts \
+	i18n/qgiscloudplugin_pt_PT.ts
 
 PLUGINNAME = qgiscloud
 

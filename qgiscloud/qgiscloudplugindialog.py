@@ -182,29 +182,19 @@ class QgisCloudPluginDialog(QDockWidget):
         # flag to disable update of local data sources during upload
         self.do_update_local_data_sources = True
 
-        QObject.connect(self.ui.btnLogin, SIGNAL("clicked()"), self.check_login)
-        QObject.connect(
-            self.ui.btnDbCreate, SIGNAL("clicked()"), self.create_database)
-        QObject.connect(
-            self.ui.btnDbDelete, SIGNAL("clicked()"), self.delete_database)
-        QObject.connect(
-            self.ui.btnDbRefresh, SIGNAL("clicked()"), self.refresh_databases)
-        QObject.connect(self.ui.tabDatabases, SIGNAL(
-            "itemSelectionChanged()"), self.select_database)
-        QObject.connect(
-            self.ui.btnPublishMap, SIGNAL("clicked()"), self.publish_map)
-        QObject.connect(self.ui.btnRefreshLocalLayers, SIGNAL(
-            "clicked()"), self.refresh_local_data_sources)
-        QObject.connect(
-            self.iface, SIGNAL("newProjectCreated()"), self.reset_load_data)
-        QObject.connect(QgsMapLayerRegistry.instance(), SIGNAL(
-            "layerWillBeRemoved(QString)"), self.remove_layer)
-        QObject.connect(QgsMapLayerRegistry.instance(), SIGNAL(
-            "layerWasAdded(QgsMapLayer *)"), self.add_layer)
-        QObject.connect(self.ui.cbUploadDatabase, SIGNAL(
-            "currentIndexChanged(int)"), lambda idx: self.activate_upload_button())
-        QObject.connect(
-            self.ui.btnUploadData, SIGNAL("clicked()"), self.upload_data)
+        self.ui.btnLogin.clicked.connect(self.check_login)
+        self.ui.btnDbCreate.clicked.connect(self.create_database)
+        self.ui.btnDbDelete.clicked.connect(self.delete_database)
+        self.ui.btnDbRefresh.clicked.connect(self.refresh_databases)
+        self.ui.tabDatabases.itemSelectionChanged.connect(self.select_database)
+        self.ui.btnPublishMap.clicked.connect(self.publish_map)
+        self.ui.btnRefreshLocalLayers.clicked.connect(self.refresh_local_data_sources)
+        self.iface.newProjectCreated.connect(self.reset_load_data)
+        self.iface.projectRead.connect(self.reset_load_data)
+        QgsMapLayerRegistry.instance().layerWillBeRemoved.connect(self.remove_layer)
+        QgsMapLayerRegistry.instance().layerWasAdded.connect(self.add_layer)
+        self.ui.cbUploadDatabase.currentIndexChanged.connect(lambda idx: self.activate_upload_button())
+        self.ui.btnUploadData.clicked.connect(self.upload_data)
 
         self.ui.editServer.textChanged.connect(self.serverURL)
         self.ui.resetUrlBtn.clicked.connect(self.resetApiUrl)
@@ -228,14 +218,11 @@ class QgisCloudPluginDialog(QDockWidget):
     def unload(self):
         self.do_update_local_data_sources = False
         if self.iface:
-            QObject.disconnect(
-                self.iface, SIGNAL("newProjectCreated()"),
-                self.reset_load_data)
+            self.iface.newProjectCreated.disconnect(self.reset_load_data)
+            self.iface.projectRead.disconnect(self.reset_load_data)
         if QgsMapLayerRegistry.instance():
-            QObject.disconnect(QgsMapLayerRegistry.instance(), SIGNAL(
-                "layerWillBeRemoved(QString)"), self.remove_layer)
-            QObject.disconnect(QgsMapLayerRegistry.instance(), SIGNAL(
-                "layerWasAdded(QgsMapLayer *)"), self.add_layer)
+            QgsMapLayerRegistry.instance().layerWillBeRemoved.disconnect(self.remove_layer)
+            QgsMapLayerRegistry.instance().layerWasAdded.disconnect(self.add_layer)
 
     def statusBar(self):
         return self.iface.mainWindow().statusBar()
@@ -375,7 +362,7 @@ class QgisCloudPluginDialog(QDockWidget):
                     answer = QMessageBox.question(
                         self,
                         self.tr("Warning"),
-                        self.tr("You have layers from database {name} loaded in your project! Do you want to remove them before you delete database {name}.").format(name=name),
+                        self.tr("You have layers from database {name} loaded in your project! Do you want to remove them before you delete database {name}?").format(name=name),
                         QMessageBox.StandardButtons(
                             QMessageBox.Cancel |
                             QMessageBox.Yes))
@@ -535,9 +522,7 @@ class QgisCloudPluginDialog(QDockWidget):
         saved = self.check_project_saved()
         if not saved:
             self.statusBar().showMessage(self.tr("Cancelled"))
-            QApplication.restoreOverrideCursor()
-            return
-        if self.check_login() and self.check_layers():
+        elif self.check_login() and self.check_layers():
             self.statusBar().showMessage(self.tr("Publishing map"))
             try:
                 fullExtent = self.iface.mapCanvas().fullExtent()
@@ -561,11 +546,10 @@ class QgisCloudPluginDialog(QDockWidget):
                     "Map successfully published"), level=0, duration=2)
                 self.statusBar().showMessage(
                     self.tr("Map successfully published"))
-                QApplication.restoreOverrideCursor()
             except Exception as e:
                 self.statusBar().showMessage("")
                 ErrorReportDialog(self.tr("Error uploading project"), self.tr("An error occured."), str(e) + "\n" + traceback.format_exc(), self.user, self).exec_()
-                QApplication.restoreOverrideCursor()
+        QApplication.restoreOverrideCursor()
 
     def publish_symbols(self, missingSvgSymbols):
         self.statusBar().showMessage(self.tr("Uploading SVG symbols"))
@@ -585,6 +569,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.statusBar().showMessage("")
 
     def reset_load_data(self):
+        self.ui.widgetServices.hide()
         self.update_local_data_sources([],  [])
         self.ui.btnUploadData.setEnabled(False)
 
@@ -618,7 +603,7 @@ class QgisCloudPluginDialog(QDockWidget):
             if local_layers or local_raster_layers:
                 title = self.tr("Local layers found")
                 message += self.tr(
-                    "Some layers are using local data. You can upload local layers to your cloud database in the 'Upload Data' tab.\n\n")
+                    "Some layers are using local data. Please upload local layers to your cloud database in the 'Upload Data' tab before publishing.\n\n")
 
             if unsupported_layers:
                 title = self.tr("Unsupported layers found")
@@ -633,7 +618,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 message += self.tr(
                     "For raster data you can use public WMS layers or the OpenLayers Plugin.")
 
-            QMessageBox.information(self, title, message)
+            QMessageBox.warning(self, title, message)
 
             self.refresh_databases()
             self.ui.tabWidget.setCurrentWidget(self.ui.uploadTab)
