@@ -3,7 +3,7 @@ name=QGIS Cloud Plugin
 qgisMinimumVersion=1.8
 qgisMaximumVersion=2.99
 description=Publish maps on qgiscloud.com
-version=1.4.11
+version=1.4.12
 author=Pirmin Kalberer, Mathias Walker, Horst Duester, Sandro Mani
 email=pka@sourcepole.ch
 about=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich, Switzerland
@@ -11,9 +11,10 @@ about=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich
 ; Optional items:
 
 changelog=
+    1.4.12
+    - Handling of non geometry layers improved
     1.4.11
-    - Set QWC2 as default Web Client
-    - all column names set to lower case during import of vector data
+    - OpenLayers-Plugin bug fixed
     1.4.10
     - Set QWC2 as default Web Client
     - all column names set to lower case during import of vector data

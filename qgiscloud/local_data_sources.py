@@ -58,7 +58,7 @@ class LocalDataSources:
 
             if provider == "postgres":
                 if QgsDataSourceURI(layer.publicSource()).host() not in DbConnectionCfg.CLOUD_DB_HOSTS:
-                    if layer.wkbType() != 100: # FIXME: QGis.WKBNoGeometry
+                    if layer.wkbType() != 0: 
                         local_layers.append(layer)
                     else:
                         # geometryless tables not supported
