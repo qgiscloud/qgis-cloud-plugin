@@ -24,11 +24,12 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from qgis.core import *
 import resources_rc
+import imp
 from openlayers_plugin.openlayers_layer import OpenlayersLayer
 from openlayers_plugin.openlayers_plugin_layer_type import OpenlayersPluginLayerType
 from openlayers_plugin.weblayers.weblayer_registry import WebLayerTypeRegistry
 from openlayers_plugin.weblayers.google_maps import OlGooglePhysicalLayer, OlGoogleStreetsLayer, OlGoogleHybridLayer, OlGoogleSatelliteLayer
-#from openlayers_plugin.weblayers.osm import OlOpenStreetMapLayer, OlOpenCycleMapLayer, OlOCMLandscapeLayer, OlOCMPublicTransportLayer, OlOSMHumanitarianDataModelLayer
+from openlayers_plugin.weblayers.osm_thunderforest import OlOpenCycleMapLayer, OlOCMLandscapeLayer, OlOCMPublicTransportLayer, OlOCMOutdoorstLayer, OlOCMTransportDarkLayer, OlOCMSpinalMapLayer, OlOCMPioneerLayer, OlOCMMobileAtlasLayer, OlOCMNeighbourhoodLayer
 from openlayers_plugin.weblayers.osm import OlOpenStreetMapLayer, OlOSMHumanitarianDataModelLayer
 from openlayers_plugin.weblayers.bing_maps import OlBingRoadLayer, OlBingAerialLayer, OlBingAerialLabelledLayer
 from openlayers_plugin.weblayers.apple_maps import OlAppleiPhotoMapLayer
@@ -40,6 +41,7 @@ class OpenlayersMenu(QMenu):
     def __init__(self, iface, parent=None):
         QMenu.__init__(self, parent)
         self.iface = iface
+
         self._olLayerTypeRegistry = WebLayerTypeRegistry(self)
 
         self._olLayerTypeRegistry.register(OlGooglePhysicalLayer())
@@ -48,10 +50,18 @@ class OpenlayersMenu(QMenu):
         self._olLayerTypeRegistry.register(OlGoogleSatelliteLayer())
 
         self._olLayerTypeRegistry.register(OlOpenStreetMapLayer())
-#        self._olLayerTypeRegistry.register(OlOpenCycleMapLayer())
-#        self._olLayerTypeRegistry.register(OlOCMLandscapeLayer())
-#        self._olLayerTypeRegistry.register(OlOCMPublicTransportLayer())
         self._olLayerTypeRegistry.register(OlOSMHumanitarianDataModelLayer())
+                
+        self._olLayerTypeRegistry.register(OlOpenCycleMapLayer())
+        self._olLayerTypeRegistry.register(OlOCMLandscapeLayer())
+        self._olLayerTypeRegistry.register(OlOCMPublicTransportLayer())
+        self._olLayerTypeRegistry.register(OlOCMOutdoorstLayer())
+        self._olLayerTypeRegistry.register(OlOCMTransportDarkLayer())
+        self._olLayerTypeRegistry.register(OlOCMSpinalMapLayer())
+        self._olLayerTypeRegistry.register(OlOCMPioneerLayer())
+        self._olLayerTypeRegistry.register(OlOCMMobileAtlasLayer())
+        self._olLayerTypeRegistry.register(OlOCMNeighbourhoodLayer())        
+
 
         self._olLayerTypeRegistry.register(OlBingRoadLayer())
         self._olLayerTypeRegistry.register(OlBingAerialLayer())
@@ -76,6 +86,8 @@ class OpenlayersMenu(QMenu):
         self.pluginLayerType = OpenlayersPluginLayerType(
             self.iface, self.setReferenceLayer, self._olLayerTypeRegistry)
         QgsPluginLayerRegistry.instance().addPluginLayerType(self.pluginLayerType)
+
+        
 
     def addLayer(self, layerType):
         layer = OpenlayersLayer(self.iface, self._olLayerTypeRegistry)
