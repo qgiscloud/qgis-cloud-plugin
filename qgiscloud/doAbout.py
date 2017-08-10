@@ -41,7 +41,8 @@ class DlgAbout:
         Hebrew - Harel Dan <br>
         Italian - Sandro Mani <br>
         Portuguese (Brazil) - Rodrigo Smarzaro<br>
-        Portuguese (Europeu) - Nelson Silva<br><br>
+        Portuguese (Europeu) - Nelson Silva<br>
+        Espaniol - Dr. Mario Alberto Luna Pavo<br><br>
         """
         
     def licenseString(self):

@@ -30,6 +30,7 @@ from qgis.core import *
 from numbers import Number
 import os
 import sys
+import apicompat
 
 
 class PGVectorLayerImport:
@@ -40,12 +41,12 @@ class PGVectorLayerImport:
         if not value:
             return "NULL"
         if isinstance(value, Number):
-            return str(value)
+            return pystring(value)
         else:
             try:
                 v = value.toString()
             except:
-                v = str(value)
+                v = pystring(value)
             v = v.replace("'", "''")
             if v.find("\\") != -1:
                 return "E'" + v.replace("\\", "\\\\") + "'"
