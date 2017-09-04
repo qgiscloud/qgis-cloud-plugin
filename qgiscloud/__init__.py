@@ -23,9 +23,9 @@
 def name():
     return "QGIS Cloud Plugin"
 def description():
-    return "Publish maps on qgiscloud.com"
+    return "Publish maps and share data on qgiscloud.com"
 def version():
-    return "1.4.15"
+    return "1.4.16"
 def icon():
     return "icon.png"
 def qgisMinimumVersion():

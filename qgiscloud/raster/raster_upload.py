@@ -368,8 +368,8 @@ class RasterUpload(QObject):
         nx = float(raster_size[0]) / float(block_size[0])
         ny = float(raster_size[1]) / float(block_size[1])
     
-        print  int(math.ceil(nx)), int(math.ceil(ny))
-        return ( int(math.ceil(nx)), int(math.ceil(ny)))
+        print  int(round(nx)), int(round(ny))
+        return ( int(round(nx)), int(round(ny)))
     
     def calculate_block_pad_size(self,  band, xoff, yoff, block_size):
         """Calculates number of columns [0] and rows [1] of padding"""     
