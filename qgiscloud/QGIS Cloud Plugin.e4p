@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project QGIS Cloud Plugin -->
-<!-- Saved: 2017-08-10, 14:51:24 -->
+<!-- Saved: 2017-10-16, 16:59:35 -->
 <!-- Copyright (C) 2017 ,  -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -48,12 +48,11 @@
     <Source>simplejson/scanner.py</Source>
     <Source>simplejson/tool.py</Source>
     <Source>spinner.py</Source>
-    <Source>ui_login.py</Source>
     <Source>ui_qgiscloudplugin.py</Source>
   </Sources>
   <Forms>
+    <Form>qgiscloudplugin.ui</Form>
     <Form>ui_login.ui</Form>
-    <Form>ui_qgiscloudplugin.ui</Form>
   </Forms>
   <Translations>
     <Translation>i18n/qgiscloudplugin_de.qm</Translation>
@@ -63,7 +62,6 @@
     <Translation>i18n/qgiscloudplugin_he.ts</Translation>
     <Translation>i18n/qgiscloudplugin_it.qm</Translation>
     <Translation>i18n/qgiscloudplugin_it.ts</Translation>
-    <Translation>i18n/qgiscloudplugin_nl.ts</Translation>
     <Translation>i18n/qgiscloudplugin_pt_BR.qm</Translation>
     <Translation>i18n/qgiscloudplugin_pt_BR.ts</Translation>
     <Translation>i18n/qgiscloudplugin_pt_PT.qm</Translation>
