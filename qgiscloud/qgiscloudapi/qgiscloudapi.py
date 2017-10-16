@@ -37,6 +37,7 @@ except ImportError:
 import time
 from urllib import urlencode
 import urllib2
+import base64
 
 from version import __version__
 
@@ -186,6 +187,16 @@ class API():
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
         content = request.get(resource)
         return json.loads(content)
+        
+    def read_maps(self):
+        """
+            Returns a list of databases.
+        """
+        self.requires_auth()
+        resource = '/maps.json'
+        request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
+        content = request.get(resource)
+        return json.loads(content)        
 
     def delete_database(self, db_name):
         """
@@ -272,22 +283,33 @@ class API():
         content = request.get(resource)
         return json.loads(content)
 
-    def read_map(self, map_name):
+    def read_map(self, map_id):
         """
             Returns all map details.
         """
-        #self.requires_auth()
-        resource = '/maps/%s.json' % (map_name)
+        self.requires_auth()
+        resource = '/maps/%s.json' % (map_id)
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
         content = request.get(resource)
         return json.loads(content)
+        
+    def load_map_project(self,  map_id):
+        """
+            Download of QGIS project file.
+        """
+        self.requires_auth()
+        resource = '/maps/%s/qgs' % (map_id)
+        request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
+        content = request.get(resource)
+        print self.url
+        return content        
 
-    def delete_map(self, map_name):
+    def delete_map(self, map_id):
         """
             Delete a map.
         """
         self.requires_auth()
-        resource = '/maps/%s.json' % (map_name)
+        resource = '/maps/%s.json' % (map_id)
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
         request.delete(resource)
         return True
@@ -489,7 +511,7 @@ class Request():
     version = None
     url = None
 
-    def __init__(self, user=None, password=None, token=None, cache=None, version=__version__, url=API_URL):
+    def __init__(self, user=None, password=None, token=None, cache=None, version=__version__, url=API_URL,  headers=None):
         self.user = user
         self.password = password
         self.token = token
@@ -500,8 +522,8 @@ class Request():
     def post(self, resource, data={}):
         return self.request(resource, method='POST', data=data)
 
-    def get(self, resource):
-        return self.request(resource, method='GET')
+    def get(self, resource,  headers={}):
+        return self.request(resource, method='GET',  data=None,  headers=headers)
 
     def put(self, resource, data={}):
         return self.request(resource, method='PUT', data=data)

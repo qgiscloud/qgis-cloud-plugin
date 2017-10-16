@@ -24,7 +24,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.QtXml import *
 from qgis.core import *
-from ui_qgiscloudplugin import Ui_QgisCloudPlugin
+from Ui_qgiscloudplugin import Ui_QgisCloudPlugin
 from ui_login import Ui_LoginDialog
 from qgiscloudapi.qgiscloudapi import *
 from db_connections import DbConnections
@@ -159,11 +159,13 @@ class QgisCloudPluginDialog(QDockWidget):
 
         self.ui.btnUploadData.setEnabled(False)
         self.ui.btnPublishMap.setEnabled(False)
+        self.ui.btnMapDelete.setEnabled(False)
         self.ui.progressWidget.hide()
         self.ui.btnLogout.hide()
         self.ui.lblLoginStatus.hide()
         self.ui.widgetServices.hide()
         self.ui.widgetDatabases.setEnabled(False)
+        self.ui.widgetMaps.setEnabled(False)
         self.ui.labelOpenLayersPlugin.hide()
 
         try:
@@ -186,7 +188,11 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.btnDbCreate.clicked.connect(self.create_database)
         self.ui.btnDbDelete.clicked.connect(self.delete_database)
         self.ui.btnDbRefresh.clicked.connect(self.refresh_databases)
+        self.ui.btnMapLoad.clicked.connect(self.load_map)
+        self.ui.btnMapDelete.clicked.connect(self.delete_map)
+        self.ui.btnMapsRefresh.clicked.connect(self.refresh_maps)        
         self.ui.tabDatabases.itemSelectionChanged.connect(self.select_database)
+        self.ui.tabMaps.itemSelectionChanged.connect(self.select_map)
         self.ui.btnPublishMap.clicked.connect(self.publish_map)
         self.ui.btnRefreshLocalLayers.clicked.connect(self.refresh_local_data_sources)
         self.iface.newProjectCreated.connect(self.reset_load_data)
@@ -308,6 +314,7 @@ class QgisCloudPluginDialog(QDockWidget):
                     self.ui.lblSignup.hide()
                     self.ui.btnLogout.show()
                     self.ui.widgetDatabases.setEnabled(True)
+                    self.ui.widgetMaps.setEnabled(True)
 
                     self.ui.lblLoginStatus.setText(
                         self.tr_uni("Logged in as {0} ({1})").format(self.user, login_info['plan']))
@@ -317,6 +324,7 @@ class QgisCloudPluginDialog(QDockWidget):
                         self.tr_uni("Logged in as {0}").format(self.user),
                         level=0, duration=2)
                     self.refresh_databases()
+                    self.refresh_maps()
                     if not version_ok:
                         self._push_message(self.tr("QGIS Cloud"), self.tr(
                             "Unsupported versions detected. Please check your versions first!"), level=1)
@@ -395,6 +403,14 @@ class QgisCloudPluginDialog(QDockWidget):
     def select_database(self):
         self.ui.btnDbDelete.setEnabled(
             len(self.ui.tabDatabases.selectedItems()) > 0)
+            
+    def select_map(self):
+        self.ui.btnMapDelete.setEnabled(
+            len(self.ui.tabMaps.selectedItems()) > 0)
+        self.ui.btnMapLoad.setEnabled(
+            len(self.ui.tabMaps.selectedItems()) > 0)
+            
+    
 
     @pyqtSignature('')
     def on_btnLogout_clicked(self):
@@ -442,6 +458,56 @@ class QgisCloudPluginDialog(QDockWidget):
 
         self.db_size(self.db_connections)
         QApplication.restoreOverrideCursor()
+        
+    def load_map(self):
+        map_id = self.ui.tabMaps.currentItem().data(Qt.UserRole)
+        result = self.api.load_map_project(map_id)
+            
+            
+    def delete_map(self):
+        name = self.ui.tabMaps.currentItem().text()
+        map_id = self.ui.tabMaps.currentItem().data(Qt.UserRole)
+        
+        msgBox = QMessageBox()
+        msgBox.setText(self.tr("Delete QGIS Cloud map."))
+        msgBox.setInformativeText(
+            self.tr_uni("Do you want to delete the map \"%s\"?") % name)
+        msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        msgBox.setDefaultButton(QMessageBox.Cancel)
+        msgBox.setIcon(QMessageBox.Question)
+        ret = msgBox.exec_()
+        
+        if ret == QMessageBox.Ok:
+            self.setCursor(Qt.WaitCursor)
+            success = self.api.delete_map(map_id)
+            
+            if success:
+                self.ui.btnMapDelete.setEnabled(False)
+                time.sleep(2)
+                self.refresh_maps()
+            else:
+                self.show_api_error(success)
+                
+            self.unsetCursor()
+            
+    def refresh_maps(self):
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        if self.clouddb:
+            map_list = self.api.read_maps()
+            if self.show_api_error(map_list):
+                QApplication.restoreOverrideCursor()
+                return
+
+            self.ui.tabMaps.clear()
+            self.ui.btnMapDelete.setEnabled(False)
+            self.ui.btnMapLoad.setEnabled(False)
+            
+            for map in map_list:
+                it = QListWidgetItem(map['map']['name'])
+                self.ui.tabMaps.addItem(it)
+                it.setData(Qt.UserRole,  map['map']['id'])
+
+        QApplication.restoreOverrideCursor()        
 
     def api_url(self):
         return unicode(self.ui.editServer.text())
