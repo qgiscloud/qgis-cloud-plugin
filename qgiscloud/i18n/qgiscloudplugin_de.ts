@@ -86,12 +86,12 @@
 <context>
     <name>QgisCloudPlugin</name>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="342"/>
+        <location filename="../ui_qgiscloudplugin.py" line="393"/>
         <source>Publish Map</source>
         <translation>Karte publizieren</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="391"/>
+        <location filename="../ui_qgiscloudplugin.py" line="406"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -104,12 +104,12 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://qgiscloud.com/account/sign_up&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;Registrieren&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="369"/>
+        <location filename="../ui_qgiscloudplugin.py" line="381"/>
         <source>Webmap</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="370"/>
+        <location filename="../ui_qgiscloudplugin.py" line="382"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -123,17 +123,17 @@ p, li { white-space: pre-wrap; }
         <translation>Mobile Karte</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="350"/>
+        <location filename="../ui_qgiscloudplugin.py" line="362"/>
         <source>Public WMS</source>
         <translation>Öffentlicher WMS</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="356"/>
+        <location filename="../ui_qgiscloudplugin.py" line="368"/>
         <source>Map Admin</source>
         <translation>Kartenadministration</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="357"/>
+        <location filename="../ui_qgiscloudplugin.py" line="369"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -142,12 +142,12 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="362"/>
+        <location filename="../ui_qgiscloudplugin.py" line="374"/>
         <source>Support</source>
         <translation>Hilfe</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="363"/>
+        <location filename="../ui_qgiscloudplugin.py" line="375"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -156,117 +156,117 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="385"/>
+        <location filename="../ui_qgiscloudplugin.py" line="400"/>
         <source>Upload Data</source>
         <translation>Daten laden</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="383"/>
+        <location filename="../ui_qgiscloudplugin.py" line="398"/>
         <source>Refresh layers</source>
         <translation>Layer aktualisieren</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="384"/>
+        <location filename="../ui_qgiscloudplugin.py" line="399"/>
         <source>Upload data</source>
         <translation>Daten in die Cloud laden</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="406"/>
+        <location filename="../ui_qgiscloudplugin.py" line="421"/>
         <source>Account</source>
         <translation>Benutzerkonto</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="387"/>
+        <location filename="../ui_qgiscloudplugin.py" line="402"/>
         <source>https://api.qgiscloud.com</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="390"/>
+        <location filename="../ui_qgiscloudplugin.py" line="405"/>
         <source>Login</source>
         <translation>Anmelden</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="396"/>
+        <location filename="../ui_qgiscloudplugin.py" line="411"/>
         <source>Logged in as ...</source>
         <translation>Angemeldet als ...</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="398"/>
+        <location filename="../ui_qgiscloudplugin.py" line="413"/>
         <source>Databases</source>
         <translation>Datenbanken</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="405"/>
+        <location filename="../ui_qgiscloudplugin.py" line="420"/>
         <source>Refresh</source>
         <translation>Aktualisieren</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="408"/>
+        <location filename="../ui_qgiscloudplugin.py" line="423"/>
         <source>About</source>
         <translation>Über</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="388"/>
+        <location filename="../ui_qgiscloudplugin.py" line="403"/>
         <source>Reset QGIS Cloud API URL</source>
         <translation>Auf die QGIS Cloud API URL zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="389"/>
+        <location filename="../ui_qgiscloudplugin.py" line="404"/>
         <source>...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="397"/>
+        <location filename="../ui_qgiscloudplugin.py" line="412"/>
         <source>Logout</source>
         <translation>Abmelden</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="341"/>
+        <location filename="../ui_qgiscloudplugin.py" line="353"/>
         <source>&amp;QGIS Cloud</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="381"/>
+        <location filename="../ui_qgiscloudplugin.py" line="396"/>
         <source>Map</source>
         <translation>Karte</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="344"/>
+        <location filename="../ui_qgiscloudplugin.py" line="395"/>
         <source>Add background layer</source>
         <translation>Hintergrundebene hinzufügen</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="343"/>
+        <location filename="../ui_qgiscloudplugin.py" line="394"/>
         <source>&lt;i&gt;To add a background layer to the map, install the OpenLayers plugin.&lt;/i&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="382"/>
+        <location filename="../ui_qgiscloudplugin.py" line="397"/>
         <source>Database:</source>
         <translation>Datenbank:</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="399"/>
+        <location filename="../ui_qgiscloudplugin.py" line="414"/>
         <source>Create</source>
         <translation>Erzeugen</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="404"/>
+        <location filename="../ui_qgiscloudplugin.py" line="419"/>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="407"/>
+        <location filename="../ui_qgiscloudplugin.py" line="422"/>
         <source>&lt;b&gt;Plugin version:&lt;/b&gt;</source>
         <translation>&lt;b&gt;Plugin-Version:&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="375"/>
+        <location filename="../Ui_qgiscloudplugin.py" line="377"/>
         <source>QWC1 Webmap (old)</source>
         <translation>QWC1 Webmap (alt)</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="345"/>
+        <location filename="../ui_qgiscloudplugin.py" line="357"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -275,7 +275,7 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="351"/>
+        <location filename="../ui_qgiscloudplugin.py" line="363"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -284,12 +284,12 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="368"/>
+        <location filename="../Ui_qgiscloudplugin.py" line="370"/>
         <source>Mobile map (old)</source>
         <translation>Mobile Karte (alt)</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="376"/>
+        <location filename="../Ui_qgiscloudplugin.py" line="378"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -298,17 +298,17 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="386"/>
+        <location filename="../ui_qgiscloudplugin.py" line="401"/>
         <source>&amp;Server:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="402"/>
+        <location filename="../ui_qgiscloudplugin.py" line="417"/>
         <source>Load</source>
         <translation>Laden</translation>
     </message>
     <message>
-        <location filename="../Ui_qgiscloudplugin.py" line="403"/>
+        <location filename="../ui_qgiscloudplugin.py" line="418"/>
         <source>Published Maps</source>
         <translation>Publizierte Karten</translation>
     </message>
@@ -326,26 +326,31 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://qgiscloud.com/user/map/qwc2/&quot;&gt;&lt;span style=&quot; font-family:&apos;Ubuntu&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;http://qgiscloud.com/user/map/qwc2/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="../Ui_qgiscloudplugin.py" line="405"/>
+        <source>Maps</source>
+        <translation>Karten</translation>
+    </message>
 </context>
 <context>
     <name>QgisCloudPluginDialog</name>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="347"/>
+        <location filename="../qgiscloudplugindialog.py" line="345"/>
         <source>Login failed</source>
         <translation>Anmeldung fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="342"/>
+        <location filename="../qgiscloudplugindialog.py" line="340"/>
         <source>Wrong user name or password</source>
         <translation>Falscher Benutzername oder falsches Passwort</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="386"/>
+        <location filename="../qgiscloudplugindialog.py" line="384"/>
         <source>Delete QGIS Cloud database.</source>
         <translation>QGIS Cloud Datenbank löschen.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="456"/>
+        <location filename="../qgiscloudplugindialog.py" line="454"/>
         <source>Select database</source>
         <translation>Datenbank auswählen</translation>
     </message>
@@ -355,54 +360,54 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="554"/>
+        <location filename="../qgiscloudplugindialog.py" line="564"/>
         <source>The project has been modified.</source>
         <translation>Das Projekt wurde verändert.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="593"/>
+        <location filename="../qgiscloudplugindialog.py" line="603"/>
         <source>Publishing map</source>
         <translation>Die Karte wird publiziert</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="614"/>
+        <location filename="../qgiscloudplugindialog.py" line="624"/>
         <source>Map successfully published</source>
         <translation>Die Karte wurde erfolgreich publiziert</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="618"/>
+        <location filename="../qgiscloudplugindialog.py" line="628"/>
         <source>Error uploading project</source>
         <translation>Fehler beim Hochladen des Projektes</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="622"/>
+        <location filename="../qgiscloudplugindialog.py" line="633"/>
         <source>Uploading SVG symbols</source>
         <translation>SVG Symbole werden hoch geladen</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="659"/>
+        <location filename="../qgiscloudplugindialog.py" line="670"/>
         <source>Error checking local data sources</source>
         <translation>Fehler bei der Prüfung der loalen Datenquellen</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="672"/>
+        <location filename="../qgiscloudplugindialog.py" line="683"/>
         <source>Local layers found</source>
         <translation>Lokale Layer wurden gefunden</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="677"/>
+        <location filename="../qgiscloudplugindialog.py" line="688"/>
         <source>Unsupported layers found</source>
         <translation>Nicht unterstützte Layer wurden gefunden</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="678"/>
+        <location filename="../qgiscloudplugindialog.py" line="689"/>
         <source>Raster, plugin or geometryless layers are not supported:
 
 </source>
         <translation>Raster, Plugin oder geometrielose Layer können nicht verarbeitet werden:</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="684"/>
+        <location filename="../qgiscloudplugindialog.py" line="695"/>
         <source>
 Please remove or replace above layers before publishing your map.
 </source>
@@ -410,226 +415,251 @@ Please remove or replace above layers before publishing your map.
 Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="686"/>
+        <location filename="../qgiscloudplugindialog.py" line="697"/>
         <source>For raster data you can use public WMS layers or the OpenLayers Plugin.</source>
         <translation>Für Raster-Daten können Sie WMS Layer oder das OpenLayers Plugin verwenden.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="735"/>
+        <location filename="../qgiscloudplugindialog.py" line="746"/>
         <source>Note: OGR features will be converted to MULTI-type</source>
         <translation>Hinweis: OGS Geometrien werden zu Multi-Geomtrien konvertiert</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="761"/>
+        <location filename="../qgiscloudplugindialog.py" line="772"/>
         <source>Updated local data sources</source>
         <translation>Die lokalen Daten wurden hoch geladen</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="866"/>
+        <location filename="../qgiscloudplugindialog.py" line="877"/>
         <source>Network Error</source>
         <translation>Netzwerk Fehler</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="873"/>
+        <location filename="../qgiscloudplugindialog.py" line="884"/>
         <source>Uploading data...</source>
         <translation>Daten werden hoch geladen...</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="612"/>
+        <location filename="../qgiscloudplugindialog.py" line="622"/>
         <source>QGIS Cloud</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="964"/>
+        <location filename="../qgiscloudplugindialog.py" line="975"/>
         <source>QGIS Cloud Error</source>
         <translation>QGIS Cloud Fehler</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="966"/>
+        <location filename="../qgiscloudplugindialog.py" line="977"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="591"/>
+        <location filename="../qgiscloudplugindialog.py" line="601"/>
         <source>Cancelled</source>
         <translation>Abgebrochen</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="329"/>
+        <location filename="../qgiscloudplugindialog.py" line="327"/>
         <source>Unsupported versions detected. Please check your versions first!</source>
         <translation>Nicht unterstützte Versionen sind gefunden worden. Bitte prüfen Sie, ob Updates für das Plugin vorliegen!</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="730"/>
+        <location filename="../qgiscloudplugindialog.py" line="741"/>
         <source>Unsupported geometry type</source>
         <translation>Nicht unterstützter Geometrietyp</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="730"/>
+        <location filename="../qgiscloudplugindialog.py" line="741"/>
         <source>Unsupported geometry type &apos;{type}&apos; in layer &apos;{layer}&apos;</source>
         <translation>Nicht unterstützter Geometrietyp &apos;{type}&apos; in Ebene &apos;{layer}&apos;</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="798"/>
+        <location filename="../qgiscloudplugindialog.py" line="809"/>
         <source>Unknown type</source>
         <translation>Unbekannter Typ</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1026"/>
+        <location filename="../qgiscloudplugindialog.py" line="1037"/>
         <source>Used DB Storage: </source>
         <translation>Verwendeter Datenbankspeicher: </translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="857"/>
+        <location filename="../qgiscloudplugindialog.py" line="868"/>
         <source>No database selected</source>
         <translation>Keine Datenbank ausgewählt</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="857"/>
+        <location filename="../qgiscloudplugindialog.py" line="868"/>
         <source>Please select a database to upload data.</source>
         <translation>Bitte wählen Sie eine Datenbank aus um Daten hochzuladen.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="446"/>
+        <location filename="../qgiscloudplugindialog.py" line="444"/>
         <source>No databases</source>
         <translation>Keine Datenbanken</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="853"/>
+        <location filename="../qgiscloudplugindialog.py" line="864"/>
         <source>No database available</source>
         <translation>Keine Datenbanken verfügbar</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="853"/>
+        <location filename="../qgiscloudplugindialog.py" line="864"/>
         <source>Please create a database in the &apos;Account&apos; tab.</source>
         <translation>Bitte legen Sie eine Datenbank in &apos;Benutzerkonto&apos; Registerkarte an.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="553"/>
+        <location filename="../qgiscloudplugindialog.py" line="563"/>
         <source>Project Modified</source>
         <translation>Projekt geändert</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="659"/>
+        <location filename="../qgiscloudplugindialog.py" line="670"/>
         <source>An error occured.</source>
         <translation>Ein Fehler ist aufgetreten</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="906"/>
+        <location filename="../qgiscloudplugindialog.py" line="917"/>
         <source>Upload errors occurred</source>
         <translation>Fehler beim Hochladen der Daten</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="906"/>
+        <location filename="../qgiscloudplugindialog.py" line="917"/>
         <source>Upload errors occurred. Not all data could be uploaded.</source>
         <translation>Fehler beim Hochladen der Daten sind aufgetreten. Nicht alle Daten konnten hochgeladen werden.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="938"/>
+        <location filename="../qgiscloudplugindialog.py" line="949"/>
         <source>Save Project</source>
         <translation>Projekt speichern</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="930"/>
+        <location filename="../qgiscloudplugindialog.py" line="941"/>
         <source>Choose were to save the modified project:</source>
         <translation>Wählen Sie, wo das geänderte Projekt gespeichert werden soll.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="938"/>
+        <location filename="../qgiscloudplugindialog.py" line="949"/>
         <source>QGIS Project Files</source>
         <translation>QGIS Projektdateien</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="927"/>
+        <location filename="../qgiscloudplugindialog.py" line="938"/>
         <source>Upload complete. The local layers in the project were replaced with the layers uploaded to the qgiscloud database.</source>
         <translation>Die Daten wurden hochgeladen. Die lokalen Ebenen im Projekt wurden mit den Layers in der qgiscloud Datenbank ersetzt.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="555"/>
+        <location filename="../qgiscloudplugindialog.py" line="565"/>
         <source>The project needs to be saved before it can be published. Proceed?</source>
         <translation>Das Project muss gespeichert werden bevor es publiziert werden kann. Fortsetzen?</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="347"/>
+        <location filename="../qgiscloudplugindialog.py" line="345"/>
         <source>Login failed: %s</source>
         <translation>Anmeldung fehlgeschlagen: %s</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="585"/>
+        <location filename="../qgiscloudplugindialog.py" line="595"/>
         <source>Warning!</source>
         <translation>Achtung!</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="573"/>
+        <location filename="../qgiscloudplugindialog.py" line="583"/>
         <source>The project has a user defined CRS. The use of user defined CRS is not supported. Please correct the project CRS before publishing!</source>
         <translation>Das Projekt ist auf ein benutzerdefiniertes KBS eingestellt. QGIS Cloud unterstützt keine benutzerdefinierten KBS. Bitte korrigieren Sie das KBS vor der Publikation!</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="585"/>
+        <location filename="../qgiscloudplugindialog.py" line="595"/>
         <source>The layer(s) {layerlist}have user defined CRS. The use of user defined CRS is not supported. Please correct the CRS before publishing!</source>
         <translation>Die Layer {layerlist} haben benutzerdefinierte KBS. QGIS Cloud unterstützt keine benutzerdefinierten KBS. Bitte korrigieren Sie das KBS vor der Publikation!</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="359"/>
+        <location filename="../qgiscloudplugindialog.py" line="357"/>
         <source>Number of %s permitted databases exceeded! Please upgrade your account!</source>
         <translation>Die Anzahl der %s erlaubten Datenbanken ist überschritten! Bitte kaufen Sie weitere Datenbanken hinzu!</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="866"/>
+        <location filename="../qgiscloudplugindialog.py" line="877"/>
         <source>Could not connect to database server ({0}) on port {1}. Please contact your system administrator or internet provider to open port {1} in the firewall</source>
         <translation>Der Datenbank-Server ({0}) kann nicht über den Port {1} verbunden werden. Bitten Sie den Systemadministrator oder Internet-Provider den Port {1} in der Firewall zu öffnen</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="311"/>
+        <location filename="../qgiscloudplugindialog.py" line="309"/>
         <source>New Version</source>
         <translation>Neue Version</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="382"/>
+        <location filename="../qgiscloudplugindialog.py" line="500"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="382"/>
-        <source>Deletion of database {name} interrupted!</source>
-        <translation></translation>
+        <location filename="../qgiscloudplugindialog.py" line="380"/>
+        <source>Deletion of database &quot;{name}&quot; interrupted!</source>
+        <translation>Löschen der Datenbank &quot;{name}&quot; abgebrochen!</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="311"/>
+        <location filename="../qgiscloudplugindialog.py" line="309"/>
         <source>New plugin release {version} is available! Please upgrade the QGIS Cloud plugin.</source>
         <translation>Die neue Version {version} des QGIS CLoud Plugins ist verfügbar! Bitte aktualisieren Sie das Plugin.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="337"/>
+        <location filename="../qgiscloudplugindialog.py" line="335"/>
         <source>Account Disabled</source>
         <translation>Konto gesperrt</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="337"/>
+        <location filename="../qgiscloudplugindialog.py" line="335"/>
         <source>Account {username} is disabled! Please contact support@qgiscloud.com</source>
         <translation>Das KOnto mit dem Benutzernamen {username} ist gesperrt! Bitte wenden Sie sich an support@qgiscloud.com</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="342"/>
+        <location filename="../qgiscloudplugindialog.py" line="340"/>
         <source>Login for user {username} failed</source>
         <translation>Login für den Benutzer {username} gescheitert! </translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="673"/>
+        <location filename="../qgiscloudplugindialog.py" line="684"/>
         <source>Some layers are using local data. Please upload local layers to your cloud database in the &apos;Upload Data&apos; tab before publishing.
 
 </source>
         <translation>Einige Ebenen verwenden lokale Daten. Bitte diese Daten im &apos;Daten in die Cloud laden&apos; Reiter in dei Datenbank laden, befor das Projekt publiziert wird.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="370"/>
-        <source>You have layers from database {name} loaded in your project! Do you want to remove them before you delete database {name}?</source>
-        <translation>Layer der Datenbank {name} sind im Projekt geladen! Sollen diese entfernt werden, befor die Datenbank {name} gelöscht wird?</translation>
+        <location filename="../qgiscloudplugindialog.py" line="368"/>
+        <source>You have layers from database &quot;{name}&quot; loaded in your project! Do you want to remove them before you delete database &quot;{name}&quot;?</source>
+        <translation>Layer der Datenbank &quot;{name}&quot; sind im Projekt geladen! Sollen diese entfernt werden, befor die Datenbank &quot;{name}&quot; gelöscht wird?</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="472"/>
+        <location filename="../qgiscloudplugindialog.py" line="479"/>
         <source>Delete QGIS Cloud map.</source>
         <translation>QGIS Cloud Karte löschen.</translation>
+    </message>
+    <message>
+        <location filename="../qgiscloudplugindialog.py" line="385"/>
+        <source>Do you want to delete the database &quot;%s&quot;?</source>
+        <translation>Möchten Sie die Datenbank &quot;%s&quot; wirklich löschen?</translation>
+    </message>
+    <message>
+        <location filename="../qgiscloudplugindialog.py" line="480"/>
+        <source>Do you want to delete the map &quot;%s&quot;?</source>
+        <translation>Möchten Sie die Karte &quot;%s&quot; wirklich löschen?</translation>
+    </message>
+    <message>
+        <location filename="../qgiscloudplugindialog.py" line="317"/>
+        <source>Logged in as {0} ({1})</source>
+        <translation>Angemeldet als {0} ({1})</translation>
+    </message>
+    <message>
+        <location filename="../qgiscloudplugindialog.py" line="320"/>
+        <source>Logged in as {0}</source>
+        <translation>Angemeldet als {0}</translation>
+    </message>
+    <message>
+        <location filename="../qgiscloudplugindialog.py" line="500"/>
+        <source>Deletion of map &quot;{name}&quot; interrupted!</source>
+        <translation>Löschen der Karte &quot;{name}&quot; abgebrochen!</translation>
     </message>
 </context>
 <context>

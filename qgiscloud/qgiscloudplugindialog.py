@@ -315,11 +315,11 @@ class QgisCloudPluginDialog(QDockWidget):
                     self.ui.widgetMaps.setEnabled(True)
 
                     self.ui.lblLoginStatus.setText(
-                        self.tr_uni("Logged in as {0} ({1})").format(self.user, login_info['plan']))
+                        self.tr("Logged in as {0} ({1})").format(self.user, login_info['plan']))
                     self.ui.lblLoginStatus.show()
                     self._push_message(
                         self.tr("QGIS Cloud"),
-                        self.tr_uni("Logged in as {0}").format(self.user),
+                        self.tr("Logged in as {0}").format(self.user),
                         level=0, duration=2)
                     self.refresh_databases()
                     self.refresh_maps()
@@ -368,7 +368,7 @@ class QgisCloudPluginDialog(QDockWidget):
                     answer = QMessageBox.question(
                         self,
                         self.tr("Warning"),
-                        self.tr("You have layers from database {name} loaded in your project! Do you want to remove them before you delete database {name}?").format(name=name),
+                        self.tr('You have layers from database "{name}" loaded in your project! Do you want to remove them before you delete database "{name}"?').format(name=name),
                         QMessageBox.StandardButtons(
                             QMessageBox.Cancel |
                             QMessageBox.Yes))
@@ -377,13 +377,13 @@ class QgisCloudPluginDialog(QDockWidget):
                      QgsMapLayerRegistry.instance().removeMapLayer(layer.id())
                      
         if answer == QMessageBox.Cancel:
-            QMessageBox.warning(None,  self.tr('Warning'),  self.tr('Deletion of database {name} interrupted!').format(name=name))
+            QMessageBox.warning(None,  self.tr('Warning'),  self.tr('Deletion of database "{name}" interrupted!').format(name=name))
             return
             
         msgBox = QMessageBox()
-        msgBox.setText(self.tr("Delete QGIS Cloud database."))
-        msgBox.setInformativeText(
-            self.tr_uni("Do you want to delete the database \"%s\"?") % name)
+        msgBox.setWindowTitle(self.tr("Delete QGIS Cloud database."))
+        msgBox.setText(
+            self.tr("Do you want to delete the database \"%s\"?") % name)
         msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
         msgBox.setDefaultButton(QMessageBox.Cancel)
         msgBox.setIcon(QMessageBox.Question)
@@ -476,9 +476,9 @@ class QgisCloudPluginDialog(QDockWidget):
         map_id = self.ui.tabMaps.currentItem().data(Qt.UserRole)
         
         msgBox = QMessageBox()
-        msgBox.setText(self.tr("Delete QGIS Cloud map."))
-        msgBox.setInformativeText(
-            self.tr_uni("Do you want to delete the map \"%s\"?") % name)
+        msgBox.setWindowTitle(self.tr("Delete QGIS Cloud map."))
+        msgBox.setText(
+            self.tr("Do you want to delete the map \"%s\"?") % name)
         msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
         msgBox.setDefaultButton(QMessageBox.Cancel)
         msgBox.setIcon(QMessageBox.Question)
@@ -490,12 +490,14 @@ class QgisCloudPluginDialog(QDockWidget):
             
             if success:
                 self.ui.btnMapDelete.setEnabled(False)
-                time.sleep(2)
                 self.refresh_maps()
             else:
                 self.show_api_error(success)
                 
             self.unsetCursor()
+        else:
+            QMessageBox.warning(None,  self.tr('Warning'),  self.tr('Deletion of map "{name}" interrupted!').format(name=name))
+            
             
     def refresh_maps(self):
         QApplication.setOverrideCursor(Qt.WaitCursor)
