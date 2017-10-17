@@ -37,8 +37,7 @@ except ImportError:
 import time
 from urllib import urlencode
 import urllib2
-import base64
-
+import base64, zlib
 from version import __version__
 
 API_URL = 'https://api.qgiscloud.com'
@@ -293,16 +292,18 @@ class API():
         content = request.get(resource)
         return json.loads(content)
         
-    def load_map_project(self,  map_id):
+    def load_map_project(self,  map_name,  map_id):
         """
             Download of QGIS project file.
         """
         self.requires_auth()
-        resource = '/maps/%s/qgs' % (map_id)
+        headers = {}
+        resource = '/maps/%s/qgs.json' % (map_id)
+        headers['Content-Type'] = 'application/x-qgis-project'
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
-        content = request.get(resource)
-        print self.url
-        return content        
+        content = request.get(resource,  headers)
+        
+        return content
 
     def delete_map(self, map_id):
         """
@@ -552,8 +553,7 @@ class Request():
             password_manager.add_password(None, self.url, self.user, self.password)
             auth_handler = HTTPBasicAuthHandlerLimitRetries(password_manager)
             opener = urllib2.build_opener(auth_handler)
-            urllib2.install_opener(opener)
-
+            urllib2.install_opener(opener)            
         #
         # The API expects the body to be urlencoded. If data was passed to
         # the request method we therefore use urlencode from urllib.
@@ -584,65 +584,64 @@ class Request():
         # We also set the Content-Length and Accept-Encoding headers.
         #
         headers['Content-Length'] = str(len(body))
-        headers['Accept-Encoding'] = 'compress, gzip'
+#        headers['Accept-Encoding'] = 'compress, gzip'
         #
         # Finally we fire the actual request.
         #
-        for i in range(1, 6):
-            try:
-                request_method = method.upper()
-                if request_method in ['PUT', 'POST']:
-                    req = urllib2.Request(url=url, data=body, headers=headers)
-                else:
-                    req = urllib2.Request(url=url, headers=headers)
-                if request_method in ['PUT', 'DELETE']:
-                    # add PUT and DELETE methods
-                    req.get_method = lambda: request_method
-
-                response = urllib2.urlopen(req).read()
-            except urllib2.HTTPError, e:
-                #
-                # Handle the possible responses according to their HTTP STATUS
-                # CODES.
-                #
-                # All non success STATUS CODES raise an exception containing
-                # the API error message.
-                #
-                msg = e.read().decode('UTF8', errors='ignore')
-                if e.code in [201, 202, 203, 204]: # Workaround for old Pythons
-                    return msg
-                elif e.code == 400:
-                    raise BadRequestError(msg)
-                elif e.code == 401:
-                    raise UnauthorizedError(msg)
-                elif e.code == 403:
-                    raise ForbiddenError(msg)
-                elif e.code == 404:
-                    raise NotFoundError()
-                elif e.code == 409:
-                    raise ConflictDuplicateError(msg)
-                elif e.code == 410:
-                    raise GoneError(msg)
-                elif e.code == 422: # Unprocessable Entity
-                    raise BadRequestError(msg)
-                #
-                # 500 INTERNAL SERVER ERRORs normally shouldn't happen...
-                #
-                elif e.code == 500:
-                    raise InternalServerError(msg)
-                elif e.code == 501:
-                    raise NotImplementedError(msg)
-                elif e.code == 503:
-                    raise ThrottledError(msg)
-            except urllib2.URLError, e:
-                # if we could not reach the API we wait 1s and try again
-                time.sleep(1)
-                # if we tried for the fifth time we give up - and cry a little
-                if i == 5:
-                    raise ConnectionException('Connection to server failed: %s' % str(e))
+#        for i in range(1, 6):
+        try:
+            request_method = method.upper()
+            if request_method in ['PUT', 'POST']:
+                req = urllib2.Request(url=url, data=body, headers=headers)
             else:
-                #
-                # 200 OK, 201 CREATED and 204 DELETED result in returning the actual
-                # response.
-                #
-                return response.decode('UTF8')
+                req = urllib2.Request(url=url, headers=headers)
+            if request_method in ['PUT', 'DELETE']:
+                # add PUT and DELETE methods
+                req.get_method = lambda: request_method
+            response = urllib2.urlopen(req).read()
+        except urllib2.HTTPError, e:
+            #
+            # Handle the possible responses according to their HTTP STATUS
+            # CODES.
+            #
+            # All non success STATUS CODES raise an exception containing
+            # the API error message.
+            #
+            msg = e.read().decode('UTF8', errors='ignore')
+            if e.code in [201, 202, 203, 204]: # Workaround for old Pythons
+                return msg
+            elif e.code == 400:
+                raise BadRequestError(msg)
+            elif e.code == 401:
+                raise UnauthorizedError(msg)
+            elif e.code == 403:
+                raise ForbiddenError(msg)
+            elif e.code == 404:
+                raise NotFoundError()
+            elif e.code == 409:
+                raise ConflictDuplicateError(msg)
+            elif e.code == 410:
+                raise GoneError(msg)
+            elif e.code == 422: # Unprocessable Entity
+                raise BadRequestError(msg)
+            #
+            # 500 INTERNAL SERVER ERRORs normally shouldn't happen...
+            #
+            elif e.code == 500:
+                raise InternalServerError(msg)
+            elif e.code == 501:
+                raise NotImplementedError(msg)
+            elif e.code == 503:
+                raise ThrottledError(msg)
+#            except urllib2.URLError, e:
+#                # if we could not reach the API we wait 1s and try again
+#                time.sleep(1)
+#                # if we tried for the fifth time we give up - and cry a little
+#                if i == 5:
+#                    raise ConnectionException('Connection to server failed: %s' % str(e))
+        else:
+            #
+            # 200 OK, 201 CREATED and 204 DELETED result in returning the actual
+            # response.
+            #
+            return response.decode('UTF8')

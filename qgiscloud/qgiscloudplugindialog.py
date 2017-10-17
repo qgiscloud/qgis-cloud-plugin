@@ -188,9 +188,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.btnDbCreate.clicked.connect(self.create_database)
         self.ui.btnDbDelete.clicked.connect(self.delete_database)
         self.ui.btnDbRefresh.clicked.connect(self.refresh_databases)
-        self.ui.btnMapLoad.clicked.connect(self.load_map)
         self.ui.btnMapDelete.clicked.connect(self.delete_map)
-        self.ui.btnMapsRefresh.clicked.connect(self.refresh_maps)        
         self.ui.tabDatabases.itemSelectionChanged.connect(self.select_database)
         self.ui.tabMaps.itemSelectionChanged.connect(self.select_map)
         self.ui.btnPublishMap.clicked.connect(self.publish_map)
@@ -459,10 +457,19 @@ class QgisCloudPluginDialog(QDockWidget):
         self.db_size(self.db_connections)
         QApplication.restoreOverrideCursor()
         
-    def load_map(self):
+    @pyqtSignature('on_btnMapLoad_clicked()')    
+    def on_btnMapLoad_clicked(self):        
+        self.setCursor(Qt.WaitCursor)
         map_id = self.ui.tabMaps.currentItem().data(Qt.UserRole)
-        result = self.api.load_map_project(map_id)
-            
+        map_name = self.ui.tabMaps.currentItem().text()
+        result = self.api.load_map_project(map_name,  map_id)
+        qgs_file_name = '/tmp/%s.qgs' % map_name
+        qgs_file = open(qgs_file_name,  'w')
+        qgs_file.write(result)
+        qgs_file.close()
+        project = QgsProject.instance()
+        project.read(QFileInfo(qgs_file_name))
+        self.unsetCursor()
             
     def delete_map(self):
         name = self.ui.tabMaps.currentItem().text()
@@ -615,6 +622,7 @@ class QgisCloudPluginDialog(QDockWidget):
             except Exception as e:
                 self.statusBar().showMessage("")
                 ErrorReportDialog(self.tr("Error uploading project"), self.tr("An error occured."), str(e) + "\n" + traceback.format_exc(), self.user, self).exec_()
+        self.refresh_maps()
         QApplication.restoreOverrideCursor()
 
     def publish_symbols(self, missingSvgSymbols):
