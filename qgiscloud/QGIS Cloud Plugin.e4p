@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project QGIS Cloud Plugin -->
-<!-- Saved: 2017-10-17, 08:31:29 -->
+<!-- Saved: 2017-10-18, 11:58:44 -->
 <!-- Copyright (C) 2017 ,  -->
 <Project version="5.1">
   <Language>en_US</Language>
@@ -14,7 +14,6 @@
   <TranslationPattern>i18n/qgiscloudplugin_%language%.ts</TranslationPattern>
   <Sources>
     <Source>PGVectorLayerImport.py</Source>
-    <Source>Ui_qgiscloudplugin.py</Source>
     <Source>__init__.py</Source>
     <Source>apicompat/__init__.py</Source>
     <Source>apicompat/apicompat.py</Source>

@@ -24,7 +24,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.QtXml import *
 from qgis.core import *
-from Ui_qgiscloudplugin import Ui_QgisCloudPlugin
+from ui_qgiscloudplugin import Ui_QgisCloudPlugin
 from ui_login import Ui_LoginDialog
 from qgiscloudapi.qgiscloudapi import *
 from db_connections import DbConnections
@@ -469,6 +469,7 @@ class QgisCloudPluginDialog(QDockWidget):
         qgs_file.close()
         project = QgsProject.instance()
         project.read(QFileInfo(qgs_file_name))
+        self.iface.mainWindow().setWindowTitle("QGIS %s - %s" % (QGis.QGIS_VERSION,  map_name))
         self.unsetCursor()
             
     def delete_map(self):
