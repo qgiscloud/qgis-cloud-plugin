@@ -39,6 +39,7 @@ import string
 import re
 import time
 import platform
+import tempfile
 from distutils.version import StrictVersion
 
 
@@ -463,7 +464,7 @@ class QgisCloudPluginDialog(QDockWidget):
         map_id = self.ui.tabMaps.currentItem().data(Qt.UserRole)
         map_name = self.ui.tabMaps.currentItem().text()
         result = self.api.load_map_project(map_name,  map_id)
-        qgs_file_name = '/tmp/%s.qgs' % map_name
+        qgs_file_name = '%s/%s.qgs' % (tempfile.gettempdir(), map_name)
         qgs_file = open(qgs_file_name,  'w')
         qgs_file.write(result)
         qgs_file.close()
