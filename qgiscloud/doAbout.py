@@ -42,7 +42,7 @@ class DlgAbout:
         Italian - Sandro Mani <br>
         Portuguese (Brazil) - Rodrigo Smarzaro<br>
         Portuguese (Europeu) - Nelson Silva<br>
-        Espaniol - Dr. Mario Alberto Luna Pavo<br><br>
+        Spanish - Mario Alberto Luna Pavo<br><br>
         """
         
     def licenseString(self):
