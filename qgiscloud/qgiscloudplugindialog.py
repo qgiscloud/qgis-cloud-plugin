@@ -469,6 +469,17 @@ class QgisCloudPluginDialog(QDockWidget):
         qgs_file.write(result)
         qgs_file.close()
         project = QgsProject.instance()
+        if project.isDirty():
+            ok = QMessageBox.information(
+                self,
+                self.tr("Save Project"),
+                self.tr("""Your actual project has changes. Do you want to save the project?"""),
+                QMessageBox.StandardButtons(
+                    QMessageBox.Abort |
+                    QMessageBox.Discard |
+                    QMessageBox.Save))
+            if ok:
+                project.write()
         project.read(QFileInfo(qgs_file_name))
         self.iface.mainWindow().setWindowTitle("QGIS %s - %s" % (QGis.QGIS_VERSION,  map_name))
         self.unsetCursor()
