@@ -419,6 +419,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.btnLogin.show()
         self.ui.widgetServices.hide()
         self.ui.tabDatabases.clear()
+        self.ui.tabMaps.clear()
         self.ui.lblDbSize.setText("")
         self.ui.lblDbSizeUpload.setText("")
         self.ui.cbUploadDatabase.clear()
