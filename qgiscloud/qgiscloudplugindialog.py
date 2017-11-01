@@ -127,8 +127,6 @@ class QgisCloudPluginDialog(QDockWidget):
             QgsWKBTypes.MultiSurfaceZM: "MultiSurfaceZM",
      }
     
-
-
     def __init__(self, iface, version):
         QDockWidget.__init__(self, None)
         self.iface = iface
@@ -190,6 +188,8 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.btnDbDelete.clicked.connect(self.delete_database)
         self.ui.btnDbRefresh.clicked.connect(self.refresh_databases)
         self.ui.btnMapDelete.clicked.connect(self.delete_map)
+        self.ui.btnMapLoad.clicked.connect(self.map_load)
+        self.ui.tabMaps.itemDoubleClicked.connect(self.map_load)
         self.ui.tabDatabases.itemSelectionChanged.connect(self.select_database)
         self.ui.tabMaps.itemSelectionChanged.connect(self.select_map)
         self.ui.btnPublishMap.clicked.connect(self.publish_map)
@@ -404,12 +404,9 @@ class QgisCloudPluginDialog(QDockWidget):
             len(self.ui.tabDatabases.selectedItems()) > 0)
             
     def select_map(self):
-        self.ui.btnMapDelete.setEnabled(
-            len(self.ui.tabMaps.selectedItems()) > 0)
-        self.ui.btnMapLoad.setEnabled(
-            len(self.ui.tabMaps.selectedItems()) > 0)
-            
-    
+        self.ui.btnMapDelete.setEnabled(len(self.ui.tabMaps.selectedItems()) > 0)
+        self.ui.btnMapLoad.setEnabled(len(self.ui.tabMaps.selectedItems()) > 0)
+        self.update_urls(map=self.ui.tabMaps.currentItem().text())
 
     @pyqtSignature('')
     def on_btnLogout_clicked(self):
@@ -459,8 +456,8 @@ class QgisCloudPluginDialog(QDockWidget):
         self.db_size(self.db_connections)
         QApplication.restoreOverrideCursor()
         
-    @pyqtSignature('on_btnMapLoad_clicked()')    
-    def on_btnMapLoad_clicked(self):        
+    def map_load(self,  item=None,  row=None):        
+        self.ui.widgetServices.close()
         self.setCursor(Qt.WaitCursor)
         map_id = self.ui.tabMaps.currentItem().data(Qt.UserRole)
         map_name = self.ui.tabMaps.currentItem().text()
@@ -480,8 +477,10 @@ class QgisCloudPluginDialog(QDockWidget):
                     QMessageBox.Discard |
                     QMessageBox.Save))
             if ok:
-                project.write()
+                project.write()           
+                
         project.read(QFileInfo(qgs_file_name))
+        project.setDirty(False)
         self.iface.mainWindow().setWindowTitle("QGIS %s - %s" % (QGis.QGIS_VERSION,  map_name))
         self.unsetCursor()
             
@@ -499,6 +498,7 @@ class QgisCloudPluginDialog(QDockWidget):
         ret = msgBox.exec_()
         
         if ret == QMessageBox.Ok:
+            self.ui.widgetServices.close()
             self.setCursor(Qt.WaitCursor)
             success = self.api.delete_map(map_id)
             
@@ -509,6 +509,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 self.show_api_error(success)
                 
             self.unsetCursor()
+            self.ui.widgetServices.close()
         else:
             QMessageBox.warning(None,  self.tr('Warning'),  self.tr('Deletion of map "{name}" interrupted!').format(name=name))
             
@@ -534,26 +535,30 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def api_url(self):
         return unicode(self.ui.editServer.text())
-
-    def update_urls(self):
+        
+    def update_urls(self,  map=None):
+        
+        if map == None:
+            map = self.map()
+            
         self.update_url(self.ui.lblWebmap, self.api_url(),
-                        'http://', u'{0}/{1}'.format(self.user, self.map()))
+                        'http://', u'{0}/{1}'.format(self.user, map))
 #QWC1 (old) update link
         self.update_url(self.ui.lblQwc1, self.api_url(),
-                        'http://', u'{0}/{1}/qwc1/'.format(self.user, self.map()))
+                        'http://', u'{0}/{1}/qwc1/'.format(self.user, map))
                         
         if self.clouddb:
             self.update_url(
                 self.ui.lblMobileMap, self.api_url(),
-                'http://m.', u'{0}/{1}'.format(self.user, self.map()))
+                'http://m.', u'{0}/{1}'.format(self.user, map))
             self.update_url(
                 self.ui.lblWMS, self.api_url(),
-                'http://wms.', u'{0}/{1}/'.format(self.user, self.map()))
+                'http://wms.', u'{0}/{1}/'.format(self.user, map))
         else:
             self.update_url(self.ui.lblMobileMap, self.api_url(
-            ), 'http://', u'{0}/{1}/mobile'.format(self.user, self.map()))
+            ), 'http://', u'{0}/{1}/mobile'.format(self.user, map))
             self.update_url(self.ui.lblWMS, self.api_url(
-            ), 'http://', u'{0}/{1}/wms'.format(self.user, self.map()))
+            ), 'http://', u'{0}/{1}/wms'.format(self.user, map))
         self.update_url(self.ui.lblMaps, self.api_url(), 'http://', 'maps')
         self.ui.widgetServices.show()
 
@@ -564,7 +569,6 @@ class QgisCloudPluginDialog(QDockWidget):
         label.setText(text)
 
     def read_maps(self):
-        #map = self.api.read_map("1")
         if self.check_login():
             self.api.read_maps()
 
