@@ -400,8 +400,7 @@ class QgisCloudPluginDialog(QDockWidget):
             self.unsetCursor()
 
     def select_database(self):
-        self.ui.btnDbDelete.setEnabled(
-            len(self.ui.tabDatabases.selectedItems()) > 0)
+        self.ui.btnDbDelete.setEnabled(len(self.ui.tabDatabases.selectedItems()) > 0)
             
     def select_map(self):
         self.ui.btnMapDelete.setEnabled(len(self.ui.tabMaps.selectedItems()) > 0)
@@ -666,6 +665,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.widgetServices.hide()
         self.update_local_data_sources([],  [])
         self.ui.btnUploadData.setEnabled(False)
+        self.ui.tabMaps.clearSelection()
 
     def remove_layer(self, layer_id):
         if self.do_update_local_data_sources:
