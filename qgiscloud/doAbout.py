@@ -31,11 +31,11 @@ class DlgAbout:
     def contribString(self):
         return """
         <p><center><b>The QGIS Cloud-Plugin is developed by the following persons:</b></center></p> 
-        <p>Pirmin Kalberer (project manager, developer and support)<br>
-        Dr. Horst Düster (product manager, developer and support)<br>
+        <p>Dr. Horst Düster (product manager, developer and support)<br>
+        Pirmin Kalberer (project manager, developer and support)<br>
         Sandro Mani (developer)<br>
-        Mathias Walker (developer)<br>
-        Dr. Marco Hugentobler (developer)
+        Mathias Walker (developer and support)<br>
+        Dr. Marco Hugentobler (developer and support)
         </p>
         <p><b>Translations:</b</p><br>
         Hebrew - Harel Dan <br>
