@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE Project SYSTEM "Project-5.1.dtd">
+<!DOCTYPE Project SYSTEM "Project-6.0.dtd">
 <!-- eric project file for project QGIS Cloud Plugin -->
-<!-- Saved: 2017-11-01, 13:44:49 -->
+<!-- Saved: 2017-12-05, 10:34:45 -->
 <!-- Copyright (C) 2017 ,  -->
-<Project version="5.1">
+<Project version="6.0">
   <Language>en_US</Language>
   <Hash>4584268f1310e9451dfad8eab257ce4f239686ae</Hash>
   <ProgLanguage mixed="0">Python2</ProgLanguage>
@@ -14,6 +14,7 @@
   <TranslationPattern>i18n/qgiscloudplugin_%language%.ts</TranslationPattern>
   <Sources>
     <Source>PGVectorLayerImport.py</Source>
+    <Source>Ui_qgiscloudplugin.py</Source>
     <Source>__init__.py</Source>
     <Source>apicompat/__init__.py</Source>
     <Source>apicompat/apicompat.py</Source>
@@ -72,7 +73,6 @@
   <Resources>
     <Resource>resources.qrc</Resource>
   </Resources>
-  <Interfaces/>
   <Others>
     <Other>metadata.txt</Other>
     <Other>raster/raster_tools.sql</Other>

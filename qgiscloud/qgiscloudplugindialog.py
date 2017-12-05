@@ -19,7 +19,6 @@
  *                                                                         *
  ***************************************************************************/
 """
-
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.QtXml import *
@@ -41,8 +40,8 @@ import time
 import platform
 import tempfile
 from distutils.version import StrictVersion
-
-
+    
+    
 class QgisCloudPluginDialog(QDockWidget):
     COLUMN_LAYERS = 0
     COLUMN_DATA_SOURCE = 1
@@ -543,19 +542,19 @@ class QgisCloudPluginDialog(QDockWidget):
         self.update_url(self.ui.lblWebmap, self.api_url(),
                         'http://', u'{0}/{1}'.format(self.user, map))
 #QWC1 (old) update link
-        self.update_url(self.ui.lblQwc1, self.api_url(),
-                        'http://', u'{0}/{1}/qwc1/'.format(self.user, map))
+#        self.update_url(self.ui.lblQwc1, self.api_url(),
+#                        'http://', u'{0}/{1}/qwc1/'.format(self.user, map))
                         
         if self.clouddb:
-            self.update_url(
-                self.ui.lblMobileMap, self.api_url(),
-                'http://m.', u'{0}/{1}'.format(self.user, map))
+#            self.update_url(
+#                self.ui.lblMobileMap, self.api_url(),
+#                'http://m.', u'{0}/{1}'.format(self.user, map))
             self.update_url(
                 self.ui.lblWMS, self.api_url(),
                 'http://wms.', u'{0}/{1}/'.format(self.user, map))
         else:
-            self.update_url(self.ui.lblMobileMap, self.api_url(
-            ), 'http://', u'{0}/{1}/mobile'.format(self.user, map))
+#            self.update_url(self.ui.lblMobileMap, self.api_url(
+#            ), 'http://', u'{0}/{1}/mobile'.format(self.user, map))
             self.update_url(self.ui.lblWMS, self.api_url(
             ), 'http://', u'{0}/{1}/wms'.format(self.user, map))
         self.update_url(self.ui.lblMaps, self.api_url(), 'http://', 'maps')
