@@ -348,14 +348,14 @@ class Ui_QgisCloudPlugin(object):
         self.lblWMS.setText(_translate("QgisCloudPlugin", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://wms.qgiscloud.com/user/map\"><span style=\" font-family:\'Ubuntu\'; text-decoration: underline; color:#0057ae;\">http://wms.qgiscloud.com/user/map</span></a></p></body></html>", None))
+"</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://wms.qgiscloud.com/user/map\"><span style=\" font-size:9pt; text-decoration: underline; color:#0057ae;\">https://wms.qgiscloud.com/user/map</span></a></p></body></html>", None))
         self.label_5.setText(_translate("QgisCloudPlugin", "Map Admin", None))
         self.lblMaps.setText(_translate("QgisCloudPlugin", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://qgiscloud.com/maps\"><span style=\" font-family:\'Ubuntu\'; text-decoration: underline; color:#0057ae;\">http://qgiscloud.com/maps</span></a></p></body></html>", None))
+"</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://qgiscloud.com/maps\"><span style=\" font-size:9pt; text-decoration: underline; color:#0057ae;\">https://qgiscloud.com/maps</span></a></p></body></html>", None))
         self.label_8.setText(_translate("QgisCloudPlugin", "Support", None))
         self.lblMobileMap_2.setText(_translate("QgisCloudPlugin", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -366,8 +366,8 @@ class Ui_QgisCloudPlugin(object):
         self.lblWebmap.setText(_translate("QgisCloudPlugin", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://qgiscloud.com/user/map\"><span style=\" font-family:\'Ubuntu\'; text-decoration: underline; color:#0057ae;\">http://qgiscloud.com/user/map</span></a></p></body></html>", None))
+"</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://qgiscloud.com/user/map\"><span style=\" font-size:9pt; text-decoration: underline; color:#0057ae;\">https://qgiscloud.com/user/map</span></a></p></body></html>", None))
         self.lblMaps_3.setText(_translate("QgisCloudPlugin", "Published Maps", None))
         self.btnMapLoad.setText(_translate("QgisCloudPlugin", "Load", None))
         self.btnMapDelete.setText(_translate("QgisCloudPlugin", "Delete", None))
