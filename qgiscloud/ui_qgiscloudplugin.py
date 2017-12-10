@@ -369,7 +369,7 @@ class Ui_QgisCloudPlugin(object):
 "</style></head><body style=\" font-family:\'Ubuntu\'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://qgiscloud.com/user/map\"><span style=\" font-size:9pt; text-decoration: underline; color:#0057ae;\">https://qgiscloud.com/user/map</span></a></p></body></html>", None))
         self.lblMaps_3.setText(_translate("QgisCloudPlugin", "Published Maps", None))
-        self.btnMapLoad.setText(_translate("QgisCloudPlugin", "Load", None))
+        self.btnMapLoad.setText(_translate("QgisCloudPlugin", "Open Project", None))
         self.btnMapDelete.setText(_translate("QgisCloudPlugin", "Delete", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.mapTab), _translate("QgisCloudPlugin", "Maps", None))
         self.label_10.setText(_translate("QgisCloudPlugin", "Database:", None))

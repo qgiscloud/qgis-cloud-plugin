@@ -1,7 +1,7 @@
 [general]
 name=QGIS Cloud Plugin
 qgisMinimumVersion=1.8
-qgisMaximumVersion=2.18
+qgisMaximumVersion=2.99
 description=Publish maps on qgiscloud.com
 version=1.5.7
 author=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich, Switzerland

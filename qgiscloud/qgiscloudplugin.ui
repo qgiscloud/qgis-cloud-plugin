@@ -249,7 +249,7 @@ p, li { white-space: pre-wrap; }
               <item row="2" column="0">
                <widget class="QPushButton" name="btnMapLoad">
                 <property name="text">
-                 <string>Load</string>
+                 <string>Open Project</string>
                 </property>
                </widget>
               </item>

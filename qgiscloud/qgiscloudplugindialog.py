@@ -19,6 +19,7 @@
  *                                                                         *
  ***************************************************************************/
 """
+#from PyQt4 import uic
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.QtXml import *
@@ -41,6 +42,8 @@ import platform
 import tempfile
 from distutils.version import StrictVersion
     
+#FORM_CLASS, _ = uic.loadUiType(os.path.join(
+#    os.path.dirname(__file__), 'qgiscloudplugin.ui'))    
     
 class QgisCloudPluginDialog(QDockWidget):
     COLUMN_LAYERS = 0
