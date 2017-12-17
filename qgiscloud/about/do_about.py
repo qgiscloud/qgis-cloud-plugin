@@ -29,7 +29,7 @@ except:
     from PyQt4.QtGui import *
     from PyQt4.QtXml import *
     
-from .ui_qgiscloudplugin import Ui_QgisCloudPlugin
+from qgiscloud.ui_qgiscloudplugin import Ui_QgisCloudPlugin
 
 class DlgAbout:
     def aboutString(self):

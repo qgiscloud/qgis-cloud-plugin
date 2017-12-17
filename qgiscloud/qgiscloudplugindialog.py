@@ -37,7 +37,7 @@ from .qgiscloudapi.qgiscloudapi import *
 from .db_connections import DbConnections
 from .local_data_sources import LocalDataSources
 from .data_upload import DataUpload
-from .doAbout import DlgAbout
+from .about.do_about import DlgAbout
 from .error_report_dialog import ErrorReportDialog
 import os.path
 import sys
@@ -731,7 +731,7 @@ class QgisCloudPluginDialog(QDockWidget):
         # update GUI
         self.ui.tblLocalLayers.setRowCount(0)
         
-        for data_source, layers in list(self.local_data_sources.items()):
+        for data_source, layers in list(self.local_data_sources.iteritems()):
             layer_names = []
             for layer in layers:
                 layer_names.append(str(layer.name()))
