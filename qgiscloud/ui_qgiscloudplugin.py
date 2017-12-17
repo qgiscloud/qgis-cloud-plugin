@@ -396,8 +396,8 @@ class Ui_QgisCloudPlugin(object):
         self.label_6.setText(_translate("QgisCloudPlugin", "<b>Plugin version:</b>", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.aboutTab), _translate("QgisCloudPlugin", "About", None))
 
-from spinner import Spinner
-import resources_rc
+from .spinner import Spinner
+from . import resources_rc
 
 if __name__ == "__main__":
     import sys

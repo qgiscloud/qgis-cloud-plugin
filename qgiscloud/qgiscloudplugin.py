@@ -20,15 +20,22 @@
  ***************************************************************************/
 """
 # Import the PyQt and QGIS libraries
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+try:
+    from PyQt5.QtCore import * 
+    from PyQt5.QtGui import * 
+    from PyQt5.QtWidgets import *
+
+except:
+    from PyQt4.QtCore import *
+    from PyQt4.QtGui import *
+    
 from qgis.core import *
 # Initialize Qt resources from file resources_rc.py
-import resources_rc
+from . import resources_rc
+
 # Import the code for the dialog
-from qgiscloudplugindialog import QgisCloudPluginDialog
+from .qgiscloudplugindialog import QgisCloudPluginDialog
 # API compatibilty module. Has to be imported only once.
-import apicompat
 
 
 class QgisCloudPlugin:

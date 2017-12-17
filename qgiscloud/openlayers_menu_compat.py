@@ -23,11 +23,11 @@ email                : pka at sourcepole.ch
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from qgis.core import *
-import resources_rc
+from . import resources_rc
 import openlayers_plugin
 from openlayers_plugin.openlayers_layer import OpenlayersLayer
 from openlayers_plugin.openlayers_plugin_layer_type import OpenlayersPluginLayerType
-from apicompat import *
+from .apicompat import *
 import os
 
 
@@ -55,7 +55,7 @@ class OlLayerTypeRegistry:
         self.__layerTypeId += 1
 
     def types(self):
-        return self.__olLayerTypes.values()
+        return list(self.__olLayerTypes.values())
 
     def getById(self, id):
         return self.__olLayerTypes[id]

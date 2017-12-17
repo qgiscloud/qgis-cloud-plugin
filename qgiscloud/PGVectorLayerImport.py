@@ -30,7 +30,7 @@ from qgis.core import *
 from numbers import Number
 import os
 import sys
-import apicompat
+from . import apicompat
 
 
 class PGVectorLayerImport:

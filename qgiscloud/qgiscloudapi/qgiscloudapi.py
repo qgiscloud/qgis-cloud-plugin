@@ -35,10 +35,10 @@ except ImportError:
     from .. import simplejson as json
 
 import time
-from urllib import urlencode
-import urllib2
+from urllib.parse import urlencode
+import urllib.request, urllib.error, urllib.parse
 import base64, zlib
-from version import __version__
+from .version import __version__
 
 API_URL = 'https://api.qgiscloud.com'
 
@@ -466,14 +466,14 @@ class ThrottledError(Exception):
 #
 ###
 
-class HTTPBasicAuthHandlerLimitRetries(urllib2.HTTPBasicAuthHandler):
+class HTTPBasicAuthHandlerLimitRetries(urllib.request.HTTPBasicAuthHandler):
     def __init__(self, *args, **kwargs):
-        urllib2.HTTPBasicAuthHandler.__init__(self, *args, **kwargs)
+        urllib.request.HTTPBasicAuthHandler.__init__(self, *args, **kwargs)
 
     def http_error_auth_reqed(self, authreq, host, req, headers):
         authreq = headers.get(authreq, None)
         if authreq:
-            mo = urllib2.AbstractBasicAuthHandler.rx.search(authreq)
+            mo = urllib.request.AbstractBasicAuthHandler.rx.search(authreq)
             if mo:
                 if len(mo.groups()) == 3:
                     scheme, quote, realm = mo.groups()
@@ -549,11 +549,11 @@ class Request():
         if self.token is not None:
             headers['Authorization'] = 'auth_token="%s"' % (self.token['token'])
         elif self.user is not None and self.password is not None:
-            password_manager = urllib2.HTTPPasswordMgrWithDefaultRealm()
+            password_manager = urllib.request.HTTPPasswordMgrWithDefaultRealm()
             password_manager.add_password(None, self.url, self.user, self.password)
             auth_handler = HTTPBasicAuthHandlerLimitRetries(password_manager)
-            opener = urllib2.build_opener(auth_handler)
-            urllib2.install_opener(opener)            
+            opener = urllib.request.build_opener(auth_handler)
+            urllib.request.install_opener(opener)            
         #
         # The API expects the body to be urlencoded. If data was passed to
         # the request method we therefore use urlencode from urllib.
@@ -592,14 +592,14 @@ class Request():
         try:
             request_method = method.upper()
             if request_method in ['PUT', 'POST']:
-                req = urllib2.Request(url=url, data=body, headers=headers)
+                req = urllib.request.Request(url=url, data=body, headers=headers)
             else:
-                req = urllib2.Request(url=url, headers=headers)
+                req = urllib.request.Request(url=url, headers=headers)
             if request_method in ['PUT', 'DELETE']:
                 # add PUT and DELETE methods
                 req.get_method = lambda: request_method
-            response = urllib2.urlopen(req).read()
-        except urllib2.HTTPError, e:
+            response = urllib.request.urlopen(req).read()
+        except urllib.error.HTTPError as e:
             #
             # Handle the possible responses according to their HTTP STATUS
             # CODES.

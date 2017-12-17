@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-6.0.dtd">
 <!-- eric project file for project QGIS Cloud Plugin -->
-<!-- Saved: 2017-12-17, 11:21:42 -->
+<!-- Saved: 2017-12-17, 11:41:38 -->
 <!-- Copyright (C) 2017 ,  -->
 <Project version="6.0">
   <Language>en_US</Language>
@@ -17,14 +17,6 @@
     <Source>PGVectorLayerImport.py</Source>
     <Source>__init__.py</Source>
     <Source>apicompat/__init__.py</Source>
-    <Source>apicompat/apicompat.py</Source>
-    <Source>apicompat/sipv1/__init__.py</Source>
-    <Source>apicompat/sipv1/compat.py</Source>
-    <Source>apicompat/sipv1/decorators.py</Source>
-    <Source>apicompat/sipv1/qgisapi.py</Source>
-    <Source>apicompat/sipv1/vectorapi.py</Source>
-    <Source>apicompat/sipv2/__init__.py</Source>
-    <Source>apicompat/sipv2/compat.py</Source>
     <Source>data_raster_upload.py</Source>
     <Source>data_upload.py</Source>
     <Source>db_connection_cfg.py</Source>

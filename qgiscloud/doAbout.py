@@ -22,7 +22,7 @@
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-from ui_qgiscloudplugin import Ui_QgisCloudPlugin
+from .ui_qgiscloudplugin import Ui_QgisCloudPlugin
 
 class DlgAbout:
     def aboutString(self):

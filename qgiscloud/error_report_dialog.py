@@ -25,8 +25,8 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from qgis.core import *
 from . import version
-import apicompat
-import urllib
+from . import apicompat
+import urllib.request, urllib.parse, urllib.error
 import sys
 import platform
 
@@ -76,7 +76,7 @@ class ErrorReportDialog(QDialog):
                     self.username)
         url = QUrl()
         url.setEncodedUrl("mailto:support@qgiscloud.com?subject=%s&body=%s" % (
-                urllib.quote(pystring(self.windowTitle())),
-                urllib.quote(body)),
+                urllib.parse.quote(pystring(self.windowTitle())),
+                urllib.parse.quote(body)),
         )
         QDesktopServices.openUrl(url)
