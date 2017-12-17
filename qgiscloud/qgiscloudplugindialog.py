@@ -19,10 +19,18 @@
  *                                                                         *
  ***************************************************************************/
 """
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from PyQt4.QtXml import *
+try:
+    from PyQt5.QtCore import * 
+    from PyQt5.QtGui import * 
+    from PyQt5.QtWidgets import *
+    from PyQt5.QtXml import *
+except:
+    from PyQt4.QtCore import *
+    from PyQt4.QtGui import *
+    from PyQt4.QtXml import *
+    
 from qgis.core import *
+#from qgis.utils import *
 from .ui_qgiscloudplugin import Ui_QgisCloudPlugin
 from .ui_login import Ui_LoginDialog
 from .qgiscloudapi.qgiscloudapi import *
@@ -48,81 +56,81 @@ class QgisCloudPluginDialog(QDockWidget):
     COLUMN_GEOMETRY_TYPE = 3
     COLUMN_SRID = 4
 
-    if QGis.QGIS_VERSION_INT < 21400:
+    if Qgis.QGIS_VERSION_INT < 21400:
         GEOMETRY_TYPES = {
-            QGis.WKBUnknown: "Unknown",
-            QGis.WKBPoint: "Point",
-            QGis.WKBMultiPoint: "MultiPoint",
-            QGis.WKBLineString: "LineString",
-            QGis.WKBMultiLineString: "MultiLineString",
-            QGis.WKBPolygon: "Polygon",
-            QGis.WKBMultiPolygon: "MultiPolygon",
-            # Workaround (missing Python binding?): QGis.WKBNoGeometry /
+            Qgis.WKBUnknown: "Unknown",
+            Qgis.WKBPoint: "Point",
+            Qgis.WKBMultiPoint: "MultiPoint",
+            Qgis.WKBLineString: "LineString",
+            Qgis.WKBMultiLineString: "MultiLineString",
+            Qgis.WKBPolygon: "Polygon",
+            Qgis.WKBMultiPolygon: "MultiPolygon",
+            # Workaround (missing Python binding?): Qgis.WKBNoGeometry /
             # ogr.wkbNone
             100: "No geometry",
-            QGis.WKBPoint25D: "Point",
-            QGis.WKBLineString25D: "LineString",
-            QGis.WKBPolygon25D: "Polygon",
-            QGis.WKBMultiPoint25D: "MultiPoint",
-            QGis.WKBMultiLineString25D: "MultiLineString",
-            QGis.WKBMultiPolygon25D: "MultiPolygon", 
-            QGis.WKBMultiPolygon25D: "MultiPolygon", 
-            QGis.WKBMultiPolygon25D: "MultiPolygon", 
+            Qgis.WKBPoint25D: "Point",
+            Qgis.WKBLineString25D: "LineString",
+            Qgis.WKBPolygon25D: "Polygon",
+            Qgis.WKBMultiPoint25D: "MultiPoint",
+            Qgis.WKBMultiLineString25D: "MultiLineString",
+            Qgis.WKBMultiPolygon25D: "MultiPolygon", 
+            Qgis.WKBMultiPolygon25D: "MultiPolygon", 
+            Qgis.WKBMultiPolygon25D: "MultiPolygon", 
      }
     else:
         GEOMETRY_TYPES = {
-            QgsWKBTypes.Unknown: "Unknown",
-            QgsWKBTypes.NoGeometry: "No geometry",
-            QgsWKBTypes.Point: "Point",
-            QgsWKBTypes.MultiPoint: "MultiPoint",               
-            QgsWKBTypes.PointZ: "PointZ",
-            QgsWKBTypes.MultiPointZ: "MultiPointZ",
-            QgsWKBTypes.PointM: "PointM",
-            QgsWKBTypes.MultiPointM: "MultiPointM",
-            QgsWKBTypes.PointZM: "PointZM",
-            QgsWKBTypes.MultiPointZM: "MultiPointZM",
-            QgsWKBTypes.Point25D: "Point25D",
-            QgsWKBTypes.MultiPoint25D: "MultiPoint25D",
-            QgsWKBTypes.LineString: "LineString",
-            QgsWKBTypes.MultiLineString: "LineString",
-            QgsWKBTypes.LineStringZ: "LineStringZ",
-            QgsWKBTypes.MultiLineStringZ: "LineStringZ",
-            QgsWKBTypes.LineStringM: "LineStringM",
-            QgsWKBTypes.MultiLineStringM: "LineStringM",
-            QgsWKBTypes.LineStringZM: "LineStringZM",
-            QgsWKBTypes.MultiLineStringZM: "LineStringZM",
-            QgsWKBTypes.LineString25D: "LineString25D",
-            QgsWKBTypes.MultiLineString25D: "MultiLineString25D",
-            QgsWKBTypes.Polygon: "Polygon",            
-            QgsWKBTypes.MultiPolygon: "MultiPolygon", 
-            QgsWKBTypes.PolygonZ: "PolygonZ",            
-            QgsWKBTypes.MultiPolygonZ: "MultiPolygonZ", 
-            QgsWKBTypes.PolygonM: "PolygonM",            
-            QgsWKBTypes.MultiPolygonM: "MultiPolygonM", 
-            QgsWKBTypes.PolygonZM: "PolygonZM",            
-            QgsWKBTypes.MultiPolygonZM: "MultiPolygonZM", 
-            QgsWKBTypes.Polygon25D: "Polygon25D",            
-            QgsWKBTypes.MultiPolygon25D: "MultiPolygon25D", 
-            QgsWKBTypes.CircularString: "CircularString",
-            QgsWKBTypes.CompoundCurve: "CompoundCurve",
-            QgsWKBTypes.CurvePolygon: "CurvePolygon", 
-            QgsWKBTypes.MultiCurve: "MultiCurve",
-            QgsWKBTypes.MultiSurface: "MultiSurface",
-            QgsWKBTypes.CircularStringZ: "CircularStringZ",
-            QgsWKBTypes.CompoundCurveZ: "CompoundCurveZ",
-            QgsWKBTypes.CurvePolygonZ: "CurvePolygonZ", 
-            QgsWKBTypes.MultiCurveZ: "MultiCurveZ",
-            QgsWKBTypes.MultiSurfaceZ: "MultiSurfaceZ",
-            QgsWKBTypes.CircularStringM: "CircularStringM",
-            QgsWKBTypes.CompoundCurveM: "CompoundCurveM",
-            QgsWKBTypes.CurvePolygonM: "CurvePolygonM", 
-            QgsWKBTypes.MultiCurveM: "MultiCurveM",
-            QgsWKBTypes.MultiSurfaceM: "MultiSurfaceM",
-            QgsWKBTypes.CircularStringZM: "CircularStringZM",
-            QgsWKBTypes.CompoundCurveZM: "CompoundCurveZM",
-            QgsWKBTypes.CurvePolygonZM: "CurvePolygonZM", 
-            QgsWKBTypes.MultiCurveZM: "MultiCurveZM",
-            QgsWKBTypes.MultiSurfaceZM: "MultiSurfaceZM",
+            QgsWkbTypes.Unknown: "Unknown",
+            QgsWkbTypes.NoGeometry: "No geometry",
+            QgsWkbTypes.Point: "Point",
+            QgsWkbTypes.MultiPoint: "MultiPoint",               
+            QgsWkbTypes.PointZ: "PointZ",
+            QgsWkbTypes.MultiPointZ: "MultiPointZ",
+            QgsWkbTypes.PointM: "PointM",
+            QgsWkbTypes.MultiPointM: "MultiPointM",
+            QgsWkbTypes.PointZM: "PointZM",
+            QgsWkbTypes.MultiPointZM: "MultiPointZM",
+            QgsWkbTypes.Point25D: "Point25D",
+            QgsWkbTypes.MultiPoint25D: "MultiPoint25D",
+            QgsWkbTypes.LineString: "LineString",
+            QgsWkbTypes.MultiLineString: "LineString",
+            QgsWkbTypes.LineStringZ: "LineStringZ",
+            QgsWkbTypes.MultiLineStringZ: "LineStringZ",
+            QgsWkbTypes.LineStringM: "LineStringM",
+            QgsWkbTypes.MultiLineStringM: "LineStringM",
+            QgsWkbTypes.LineStringZM: "LineStringZM",
+            QgsWkbTypes.MultiLineStringZM: "LineStringZM",
+            QgsWkbTypes.LineString25D: "LineString25D",
+            QgsWkbTypes.MultiLineString25D: "MultiLineString25D",
+            QgsWkbTypes.Polygon: "Polygon",            
+            QgsWkbTypes.MultiPolygon: "MultiPolygon", 
+            QgsWkbTypes.PolygonZ: "PolygonZ",            
+            QgsWkbTypes.MultiPolygonZ: "MultiPolygonZ", 
+            QgsWkbTypes.PolygonM: "PolygonM",            
+            QgsWkbTypes.MultiPolygonM: "MultiPolygonM", 
+            QgsWkbTypes.PolygonZM: "PolygonZM",            
+            QgsWkbTypes.MultiPolygonZM: "MultiPolygonZM", 
+            QgsWkbTypes.Polygon25D: "Polygon25D",            
+            QgsWkbTypes.MultiPolygon25D: "MultiPolygon25D", 
+            QgsWkbTypes.CircularString: "CircularString",
+            QgsWkbTypes.CompoundCurve: "CompoundCurve",
+            QgsWkbTypes.CurvePolygon: "CurvePolygon", 
+            QgsWkbTypes.MultiCurve: "MultiCurve",
+            QgsWkbTypes.MultiSurface: "MultiSurface",
+            QgsWkbTypes.CircularStringZ: "CircularStringZ",
+            QgsWkbTypes.CompoundCurveZ: "CompoundCurveZ",
+            QgsWkbTypes.CurvePolygonZ: "CurvePolygonZ", 
+            QgsWkbTypes.MultiCurveZ: "MultiCurveZ",
+            QgsWkbTypes.MultiSurfaceZ: "MultiSurfaceZ",
+            QgsWkbTypes.CircularStringM: "CircularStringM",
+            QgsWkbTypes.CompoundCurveM: "CompoundCurveM",
+            QgsWkbTypes.CurvePolygonM: "CurvePolygonM", 
+            QgsWkbTypes.MultiCurveM: "MultiCurveM",
+            QgsWkbTypes.MultiSurfaceM: "MultiSurfaceM",
+            QgsWkbTypes.CircularStringZM: "CircularStringZM",
+            QgsWkbTypes.CompoundCurveZM: "CompoundCurveZM",
+            QgsWkbTypes.CurvePolygonZM: "CurvePolygonZM", 
+            QgsWkbTypes.MultiCurveZM: "MultiCurveZM",
+            QgsWkbTypes.MultiSurfaceZM: "MultiSurfaceZM",
      }
     
     def __init__(self, iface, version):
@@ -141,7 +149,7 @@ class QgisCloudPluginDialog(QDockWidget):
             myAbout.contribString() +
             myAbout.licenseString() +
             "<p>Versions:<ul>" +
-            "<li>QGIS: %s</li>" % str(QGis.QGIS_VERSION).encode("utf-8") +
+            "<li>QGIS: %s</li>" % str(Qgis.QGIS_VERSION).encode("utf-8") +
             "<li>Python: %s</li>" % sys.version.replace("\n", " ") +
             "<li>OS: %s</li>" % platform.platform() +
             "</ul></p>")
@@ -166,7 +174,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.labelOpenLayersPlugin.hide()
 
         try:
-            if QGis.QGIS_VERSION_INT >= 20300:
+            if qgis.utils.Qgis.QGIS_VERSION_INT >= 21400:
                 from .openlayers_menu import OpenlayersMenu
             else:
                 # QGIS 1.x - QGIS-2.2
@@ -194,8 +202,10 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.btnRefreshLocalLayers.clicked.connect(self.refresh_local_data_sources)
         self.iface.newProjectCreated.connect(self.reset_load_data)
         self.iface.projectRead.connect(self.reset_load_data)
-        QgsMapLayerRegistry.instance().layerWillBeRemoved.connect(self.remove_layer)
-        QgsMapLayerRegistry.instance().layerWasAdded.connect(self.add_layer)
+        
+        QgsProject.instance().layerWillBeRemoved.connect(self.remove_layer)
+        QgsProject.instance().layerWasAdded.connect(self.add_layer)
+
         self.ui.cbUploadDatabase.currentIndexChanged.connect(lambda idx: self.activate_upload_button())
         self.ui.btnUploadData.clicked.connect(self.upload_data)
 
@@ -223,9 +233,9 @@ class QgisCloudPluginDialog(QDockWidget):
         if self.iface:
             self.iface.newProjectCreated.disconnect(self.reset_load_data)
             self.iface.projectRead.disconnect(self.reset_load_data)
-        if QgsMapLayerRegistry.instance():
-            QgsMapLayerRegistry.instance().layerWillBeRemoved.disconnect(self.remove_layer)
-            QgsMapLayerRegistry.instance().layerWasAdded.disconnect(self.add_layer)
+            
+            QgsProject.instance().layerWillBeRemoved.disconnect(self.remove_layer)
+            QgsProject.instance().layerWasAdded.disconnect(self.add_layer)
 
     def statusBar(self):
         return self.iface.mainWindow().statusBar()
@@ -273,7 +283,7 @@ class QgisCloudPluginDialog(QDockWidget):
         return {
             'versions': {
                 'plugin': self.version,
-                'QGIS': QGis.QGIS_VERSION,
+                'QGIS': Qgis.QGIS_VERSION,
                 'OS': platform.platform(),
                 'Python': sys.version
             }
@@ -360,7 +370,8 @@ class QgisCloudPluginDialog(QDockWidget):
         
         answer = False
         
-        for layer in list(QgsMapLayerRegistry.instance().mapLayers().values()):            
+#        for layer in list(QgsMapLayerRegistry.instance().mapLayers().values()):            
+        for layer in list(QgsProject.mapLayers().values()):            
             if QgsDataSourceURI(layer.publicSource()).database() == name:
                 
                 if not answer:
@@ -373,7 +384,7 @@ class QgisCloudPluginDialog(QDockWidget):
                             QMessageBox.Yes))
 
                 if answer == QMessageBox.Yes:
-                     QgsMapLayerRegistry.instance().removeMapLayer(layer.id())
+                     QgsProject.instance().removeMapLayer(layer.id())
                      
         if answer == QMessageBox.Cancel:
             QMessageBox.warning(None,  self.tr('Warning'),  self.tr('Deletion of database "{name}" interrupted!').format(name=name))
@@ -405,7 +416,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.btnMapLoad.setEnabled(len(self.ui.tabMaps.selectedItems()) > 0)
         self.update_urls(map=self.ui.tabMaps.currentItem().text())
 
-    @pyqtSignature('')
+    @pyqtSlot()
     def on_btnLogout_clicked(self):
         self.api.reset_auth()
         self.ui.btnLogout.hide()
@@ -439,7 +450,7 @@ class QgisCloudPluginDialog(QDockWidget):
             if self.db_connections.count() == 0:
                 self.ui.cbUploadDatabase.setEditText(self.tr("No databases"))
             else:
-                for name, db in self.db_connections.items():
+                for name, db in list(self.db_connections.items()):
                     it = QListWidgetItem(name)
                     it.setToolTip(db.description())
                     self.ui.tabDatabases.addItem(it)
@@ -478,7 +489,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 
         project.read(QFileInfo(qgs_file_name))
         project.setDirty(False)
-        self.iface.mainWindow().setWindowTitle("QGIS %s - %s" % (QGis.QGIS_VERSION,  map_name))
+        self.iface.mainWindow().setWindowTitle("QGIS %s - %s" % (Qgis.QGIS_VERSION,  map_name))
         self.unsetCursor()
             
     def delete_map(self):
@@ -720,7 +731,7 @@ class QgisCloudPluginDialog(QDockWidget):
         # update GUI
         self.ui.tblLocalLayers.setRowCount(0)
         
-        for data_source, layers in self.local_data_sources.items():
+        for data_source, layers in list(self.local_data_sources.items()):
             layer_names = []
             for layer in layers:
                 layer_names.append(str(layer.name()))
@@ -777,35 +788,35 @@ class QgisCloudPluginDialog(QDockWidget):
         self.statusBar().showMessage(self.tr("Updated local data sources"))
 
     def __wkbTypeString(self, wkbType):
-        if wkbType == QGis.WKBUnknown:
+        if wkbType == Qgis.WKBUnknown:
             return "WKBUnknown"
-        elif wkbType == QGis.WKBPoint:
+        elif wkbType == Qgis.WKBPoint:
             return "WKBPoint"
-        elif wkbType == QGis.WKBLineString:
+        elif wkbType == Qgis.WKBLineString:
             return "WKBLineString"
-        elif wkbType == QGis.WKBMultiLineString:
+        elif wkbType == Qgis.WKBMultiLineString:
             return "WKBMultiLineString"
-        elif wkbType == QGis.WKBPolygon:
+        elif wkbType == Qgis.WKBPolygon:
             return "WKBPolygon"
-        elif wkbType == QGis.WKBMultiPoint:
+        elif wkbType == Qgis.WKBMultiPoint:
             return "WKBMultiPoint"
-        elif wkbType == QGis.WKBMultiPolygon:
+        elif wkbType == Qgis.WKBMultiPolygon:
             return "WKBMultiPolygon"
-        elif wkbType == QGis.WKBNoGeometry:
+        elif wkbType == Qgis.WKBNoGeometry:
             return "WKBNoGeometry"
-        elif wkbType == QGis.WKBPoint25D:
+        elif wkbType == Qgis.WKBPoint25D:
             return "WKBPoint25D"
-        elif wkbType == QGis.WKBLineString25D:
+        elif wkbType == Qgis.WKBLineString25D:
             return "WKBLineString25D"
-        elif wkbType == QGis.WKBPolygon25D:
+        elif wkbType == Qgis.WKBPolygon25D:
             return "WKBPolygon25D"
-        elif wkbType == QGis.WKBMultiPoint25D:
+        elif wkbType == Qgis.WKBMultiPoint25D:
             return "WKBMultiPoint25D"
-        elif wkbType == QGis.WKBMultiLineString25D:
+        elif wkbType == Qgis.WKBMultiLineString25D:
             return "WKBMultiLineString25D"
-        elif wkbType == QGis.WKBMultiPolygon25D:
+        elif wkbType == Qgis.WKBMultiPolygon25D:
             return "WKBMultiPolygon25D"
-        elif QGis.QGIS_VERSION_INT >= 21400:
+        elif Qgis.QGIS_VERSION_INT >= 21400:
             if wkbType == QgsWKBTypes.LineStringZM:
                 return "WKBLineStringZM"
             elif wkbType == QgsWKBTypes.MultiLineStringZM:
@@ -837,7 +848,7 @@ class QgisCloudPluginDialog(QDockWidget):
         else:
             # remove table names without data sources
             keys_to_remove = []
-            for key in self.data_sources_table_names.keys():
+            for key in list(self.data_sources_table_names.keys()):
                 if self.local_data_sources.layers(key) is None:
                     keys_to_remove.append(key)
 

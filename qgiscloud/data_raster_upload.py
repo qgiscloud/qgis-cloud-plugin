@@ -1,4 +1,4 @@
-from . import raster.raster_upload as raster_upload
+from .raster import raster_upload as raster_upload
 from osgeo import gdal
 from osgeo import osr
 import osgeo.gdalconst as gdalc

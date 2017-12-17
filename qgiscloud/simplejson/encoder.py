@@ -24,8 +24,8 @@ ESCAPE_DCT = {
     '\n': '\\n',
     '\r': '\\r',
     '\t': '\\t',
-    '\u2028': '\\u2028',
-    '\u2029': '\\u2029',
+    '\\u2028': '\\u2028',
+    '\\u2029': '\\u2029',
 }
 for i in range(0x20):
     #ESCAPE_DCT.setdefault(chr(i), '\\u{0:04x}'.format(i))
@@ -413,7 +413,7 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
             items = list(dct.items())
             items.sort(key=lambda kv: kv[0])
         else:
-            items = iter(dct.items())
+            items = iter(list(dct.items()))
         for key, value in items:
             if isinstance(key, str):
                 pass

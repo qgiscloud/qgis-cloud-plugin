@@ -20,6 +20,7 @@
  ***************************************************************************/
  This script initializes the plugin, making it known to QGIS.
 """
+from .about.metadata import MetaData
 import os
 import qgis.utils
 
@@ -32,8 +33,8 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :type iface: QgsInterface
     """
 
-    plugin_name = os.path.dirname(__file__).split(os.path.sep)[-1]
-    plugin_name = qgis.utils.pluginMetadata(plugin_name, 'name')
+    plugin_name = MetaData().name()
+    
     try:
         # qgis.PyQt is available in QGIS >=2.14
         from qgis.PyQt.QtCore import qVersion
@@ -58,4 +59,4 @@ def classFactory(iface):  # pylint: disable=invalid-name
             raise ImportError(message)
 
     from .qgiscloudplugin import QgisCloudPlugin
-    return QgisCloudPlugin(iface)
+    return QgisCloudPlugin(iface,  MetaData().version())

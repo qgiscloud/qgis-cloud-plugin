@@ -22,10 +22,16 @@
 # NOTE: always convert features in OGR layers or PostGIS layers of type GEOMETRY to MULTI-type geometry, as geometry type detection of e.g. shapefiles is unreliable
 """
 
-from . import apicompat
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from PyQt4.QtXml import *
+try:
+    from PyQt5.QtCore import * 
+    from PyQt5.QtGui import * 
+    from PyQt5.QtWidgets import *
+    from PyQt5.QtXml import *
+except:
+    from PyQt4.QtCore import *
+    from PyQt4.QtGui import *
+    from PyQt4.QtXml import *
+    
 from qgis.core import *
 from .db_connections import DbConnections
 from osgeo import ogr
@@ -67,7 +73,7 @@ class DataUpload(QObject):
         except Exception as e:
             raise RuntimeError("Connection to database failed %s" % str(e))
 
-        for data_source, item in data_sources_items.items():
+        for data_source, item in list(data_sources_items.items()):
             # Check available space, block if exceded
             size = DbConnections().db_size()
 
@@ -284,15 +290,15 @@ class DataUpload(QObject):
         try:
             wktType = struct.unpack("=i", wkb[1:5])[0] & 0xffffffff
 
-            if not QGis.isMultiType(wktType):
-                wktType = QGis.multiType(wktType) & 0xffffffff
+            if not Qgis.isMultiType(wktType):
+                wktType = Qgis.multiType(wktType) & 0xffffffff
                 wkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", 1) + wkb
         except:
-            # Some platforms (Windows) complain when a long is passed to QGis.isMultiType
+            # Some platforms (Windows) complain when a long is passed to Qgis.isMultiType
             # And some other platforms complain if not a long is passed...
             wktType = struct.unpack("=i", wkb[1:5])[0]
-            if not QGis.isMultiType(wktType):
-                wktType = QGis.multiType(wktType) & 0xffffffff
+            if not Qgis.isMultiType(wktType):
+                wktType = Qgis.multiType(wktType) & 0xffffffff
                 wkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", 1) + wkb
 
         # See postgis sources liblwgeom.h.in:
@@ -322,7 +328,7 @@ class DataUpload(QObject):
 
     def _replace_local_layers(self, layers_to_replace):
         if len(layers_to_replace) > 0:
-            if QGis.QGIS_VERSION_INT >= 20600:
+            if Qgis.QGIS_VERSION_INT >= 20600:
                 root = QgsProject.instance().layerTreeRoot()
                 self._replace_local_layers_in_layer_tree(root, layers_to_replace)
             else:
@@ -399,7 +405,7 @@ class DataUpload(QObject):
         if remote_layer.isValid():
             self.copy_layer_settings(local_layer, remote_layer)
 
-            if QGis.QGIS_VERSION_INT >= 20600:
+            if Qgis.QGIS_VERSION_INT >= 20600:
                 group_node = node.parent()
 
                 # add remote layer

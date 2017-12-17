@@ -19,9 +19,16 @@
  *                                                                         *
  ***************************************************************************/
 """
-
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+try:
+    from PyQt5.QtCore import * 
+    from PyQt5.QtGui import * 
+    from PyQt5.QtWidgets import *
+    from PyQt5.QtXml import *
+except:
+    from PyQt4.QtCore import *
+    from PyQt4.QtGui import *
+    from PyQt4.QtXml import *
+    
 from qgis.core import *
 from .db_connection_cfg import DbConnectionCfg
 
@@ -39,7 +46,7 @@ class LocalDataSources:
             return None
 
     def iteritems(self):
-        return iter(self._local_data_sources.items())
+        return iter(list(self._local_data_sources.items()))
 
     def count(self):
         return len(self._local_data_sources)

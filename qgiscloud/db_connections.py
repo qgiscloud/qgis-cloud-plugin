@@ -19,9 +19,16 @@
  *                                                                         *
  ***************************************************************************/
 """
-
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+try:
+    from PyQt5.QtCore import * 
+    from PyQt5.QtGui import * 
+    from PyQt5.QtWidgets import *
+    from PyQt5.QtXml import *
+except:
+    from PyQt4.QtCore import *
+    from PyQt4.QtGui import *
+    from PyQt4.QtXml import *
+    
 from qgis.core import *
 from .db_connection_cfg import DbConnectionCfg
 import time
@@ -42,7 +49,7 @@ class DbConnections:
         return len(self._dbs)
 
     def iteritems(self):
-        return iter(self._dbs.items())
+        return iter(list(self._dbs.items()))
 
     def db(self, dbname):
         return self._dbs[str(dbname)]

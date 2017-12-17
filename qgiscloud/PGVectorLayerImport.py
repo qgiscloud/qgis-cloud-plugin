@@ -22,15 +22,21 @@
  ***************************************************************************/
 
 """
-
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from PyQt4.QtXml import *
+try:
+    from PyQt5.QtCore import * 
+    from PyQt5.QtGui import * 
+    from PyQt5.QtWidgets import *
+    from PyQt5.QtXml import *
+except:
+    from PyQt4.QtCore import *
+    from PyQt4.QtGui import *
+    from PyQt4.QtXml import *
+    
 from qgis.core import *
 from numbers import Number
 import os
 import sys
-from . import apicompat
+#from . import apicompat
 
 
 class PGVectorLayerImport:
@@ -95,34 +101,34 @@ class PGVectorLayerImport:
         return True
 
     def __postgisWkbType(self, wkbType):
-        if QGis.QGIS_VERSION_INT < 21400:
-            if wkbType == QGis.WKBPoint25D:
+        if Qgis.QGIS_VERSION_INT < 21400:
+            if wkbType == Qgis.WKBPoint25D:
                 return ("POINT", 3)
-            elif wkbType == QGis.WKBPoint:
+            elif wkbType == Qgis.WKBPoint:
                 return ("POINT", 2)
-            elif wkbType == QGis.WKBLineString25D:
+            elif wkbType == Qgis.WKBLineString25D:
                 return ("LINESTRING", 3)
-            elif wkbType == QGis.WKBLineString:
+            elif wkbType == Qgis.WKBLineString:
                 return ("LINESTRING", 2)
-            elif wkbType == QGis.WKBPolygon25D:
+            elif wkbType == Qgis.WKBPolygon25D:
                 return ("POLYGON", 3)
-            elif wkbType == QGis.WKBPolygon:
+            elif wkbType == Qgis.WKBPolygon:
                 return ("POLYGON", 2)
-            elif wkbType == QGis.WKBMultiPoint25D:
+            elif wkbType == Qgis.WKBMultiPoint25D:
                 return ("MULTIPOINT", 3)
-            elif wkbType == QGis.WKBMultiPoint:
+            elif wkbType == Qgis.WKBMultiPoint:
                 return ("MULTIPOINT", 2)
-            elif wkbType == QGis.WKBMultiLineString25D:
+            elif wkbType == Qgis.WKBMultiLineString25D:
                 return ("MULTILINESTRING", 3)
-            elif wkbType == QGis.WKBMultiLineString:
+            elif wkbType == Qgis.WKBMultiLineString:
                 return ("MULTILINESTRING", 2)
-            elif wkbType == QGis.WKBMultiPolygon25D:
+            elif wkbType == Qgis.WKBMultiPolygon25D:
                 return ("MULTIPOLYGON", 3)
-            elif wkbType == QGis.WKBMultiPolygon:
+            elif wkbType == Qgis.WKBMultiPolygon:
                 return ("MULTIPOLYGON", 2)
-            elif wkbType == QGis.WKBUnknown:
+            elif wkbType == Qgis.WKBUnknown:
                 return ("GEOMETRY", 2)
-            elif wkbType == QGis.WKBNoGeometry:
+            elif wkbType == Qgis.WKBNoGeometry:
                 return ("", 0)
         else:
             if wkbType == QgsWKBTypes.Unknown:
@@ -263,7 +269,7 @@ class PGVectorLayerImport:
         schemaName = dsUri.schema()
         tableName = dsUri.table()
 
-        if wkbType == QGis.WKBNoGeometry:
+        if wkbType == Qgis.WKBNoGeometry:
             geometryColumn = ""
         else:
             geometryColumn = dsUri.geometryColumn()

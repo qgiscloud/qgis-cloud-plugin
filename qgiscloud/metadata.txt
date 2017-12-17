@@ -1,15 +1,17 @@
 [general]
 name=QGIS Cloud Plugin
-qgisMinimumVersion=1.8
-qgisMaximumVersion=2.99
+qgisMinimumVersion=2.8
+qgisMaximumVersion=3.99
 description=Publish maps on qgiscloud.com
-version=1.5.7
+version=3.0.0
 author=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich, Switzerland
 email=support@qgiscloud.com
 about= QGIS Cloud is your powerful Web-GIS platform for publishing maps, data and services on the internet. Create and edit professional maps with all the capabilities from QGIS. With only a few short mouse-clicks you can share your work on qgiscloud.com with the public.
 ; Optional items:
 
 changelog=
+    3.0.0
+    - Initial QGIS 3 migration release with 2.x backward compatibility
     1.5.7
     - QWC1 related links removed
     1.5.6

@@ -21,11 +21,19 @@ email                : smani at sourcepole.ch
 """
 # Import the PyQt and QGIS libraries
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+try:
+    from PyQt5.QtCore import * 
+    from PyQt5.QtGui import * 
+    from PyQt5.QtWidgets import *
+    from PyQt5.QtXml import *
+except:
+    from PyQt4.QtCore import *
+    from PyQt4.QtGui import *
+    from PyQt4.QtXml import *
+    
 from qgis.core import *
-from . import version
-from . import apicompat
+from .about.metadata import MetaData
+#from . import apicompat
 import urllib.request, urllib.parse, urllib.error
 import sys
 import platform
@@ -69,10 +77,10 @@ class ErrorReportDialog(QDialog):
                 " QGIS Cloud Plugin: %s\n\n"
                 "Username: %s\n") % (
                     self.plainTextEdit.toPlainText(),
-                    QGis.QGIS_VERSION,
+                    Qgis.QGIS_VERSION,
                     sys.version.replace("\n", " "),
                     platform.platform(),
-                    version(),
+                    MetaData().version(), 
                     self.username)
         url = QUrl()
         url.setEncodedUrl("mailto:support@qgiscloud.com?subject=%s&body=%s" % (

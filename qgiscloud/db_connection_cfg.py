@@ -19,8 +19,11 @@
  *                                                                         *
  ***************************************************************************/
 """
+try:
+    from PyQt5.QtCore import * 
+except:
+    from PyQt4.QtCore import *
 
-from PyQt4.QtCore import *
 import psycopg2
 from qgis.core import *
 
