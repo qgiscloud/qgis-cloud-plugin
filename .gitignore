@@ -1,6 +1,7 @@
 /"qgiscloud/C:\\nppdf32Log\\debuglog.txt"
 /qgiscloud/.gitignore
 *.pyc
+*.e4p
 qgiscloud.zip
 createdist.sh
 exclude.lst

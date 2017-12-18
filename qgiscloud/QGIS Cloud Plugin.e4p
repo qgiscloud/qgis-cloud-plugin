@@ -1,33 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-6.0.dtd">
 <!-- eric project file for project QGIS Cloud Plugin -->
-<!-- Saved: 2017-12-10, 13:16:07 -->
+<!-- Saved: 2017-12-17, 16:43:27 -->
 <!-- Copyright (C) 2017 ,  -->
 <Project version="6.0">
   <Language>en_US</Language>
-  <Hash>4584268f1310e9451dfad8eab257ce4f239686ae</Hash>
-  <ProgLanguage mixed="0">Python2</ProgLanguage>
-  <ProjectType>Qt4</ProjectType>
+  <Hash>d61ea45470cba683302e567145ad01a2cc5bdb84</Hash>
+  <ProgLanguage mixed="0">Python3</ProgLanguage>
+  <ProjectType>PyQt5</ProjectType>
   <Version>0.1</Version>
   <Author></Author>
   <Email></Email>
   <TranslationPattern>i18n/qgiscloudplugin_%language%.ts</TranslationPattern>
+  <Eol index="0"/>
   <Sources>
     <Source>PGVectorLayerImport.py</Source>
     <Source>__init__.py</Source>
-    <Source>apicompat/__init__.py</Source>
-    <Source>apicompat/apicompat.py</Source>
-    <Source>apicompat/sipv1/__init__.py</Source>
-    <Source>apicompat/sipv1/compat.py</Source>
-    <Source>apicompat/sipv1/decorators.py</Source>
-    <Source>apicompat/sipv1/qgisapi.py</Source>
-    <Source>apicompat/sipv1/vectorapi.py</Source>
-    <Source>apicompat/sipv2/__init__.py</Source>
-    <Source>apicompat/sipv2/compat.py</Source>
+    <Source>about/__init__.py</Source>
+    <Source>about/do_about.py</Source>
+    <Source>about/metadata.py</Source>
+    <Source>data_raster_upload.py</Source>
     <Source>data_upload.py</Source>
     <Source>db_connection_cfg.py</Source>
     <Source>db_connections.py</Source>
-    <Source>doAbout.py</Source>
     <Source>error_report_dialog.py</Source>
     <Source>local_data_sources.py</Source>
     <Source>openlayers_menu.py</Source>
@@ -48,6 +43,7 @@
     <Source>simplejson/scanner.py</Source>
     <Source>simplejson/tool.py</Source>
     <Source>spinner.py</Source>
+    <Source>ui_login.py</Source>
     <Source>ui_qgiscloudplugin.py</Source>
   </Sources>
   <Forms>
@@ -73,23 +69,131 @@
     <Resource>resources.qrc</Resource>
   </Resources>
   <Others>
+    <Other>QGIS Cloud Plugin.e4p</Other>
     <Other>metadata.txt</Other>
-    <Other>raster/raster_tools.sql</Other>
+    <Other>qgiscloudapi/SPEC.txt</Other>
+    <Other>simplejson/LICENSE.txt</Other>
   </Others>
   <MainScript>qgiscloudplugin.py</MainScript>
   <Vcs>
     <VcsType>None</VcsType>
+    <VcsOptions>
+      <dict>
+        <key>
+          <string>add</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>checkout</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>commit</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>diff</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>export</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>global</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>history</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>log</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>remove</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>status</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>tag</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+        <key>
+          <string>update</string>
+        </key>
+        <value>
+          <list>
+            <string></string>
+          </list>
+        </value>
+      </dict>
+    </VcsOptions>
   </Vcs>
   <FiletypeAssociations>
+    <FiletypeAssociation pattern="*.e4p" type="OTHERS"/>
     <FiletypeAssociation pattern="*.idl" type="INTERFACES"/>
-    <FiletypeAssociation pattern="*.ptl" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.md" type="OTHERS"/>
+    <FiletypeAssociation pattern="*.proto" type="PROTOCOLS"/>
     <FiletypeAssociation pattern="*.py" type="SOURCES"/>
-    <FiletypeAssociation pattern="*.py2" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.py3" type="SOURCES"/>
     <FiletypeAssociation pattern="*.pyw" type="SOURCES"/>
-    <FiletypeAssociation pattern="*.pyw2" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.pyw3" type="SOURCES"/>
     <FiletypeAssociation pattern="*.qm" type="TRANSLATIONS"/>
     <FiletypeAssociation pattern="*.qrc" type="RESOURCES"/>
+    <FiletypeAssociation pattern="*.rst" type="OTHERS"/>
     <FiletypeAssociation pattern="*.ts" type="TRANSLATIONS"/>
+    <FiletypeAssociation pattern="*.txt" type="OTHERS"/>
     <FiletypeAssociation pattern="*.ui" type="FORMS"/>
+    <FiletypeAssociation pattern="README" type="OTHERS"/>
+    <FiletypeAssociation pattern="README.*" type="OTHERS"/>
   </FiletypeAssociations>
 </Project>
