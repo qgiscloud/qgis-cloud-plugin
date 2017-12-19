@@ -29,6 +29,7 @@ except:
     from PyQt4.QtGui import *
     
 from qgis.core import *
+from .about.metadata import MetaData
 # Initialize Qt resources from file resources_rc.py
 from . import resources_rc
 import os
@@ -40,10 +41,11 @@ from .qgiscloudplugindialog import QgisCloudPluginDialog
 
 class QgisCloudPlugin:
 
-    def __init__(self, iface, version):
+    def __init__(self, iface):
         # Save reference to the QGIS interface
         self.iface = iface
-        self.version = version
+        self.meta_data = MetaData()
+        self.version = self.meta_data.version()
 
     def initGui(self):
         # Create action that will start plugin configuration

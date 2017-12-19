@@ -59,4 +59,4 @@ def classFactory(iface):  # pylint: disable=invalid-name
             raise ImportError(message)
 
     from .qgiscloudplugin import QgisCloudPlugin
-    return QgisCloudPlugin(iface,  MetaData().version())
+    return QgisCloudPlugin(iface)
