@@ -486,12 +486,19 @@ class HTTPBasicAuthHandlerLimitRetries(urllib.request.HTTPBasicAuthHandler):
         user, pw = self.passwd.find_user_password(realm, host)
         if pw is not None:
             raw = ("%s:%s" % (user, pw)).encode('utf8')
-            auth = 'Basic %s' % urllib2.base64.b64encode(raw).strip()
+            auth = 'Basic %s' % urllib.base64.b64encode(raw).strip()
             if req.get_header(self.auth_header, None) == auth:
                 return None
             req.add_unredirected_header(self.auth_header, auth)
             #return self.parent.open(req, timeout=req.timeout)
             return self.parent.open(req)
+#import base64
+#import urllib.request
+#request = urllib.request.Request('http://mysite/admin/index.cgi?index=127')
+#base64string =  bytes('%s:%s' % ('login', 'password'), 'ascii')
+#request.add_header("Authorization", "Basic %s" % base64string)
+#result = urllib.request.urlopen(request)
+#resulttext = result.read()
 
 ###
 #
@@ -592,12 +599,13 @@ class Request():
         try:
             request_method = method.upper()
             if request_method in ['PUT', 'POST']:
-                req = urllib.request.Request(url=url, data=body, headers=headers)
+                req = urllib.request.Request(url=url, data=body.encode('ascii'), headers=headers)
             else:
                 req = urllib.request.Request(url=url, headers=headers)
             if request_method in ['PUT', 'DELETE']:
                 # add PUT and DELETE methods
                 req.get_method = lambda: request_method
+
             response = urllib.request.urlopen(req).read()
         except urllib.error.HTTPError as e:
             #
