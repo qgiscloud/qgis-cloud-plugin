@@ -19,18 +19,8 @@
  *                                                                         *
  ***************************************************************************/
 """
-try:
-    from PyQt5.QtCore import * 
-    from PyQt5.QtGui import * 
-    from PyQt5.QtWidgets import *
-    from PyQt5.QtXml import *
-except:
-    from PyQt4.QtCore import *
-    from PyQt4.QtGui import *
-    from PyQt4.QtXml import *
-    
 from qgis.core import *
-from .db_connection_cfg import DbConnectionCfg
+from db_connection_cfg import DbConnectionCfg
 
 
 class LocalDataSources:
@@ -40,13 +30,13 @@ class LocalDataSources:
         self._local_data_sources = {}
 
     def layers(self, data_source):
-        if data_source in self._local_data_sources:
+        if self._local_data_sources.has_key(data_source):
             return self._local_data_sources[data_source]
         else:
             return None
 
     def iteritems(self):
-        return iter(list(self._local_data_sources.items()))
+        return self._local_data_sources.iteritems()
 
     def count(self):
         return len(self._local_data_sources)
@@ -55,7 +45,7 @@ class LocalDataSources:
         unsupported_layers = []
         local_layers = []
         local_raster_layers = []
-        for layer in list(QgsMapLayerRegistry.instance().mapLayers().values()):
+        for layer in QgsMapLayerRegistry.instance().mapLayers().values():
             if layer.id() == skip_layer_id:
                 continue
             if layer.type() != QgsMapLayer.PluginLayer:
@@ -103,12 +93,12 @@ class LocalDataSources:
             if len(ds.connectionInfo()) > 0:
                 # Spatialite / Postgres
                 ds.setSql("")
-                data_source = str(ds.uri())
+                data_source = unicode(ds.uri())
             else:
-                data_source = str(layer.source())
+                data_source = unicode(layer.source())
 
             # group layers by source
-            if data_source in self._local_data_sources:
+            if self._local_data_sources.has_key(data_source):
                 self._local_data_sources[data_source].append(layer)
             else:
                 self._local_data_sources[data_source] = [layer]

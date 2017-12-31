@@ -21,20 +21,12 @@ email                : smani at sourcepole.ch
 """
 # Import the PyQt and QGIS libraries
 
-try:
-    from PyQt5.QtCore import * 
-    from PyQt5.QtGui import * 
-    from PyQt5.QtWidgets import *
-    from PyQt5.QtXml import *
-except:
-    from PyQt4.QtCore import *
-    from PyQt4.QtGui import *
-    from PyQt4.QtXml import *
-    
+from PyQt4.QtCore import Qt,  QUrl
+from PyQt4.QtGui import QDialog,  QVBoxLayout,  QLabel,  QPlainTextEdit,  QDialogButtonBox,  QDesktopServices
 from qgis.core import *
-from .about.metadata import MetaData
-#from . import apicompat
-import urllib.request, urllib.parse, urllib.error
+from . import version
+import apicompat
+import urllib
 import sys
 import platform
 
@@ -77,14 +69,14 @@ class ErrorReportDialog(QDialog):
                 " QGIS Cloud Plugin: %s\n\n"
                 "Username: %s\n") % (
                     self.plainTextEdit.toPlainText(),
-                    Qgis.QGIS_VERSION,
+                    QGis.QGIS_VERSION,
                     sys.version.replace("\n", " "),
                     platform.platform(),
-                    MetaData().version(), 
+                    version(),
                     self.username)
         url = QUrl()
         url.setEncodedUrl("mailto:support@qgiscloud.com?subject=%s&body=%s" % (
-                urllib.parse.quote(pystring(self.windowTitle())),
-                urllib.parse.quote(body)),
+                urllib.quote(pystring(self.windowTitle())),
+                urllib.quote(body)),
         )
         QDesktopServices.openUrl(url)

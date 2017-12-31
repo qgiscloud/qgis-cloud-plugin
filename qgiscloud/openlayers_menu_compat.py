@@ -20,22 +20,14 @@ email                : pka at sourcepole.ch
  ***************************************************************************/
 """
 # Import the PyQt and QGIS libraries
-try:
-    from PyQt5.QtCore import * 
-    from PyQt5.QtGui import * 
-    from PyQt5.QtWidgets import *
-    from PyQt5.QtXml import *
-except:
-    from PyQt4.QtCore import *
-    from PyQt4.QtGui import *
-    from PyQt4.QtXml import *
-    
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
 from qgis.core import *
-from . import resources_rc
+import resources_rc
 import openlayers_plugin
 from openlayers_plugin.openlayers_layer import OpenlayersLayer
 from openlayers_plugin.openlayers_plugin_layer_type import OpenlayersPluginLayerType
-#from .apicompat import *
+from apicompat import *
 import os
 
 
@@ -63,7 +55,7 @@ class OlLayerTypeRegistry:
         self.__layerTypeId += 1
 
     def types(self):
-        return list(self.__olLayerTypes.values())
+        return self.__olLayerTypes.values()
 
     def getById(self, id):
         return self.__olLayerTypes[id]
@@ -97,7 +89,7 @@ class OpenlayersMenu(QMenu):
         for layerType in self.olLayerTypeRegistry.types():
             # Create actions for adding layers
             action = QAction(QIcon(pathPlugin % layerType.icon), pystring(QApplication.translate("OpenlayersPlugin", "Add {name} layer")).format(name=layerType.name), self.iface.mainWindow())
-            action.triggered.connect(layerType.addLayer)
+            QObject.connect(action, SIGNAL("triggered()"), layerType.addLayer)
             self.addAction(action)
 
         if not self.__setCoordRSGoogle():
@@ -113,7 +105,7 @@ class OpenlayersMenu(QMenu):
         layer.setLayerName(layerType.name)
         layer.setLayerType(layerType)
         if layer.isValid():
-            if Qgis.QGIS_VERSION_INT >= 10900:
+            if QGis.QGIS_VERSION_INT >= 10900:
                 QgsMapLayerRegistry.instance().addMapLayers([layer])
             else:
                 QgsMapLayerRegistry.instance().addMapLayer(layer)
@@ -126,7 +118,7 @@ class OpenlayersMenu(QMenu):
 
     def removeLayer(self, layerId):
         layerToRemove = None
-        if Qgis.QGIS_VERSION_INT >= 10900:
+        if QGis.QGIS_VERSION_INT >= 10900:
             if self.layer is not None and self.layer.id() == layerId:
                 self.layer = None
         else:
@@ -135,7 +127,7 @@ class OpenlayersMenu(QMenu):
 
     def __setCoordRSGoogle(self):
         self.__coordRSGoogle = QgsCoordinateReferenceSystem()
-        if Qgis.QGIS_VERSION_INT >= 10900:
+        if QGis.QGIS_VERSION_INT >= 10900:
             idEpsgRSGoogle = 'EPSG:3857'
             createCrs = self.__coordRSGoogle.createFromOgcWmsCrs(idEpsgRSGoogle)
         else:
@@ -156,7 +148,7 @@ class OpenlayersMenu(QMenu):
         mapCanvas = self.iface.mapCanvas()
         # On the fly
         mapCanvas.mapRenderer().setProjectionsEnabled(True)
-        if Qgis.QGIS_VERSION_INT >= 10900:
+        if QGis.QGIS_VERSION_INT >= 10900:
             theCoodRS = mapCanvas.mapRenderer().destinationCrs()
         else:
             theCoodRS = mapCanvas.mapRenderer().destinationSrs()
@@ -164,7 +156,7 @@ class OpenlayersMenu(QMenu):
             coodTrans = QgsCoordinateTransform(theCoodRS, self.__coordRSGoogle)
             extMap = mapCanvas.extent()
             extMap = coodTrans.transform(extMap, QgsCoordinateTransform.ForwardTransform)
-            if Qgis.QGIS_VERSION_INT >= 10900:
+            if QGis.QGIS_VERSION_INT >= 10900:
                 mapCanvas.mapRenderer().setDestinationCrs(self.__coordRSGoogle)
             else:
                 mapCanvas.mapRenderer().setDestinationSrs(self.__coordRSGoogle)

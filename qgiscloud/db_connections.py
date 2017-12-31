@@ -19,18 +19,11 @@
  *                                                                         *
  ***************************************************************************/
 """
-try:
-    from PyQt5.QtCore import * 
-    from PyQt5.QtGui import * 
-    from PyQt5.QtWidgets import *
-    from PyQt5.QtXml import *
-except:
-    from PyQt4.QtCore import *
-    from PyQt4.QtGui import *
-    from PyQt4.QtXml import *
-    
+
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
 from qgis.core import *
-from .db_connection_cfg import DbConnectionCfg
+from db_connection_cfg import DbConnectionCfg
 import time
 import socket
 
@@ -49,16 +42,16 @@ class DbConnections:
         return len(self._dbs)
 
     def iteritems(self):
-        return iter(list(self._dbs.items()))
+        return self._dbs.iteritems()
 
     def db(self, dbname):
-        return self._dbs[str(dbname)]
+        return self._dbs[unicode(dbname)]
         
         
     def db_size(self):
         usedSpace = 0
-        self.numDbs = len(list(self._dbs.keys()))
-        for db in list(self._dbs.keys()):
+        self.numDbs = len(self._dbs.keys())
+        for db in self._dbs.keys():
             try:
                 conn = self.db(db).psycopg_connection()
             except:
@@ -78,12 +71,13 @@ class DbConnections:
         return self._dbs_refreshed
         
     def refresh(self, user):
-        cloud_connections_key = "/qgiscloud/connections/%s" % user
+        cloud_connections_key = u"/qgiscloud/connections/%s" % user
         settings = QSettings()
 
-        cloud_dbs_from_server = list(self._dbs.keys())
+        cloud_dbs_from_server = self._dbs.keys()
         stored_connections = settings.value(cloud_connections_key) or []
-        cloud_dbs_from_settings = [str(conn) for conn in pystringlist(stored_connections)]
+        cloud_dbs_from_settings = map(
+            lambda conn: str(conn), pystringlist(stored_connections))
 
         # remove obsolete connections
         for db_name in (set(cloud_dbs_from_settings) - set(cloud_dbs_from_server)):

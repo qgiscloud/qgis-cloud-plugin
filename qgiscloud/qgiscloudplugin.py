@@ -20,32 +20,21 @@
  ***************************************************************************/
 """
 # Import the PyQt and QGIS libraries
-try:
-    from PyQt5.QtCore import * 
-    from PyQt5.QtGui import * 
-    from PyQt5.QtWidgets import *
-except:
-    from PyQt4.QtCore import *
-    from PyQt4.QtGui import *
-    
+from PyQt4.QtCore import Qt,  QObject,  QSettings,  QFileInfo,  QTranslator,  qVersion
+from PyQt4.QtGui import QAction,  QIcon
 from qgis.core import *
-from .about.metadata import MetaData
 # Initialize Qt resources from file resources_rc.py
-from . import resources_rc
-import os
-
+import resources_rc
 # Import the code for the dialog
-from .qgiscloudplugindialog import QgisCloudPluginDialog
+from qgiscloudplugindialog import QgisCloudPluginDialog
 # API compatibilty module. Has to be imported only once.
-
 
 class QgisCloudPlugin:
 
-    def __init__(self, iface):
+    def __init__(self, iface, version):
         # Save reference to the QGIS interface
         self.iface = iface
-        self.meta_data = MetaData()
-        self.version = self.meta_data.version()
+        self.version = version
 
     def initGui(self):
         # Create action that will start plugin configuration
@@ -57,21 +46,21 @@ class QgisCloudPlugin:
         self.iface.addToolBarIcon(self.action)
         self.iface.addPluginToMenu("&Cloud", self.action)
 
-        self.plugin_dir = QFileInfo(os.path.dirname(__file__))
+        self.plugin_dir = QFileInfo(QgsApplication.qgisUserDbFilePath()).path() + "/python/plugins/qgiscloud"
         # initialize locale
         localePath = ""
         locale_short = QSettings().value("locale/userLocale", type=str)[0:2]
         locale_long = QSettings().value("locale/userLocale", type=str)
                 
         if QFileInfo(self.plugin_dir).exists():            
-            if QFileInfo("%s/i18n/qgiscloudplugin_%s.qm" % (self.plugin_dir,  locale_short)).exists():
+            if QFileInfo(self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_short + ".qm").exists():
                 self.translator = QTranslator()
-                self.translator.load("%s/i18n/qgiscloudplugin_%s.qm" % (self.plugin_dir,  locale_short))            
+                self.translator.load( self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_short + ".qm")            
                 if qVersion() > '4.3.3':
                     QCoreApplication.installTranslator(self.translator)
-            elif QFileInfo("%s/i18n/qgiscloudplugin_%s.qm" % (self.plugin_dir,  locale_long)).exists():
+            elif QFileInfo(self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_long + ".qm").exists():
                 self.translator = QTranslator()
-                self.translator.load("%s/i18n/qgiscloudplugin_%s.qm" % (self.plugin_dir,  locale_long))          
+                self.translator.load( self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_long + ".qm")          
                 if qVersion() > '4.3.3':
                     QCoreApplication.installTranslator(self.translator)                
             

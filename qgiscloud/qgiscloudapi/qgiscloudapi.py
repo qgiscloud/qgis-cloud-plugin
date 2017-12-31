@@ -35,10 +35,10 @@ except ImportError:
     from .. import simplejson as json
 
 import time
-from urllib.parse import urlencode
-import urllib.request, urllib.error, urllib.parse
+from urllib import urlencode
+import urllib2
 import base64, zlib
-from .version import __version__
+from version import __version__
 
 API_URL = 'https://api.qgiscloud.com'
 
@@ -466,14 +466,14 @@ class ThrottledError(Exception):
 #
 ###
 
-class HTTPBasicAuthHandlerLimitRetries(urllib.request.HTTPBasicAuthHandler):
+class HTTPBasicAuthHandlerLimitRetries(urllib2.HTTPBasicAuthHandler):
     def __init__(self, *args, **kwargs):
-        urllib.request.HTTPBasicAuthHandler.__init__(self, *args, **kwargs)
+        urllib2.HTTPBasicAuthHandler.__init__(self, *args, **kwargs)
 
     def http_error_auth_reqed(self, authreq, host, req, headers):
         authreq = headers.get(authreq, None)
         if authreq:
-            mo = urllib.request.AbstractBasicAuthHandler.rx.search(authreq)
+            mo = urllib2.AbstractBasicAuthHandler.rx.search(authreq)
             if mo:
                 if len(mo.groups()) == 3:
                     scheme, quote, realm = mo.groups()
@@ -486,21 +486,12 @@ class HTTPBasicAuthHandlerLimitRetries(urllib.request.HTTPBasicAuthHandler):
         user, pw = self.passwd.find_user_password(realm, host)
         if pw is not None:
             raw = ("%s:%s" % (user, pw)).encode('utf8')
-            auth = 'Basic %s' % unicode(base64.b64encode(raw).strip())
-            print (auth)
-            auth = 'Basic aGR1czE6d0hubGxIbm0h'
+            auth = 'Basic %s' % urllib2.base64.b64encode(raw).strip()
             if req.get_header(self.auth_header, None) == auth:
                 return None
             req.add_unredirected_header(self.auth_header, auth)
             #return self.parent.open(req, timeout=req.timeout)
             return self.parent.open(req)
-#import base64
-#import urllib.request
-#request = urllib.request.Request('http://mysite/admin/index.cgi?index=127')
-#base64string =  bytes('%s:%s' % ('login', 'password'), 'ascii')
-#request.add_header("Authorization", "Basic %s" % base64string)
-#result = urllib.request.urlopen(request)
-#resulttext = result.read()
 
 ###
 #
@@ -558,11 +549,11 @@ class Request():
         if self.token is not None:
             headers['Authorization'] = 'auth_token="%s"' % (self.token['token'])
         elif self.user is not None and self.password is not None:
-            password_manager = urllib.request.HTTPPasswordMgrWithDefaultRealm()
+            password_manager = urllib2.HTTPPasswordMgrWithDefaultRealm()
             password_manager.add_password(None, self.url, self.user, self.password)
             auth_handler = HTTPBasicAuthHandlerLimitRetries(password_manager)
-            opener = urllib.request.build_opener(auth_handler)
-            urllib.request.install_opener(opener)            
+            opener = urllib2.build_opener(auth_handler)
+            urllib2.install_opener(opener)            
         #
         # The API expects the body to be urlencoded. If data was passed to
         # the request method we therefore use urlencode from urllib.
@@ -601,15 +592,14 @@ class Request():
         try:
             request_method = method.upper()
             if request_method in ['PUT', 'POST']:
-                req = urllib.request.Request(url=url, data=body.encode('ascii'), headers=headers)
+                req = urllib2.Request(url=url, data=body, headers=headers)
             else:
-                req = urllib.request.Request(url=url, headers=headers)
+                req = urllib2.Request(url=url, headers=headers)
             if request_method in ['PUT', 'DELETE']:
                 # add PUT and DELETE methods
                 req.get_method = lambda: request_method
-
-            response = urllib.request.urlopen(req).read()
-        except urllib.error.HTTPError as e:
+            response = urllib2.urlopen(req).read()
+        except urllib2.HTTPError, e:
             #
             # Handle the possible responses according to their HTTP STATUS
             # CODES.

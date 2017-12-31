@@ -19,11 +19,8 @@
  *                                                                         *
  ***************************************************************************/
 """
-try:
-    from PyQt5.QtCore import * 
-except:
-    from PyQt4.QtCore import *
 
+from PyQt4.QtCore import QSettings
 import psycopg2
 from qgis.core import *
 
@@ -50,7 +47,7 @@ class DbConnectionCfg:
 
     @staticmethod
     def connection_key(conn_name):
-        return "/PostgreSQL/connections/%s" % conn_name
+        return u"/PostgreSQL/connections/%s" % conn_name
 
     def key(self):
         return self.connection_key(self.name)
@@ -106,7 +103,7 @@ class DbConnectionCfg:
     def get_cloud_db_connections(db_name):
         connection_names = []
         settings = QSettings()
-        settings.beginGroup("/PostgreSQL/connections")
+        settings.beginGroup(u"/PostgreSQL/connections")
         for name in settings.childGroups():
             settings.beginGroup(name)
             # host might be NoneType, which causes str conversion to fail
@@ -122,7 +119,7 @@ class DbConnectionCfg:
         return connection_names
 
     def description(self):
-        return str(QCoreApplication.translate(
+        return unicode(QCoreApplication.translate(
             "QgisCloudPluginDialog",
             "host: %s port: %s database: %s username: %s password: %s")) % \
             (self.host, self.port, self.database, self.username, self.password)

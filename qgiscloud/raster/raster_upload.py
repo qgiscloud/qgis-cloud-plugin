@@ -20,19 +20,13 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ################################################################################
 #
-try:
-    from PyQt5.QtCore import * 
-    from PyQt5.QtGui import * 
-    from PyQt5.QtWidgets import *
-except:
-    from PyQt4.QtCore import *
-    from PyQt4.QtGui import *
-    
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
 from qgis.core import *
 from osgeo import gdal
 from osgeo import osr
 import osgeo.gdalconst as gdalc
-from io import StringIO
+from StringIO import StringIO
 from qgiscloud.db_connections import DbConnections
 import binascii
 import glob
@@ -88,7 +82,7 @@ class RasterUpload(QObject):
         # Burn all specified input raster files into single WKTRaster table
         gt = None
         
-        for layer_id in list(raster.keys()):
+        for layer_id in raster.keys():
             layer_info = raster[layer_id]
             opts['srid'] = layer_info['layer'].dataProvider().crs().postgisSrid()
             infile = layer_info['data_source']
@@ -374,7 +368,7 @@ class RasterUpload(QObject):
         nx = float(raster_size[0]) / float(block_size[0])
         ny = float(raster_size[1]) / float(block_size[1])
     
-        print((int(round(nx)), int(round(ny))))
+        print  int(round(nx)), int(round(ny))
         return ( int(round(nx)), int(round(ny)))
     
     def calculate_block_pad_size(self,  band, xoff, yoff, block_size):

@@ -66,9 +66,9 @@ class OrderedDict(dict, DictMixin):
         # Modified from original to support Python 2.4, see
         # http://code.google.com/p/simplejson/issues/detail?id=53
         if last:
-            key = next(reversed(self))
+            key = reversed(self).next()
         else:
-            key = next(iter(self))
+            key = iter(self).next()
         value = self.pop(key)
         return key, value
 
@@ -97,7 +97,7 @@ class OrderedDict(dict, DictMixin):
     def __repr__(self):
         if not self:
             return '%s()' % (self.__class__.__name__,)
-        return '%s(%r)' % (self.__class__.__name__, list(self.items()))
+        return '%s(%r)' % (self.__class__.__name__, self.items())
 
     def copy(self):
         return self.__class__(self)
@@ -112,7 +112,7 @@ class OrderedDict(dict, DictMixin):
     def __eq__(self, other):
         if isinstance(other, OrderedDict):
             return len(self)==len(other) and \
-                   all(p==q for p, q in  zip(list(self.items()), list(other.items())))
+                   all(p==q for p, q in  zip(self.items(), other.items()))
         return dict.__eq__(self, other)
 
     def __ne__(self, other):

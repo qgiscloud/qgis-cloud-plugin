@@ -19,16 +19,9 @@
  *                                                                         *
  ***************************************************************************/
 """
-try:
-    from PyQt5.QtCore import * 
-    from PyQt5.QtGui import * 
-    from PyQt5.QtWidgets import *
-    from PyQt5.QtXml import *
-except:
-    from PyQt4.QtCore import *
-    from PyQt4.QtGui import *
-    from PyQt4.QtXml import *
-    
+
+from PyQt4.QtCore import Qt,  QRect
+from PyQt4.QtGui import QWidget,  QPainter,  QColor
 import math
 
 
