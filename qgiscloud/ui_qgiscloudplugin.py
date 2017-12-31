@@ -1,3 +1,4 @@
+from builtins import object
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file '/home/hdus/dev/qgis/qgis-cloud-plugin/qgiscloud/qgiscloudplugin.ui'
@@ -7,7 +8,6 @@
 # WARNING! All changes made in this file will be lost!
 
 from qgis.PyQt  import QtCore, QtGui, QtWidgets
-from spinner import Spinner
 
 class Ui_QgisCloudPlugin(object):
     def setupUi(self, QgisCloudPlugin):
@@ -384,8 +384,8 @@ class Ui_QgisCloudPlugin(object):
         self.label_6.setText(_translate("QgisCloudPlugin", "<b>Plugin version:</b>"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.aboutTab), _translate("QgisCloudPlugin", "About"))
 
-from spinner import Spinner
-import resources_rc
+from .spinner import Spinner
+from .resources_rc import *
 
 if __name__ == "__main__":
     import sys

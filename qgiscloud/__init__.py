@@ -26,13 +26,13 @@ def name():
 def description():
     return "Publish maps and share data on qgiscloud.com"
 def version():
-    return "1.5.7"
+    return "3.0.0"
 def icon():
     return "icon.png"
 def qgisMinimumVersion():
-    return "1.8"
+    return "2.14"
 def qgisMaximumVersion():
-    return "2.99"
+    return "3.99"
 def author():
   return "Sourcepole"
 def classFactory(iface):

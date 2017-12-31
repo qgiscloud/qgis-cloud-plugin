@@ -52,11 +52,13 @@ class QgisCloudPluginDialog(QDockWidget):
     COLUMN_SRID = 4
 
     try:
-        version = Qgis.QGIS_VERSION_INT
+        VERSION_INT = Qgis.QGIS_VERSION_INT
+        VERSION = Qgis.QGIS_VERSION
     except:
-        version = QGis.QGIS_VERSION_INT
+        VERSION_INT = QGis.QGIS_VERSION_INT
+        VERSION = QGis.QGIS_VERSION
 
-    if version < 21400:
+    if VERSION_INT< 21400:
         GEOMETRY_TYPES = {
             QGis.WKBUnknown: "Unknown",
             QGis.WKBPoint: "Point",
@@ -77,7 +79,7 @@ class QgisCloudPluginDialog(QDockWidget):
             QGis.WKBMultiPolygon25D: "MultiPolygon", 
             QGis.WKBMultiPolygon25D: "MultiPolygon", 
      }
-    elif version < 29900:
+    elif VERSION_INT < 29900:
         GEOMETRY_TYPES = {
             QgsWKBTypes.Unknown: "Unknown",
             QgsWKBTypes.NoGeometry: "No geometry",
@@ -205,7 +207,7 @@ class QgisCloudPluginDialog(QDockWidget):
             myAbout.contribString() +
             myAbout.licenseString() +
             "<p>Versions:<ul>" +
-            "<li>QGIS: %s</li>" % str(QGis.QGIS_VERSION).encode("utf-8") +
+            "<li>QGIS: %s</li>" % str(self.VERSION).encode("utf-8") +
             "<li>Python: %s</li>" % sys.version.replace("\n", " ") +
             "<li>OS: %s</li>" % platform.platform() +
             "</ul></p>")
@@ -230,7 +232,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.labelOpenLayersPlugin.hide()
 
         try:
-            if QGis.QGIS_VERSION_INT >= 20300:
+            if self.VERSION_INT >= 20300:
                 from .openlayers_menu import OpenlayersMenu
             else:
                 # QGIS 1.x - QGIS-2.2
@@ -337,7 +339,7 @@ class QgisCloudPluginDialog(QDockWidget):
         return {
             'versions': {
                 'plugin': self.version.encode('utf-8'),
-                'QGIS': QGis.QGIS_VERSION.encode('utf-8'),
+                'QGIS': self.VERSION.encode('utf-8'),
                 'OS': platform.platform().encode('utf-8'),
                 'Python': sys.version.encode('utf-8')
             }
@@ -503,7 +505,7 @@ class QgisCloudPluginDialog(QDockWidget):
             if self.db_connections.count() == 0:
                 self.ui.cbUploadDatabase.setEditText(self.tr("No databases"))
             else:
-                for name, db in list(self.db_connections.iteritems()):
+                for name, db in list(self.db_connections.items()):
                     it = QListWidgetItem(name)
                     it.setToolTip(db.description())
                     self.ui.tabDatabases.addItem(it)
@@ -517,7 +519,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.db_size(self.db_connections)
         QApplication.restoreOverrideCursor()
         
-    def map_load(self,  item=None,  row=None):        
+    def map_load(self,  item=None,  row=None):     
         self.ui.widgetServices.close()
         self.setCursor(Qt.WaitCursor)
         map_id = self.ui.tabMaps.currentItem().data(Qt.UserRole)
@@ -542,7 +544,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 
         project.read(QFileInfo(qgs_file_name))
         project.setDirty(False)
-        self.iface.mainWindow().setWindowTitle("QGIS %s - %s" % (QGis.QGIS_VERSION,  map_name))
+        self.iface.mainWindow().setWindowTitle("QGIS %s - %s" % (self.VERSION,  map_name))
         self.unsetCursor()
             
     def delete_map(self):
@@ -784,7 +786,7 @@ class QgisCloudPluginDialog(QDockWidget):
         # update GUI
         self.ui.tblLocalLayers.setRowCount(0)
         
-        for data_source, layers in list(self.local_data_sources.iteritems()):
+        for data_source, layers in list(self.local_data_sources.items()):
             layer_names = []
             for layer in layers:
                 layer_names.append(str(layer.name()))
@@ -869,7 +871,7 @@ class QgisCloudPluginDialog(QDockWidget):
             return "WKBMultiLineString25D"
         elif wkbType == QGis.WKBMultiPolygon25D:
             return "WKBMultiPolygon25D"
-        elif QGis.QGIS_VERSION_INT >= 21400:
+        elif QGis.QGIS_self.VERSION_INT >= 21400:
             if wkbType == QgsWKBTypes.LineStringZM:
                 return "WKBLineStringZM"
             elif wkbType == QgsWKBTypes.MultiLineStringZM:
@@ -980,7 +982,7 @@ class QgisCloudPluginDialog(QDockWidget):
 
             try:
                 self.data_upload.upload(
-                    self.db_connections.db(db_name), data_sources_items, self.maxSize)
+                    self.db_connections.db(db_name.encode('utf-8')), data_sources_items, self.maxSize)
                 upload_ok = True
             except Exception as e:
                 ErrorReportDialog(self.tr("Upload errors occurred"), self.tr("Upload errors occurred. Not all data could be uploaded."), str(e) + "\n" + traceback.format_exc(), self.user, self).exec_()

@@ -26,7 +26,7 @@ from future import standard_library
 standard_library.install_aliases()
 from builtins import str
 from builtins import range
-from qgis.PyQt.QtCore import QObject, QVariant, QPyNullVariant, QDate, QDateTime
+from qgis.PyQt.QtCore import QObject, QVariant, QDate, QDateTime
 from qgis.PyQt.QtWidgets import QMessageBox, QApplication
 from qgis.core import *
 from .db_connections import DbConnections
@@ -178,7 +178,7 @@ class DataUpload(QObject):
                                 val = val.replace('\\', r"\\")
                         else:
                             # QGIS 2.x
-                            if val is None or isinstance(val, QPyNullVariant):
+                            if val is None or isinstance(val, QVariant):
                                 val = b"\\N"
                             elif isinstance(val, QDate) or isinstance(val, QDateTime):
                                 val = bytearray(val.toString(Qt.ISODate).encode('utf-8'))
@@ -280,7 +280,7 @@ class DataUpload(QObject):
         self._replace_local_layers(layers_to_replace)
         self.progress_label.setText("")
         if not import_ok:
-            raise RuntimeError(messages)
+            raise RuntimeError(str(messages))
 
     def _wkbToEWkbHex(self, wkb, srid, convertToMulti=False):
         try:
