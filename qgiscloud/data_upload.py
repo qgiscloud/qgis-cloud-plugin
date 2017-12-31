@@ -21,20 +21,25 @@
 
 # NOTE: always convert features in OGR layers or PostGIS layers of type GEOMETRY to MULTI-type geometry, as geometry type detection of e.g. shapefiles is unreliable
 """
-from PyQt4.QtCore import QObject, QVariant
-from PyQt4.QtGui import QMessageBox,  QApplication
+from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
+from qgis.PyQt.QtCore import QObject, QVariant, QPyNullVariant, QDate, QDateTime
+from qgis.PyQt.QtWidgets import QMessageBox, QApplication
 from qgis.core import *
-from db_connections import DbConnections
+from .db_connections import DbConnections
 from osgeo import ogr
 import os
 import re
 import psycopg2
-from StringIO import StringIO
+from io import StringIO
 import struct
 import binascii
-from raster.raster_upload import RasterUpload
+from .raster.raster_upload import RasterUpload
 
-from PGVectorLayerImport import PGVectorLayerImport
+from .PGVectorLayerImport import PGVectorLayerImport
 
 
 class DataUpload(QObject):
@@ -64,7 +69,7 @@ class DataUpload(QObject):
         except Exception as e:
             raise RuntimeError("Connection to database failed %s" % str(e))
 
-        for data_source, item in data_sources_items.iteritems():
+        for data_source, item in list(data_sources_items.items()):
             # Check available space, block if exceded
             size = DbConnections().db_size()
 
@@ -129,7 +134,7 @@ class DataUpload(QObject):
                 vectorLayerImport = None
 
                 # Build import string
-                attribs = range(0, fields.count())
+                attribs = list(range(0, fields.count()))
                 count = 0
                 importstr = bytearray()
                 ok = True
@@ -165,7 +170,7 @@ class DataUpload(QObject):
                                 if not val:
                                     val = b"\\N"
                             else:
-                                val = bytearray(unicode(val.toString()).encode('utf-8'))
+                                val = bytearray(str(val.toString()).encode('utf-8'))
                                 val = val.replace('\x00', '?')
                                 val = val.replace('\t', r"E'\t'")
                                 val = val.replace('\n', r"E'\n'")
@@ -180,7 +185,7 @@ class DataUpload(QObject):
                                 if not val:
                                     val = b"\\N"
                             else:
-                                val = bytearray(unicode(val).encode('utf-8'))
+                                val = bytearray(str(val).encode('utf-8'))
                                 val = val.replace('\x00', '?')
                                 val = val.replace('\t', r"E'\t'")
                                 val = val.replace('\n', r"E'\n'")

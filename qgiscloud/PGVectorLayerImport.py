@@ -22,18 +22,16 @@
  ***************************************************************************/
 
 """
+from __future__ import absolute_import
+from builtins import str
+from builtins import range
+from builtins import object
 
-from PyQt4.QtCore import QVariant
-#from PyQt4.QtGui import *
-#from PyQt4.QtXml import *
+from qgis.PyQt.QtCore import QVariant
 from qgis.core import *
 from numbers import Number
-import os
-import sys
-import apicompat
 
-
-class PGVectorLayerImport:
+class PGVectorLayerImport(object):
     def __quotedIdentifier(self, ident):
         return '"' + ident.replace('"', '""') + '"'
 

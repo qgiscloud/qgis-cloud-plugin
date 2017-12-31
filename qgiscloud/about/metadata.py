@@ -1,19 +1,22 @@
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 import os
 import platform
 
 try:
-    import ConfigParser
+    import configparser
 except ImportError:
     import configparser    
 
-class MetaData():
+class MetaData(object):
 
     def __init__(self):
         try:
             self.config = configparser.ConfigParser()
             self.config.read(os.path.join(os.path.dirname(__file__),'..','metadata.txt'))
         except:
-            self.config = ConfigParser.ConfigParser()
+            self.config = configparser.ConfigParser()
             self.config.read(os.path.join(os.path.dirname(__file__),'..','metadata.txt'))
 
     def name(self):

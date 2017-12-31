@@ -19,17 +19,21 @@
  *                                                                         *
  ***************************************************************************/
 """
+from __future__ import absolute_import
+from builtins import object
 # Import the PyQt and QGIS libraries
-from PyQt4.QtCore import Qt,  QObject,  QSettings,  QFileInfo,  QTranslator,  qVersion
-from PyQt4.QtGui import QAction,  QIcon
+from qgis.PyQt.QtCore import Qt, QObject, QSettings, QFileInfo, QTranslator, qVersion
+from qgis.PyQt.QtWidgets import QAction
+from qgis.PyQt.QtGui import QIcon
 from qgis.core import *
 # Initialize Qt resources from file resources_rc.py
-import resources_rc
+from . import resources_rc
 # Import the code for the dialog
-from qgiscloudplugindialog import QgisCloudPluginDialog
-# API compatibilty module. Has to be imported only once.
+from .qgiscloudplugindialog import QgisCloudPluginDialog
+import os
 
-class QgisCloudPlugin:
+
+class QgisCloudPlugin(object):
 
     def __init__(self, iface, version):
         # Save reference to the QGIS interface
@@ -46,7 +50,7 @@ class QgisCloudPlugin:
         self.iface.addToolBarIcon(self.action)
         self.iface.addPluginToMenu("&Cloud", self.action)
 
-        self.plugin_dir = QFileInfo(QgsApplication.qgisUserDbFilePath()).path() + "/python/plugins/qgiscloud"
+        self.plugin_dir = self.plugin_dir = os.path.dirname(__file__)
         # initialize locale
         localePath = ""
         locale_short = QSettings().value("locale/userLocale", type=str)[0:2]

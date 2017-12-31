@@ -19,13 +19,15 @@
  *                                                                         *
  ***************************************************************************/
 """
+from builtins import str
+from builtins import object
 
-from PyQt4.QtCore import QSettings
+from qgis.PyQt.QtCore import QSettings
 import psycopg2
 from qgis.core import *
 
 
-class DbConnectionCfg:
+class DbConnectionCfg(object):
 
     CLOUD_DB_HOSTS = ['db.qgiscloud.com', 'spacialdb.com']
 
@@ -68,11 +70,11 @@ class DbConnectionCfg:
         settings = QSettings()
         key = DbConnectionCfg.connection_key(conn_name)
         settings.beginGroup(key)
-        host = settings.value("host", type=str)
-        port = settings.value("port", type=str)
-        database = settings.value("database", type=str)
-        username = settings.value("username", type=str)
-        password = settings.value("password", type=str)
+        host = settings.value("host")
+        port = settings.value("port")
+        database = settings.value("database")
+        username = settings.value("username")
+        password = settings.value("password")
         sslmode = settings.value("sslmode", type=int)
         estimatedMetadata = settings.value("estimatedMetadata", type=bool)
         return cls(
@@ -108,8 +110,8 @@ class DbConnectionCfg:
             settings.beginGroup(name)
             # host might be NoneType, which causes str conversion to fail
             try:
-                db = settings.value("database", type=str)
-                host = settings.value("host", type=str)
+                db = settings.value("database")
+                host = settings.value("host")
                 if db == db_name and host in DbConnectionCfg.CLOUD_DB_HOSTS:
                     connection_names.append(name)
             except:
@@ -119,7 +121,7 @@ class DbConnectionCfg:
         return connection_names
 
     def description(self):
-        return unicode(QCoreApplication.translate(
+        return str(QCoreApplication.translate(
             "QgisCloudPluginDialog",
             "host: %s port: %s database: %s username: %s password: %s")) % \
             (self.host, self.port, self.database, self.username, self.password)

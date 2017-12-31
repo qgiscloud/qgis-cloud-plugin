@@ -19,11 +19,11 @@ email                : pka at sourcepole.ch
  *                                                                         *
  ***************************************************************************/
 """
+from __future__ import absolute_import
 # Import the PyQt and QGIS libraries
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from qgis.PyQt.QtWidgets import QMenu
 from qgis.core import *
-import resources_rc
+from . import resources_rc
 import imp
 from openlayers_plugin.openlayers_layer import OpenlayersLayer
 from openlayers_plugin.openlayers_plugin_layer_type import OpenlayersPluginLayerType

@@ -19,14 +19,17 @@ email                : smani at sourcepole.ch
  *                                                                         *
  ***************************************************************************/
 """
+from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
 # Import the PyQt and QGIS libraries
 
-from PyQt4.QtCore import Qt,  QUrl
-from PyQt4.QtGui import QDialog,  QVBoxLayout,  QLabel,  QPlainTextEdit,  QDialogButtonBox,  QDesktopServices
+from qgis.PyQt.QtCore import Qt, QUrl
+from qgis.PyQt.QtWidgets import QDialog, QVBoxLayout, QLabel, QPlainTextEdit, QDialogButtonBox
+from qgis.PyQt.QtGui import QDesktopServices
 from qgis.core import *
 from . import version
-import apicompat
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import sys
 import platform
 
@@ -76,7 +79,7 @@ class ErrorReportDialog(QDialog):
                     self.username)
         url = QUrl()
         url.setEncodedUrl("mailto:support@qgiscloud.com?subject=%s&body=%s" % (
-                urllib.quote(pystring(self.windowTitle())),
-                urllib.quote(body)),
+                urllib.parse.quote(pystring(self.windowTitle())),
+                urllib.parse.quote(body)),
         )
         QDesktopServices.openUrl(url)

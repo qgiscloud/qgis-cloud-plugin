@@ -20,6 +20,7 @@
  ***************************************************************************/
  This script initializes the plugin, making it known to QGIS.
 """
+from __future__ import absolute_import
 def name():
     return "QGIS Cloud Plugin"
 def description():
@@ -35,5 +36,5 @@ def qgisMaximumVersion():
 def author():
   return "Sourcepole"
 def classFactory(iface):
-    from qgiscloudplugin import QgisCloudPlugin
+    from .qgiscloudplugin import QgisCloudPlugin
     return QgisCloudPlugin(iface, version())

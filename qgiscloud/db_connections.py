@@ -19,16 +19,18 @@
  *                                                                         *
  ***************************************************************************/
 """
+from __future__ import absolute_import
+from builtins import str
+from builtins import object
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from qgis.PyQt.QtCore import QSettings
 from qgis.core import *
-from db_connection_cfg import DbConnectionCfg
+from .db_connection_cfg import DbConnectionCfg
 import time
 import socket
 
 
-class DbConnections:
+class DbConnections(object):
 
     def __init__(self):
         self._dbs = {}  # Map<dbname, DbConnectionCfg>
@@ -42,16 +44,16 @@ class DbConnections:
         return len(self._dbs)
 
     def iteritems(self):
-        return self._dbs.iteritems()
+        return iter(list(self._dbs.items()))
 
     def db(self, dbname):
-        return self._dbs[unicode(dbname)]
+        return self._dbs[str(dbname)]
         
         
     def db_size(self):
         usedSpace = 0
-        self.numDbs = len(self._dbs.keys())
-        for db in self._dbs.keys():
+        self.numDbs = len(list(self._dbs.keys()))
+        for db in list(self._dbs.keys()):
             try:
                 conn = self.db(db).psycopg_connection()
             except:
@@ -74,10 +76,9 @@ class DbConnections:
         cloud_connections_key = u"/qgiscloud/connections/%s" % user
         settings = QSettings()
 
-        cloud_dbs_from_server = self._dbs.keys()
+        cloud_dbs_from_server = list(self._dbs.keys())
         stored_connections = settings.value(cloud_connections_key) or []
-        cloud_dbs_from_settings = map(
-            lambda conn: str(conn), pystringlist(stored_connections))
+        cloud_dbs_from_settings = [str(conn) for conn in pystringlist(stored_connections)]
 
         # remove obsolete connections
         for db_name in (set(cloud_dbs_from_settings) - set(cloud_dbs_from_server)):

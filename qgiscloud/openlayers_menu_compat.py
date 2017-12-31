@@ -19,19 +19,19 @@ email                : pka at sourcepole.ch
  *                                                                         *
  ***************************************************************************/
 """
+from __future__ import absolute_import
+from builtins import object
 # Import the PyQt and QGIS libraries
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from qgis.PyQt.QtWidgets import QMenu, QAction, QMessageBox
 from qgis.core import *
-import resources_rc
+from . import resources_rc
 import openlayers_plugin
 from openlayers_plugin.openlayers_layer import OpenlayersLayer
 from openlayers_plugin.openlayers_plugin_layer_type import OpenlayersPluginLayerType
-from apicompat import *
 import os
 
 
-class OlLayerType:
+class OlLayerType(object):
     def __init__(self, plugin, name, icon, html, emitsLoadEnd = False):
         self.__plugin = plugin
         self.name = name
@@ -44,7 +44,7 @@ class OlLayerType:
         self.__plugin.addLayer(self)
 
 
-class OlLayerTypeRegistry:
+class OlLayerTypeRegistry(object):
     def __init__(self):
         self.__olLayerTypes = {}
         self.__layerTypeId = 0
@@ -55,7 +55,7 @@ class OlLayerTypeRegistry:
         self.__layerTypeId += 1
 
     def types(self):
-        return self.__olLayerTypes.values()
+        return list(self.__olLayerTypes.values())
 
     def getById(self, id):
         return self.__olLayerTypes[id]
@@ -89,7 +89,7 @@ class OpenlayersMenu(QMenu):
         for layerType in self.olLayerTypeRegistry.types():
             # Create actions for adding layers
             action = QAction(QIcon(pathPlugin % layerType.icon), pystring(QApplication.translate("OpenlayersPlugin", "Add {name} layer")).format(name=layerType.name), self.iface.mainWindow())
-            QObject.connect(action, SIGNAL("triggered()"), layerType.addLayer)
+            action.triggered.connect(layerType.addLayer)
             self.addAction(action)
 
         if not self.__setCoordRSGoogle():

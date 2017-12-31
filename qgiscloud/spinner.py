@@ -19,9 +19,11 @@
  *                                                                         *
  ***************************************************************************/
 """
+from builtins import range
 
-from PyQt4.QtCore import Qt,  QRect
-from PyQt4.QtGui import QWidget,  QPainter,  QColor
+from qgis.PyQt.QtCore import Qt, QRect
+from qgis.PyQt.QtWidgets import QWidget
+from qgis.PyQt.QtGui import QPainter, QColor
 import math
 
 

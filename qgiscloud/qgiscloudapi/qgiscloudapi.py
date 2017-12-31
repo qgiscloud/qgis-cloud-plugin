@@ -27,6 +27,11 @@ limitations under the License.
 # maps = api.read_maps()
 
 """
+from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 
 # python versions below 2.6 do not have json included we need simplejson then
 try:
@@ -35,10 +40,10 @@ except ImportError:
     from .. import simplejson as json
 
 import time
-from urllib import urlencode
-import urllib2
+from urllib.parse import urlencode
+import urllib.request, urllib.error, urllib.parse
 import base64, zlib
-from version import __version__
+from .version import __version__
 
 API_URL = 'https://api.qgiscloud.com'
 
@@ -47,7 +52,7 @@ __all__ = ['API', 'UnauthorizedError', 'ConnectionException', 'TokenRequiredErro
            'NotImplementedError', 'ThrottledError']
 
 
-class API():
+class API(object):
     """
         The API class contains all methods to access the qgiscloud RESTful
         API.
@@ -129,7 +134,13 @@ class API():
             'type': 'Login',
             'info': version_info
         }
-        request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
+        
+        request = Request(user=self.user.encode('utf-8'), 
+                                       password=self.password.encode('utf-8'), 
+                                       token=self.get_token(), 
+                                       cache=self.cache, 
+                                       url=self.url)
+                                       
         content = request.post(resource, data)
         login_info = json.loads(content)
         if 'clouddb' not in login_info:
@@ -140,7 +151,7 @@ class API():
         """
             Queries the API for a new Token and saves it as self._token.
         """
-        request = Request(user=user, password=password, cache=self.cache, url=self.url)
+        request = Request(user=user.encode('utf-8'), password=password.encode('utf-8'), cache=self.cache, url=self.url)
         content = request.post('/token.json')
         self.set_token(json.loads(content))
         return True
@@ -465,15 +476,24 @@ class ThrottledError(Exception):
 # http://bugs.python.org/file20471/simpler_fix.patch
 #
 ###
+#
+#                    passman = urllib.request.HTTPPasswordMgrWithDefaultRealm()
+#                    passman.add_password(None, url, username, password)
+#                    urllib.request.install_opener(urllib.request.build_opener(urllib.request.HTTPBasicAuthHandler(passman)))
+#                    urllib.request.install_opener(urllib.request.build_opener(urllib.request.HTTPCookieProcessor()))
+#                    
+#                    request = urllib.request.Request(url)
+#                    base64string = base64.b64encode(b'%s:%s' % (username, password))
+#                    request.add_header("Authorization", b"Basic %s" % base64string)   
 
-class HTTPBasicAuthHandlerLimitRetries(urllib2.HTTPBasicAuthHandler):
+class HTTPBasicAuthHandlerLimitRetries(urllib.request.HTTPBasicAuthHandler):
     def __init__(self, *args, **kwargs):
-        urllib2.HTTPBasicAuthHandler.__init__(self, *args, **kwargs)
+        urllib.request.HTTPBasicAuthHandler.__init__(self, *args, **kwargs)
 
     def http_error_auth_reqed(self, authreq, host, req, headers):
         authreq = headers.get(authreq, None)
         if authreq:
-            mo = urllib2.AbstractBasicAuthHandler.rx.search(authreq)
+            mo = urllib.request.AbstractBasicAuthHandler.rx.search(authreq)
             if mo:
                 if len(mo.groups()) == 3:
                     scheme, quote, realm = mo.groups()
@@ -486,7 +506,7 @@ class HTTPBasicAuthHandlerLimitRetries(urllib2.HTTPBasicAuthHandler):
         user, pw = self.passwd.find_user_password(realm, host)
         if pw is not None:
             raw = ("%s:%s" % (user, pw)).encode('utf8')
-            auth = 'Basic %s' % urllib2.base64.b64encode(raw).strip()
+            auth = 'Basic %s' % base64.b64encode(raw).strip()
             if req.get_header(self.auth_header, None) == auth:
                 return None
             req.add_unredirected_header(self.auth_header, auth)
@@ -499,7 +519,7 @@ class HTTPBasicAuthHandlerLimitRetries(urllib2.HTTPBasicAuthHandler):
 #
 ###
 
-class Request():
+class Request(object):
     """
         Request is used internally to actually fire API requests. It has some
         handy shortcut methods for POST, GET, PUT and DELETE, sets correct
@@ -549,11 +569,11 @@ class Request():
         if self.token is not None:
             headers['Authorization'] = 'auth_token="%s"' % (self.token['token'])
         elif self.user is not None and self.password is not None:
-            password_manager = urllib2.HTTPPasswordMgrWithDefaultRealm()
+            password_manager = urllib.request.HTTPPasswordMgrWithDefaultRealm()
             password_manager.add_password(None, self.url, self.user, self.password)
             auth_handler = HTTPBasicAuthHandlerLimitRetries(password_manager)
-            opener = urllib2.build_opener(auth_handler)
-            urllib2.install_opener(opener)            
+            opener = urllib.request.build_opener(auth_handler)
+            urllib.request.install_opener(opener)            
         #
         # The API expects the body to be urlencoded. If data was passed to
         # the request method we therefore use urlencode from urllib.
@@ -561,7 +581,7 @@ class Request():
         if data == None:
             body = ''
         else:
-            body = urlencode(data)
+            body = urlencode(data).encode('utf-8')
 
         #
         # We set the Host Header for MacOSX 10.5, to circumvent the NotFoundError
@@ -592,14 +612,14 @@ class Request():
         try:
             request_method = method.upper()
             if request_method in ['PUT', 'POST']:
-                req = urllib2.Request(url=url, data=body, headers=headers)
+                req = urllib.request.Request(url=url, data=body, headers=headers)
             else:
-                req = urllib2.Request(url=url, headers=headers)
+                req = urllib.request.Request(url=url, headers=headers)
             if request_method in ['PUT', 'DELETE']:
                 # add PUT and DELETE methods
                 req.get_method = lambda: request_method
-            response = urllib2.urlopen(req).read()
-        except urllib2.HTTPError, e:
+            response = urllib.request.urlopen(req).read()
+        except urllib.error.HTTPError as e:
             #
             # Handle the possible responses according to their HTTP STATUS
             # CODES.
