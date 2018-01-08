@@ -39,7 +39,7 @@ class LocalDataSources(object):
             return None
 
     def iteritems(self):
-        return iter(list(self._local_data_sources.items()))
+        return iter(list(self._local_data_sources.iteritems()))
 
     def count(self):
         return len(self._local_data_sources)

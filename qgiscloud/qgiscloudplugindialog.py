@@ -260,8 +260,14 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.btnRefreshLocalLayers.clicked.connect(self.refresh_local_data_sources)
         self.iface.newProjectCreated.connect(self.reset_load_data)
         self.iface.projectRead.connect(self.reset_load_data)
-        QgsMapLayerRegistry.instance().layerWillBeRemoved.connect(self.remove_layer)
-        QgsMapLayerRegistry.instance().layerWasAdded.connect(self.add_layer)
+        
+        if self.VERSION_INT >= 29900:
+            QgsProject().layerWillBeRemoved.connect(self.remove_layer)
+            QgsProject().layerWasAdded.connect(self.add_layer)
+        else:
+            QgsMapLayerRegistry.instance().layerWillBeRemoved.connect(self.remove_layer)
+            QgsMapLayerRegistry.instance().layerWasAdded.connect(self.add_layer)
+        
         self.ui.cbUploadDatabase.currentIndexChanged.connect(lambda idx: self.activate_upload_button())
         self.ui.btnUploadData.clicked.connect(self.upload_data)
 
@@ -505,7 +511,7 @@ class QgisCloudPluginDialog(QDockWidget):
             if self.db_connections.count() == 0:
                 self.ui.cbUploadDatabase.setEditText(self.tr("No databases"))
             else:
-                for name, db in list(self.db_connections.items()):
+                for name, db in list(self.db_connections.iteritems()):
                     it = QListWidgetItem(name)
                     it.setToolTip(db.description())
                     self.ui.tabDatabases.addItem(it)
@@ -786,7 +792,7 @@ class QgisCloudPluginDialog(QDockWidget):
         # update GUI
         self.ui.tblLocalLayers.setRowCount(0)
         
-        for data_source, layers in list(self.local_data_sources.items()):
+        for data_source, layers in list(self.local_data_sources.iteritems()):
             layer_names = []
             for layer in layers:
                 layer_names.append(str(layer.name()))
@@ -961,16 +967,16 @@ class QgisCloudPluginDialog(QDockWidget):
             # Map<data_source, {table: table, layers: layers}>
             data_sources_items = {}
             for row in range(0, self.ui.tblLocalLayers.rowCount()):
-                data_source = str(
+                data_source = unicode(
                     self.ui.tblLocalLayers.item(
                         row, self.COLUMN_DATA_SOURCE).text())
                 layers = self.local_data_sources.layers(data_source)
                 if layers is not None:
-                    table_name = str(
+                    table_name = unicode(
                         self.ui.tblLocalLayers.item(
                             row, self.COLUMN_TABLE_NAME).text())
                     data_sources_items[data_source] = {
-                        'table': table_name, 'layers': layers}
+                        u'table': unicode(table_name), u'layers': layers}
 
             login_info = self.api.check_login(version_info=self._version_info())
             try:            
@@ -981,8 +987,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 self.maxDBs = 5
 
             try:
-                self.data_upload.upload(
-                    self.db_connections.db(db_name.encode('utf-8')), data_sources_items, self.maxSize)
+                self.data_upload.upload(self.db_connections.db(unicode(db_name)), data_sources_items, unicode(self.maxSize))
                 upload_ok = True
             except Exception as e:
                 ErrorReportDialog(self.tr("Upload errors occurred"), self.tr("Upload errors occurred. Not all data could be uploaded."), str(e) + "\n" + traceback.format_exc(), self.user, self).exec_()

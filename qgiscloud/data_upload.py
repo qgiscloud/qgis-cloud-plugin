@@ -69,7 +69,7 @@ class DataUpload(QObject):
         except Exception as e:
             raise RuntimeError("Connection to database failed %s" % str(e))
 
-        for data_source, item in list(data_sources_items.items()):
+        for data_source, item in list(data_sources_items.iteritems()):
             # Check available space, block if exceded
             size = DbConnections().db_size()
 

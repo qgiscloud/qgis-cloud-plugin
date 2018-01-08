@@ -44,7 +44,7 @@ class DbConnections(object):
         return len(self._dbs)
 
     def iteritems(self):
-        return iter(list(self._dbs.items()))
+        return iter(list(self._dbs.iteritems()))
 
     def db(self, dbname):
         return self._dbs[str(dbname)]
