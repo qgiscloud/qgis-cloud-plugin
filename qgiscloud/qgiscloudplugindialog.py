@@ -990,20 +990,13 @@ class QgisCloudPluginDialog(QDockWidget):
     def db_size(self,  db_connections):
         usedSpace = 0
         self.numDbs = len(db_connections._dbs.keys())
-        for db in db_connections._dbs.keys():
-            try:
-                conn = db_connections.db(db).psycopg_connection()
-            except:
-                continue
-            cursor = conn.cursor()
-            sql = "SELECT pg_database_size('" + str(db) + "')"
-            cursor.execute(sql)
-            usedSpace += int(cursor.fetchone()[0])-(11*1024*1024)
-            cursor.close()
-            conn.close
+#        for db in db_connections._dbs.keys():
+#            try:
+#                conn = db_connections.db(db).psycopg_connection()
+#            except:
+#                continue
 
-        # Used space in MB
-        usedSpace /= 1024 * 1024
+        usedSpace = db_connections.db_size()
 
         login_info = self.api.check_login(version_info=self._version_info())
         

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE Project SYSTEM "Project-6.0.dtd">
+<!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project QGIS Cloud Plugin -->
-<!-- Saved: 2017-12-17, 16:43:27 -->
-<!-- Copyright (C) 2017 ,  -->
-<Project version="6.0">
+<!-- Saved: 2018-01-16, 13:40:56 -->
+<!-- Copyright (C) 2018 ,  -->
+<Project version="5.1">
   <Language>en_US</Language>
   <Hash>d61ea45470cba683302e567145ad01a2cc5bdb84</Hash>
   <ProgLanguage mixed="0">Python3</ProgLanguage>
@@ -16,9 +16,6 @@
   <Sources>
     <Source>PGVectorLayerImport.py</Source>
     <Source>__init__.py</Source>
-    <Source>about/__init__.py</Source>
-    <Source>about/do_about.py</Source>
-    <Source>about/metadata.py</Source>
     <Source>data_raster_upload.py</Source>
     <Source>data_upload.py</Source>
     <Source>db_connection_cfg.py</Source>

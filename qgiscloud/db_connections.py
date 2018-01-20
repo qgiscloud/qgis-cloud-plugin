@@ -57,9 +57,18 @@ class DbConnections:
             except:
                 continue
             cursor = conn.cursor()
-            sql = "SELECT pg_database_size('" + str(db) + "')"
+#            sql = "SELECT pg_database_size('" + str(db) + "')"
+            sql = """with table_size as (
+                                SELECT relname as table, 
+                                    pg_size_pretty(pg_total_relation_size(relid)) As size_pretty,
+                                    pg_total_relation_size(relid) As size
+                                FROM pg_catalog.pg_statio_user_tables 
+                                ORDER BY pg_total_relation_size(relid) DESC)
+
+                            select pg_size_pretty(sum) as size_pretty, sum as size
+                            from (select sum(size) from table_size) as sum_sizes;"""
             cursor.execute(sql)
-            usedSpace += int(cursor.fetchone()[0])
+            usedSpace += int(cursor.fetchone()[1])-(3*1024*1024)
             cursor.close()
             conn.close
 
