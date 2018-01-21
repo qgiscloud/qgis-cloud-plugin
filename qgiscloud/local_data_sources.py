@@ -25,8 +25,14 @@ from builtins import object
 from qgis.core import *
 from .db_connection_cfg import DbConnectionCfg
 
-
 class LocalDataSources(object):
+    
+    try:
+        VERSION_INT = Qgis.QGIS_VERSION_INT
+        VERSION = Qgis.QGIS_VERSION
+    except:
+        VERSION_INT = QGis.QGIS_VERSION_INT
+        VERSION = QGis.QGIS_VERSION    
 
     def __init__(self):
         # map<data source, layers>
@@ -39,7 +45,7 @@ class LocalDataSources(object):
             return None
 
     def iteritems(self):
-        return iter(list(self._local_data_sources.iteritems()))
+        return iter(list(self._local_data_sources.items()))
 
     def count(self):
         return len(self._local_data_sources)

@@ -19,16 +19,12 @@ email                : smani at sourcepole.ch
  *                                                                         *
  ***************************************************************************/
 """
-from __future__ import absolute_import
-from future import standard_library
-standard_library.install_aliases()
 # Import the PyQt and QGIS libraries
-
 from qgis.PyQt.QtCore import Qt, QUrl
 from qgis.PyQt.QtWidgets import QDialog, QVBoxLayout, QLabel, QPlainTextEdit, QDialogButtonBox
 from qgis.PyQt.QtGui import QDesktopServices
 from qgis.core import *
-from . import version
+from .about.metadata import MetaData
 import urllib.request, urllib.parse, urllib.error
 import sys
 import platform
@@ -60,6 +56,7 @@ class ErrorReportDialog(QDialog):
         self.buttonBox.rejected.connect(self.reject)
 
         self.username = username
+        self.metadata = MetaData()
 
     def __reportError(self):
         body = ("Please provide any additional information here:\n\n\n"
@@ -75,7 +72,7 @@ class ErrorReportDialog(QDialog):
                     QGis.QGIS_VERSION,
                     sys.version.replace("\n", " "),
                     platform.platform(),
-                    version(),
+                    self.metadata.version(),
                     self.username)
         url = QUrl()
         url.setEncodedUrl("mailto:support@qgiscloud.com?subject=%s&body=%s" % (

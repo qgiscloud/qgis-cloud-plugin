@@ -20,21 +20,8 @@
  ***************************************************************************/
  This script initializes the plugin, making it known to QGIS.
 """
-from __future__ import absolute_import
-def name():
-    return "QGIS Cloud Plugin"
-def description():
-    return "Publish maps and share data on qgiscloud.com"
-def version():
-    return "3.0.0"
-def icon():
-    return "icon.png"
-def qgisMinimumVersion():
-    return "2.14"
-def qgisMaximumVersion():
-    return "3.99"
-def author():
-  return "Sourcepole"
+from .about.metadata import MetaData
+
 def classFactory(iface):
     from .qgiscloudplugin import QgisCloudPlugin
-    return QgisCloudPlugin(iface, version())
+    return QgisCloudPlugin(iface, MetaData().version())

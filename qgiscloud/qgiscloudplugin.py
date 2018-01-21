@@ -27,7 +27,7 @@ from qgis.PyQt.QtWidgets import QAction
 from qgis.PyQt.QtGui import QIcon
 from qgis.core import *
 # Initialize Qt resources from file resources_rc.py
-from . import resources_rc
+from .resources_rc import *
 # Import the code for the dialog
 from .qgiscloudplugindialog import QgisCloudPluginDialog
 import os
@@ -44,13 +44,13 @@ class QgisCloudPlugin(object):
         # Create action that will start plugin configuration
         self.action = QAction(QIcon(":/plugins/qgiscloud/icon.png"), \
             "Cloud Settings", self.iface.mainWindow())
-        self.action.triggered.connect(self.showHideDockWidget)
+#        self.action.triggered.connect(self.showHideDockWidget)
 
         # Add toolbar button and menu item
         self.iface.addToolBarIcon(self.action)
         self.iface.addPluginToMenu("&Cloud", self.action)
 
-        self.plugin_dir = self.plugin_dir = os.path.dirname(__file__)
+        self.plugin_dir = os.path.dirname(__file__)
         # initialize locale
         localePath = ""
         locale_short = QSettings().value("locale/userLocale", type=str)[0:2]
@@ -71,7 +71,7 @@ class QgisCloudPlugin(object):
 
 
                 
-        # dock widget
+#        # dock widget
         self.dockWidget = QgisCloudPluginDialog(self.iface, self.version)
         self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)                
 

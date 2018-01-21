@@ -200,7 +200,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui = Ui_QgisCloudPlugin()
         self.ui.setupUi(self)
         self.storage_exceeded = True
-
+        
         myAbout = DlgAbout()
         self.ui.aboutText.setText(
             myAbout.aboutString() +
@@ -262,8 +262,8 @@ class QgisCloudPluginDialog(QDockWidget):
         self.iface.projectRead.connect(self.reset_load_data)
         
         if self.VERSION_INT >= 29900:
-            QgsProject().layerWillBeRemoved.connect(self.remove_layer)
-            QgsProject().layerWasAdded.connect(self.add_layer)
+            QgsProject.instance().layerWillBeRemoved.connect(self.remove_layer)
+            QgsProject.instance().layerWasAdded.connect(self.add_layer)
         else:
             QgsMapLayerRegistry.instance().layerWillBeRemoved.connect(self.remove_layer)
             QgsMapLayerRegistry.instance().layerWasAdded.connect(self.add_layer)
@@ -295,9 +295,16 @@ class QgisCloudPluginDialog(QDockWidget):
         if self.iface:
             self.iface.newProjectCreated.disconnect(self.reset_load_data)
             self.iface.projectRead.disconnect(self.reset_load_data)
-        if QgsMapLayerRegistry.instance():
-            QgsMapLayerRegistry.instance().layerWillBeRemoved.disconnect(self.remove_layer)
-            QgsMapLayerRegistry.instance().layerWasAdded.disconnect(self.add_layer)
+        
+        if self.VERSION_INT < 29900 and self.VERSION_INT < 20800:
+            if QgsMapLayerRegistry.instance():
+                QgsMapLayerRegistry.instance().layerWillBeRemoved.disconnect(self.remove_layer)
+                QgsMapLayerRegistry.instance().layerWasAdded.disconnect(self.add_layer)
+        elif self.VERSION_INT >= 29900:
+            if QgsProject.instance():
+                QgsProject.instance().layerWillBeRemoved.disconnect(self.remove_layer)
+                QgsProject.instance().layerWasAdded.disconnect(self.add_layer)
+        
 
     def statusBar(self):
         return self.iface.mainWindow().statusBar()
@@ -902,7 +909,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.do_update_local_data_sources = True
         self.update_local_layers()
         self.activate_upload_button()
-
+#
     def update_data_sources_table_names(self):
         if self.local_data_sources.count() == 0:
             self.data_sources_table_names.clear()
