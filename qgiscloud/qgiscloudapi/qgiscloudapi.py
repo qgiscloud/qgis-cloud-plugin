@@ -554,7 +554,7 @@ class Request(object):
 
     def request(self, resource, method='GET', data=None, headers={}):
         """
-            use urllib2
+            use urllib
         """
         url = self.url + resource
 
@@ -619,6 +619,7 @@ class Request(object):
                 # add PUT and DELETE methods
                 req.get_method = lambda: request_method
             response = urllib.request.urlopen(req).read()
+            
         except urllib.error.HTTPError as e:
             #
             # Handle the possible responses according to their HTTP STATUS

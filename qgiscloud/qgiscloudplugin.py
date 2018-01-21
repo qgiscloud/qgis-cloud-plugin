@@ -44,7 +44,7 @@ class QgisCloudPlugin(object):
         # Create action that will start plugin configuration
         self.action = QAction(QIcon(":/plugins/qgiscloud/icon.png"), \
             "Cloud Settings", self.iface.mainWindow())
-#        self.action.triggered.connect(self.showHideDockWidget)
+        self.action.triggered.connect(self.showHideDockWidget)
 
         # Add toolbar button and menu item
         self.iface.addToolBarIcon(self.action)
