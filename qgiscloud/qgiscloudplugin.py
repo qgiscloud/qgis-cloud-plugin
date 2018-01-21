@@ -67,9 +67,6 @@ class QgisCloudPlugin(object):
                 self.translator.load( self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_long + ".qm")          
                 if qVersion() > '4.3.3':
                     QCoreApplication.installTranslator(self.translator)                
-            
-
-
                 
 #        # dock widget
         self.dockWidget = QgisCloudPluginDialog(self.iface, self.version)
