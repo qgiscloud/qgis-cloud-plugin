@@ -44,7 +44,7 @@ class DbConnections(object):
         return len(self._dbs)
 
     def iteritems(self):
-        return iter(list(self._dbs.iteritems()))
+        return iter(list(self._dbs.items()))
 
     def db(self, dbname):
         return self._dbs[str(dbname)]
@@ -78,7 +78,7 @@ class DbConnections(object):
 
         cloud_dbs_from_server = list(self._dbs.keys())
         stored_connections = settings.value(cloud_connections_key) or []
-        cloud_dbs_from_settings = [str(conn) for conn in pystringlist(stored_connections)]
+        cloud_dbs_from_settings = [str(conn) for conn in stored_connections]
 
         # remove obsolete connections
         for db_name in (set(cloud_dbs_from_settings) - set(cloud_dbs_from_server)):

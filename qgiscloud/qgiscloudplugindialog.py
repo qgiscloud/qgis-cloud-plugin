@@ -190,6 +190,10 @@ class QgisCloudPluginDialog(QDockWidget):
             QgsWkbTypes.MultiSurfaceZM: "MultiSurfaceZM",
      }
         
+    if VERSION_INT < 29900:
+        PROJECT_INSTANCE = QgsMapLayerRegistry.instance()
+    else:
+        PROJECT_INSTANCE = QgsProject.instance()        
     
     def __init__(self, iface, version):
         QDockWidget.__init__(self, None)
@@ -260,13 +264,9 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.btnRefreshLocalLayers.clicked.connect(self.refresh_local_data_sources)
         self.iface.newProjectCreated.connect(self.reset_load_data)
         self.iface.projectRead.connect(self.reset_load_data)
-        
-        if self.VERSION_INT >= 29900:
-            QgsProject.instance().layerWillBeRemoved.connect(self.remove_layer)
-            QgsProject.instance().layerWasAdded.connect(self.add_layer)
-        else:
-            QgsMapLayerRegistry.instance().layerWillBeRemoved.connect(self.remove_layer)
-            QgsMapLayerRegistry.instance().layerWasAdded.connect(self.add_layer)
+
+        self.PROJECT_INSTANCE.layerWillBeRemoved.connect(self.remove_layer)
+        self.PROJECT_INSTANCE.layerWasAdded.connect(self.add_layer)
         
         self.ui.cbUploadDatabase.currentIndexChanged.connect(lambda idx: self.activate_upload_button())
         self.ui.btnUploadData.clicked.connect(self.upload_data)
@@ -296,14 +296,9 @@ class QgisCloudPluginDialog(QDockWidget):
             self.iface.newProjectCreated.disconnect(self.reset_load_data)
             self.iface.projectRead.disconnect(self.reset_load_data)
         
-        if self.VERSION_INT < 29900 and self.VERSION_INT < 20800:
-            if QgsMapLayerRegistry.instance():
-                QgsMapLayerRegistry.instance().layerWillBeRemoved.disconnect(self.remove_layer)
-                QgsMapLayerRegistry.instance().layerWasAdded.disconnect(self.add_layer)
-        elif self.VERSION_INT >= 29900:
-            if QgsProject.instance():
-                QgsProject.instance().layerWillBeRemoved.disconnect(self.remove_layer)
-                QgsProject.instance().layerWasAdded.disconnect(self.add_layer)
+        if self.PROJECT_INSTANCE:
+            self.PROJECT_INSTANCE.layerWillBeRemoved.disconnect(self.remove_layer)
+            self.PROJECT_INSTANCE.layerWasAdded.disconnect(self.add_layer)
         
 
     def statusBar(self):
@@ -439,7 +434,7 @@ class QgisCloudPluginDialog(QDockWidget):
         
         answer = False
         
-        for layer in list(QgsMapLayerRegistry.instance().mapLayers().values()):            
+        for layer in list(self.PROJECT_INSTANCE.mapLayers().values()):            
             if QgsDataSourceURI(layer.publicSource()).database() == name:
                 
                 if not answer:
@@ -452,7 +447,7 @@ class QgisCloudPluginDialog(QDockWidget):
                             QMessageBox.Yes))
 
                 if answer == QMessageBox.Yes:
-                     QgsMapLayerRegistry.instance().removeMapLayer(layer.id())
+                     self.PROJECT_INSTANCE.removeMapLayer(layer.id())
                      
         if answer == QMessageBox.Cancel:
             QMessageBox.warning(None,  self.tr('Warning'),  self.tr('Deletion of database "{name}" interrupted!').format(name=name))
@@ -555,7 +550,10 @@ class QgisCloudPluginDialog(QDockWidget):
             if ok:
                 project.write()           
                 
-        project.read(QFileInfo(qgs_file_name))
+        if self.VERSION_INT < 29900:
+            project.read(QFileInfo(qgs_file_name))
+        else:
+            project.read(qgs_file_name)
         project.setDirty(False)
         self.iface.mainWindow().setWindowTitle("QGIS %s - %s" % (self.VERSION,  map_name))
         self.unsetCursor()
@@ -631,7 +629,11 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.widgetServices.show()
 
     def update_url(self, label, api_url, prefix, path):
-        base_url = string.replace(api_url, 'https://api.', prefix)
+        try:
+            base_url = string.replace(api_url, 'https://api.', prefix)
+        except:
+            base_url = api_url.replace('https://api.', prefix)
+            
         url = u'{0}/{1}'.format(base_url, path)
         text = re.sub(r'http[^"]+', url, str(label.text()))
         label.setText(text)

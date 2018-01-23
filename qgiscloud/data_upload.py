@@ -43,6 +43,15 @@ from .PGVectorLayerImport import PGVectorLayerImport
 
 
 class DataUpload(QObject):
+    
+    try:
+        VERSION_INT = Qgis.QGIS_VERSION_INT
+        VERSION = Qgis.QGIS_VERSION
+    except:
+        VERSION_INT = QGis.QGIS_VERSION_INT
+        VERSION = QGis.QGIS_VERSION    
+    
+    
     def __init__(self, iface, status_bar, progress_label, api, db_connections):
         QObject.__init__(self)
         self.iface = iface
@@ -50,8 +59,13 @@ class DataUpload(QObject):
         self.progress_label = progress_label
         self.api = api
         self.db_connections = db_connections
-        pass
-
+        
+        if self.VERSION_INT < 29900:
+            self.PROJECT_INSTANCE = QgsMapLayerRegistry.instance()
+        else:
+            self.PROJECT_INSTANCE = QgsProject.instance()
+        
+        
     def upload(self, db, data_sources_items, maxSize):
         import_ok = True
         layers_to_replace = {}
@@ -349,14 +363,14 @@ class DataUpload(QObject):
                         )
                     else:
                         # move remote vector layer
-                        source_layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
+                        source_layer = self.PROJECT_INSTANCE.mapLayer(layer_id)
                         if source_layer.type() == QgsMapLayer.VectorLayer:
                             target_layer = QgsVectorLayer(source_layer.source(), source_layer.name(), source_layer.providerType())
                             if target_layer.isValid():
                                 self.copy_layer_settings(source_layer, target_layer)
-                                QgsMapLayerRegistry.instance().addMapLayer(target_layer)
+                                self.PROJECT_INSTANCE.addMapLayer(target_layer)
                                 self.iface.legendInterface().setLayerVisible(target_layer, self.iface.legendInterface().isLayerVisible(source_layer))
-                                QgsMapLayerRegistry.instance().removeMapLayer(layer_id)
+                                self.PROJECT_INSTANCE.removeMapLayer(layer_id)
                         elif source_layer.type() == QgsMapLayer.RasterLayer:
                             pass
 
@@ -405,7 +419,7 @@ class DataUpload(QObject):
                 group_node = node.parent()
 
                 # add remote layer
-                QgsMapLayerRegistry.instance().addMapLayer(remote_layer, False)
+                self.PROJECT_INSTANCE.addMapLayer(remote_layer, False)
                 idx = group_node.children().index(node)
                 remote_layer_node = group_node.insertLayer(idx, remote_layer)
                 remote_layer_node.setVisible(node.isVisible())
@@ -416,13 +430,13 @@ class DataUpload(QObject):
                 # using old legendInterface API
 
                 # add remote layer
-                QgsMapLayerRegistry.instance().addMapLayer(remote_layer)
+                self.PROJECT_INSTANCE.addMapLayer(remote_layer)
                 if remote_layer.type() == QgsVectorLayer:
                     remote_layer.updateExtents()
                     self.iface.legendInterface().setLayerVisible(remote_layer, self.iface.legendInterface().isLayerVisible(local_layer))
 
                 # remove local layer
-                QgsMapLayerRegistry.instance().removeMapLayer(local_layer.id())
+                self.PROJECT_INSTANCE.removeMapLayer(local_layer.id())
 
             self.status_bar.showMessage(u"Replaced layer %s" % remote_layer.name())
 
