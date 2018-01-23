@@ -109,8 +109,10 @@ class API(object):
         """
             Set user/password for authentication.
         """
-        self.user = user
-        self.password = password
+        self.user = bytearray()
+        self.user.extend(map(ord, user))
+        self.password = bytearray() 
+        self.password.extend(map(ord,  password))
         return True
 
     def reset_auth(self):
@@ -135,11 +137,16 @@ class API(object):
             'info': version_info
         }
         
-        request = Request(user=self.user.encode('utf-8'), 
-                                       password=self.password.encode('utf-8'), 
+        request = Request(user=self.user, 
+                                       password=self.password, 
                                        token=self.get_token(), 
                                        cache=self.cache, 
-                                       url=self.url)
+                                       url=self.url)        
+#        request = Request(user=self.user.encode('utf-8'), 
+#                                       password=self.password.encode('utf-8'), 
+#                                       token=self.get_token(), 
+#                                       cache=self.cache, 
+#                                       url=self.url)
                                        
         content = request.post(resource, data)
         login_info = json.loads(content)
@@ -505,8 +512,12 @@ class HTTPBasicAuthHandlerLimitRetries(urllib.request.HTTPBasicAuthHandler):
     def retry_http_basic_auth(self, host, req, realm):
         user, pw = self.passwd.find_user_password(realm, host)
         if pw is not None:
-            raw = ("%s:%s" % (user, pw)).encode('utf8')
-            auth = 'Basic %s' % base64.b64encode(raw).strip()
+#                        base64string = base64.b64encode(b'%s:%s' % (username, password))
+#                        request.add_header("Authorization", b"Basic %s" % base64string)             
+#            raw = ("%s:%s" % (user, pw)).encode('utf8')
+#            auth = 'Basic %s' % base64.b64encode(raw).strip()
+            raw = base64.b64encode(b"%s:%s" % (user, pw))
+            auth = 'Basic %s' % raw            
             if req.get_header(self.auth_header, None) == auth:
                 return None
             req.add_unredirected_header(self.auth_header, auth)
@@ -569,6 +580,12 @@ class Request(object):
         if self.token is not None:
             headers['Authorization'] = 'auth_token="%s"' % (self.token['token'])
         elif self.user is not None and self.password is not None:
+            
+#passman = urllib.request.HTTPPasswordMgrWithDefaultRealm()
+#passman.add_password(None, url, username, password)
+#urllib.request.install_opener(urllib.request.build_opener(urllib.request.HTTPBasicAuthHandler(passman)))
+#urllib.request.install_opener(urllib.request.build_opener(urllib.request.HTTPCookieProcessor()))
+#         
             password_manager = urllib.request.HTTPPasswordMgrWithDefaultRealm()
             password_manager.add_password(None, self.url, self.user, self.password)
             auth_handler = HTTPBasicAuthHandlerLimitRetries(password_manager)
@@ -609,6 +626,11 @@ class Request(object):
         # Finally we fire the actual request.
         #
 #        for i in range(1, 6):
+#request = urllib.request.Request(url)
+        base64string = base64.b64encode(b'%s:%s' % (self.user, self.password))
+        headers['Authorization'] = b"Basic %s" % base64string
+#request.add_header("Authorization", b"Basic %s" % base64string)   
+#u = urllib.request.urlopen(request)   
         try:
             request_method = method.upper()
             if request_method in ['PUT', 'POST']:
