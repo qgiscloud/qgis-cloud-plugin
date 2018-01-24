@@ -306,13 +306,17 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def map(self):
         project = QgsProject.instance()
-        name = os.path.splitext(
-            os.path.basename(str(project.fileName())))[0]
+        name = os.path.splitext(os.path.basename(str(project.fileName())))[0]
+            
         # Allowed chars for QGISCloud map name: /\A[A-Za-z0-9\_\-]*\Z/
-        name = str(name).encode(
-            'ascii', 'replace')  # Replace non-ascii chars
+        name = str(name).encode('ascii', 'replace')  # Replace non-ascii chars
+        
         # Replace withespace
-        name = re.compile("\W+", re.UNICODE).sub("_", name)
+        if self.VERSION_INT < 29900:
+            name = re.compile("\W+", re.UNICODE).sub("_", name)
+        else:
+            name = name.replace(b" ",  b"_")
+        
         return name
 
     def resetApiUrl(self):
@@ -615,6 +619,9 @@ class QgisCloudPluginDialog(QDockWidget):
         if map == None:
             map = self.map()
             
+        if self.VERSION_INT >= 29900:
+            map = map.decode('utf-8')
+            
         self.update_url(self.ui.lblWebmap, self.api_url(),
                         'https://', u'{0}/{1}'.format(self.user, map))
                         
@@ -663,15 +670,24 @@ class QgisCloudPluginDialog(QDockWidget):
     def publish_map(self):
         QApplication.setOverrideCursor(Qt.WaitCursor)
         canvas = self.iface.mapCanvas()
-        mapRenderer = canvas.mapRenderer()
-        srs=mapRenderer.destinationCrs()
+        
+        if self.VERSION_INT < 29900:
+            mapRenderer = canvas.mapRenderer()
+            srs=mapRenderer.destinationCrs()
+        else:
+            srs=QgsMapSettings().destinationCrs()
         
         if "USER" in srs.authid():
             QMessageBox.warning(None, self.tr('Warning!'),  self.tr("The project has a user defined CRS. The use of user defined CRS is not supported. Please correct the project CRS before publishing!"))
             QApplication.restoreOverrideCursor()
             return 
             
-        layers = self.iface.legendInterface().layers()
+        if self.VERSION_INT < 29900:
+            layers = self.iface.legendInterface().layers()
+        else:
+            layer_dict = QgsProject.instance().mapLayers()
+            layers = list(layer_dict.values())
+                    
         layerList = ''
         for layer in layers:
             if "USER" in layer.crs().authid():

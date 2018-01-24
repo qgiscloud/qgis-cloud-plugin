@@ -32,6 +32,7 @@ from future import standard_library
 standard_library.install_aliases()
 from builtins import str
 from builtins import object
+from qgis.core import *
 
 # python versions below 2.6 do not have json included we need simplejson then
 try:
@@ -70,6 +71,13 @@ class API(object):
         # token = json.loads('{"token": "A2wY7qgUNM5eTRM3Lz6D4RZHuGmYPP"}')
         # api = API(token=token)
     """
+    
+    try:
+        VERSION_INT = Qgis.QGIS_VERSION_INT
+        VERSION = Qgis.QGIS_VERSION
+    except:
+        VERSION_INT = QGis.QGIS_VERSION_INT
+        VERSION = QGis.QGIS_VERSION    
 
     user = None
     password = None
@@ -112,8 +120,12 @@ class API(object):
         self.user = bytearray()
         self.user.extend(map(ord, user))
         self.password = bytearray() 
-        self.password.extend(map(ord,  password))
-        return True
+        
+        if password != None:
+            self.password.extend(map(ord,  password))
+            return True
+        else:
+            return False
 
     def reset_auth(self):
         """
@@ -275,6 +287,9 @@ class API(object):
         """
             Create a new map and return it.
         """
+        if self.VERSION_INT >= 29900:
+            name = name.decode('utf-8')
+            
         self.requires_auth()
         resource = '/maps.json'
         file = open(mapfile, "rb")
