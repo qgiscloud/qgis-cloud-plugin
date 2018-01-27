@@ -104,7 +104,7 @@ class RasterUpload(QObject):
             
             opts['table'] = layer_info['table_name']
                 
-            self.progress_label.setText(pystring(self.tr("Creating table '{table}'...").format(table=opts['table'])))
+            self.progress_label.setText(self.tr("Creating table '{table}'...").format(table=opts['table']))
             QApplication.processEvents()
             
             self.cursor.execute(self.make_sql_drop_raster_table(opts['table']))
@@ -127,7 +127,7 @@ class RasterUpload(QObject):
                 self.conn.commit()
                 
                 sql = "select st_createoverview_qgiscloud('%s'::regclass, '%s'::name, %d)" % (opts['table'],  opts['column'],  level)
-                self.progress_label.setText(pystring(self.tr("Creating overview-level {level} for table '{table}'...").format(level=level,  table=opts['table'])))
+                self.progress_label.setText(self.tr("Creating overview-level {level} for table '{table}'...").format(level=level,  table=opts['table']))
                 QApplication.processEvents()
                 self.cursor.execute(sql)
                 self.conn.commit()
@@ -137,7 +137,7 @@ class RasterUpload(QObject):
                 self.conn.commit()
                     
     
-            self.progress_label.setText(pystring(self.tr("Registering raster columns of table '%s'..." % (opts['table']))))
+            self.progress_label.setText(self.tr("Registering raster columns of table '%s'..." % (opts['table'])))
             QApplication.processEvents()
             self.cursor.execute(self.make_sql_addrastercolumn(opts))
             self.conn.commit()
@@ -673,8 +673,8 @@ class RasterUpload(QObject):
                 if (tile_count % copy_size) == 0:
                     self.cursor.copy_from(StringIO(importString), '"public"."%s"' % gen_table)
                     importString = ""
-                    self.progress_label.setText(pystring(self.tr("{table}: {count} of {sum_tiles} tiles uploaded").format(
-                        table=gen_table, count=tile_count,  sum_tiles= sum_tiles)))                
+                    self.progress_label.setText(self.tr("{table}: {count} of {sum_tiles} tiles uploaded").format(
+                        table=gen_table, count=tile_count,  sum_tiles= sum_tiles))                
                     QApplication.processEvents()
 
         self.cursor.copy_from(StringIO(importString), '"public"."%s"' % gen_table)

@@ -23,7 +23,7 @@ from __future__ import absolute_import
 from builtins import str
 from builtins import range
 from qgis.PyQt.QtCore import Qt, QSettings, QFileInfo, pyqtSlot
-from qgis.PyQt.QtWidgets import QApplication, QDockWidget, QTableWidgetItem, QListWidgetItem, QDialog, QMessageBox, QAbstractItemView, QWidget, QLabel
+from qgis.PyQt.QtWidgets import QApplication, QDockWidget,   QTableWidgetItem, QListWidgetItem, QDialog, QMessageBox, QAbstractItemView, QWidget, QLabel
 from qgis.PyQt.QtGui import QPalette, QColor
 from qgis.core import *
 from .ui_qgiscloudplugin import Ui_QgisCloudPlugin
@@ -832,7 +832,10 @@ class QgisCloudPluginDialog(QDockWidget):
                 # use current table name if available to keep changes by user
                 table_name = self.data_sources_table_names[data_source]
                 
-            table_name_item = QTableWidgetItem(QgisCloudPluginDialog.launder_pg_name(table_name))
+            if self.VERSION_INT < 29900:
+                table_name_item = QTableWidgetItem(self.launder_pg_name(table_name))
+            else:
+                table_name_item = QTableWidgetItem(self.launder_pg_name(table_name).decode('utf-8'))
         
             if layers[0].providerType() == 'gdal':
                 geometry_type_item = QTableWidgetItem('Raster')
@@ -840,8 +843,8 @@ class QgisCloudPluginDialog(QDockWidget):
                 wkbType = layers[0].wkbType()
                 
                 if wkbType not in self.GEOMETRY_TYPES:
-                    QMessageBox.warning(self.iface.mainWindow(), self.tr("Unsupported geometry type"), pystring(self.tr(
-                        "Unsupported geometry type '{type}' in layer '{layer}'")).format(type=self.__wkbTypeString(wkbType), layer=layers[0].name()))
+                    QMessageBox.warning(self.iface.mainWindow(), self.tr("Unsupported geometry type"), self.tr(
+                        "Unsupported geometry type '{type}' in layer '{layer}'").format(type=self.__wkbTypeString(wkbType), layer=layers[0].name()))
                     continue
                 geometry_type_item = QTableWidgetItem(self.GEOMETRY_TYPES[wkbType])
                 if layers[0].providerType() == "ogr":
@@ -910,17 +913,27 @@ class QgisCloudPluginDialog(QDockWidget):
         
         return self.tr("Unknown type")
 
-    @staticmethod
-    def launder_pg_name(name):
+#    @staticmethod
+    def launder_pg_name(self,  name):
         # OGRPGDataSource::LaunderName
         # return re.sub(r"[#'-]", '_', unicode(name).lower())
         input_string = str(name).lower().encode('ascii', 'replace')
-        input_string = re.compile("\W+", re.UNICODE).sub("_", input_string)    
+        
+#        if self.VERSION_INT < 29900:
+#            input_string = re.replace("\W+", re.UNICODE).sub("_", input_string)    
+#        else:
+        input_string = input_string.replace(b" ",b"_")    
 
-        # check if tabke_name starts with number
-        if re.search("^\d", input_string):
-           input_string = '_'+input_string 
-           
+        # check if table_name starts with number
+        
+        if self.VERSION_INT < 29900:
+            if re.search("^\d", input_string):
+               input_string = '_'+input_string 
+        else:
+            if re.search("^\d", input_string.decode('utf-8')):
+               input_string = '_'+input_string.decode('utf-8') 
+               input_string = input_string.decode('utf-8')
+               
         return input_string
 
     def refresh_local_data_sources(self):
@@ -1012,7 +1025,10 @@ class QgisCloudPluginDialog(QDockWidget):
                 self.maxDBs = 5
 
             try:
-                self.data_upload.upload(self.db_connections.db(unicode(db_name)), data_sources_items, unicode(self.maxSize))
+                if self.VERSION_INT < 29900:
+                    self.data_upload.upload(self.db_connections.db(unicode(db_name)), data_sources_items, unicode(self.maxSize))
+                else:
+                    self.data_upload.upload3(self.db_connections.db(unicode(db_name)), data_sources_items, unicode(self.maxSize))
                 upload_ok = True
             except Exception as e:
                 ErrorReportDialog(self.tr("Upload errors occurred"), self.tr("Upload errors occurred. Not all data could be uploaded."), str(e) + "\n" + traceback.format_exc(), self.user, self).exec_()
