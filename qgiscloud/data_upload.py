@@ -72,7 +72,7 @@ class DataUpload(QObject):
         layers_to_replace = {}
         raster_to_upload = {}
 
-        self.status_bar.showMessage(self.tr("Uploading to database '{db}'...").format(db=db.database))
+        self.status_bar.showMessage(pystring(self.tr("Uploading to database '{db}'...")).format(db=db.database))
         QApplication.processEvents()
 
         messages = ""
@@ -84,7 +84,7 @@ class DataUpload(QObject):
         except Exception as e:
             raise RuntimeError("Connection to database failed %s" % str(e))
 
-        for data_source, item in list(data_sources_items.iteritems()):
+        for data_source, item in data_sources_items.iteritems():
             # Check available space, block if exceded
             size = DbConnections().db_size()
 
@@ -115,7 +115,7 @@ class DataUpload(QObject):
                         db.database, db.host, db.port, db.username, db.password, item['table'], geom_column
                     )
 
-                self.progress_label.setText(self.tr("Creating table '{table}'...").format(table=item['table']))
+                self.progress_label.setText(pystring(self.tr("Creating table '{table}'...")).format(table=item['table']))
                 QApplication.processEvents()
 
                 if wkbType != QGis.WKBNoGeometry:
@@ -149,7 +149,7 @@ class DataUpload(QObject):
                 vectorLayerImport = None
 
                 # Build import string
-                attribs = list(range(0, fields.count()))
+                attribs = range(0, fields.count())
                 count = 0
                 importstr = bytearray()
                 ok = True
@@ -163,10 +163,10 @@ class DataUpload(QObject):
 
                     if not feature.geometry():
                         if layer.hasGeometryType():
-                            QgsMessageLog.logMessage(self.tr("Feature {id} of layer {layer} has no geometry").format(id=feature.id(), layer=layer.name()), "QGISCloud")
+                            QgsMessageLog.logMessage(pystring(self.tr("Feature {id} of layer {layer} has no geometry")).format(id=feature.id(), layer=layer.name()), "QGISCloud")
                             importstr += "\t" + b"\\N"
                     elif QGis.multiType(feature.geometry().wkbType()) != wkbType:
-                        QgsMessageLog.logMessage(self.tr("Feature {id} of layer {layer} has wrong geometry type {type}").format(id=feature.id(), layer=layer.name(), type=QGis.featureType(feature.geometry().wkbType())), "QGISCloud")
+                        QgsMessageLog.logMessage(pystring(self.tr("Feature {id} of layer {layer} has wrong geometry type {type}")).format(id=feature.id(), layer=layer.name(), type=QGis.featureType(feature.geometry().wkbType())), "QGISCloud")
                         importstr += "\t" + b"\\N"
                     else:
                         # Second field is geometry in EWKB Hex format
@@ -185,7 +185,7 @@ class DataUpload(QObject):
                                 if not val:
                                     val = b"\\N"
                             else:
-                                val = bytearray(str(val.toString()).encode('utf-8'))
+                                val = bytearray(unicode(val.toString()).encode('utf-8'))
                                 val = val.replace('\x00', '?')
                                 val = val.replace('\t', r"E'\t'")
                                 val = val.replace('\n', r"E'\n'")
@@ -200,7 +200,7 @@ class DataUpload(QObject):
                                 if not val:
                                     val = b"\\N"
                             else:
-                                val = bytearray(str(val).encode('utf-8'))
+                                val = bytearray(unicode(val).encode('utf-8'))
                                 val = val.replace('\x00', '?')
                                 val = val.replace('\t', r"E'\t'")
                                 val = val.replace('\n', r"E'\n'")
@@ -218,7 +218,7 @@ class DataUpload(QObject):
                             ok = False
                             break
                         importstr = ""
-                        self.progress_label.setText(self.tr("{table}: {count} features uploaded").format(
+                        self.progress_label.setText(pystring(self.tr("{table}: {count} features uploaded")).format(
                             table=item['table'], count=count))
                         QApplication.processEvents()
                     # Periodically update ui
@@ -295,7 +295,7 @@ class DataUpload(QObject):
         self._replace_local_layers(layers_to_replace)
         self.progress_label.setText("")
         if not import_ok:
-            raise RuntimeError(str(messages))
+            raise RuntimeError(messages)
 
     def upload3(self, db, data_sources_items, maxSize):
         import_ok = True

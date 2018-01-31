@@ -1026,7 +1026,7 @@ class QgisCloudPluginDialog(QDockWidget):
 
             try:
                 if self.VERSION_INT < 29900:
-                    self.data_upload.upload(self.db_connections.db(unicode(db_name)), data_sources_items, unicode(self.maxSize))
+                    self.data_upload.upload(self.db_connections.db(db_name), data_sources_items, self.maxSize)
                 else:
                     self.data_upload.upload3(self.db_connections.db(unicode(db_name)), data_sources_items, unicode(self.maxSize))
                 upload_ok = True

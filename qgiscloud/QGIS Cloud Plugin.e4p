@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE Project SYSTEM "Project-6.0.dtd">
+<!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project QGIS Cloud Plugin -->
-<!-- Saved: 2017-12-31, 10:35:36 -->
-<!-- Copyright (C) 2017 ,  -->
-<Project version="6.0">
+<!-- Saved: 2018-01-31, 15:53:05 -->
+<!-- Copyright (C) 2018 ,  -->
+<Project version="5.1">
   <Language>en_US</Language>
   <Hash>d61ea45470cba683302e567145ad01a2cc5bdb84</Hash>
   <ProgLanguage mixed="0">Python3</ProgLanguage>
