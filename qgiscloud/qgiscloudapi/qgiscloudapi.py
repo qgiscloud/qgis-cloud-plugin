@@ -72,13 +72,6 @@ class API(object):
         # api = API(token=token)
     """
     
-    try:
-        VERSION_INT = Qgis.QGIS_VERSION_INT
-        VERSION = Qgis.QGIS_VERSION
-    except:
-        VERSION_INT = QGis.QGIS_VERSION_INT
-        VERSION = QGis.QGIS_VERSION    
-
     user = None
     password = None
     _token = None
@@ -287,8 +280,7 @@ class API(object):
         """
             Create a new map and return it.
         """
-        if self.VERSION_INT >= 29900:
-            name = name.decode('utf-8')
+        name = name.decode('utf-8')
             
         self.requires_auth()
         resource = '/maps.json'

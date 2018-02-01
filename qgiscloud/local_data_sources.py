@@ -26,13 +26,6 @@ from qgis.core import *
 from .db_connection_cfg import DbConnectionCfg
 
 class LocalDataSources(object):
-    
-    try:
-        VERSION_INT = Qgis.QGIS_VERSION_INT
-        VERSION = Qgis.QGIS_VERSION
-    except:
-        VERSION_INT = QGis.QGIS_VERSION_INT
-        VERSION = QGis.QGIS_VERSION    
 
     def __init__(self):
         # map<data source, layers>
@@ -54,11 +47,7 @@ class LocalDataSources(object):
         unsupported_layers = []
         local_layers = []
         local_raster_layers = []
-        
-        if self.VERSION_INT < 29900:
-            layer_list = list(QgsMapLayerRegistry.instance().mapLayers().values())
-        else:
-           layer_list = list(QgsProject.instance().mapLayers().values()) 
+        layer_list = list(QgsProject.instance().mapLayers().values()) 
            
         for layer in layer_list:
             if layer.id() == skip_layer_id:
@@ -69,10 +58,7 @@ class LocalDataSources(object):
                 provider = layer.pluginLayerType()
 
             if provider == "postgres":
-                if self.VERSION_INT < 29900:
-                    host = QgsDataSourceURI(layer.publicSource()).host()
-                else:
-                    host = QgsDataSourceUri(layer.publicSource()).host()
+                host = QgsDataSourceUri(layer.publicSource()).host()
                     
                 if host not in DbConnectionCfg.CLOUD_DB_HOSTS:
                     if layer.wkbType() != 0: 
@@ -82,19 +68,13 @@ class LocalDataSources(object):
                         unsupported_layers.append(layer)
 
             elif provider in ["gdal"] and layer.dataProvider().crs().srsid() != 0:
-                if self.VERSION_INT < 29900:
-                    metadata = layer.dataProvider().metadata()[0:13]
-                else:
-                    metadata = layer.dataProvider().htmlMetadata()[0:13]
+                metadata = layer.dataProvider().htmlMetadata()[0:13]
                     
                 if  metadata == "PostGISRaster":
                     # FIXME: Temporary workaround for buggy QgsDataSourceURI parser which fails to parse URI strings starting with PG:
                     uri = layer.dataProvider().dataSourceUri()
                     uri = uri.strip("PG: ")
-                    if self.VERSION_INT < 29900:
-                        host = QgsDataSourceURI(uri).host()
-                    else:
-                        host = QgsDataSourceUri(uri).host()
+                    host = QgsDataSourceUri(uri).host()
                         
                     if host not in DbConnectionCfg.CLOUD_DB_HOSTS:
                         unsupported_layers.append(layer)
@@ -119,10 +99,7 @@ class LocalDataSources(object):
             #qDebug("local layer source: {0} (provider type: {1})".format(layer.source(), layer.providerType()))
             #Disabled because of UnicodeEncodeError: 'ascii' codec can't encode character u'\xf3' in position 18: ordinal not in range(128)
             # get layer source without filter
-            if self.VERSION_INT < 29900:
-                ds = QgsDataSourceURI(layer.source())
-            else:
-                ds = QgsDataSourceUri(layer.source())
+            ds = QgsDataSourceUri(layer.source())
                 
             if len(ds.connectionInfo()) > 0:
                 # Spatialite / Postgres

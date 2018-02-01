@@ -28,13 +28,6 @@ from qgis.core import *
 
 
 class DbConnectionCfg(object):
-
-    try:
-        VERSION_INT = Qgis.QGIS_VERSION_INT
-        VERSION = Qgis.QGIS_VERSION
-    except:
-        VERSION_INT = QGis.QGIS_VERSION_INT
-        VERSION = QGis.QGIS_VERSION
         
     CLOUD_DB_HOSTS = ['db.qgiscloud.com', 'spacialdb.com']
 
@@ -138,27 +131,15 @@ class DbConnectionCfg(object):
             self.host, self.port, self.database, self.username, self.password)
 
     def data_source_uri(self):
-        
-        if self.VERSION_INT < 29900:
-            uri = QgsDataSourceURI()
-            uri.setConnection(
-                self.host,
-                self.port,
-                self.database,
-                self.username,
-                self.password,
-                QgsDataSourceURI.SSLmode(self.sslmode)
-            )
-        else:
-            uri = QgsDataSourceUri()
-            uri.setConnection(
-                self.host,
-                self.port,
-                self.database,
-                self.username,
-                self.password,
-                QgsDataSourceUri.SslMode(self.sslmode)
-            )            
+        uri = QgsDataSourceUri()
+        uri.setConnection(
+            self.host,
+            self.port,
+            self.database,
+            self.username,
+            self.password,
+            QgsDataSourceUri.SslMode(self.sslmode)
+        )            
         uri.setUseEstimatedMetadata(self.estimatedMetadata)
         return uri
 
