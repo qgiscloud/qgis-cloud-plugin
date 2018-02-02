@@ -105,6 +105,8 @@ class DataUpload(QObject):
                 self.progress_label.setText(self.tr("Creating table '{table}'...").format(table=item['table']))
                 QApplication.processEvents()
 
+                print (wkbType)
+                
                 if wkbType != QgsWkbTypes.NoGeometry:
                     # Check if SRID is known on database, otherwise create record
                     cursor.execute("SELECT srid FROM public.spatial_ref_sys WHERE srid = %s" % layer.crs().postgisSrid())
@@ -181,7 +183,6 @@ class DataUpload(QObject):
 
                     # Upload in chunks
                     if (count % 100) == 0:
-
                         try:
                             cursor.copy_from(StringIO(importstr.decode('utf-8')), '"public"."%s"' % item['table'])
                         except Exception as e:
@@ -385,10 +386,10 @@ class DataUpload(QObject):
         doc = QDomDocument()
         node = doc.createElement("symbology")
         doc.appendChild(node)
-        source_layer.writeSymbology(node, doc, error)
+        source_layer.writeSymbology(node, doc, error,  QgsReadWriteContext())
 
         if not error:
-            target_layer.readSymbology(node, error)
+            target_layer.readSymbology(node, error,  QgsReadWriteContext())
         if error:
             QMessageBox.warning(None, "Could not copy symbology", error)
 
