@@ -310,12 +310,13 @@ class DataUpload(QObject):
         else:
             wktType |= 0x20000000
         try:
-            print (wkb[0])
+#            print (wkb[0].decode('utf-8',  'ignore'))
 #            print (wktType)
 #            print (srid)
-#            print (wkb[5:])
+            wkb_5 = "%s" % wkb[5:]
             
-            ewkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", srid) + wkb[5:]
+#            ewkb = wkb[0] + struct.pack("=I", wktType).decode('utf-8',  'ignore') + struct.pack("=I", srid) + wkb[5:]
+            ewkb = wkb[0] + struct.pack("=I", wktType).decode('utf-8',  'ignore') + struct.pack("=I", srid).decode('utf-8',  'ignore') + wkb_5
         except:
             ewkb = wkb[0] + struct.pack("=I", (wktType & 0xffffffff)) + struct.pack("=I", srid) + wkb[5:]
         return binascii.hexlify(ewkb)
