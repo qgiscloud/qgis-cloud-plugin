@@ -134,7 +134,7 @@ class DbConnectionCfg(object):
         uri = QgsDataSourceUri()
         uri.setConnection(
             self.host,
-            self.port,
+            str(self.port),
             self.database,
             self.username,
             self.password,

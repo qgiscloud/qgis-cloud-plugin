@@ -24,7 +24,8 @@ from builtins import str
 from builtins import range
 from qgis.PyQt.QtCore import Qt, QSettings, QFileInfo, pyqtSlot
 from qgis.PyQt.QtWidgets import QApplication, QDockWidget,   QTableWidgetItem, QListWidgetItem, \
-                                                        QDialog, QMessageBox, QAbstractItemView, QWidget, QLabel
+                                                        QDialog, QMessageBox, QAbstractItemView, QWidget, QLabel,  QVBoxLayout,  \
+                                                        QFileDialog
 from qgis.PyQt.QtGui import QPalette, QColor
 from qgis.core import *
 from .ui_qgiscloudplugin import Ui_QgisCloudPlugin

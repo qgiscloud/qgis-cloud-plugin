@@ -104,8 +104,6 @@ class DataUpload(QObject):
 
                 self.progress_label.setText(self.tr("Creating table '{table}'...").format(table=item['table']))
                 QApplication.processEvents()
-
-                print (wkbType)
                 
                 if wkbType != QgsWkbTypes.NoGeometry:
                     # Check if SRID is known on database, otherwise create record
@@ -149,16 +147,17 @@ class DataUpload(QObject):
                     # First field is primary key
                     importstr.extend(str(count).encode('utf-8'))
                     count += 1
-
+#                    print (QgsWkbTypes.isMultiType(feature.geometry().wkbType()))
                     if not feature.geometry():
                         if layer.hasGeometryType():
                             QgsMessageLog.logMessage(self.tr("Feature {id} of layer {layer} has no geometry").format(id=feature.id(), layer=layer.name()), "QGISCloud")
                             importstr.extend("\t" + b"\\N")
-                    elif QgsWkbTypes.isMultiType(feature.geometry().wkbType()) != wkbType:
+                    elif feature.geometry().wkbType() != wkbType:
                         QgsMessageLog.logMessage(self.tr("Feature {id} of layer {layer} has wrong geometry type {type}").format(id=feature.id(), layer=layer.name(), type= QgsWkbTypes.displayString(feature.geometry().wkbType())), "QGISCloud")
                         importstr.extend("\t".encode('utf-8') + "\\N".encode('utf-8'))
                     else:
                         # Second field is geometry in EWKB Hex format
+                        print (self._wkbToEWkbHex(feature.geometry().asWkb(), srid))
                         importstr.extend("\t" + self._wkbToEWkbHex(feature.geometry().asWkb(), srid))
 
                     # Finally, copy data attributes
@@ -311,6 +310,11 @@ class DataUpload(QObject):
         else:
             wktType |= 0x20000000
         try:
+            print (wkb[0])
+#            print (wktType)
+#            print (srid)
+#            print (wkb[5:])
+            
             ewkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", srid) + wkb[5:]
         except:
             ewkb = wkb[0] + struct.pack("=I", (wktType & 0xffffffff)) + struct.pack("=I", srid) + wkb[5:]
@@ -368,7 +372,7 @@ class DataUpload(QObject):
             self.PROJECT_INSTANCE.addMapLayer(remote_layer, False)
             idx = group_node.children().index(node)
             remote_layer_node = group_node.insertLayer(idx, remote_layer)
-            remote_layer_node.setVisible(node.isVisible())
+            remote_layer_node.setItemVisibilityChecked(node.isVisible())
 
             # remove local layer
             group_node.removeChildNode(node)
