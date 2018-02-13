@@ -84,7 +84,7 @@ class DataUpload(QObject):
             layer = item['layers'][0]
             if layer.type() == QgsMapLayer.VectorLayer:
                 # The QgsFields() is to support the QGIS 1.x API, see apicompat/vectorapi.py
-                fields = QgsFields(layer.pendingFields())
+                fields = QgsFields(layer.fields())
                 srid = layer.crs().postgisSrid()
                 geom_column = "wkb_geometry"
                 wkbType = layer.wkbType()
