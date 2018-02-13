@@ -157,7 +157,6 @@ class DataUpload(QObject):
                         importstr.extend("\t".encode('utf-8') + "\\N".encode('utf-8'))
                     else:
                         # Second field is geometry in EWKB Hex format
-                        print (self._wkbToEWkbHex(feature.geometry().asWkb(), srid))
                         importstr.extend("\t" + self._wkbToEWkbHex(feature.geometry().asWkb(), srid))
 
                     # Finally, copy data attributes
@@ -271,6 +270,7 @@ class DataUpload(QObject):
 
 
     def _wkbToEWkbHex(self, wkb, srid, convertToMulti=False):
+        print (wkb[0].encode('hex'))
         try:
             wktType = struct.unpack("=i", wkb[1:5])[0] & 0xffffffff
             if not QgsWkbTypes.isMultiType(wktType):
@@ -313,10 +313,10 @@ class DataUpload(QObject):
 #            print (wkb[0].decode('utf-8',  'ignore'))
 #            print (wktType)
 #            print (srid)
-            wkb_5 = "%s" % wkb[5:]
+#            print (wkb_5.decode('utf-8'))
             
 #            ewkb = wkb[0] + struct.pack("=I", wktType).decode('utf-8',  'ignore') + struct.pack("=I", srid) + wkb[5:]
-            ewkb = wkb[0] + struct.pack("=I", wktType).decode('utf-8',  'ignore') + struct.pack("=I", srid).decode('utf-8',  'ignore') + wkb_5
+            ewkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", srid) + wkb[5:]
         except:
             ewkb = wkb[0] + struct.pack("=I", (wktType & 0xffffffff)) + struct.pack("=I", srid) + wkb[5:]
         return binascii.hexlify(ewkb)
