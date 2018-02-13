@@ -31,10 +31,10 @@ from qgis.PyQt.QtWidgets import QMessageBox, QApplication
 from qgis.PyQt.QtXml import QDomDocument
 from qgis.core import *
 from .db_connections import DbConnections
-from osgeo import ogr
-import os
+#from osgeo import ogr
+#import os
 import re
-import psycopg2
+#import psycopg2
 from io import StringIO
 import struct
 import binascii
@@ -79,11 +79,9 @@ class DataUpload(QObject):
                 QMessageBox.warning(None, self.tr("Database full"), self.tr("You have exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan."))
                 break
 
-
             # Layers contains all layers with shared data source
             layer = item['layers'][0]
             if layer.type() == QgsMapLayer.VectorLayer:
-                # The QgsFields() is to support the QGIS 1.x API, see apicompat/vectorapi.py
                 fields = QgsFields(layer.fields())
                 srid = layer.crs().postgisSrid()
                 geom_column = "wkb_geometry"
@@ -147,7 +145,6 @@ class DataUpload(QObject):
                     # First field is primary key
                     importstr.extend(str(count).encode('utf-8'))
                     count += 1
-#                    print (QgsWkbTypes.isMultiType(feature.geometry().wkbType()))
                     if not feature.geometry():
                         if layer.hasGeometryType():
                             QgsMessageLog.logMessage(self.tr("Feature {id} of layer {layer} has no geometry").format(id=feature.id(), layer=layer.name()), "QGISCloud")
