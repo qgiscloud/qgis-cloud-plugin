@@ -279,15 +279,6 @@ class DataUpload(QObject):
             # Some platforms (Windows) complain when a long is passed to QGis.isMultiType
             # And some other platforms complain if not a long is passed...
             wktType = struct.unpack("=i", wkb[1:5])[0]
-            
-#            if self.VERSION_INT < 29900:
-#                if not QGis.isMultiType(wktType):
-#                    wktType = QGis.multiType(wktType) & 0xffffffff
-#                    wkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", 1) + wkb
-#                else:
-#                    if not  QgsWkbTypes.isMultiType(wktType):
-#                        wktType = QgsWkbTypes.multiType(wktType) & 0xffffffff
-#                        wkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", 1) + wkb                    
 
         # See postgis sources liblwgeom.h.in:
         # define WKBZOFFSET  0x80000000
@@ -309,12 +300,6 @@ class DataUpload(QObject):
         else:
             wktType |= 0x20000000
         try:
-#            print (wkb[0].decode('utf-8',  'ignore'))
-#            print (wktType)
-#            print (srid)
-#            print (wkb_5.decode('utf-8'))
-            
-#            ewkb = wkb[0] + struct.pack("=I", wktType).decode('utf-8',  'ignore') + struct.pack("=I", srid) + wkb[5:]
             ewkb = wkb[0:1] + struct.pack("=I", wktType) + struct.pack("=I", srid) + wkb[5:]
         except:
             ewkb = wkb[0:1] + struct.pack("=I", (wktType & 0xffffffff)) + struct.pack("=I", srid) + wkb[5:]
