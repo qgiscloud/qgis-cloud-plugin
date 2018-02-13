@@ -151,13 +151,13 @@ class DataUpload(QObject):
                     if not feature.geometry():
                         if layer.hasGeometryType():
                             QgsMessageLog.logMessage(self.tr("Feature {id} of layer {layer} has no geometry").format(id=feature.id(), layer=layer.name()), "QGISCloud")
-                            importstr.extend("\t" + b"\\N")
+                            importstr.extend(b"\t" + b"\\N")
                     elif feature.geometry().wkbType() != wkbType:
                         QgsMessageLog.logMessage(self.tr("Feature {id} of layer {layer} has wrong geometry type {type}").format(id=feature.id(), layer=layer.name(), type= QgsWkbTypes.displayString(feature.geometry().wkbType())), "QGISCloud")
-                        importstr.extend("\t".encode('utf-8') + "\\N".encode('utf-8'))
+                        importstr.extend(b"\t" + b"\\N")
                     else:
                         # Second field is geometry in EWKB Hex format
-                        importstr.extend("\t" + self._wkbToEWkbHex(feature.geometry().asWkb(), srid))
+                        importstr.extend(b"\t" + self._wkbToEWkbHex(feature.geometry().asWkb(), srid))
 
                     # Finally, copy data attributes
                     for attrib in attribs:
@@ -270,7 +270,6 @@ class DataUpload(QObject):
 
 
     def _wkbToEWkbHex(self, wkb, srid, convertToMulti=False):
-        print (wkb[0].encode('hex'))
         try:
             wktType = struct.unpack("=i", wkb[1:5])[0] & 0xffffffff
             if not QgsWkbTypes.isMultiType(wktType):
@@ -316,9 +315,9 @@ class DataUpload(QObject):
 #            print (wkb_5.decode('utf-8'))
             
 #            ewkb = wkb[0] + struct.pack("=I", wktType).decode('utf-8',  'ignore') + struct.pack("=I", srid) + wkb[5:]
-            ewkb = wkb[0] + struct.pack("=I", wktType) + struct.pack("=I", srid) + wkb[5:]
+            ewkb = wkb[0:1] + struct.pack("=I", wktType) + struct.pack("=I", srid) + wkb[5:]
         except:
-            ewkb = wkb[0] + struct.pack("=I", (wktType & 0xffffffff)) + struct.pack("=I", srid) + wkb[5:]
+            ewkb = wkb[0:1] + struct.pack("=I", (wktType & 0xffffffff)) + struct.pack("=I", srid) + wkb[5:]
         return binascii.hexlify(ewkb)
 
     def _replace_local_layers(self, layers_to_replace):
