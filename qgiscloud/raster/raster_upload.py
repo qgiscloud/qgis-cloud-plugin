@@ -490,9 +490,10 @@ class RasterUpload(QObject):
             fmt_little = '<' +fmt
             hexstr = binascii.hexlify(struct.pack(fmt_little, data)).upper().decode('utf-8')
         except:
-            fmt = 'd'
-            fmt_little = '<' +fmt
-            hexstr = binascii.hexlify(struct.pack(fmt_little, data)).upper().decode('utf-8')            
+            if fmt in ['H',  'h',  'i',  'I']:
+                data = int(data)
+                fmt_little = '<' +fmt
+                hexstr = binascii.hexlify(struct.pack(fmt_little, data)).upper().decode('utf-8')            
 
         return hexstr
     
@@ -598,7 +599,7 @@ class RasterUpload(QObject):
                                       target_block_size[0], target_block_size[1])
     
     
-            out_pixels = numpy.zeros((block_size[1]+1, block_size[0]+1), self.pt2numpy(band.DataType))
+            out_pixels = numpy.zeros((block_size[1], block_size[0]), self.pt2numpy(band.DataType))
     
             if target_padding_size[0] > 0 or target_padding_size[1] > 0:
     
@@ -685,16 +686,15 @@ class RasterUpload(QObject):
 
         self.cursor.copy_from(StringIO(importString), '"public"."%s"' % gen_table)
         self.conn.commit()
-
-        QApplication.setOverrideCursor(Qt.WaitCursor)
         
-        self.progress_label.setText(self.tr("Calculating raster params for {sum_tiles} tiles. This may take a while!").format(
-            sum_tiles= sum_tiles))                
+#        self.progress_label.setText(self.tr("Calculating raster params for {sum_tiles} tiles. This may take a while!").format(
+#            sum_tiles= sum_tiles))                
         
         self.cursor.execute(self.make_sql_addrastercolumn(options))
         self.conn.commit()
         
-        QApplication.restoreOverrideCursor()
+#        self.cursor.execute("select AddRasterConstraints('{table}', 'rast');".format(table=gen_table))
+#        self.conn.commit()
         
         return (gen_table, tile_count)
     
