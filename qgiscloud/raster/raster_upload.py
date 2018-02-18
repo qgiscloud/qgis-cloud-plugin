@@ -694,9 +694,6 @@ class RasterUpload(QObject):
         self.cursor.execute(self.make_sql_addrastercolumn(options))
         self.conn.commit()
         
-#        self.cursor.execute("select AddRasterConstraints('{table}', 'rast');".format(table=gen_table))
-#        self.conn.commit()
-        
         return (gen_table, tile_count)
     
     def wkblify_raster(self,  options, infile, i, previous_gt = None):
