@@ -687,8 +687,9 @@ class RasterUpload(QObject):
         self.cursor.copy_from(StringIO(importString), '"public"."%s"' % gen_table)
         self.conn.commit()
         
-#        self.progress_label.setText(self.tr("Calculating raster params for {sum_tiles} tiles. This may take a while!").format(
-#            sum_tiles= sum_tiles))                
+        self.progress_label.setText(self.tr("Calculating raster params for {sum_tiles} tiles ...").format(
+            sum_tiles= sum_tiles))        
+        QApplication.processEvents()        
         
         self.cursor.execute(self.make_sql_addrastercolumn(options))
         self.conn.commit()
