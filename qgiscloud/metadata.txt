@@ -250,5 +250,5 @@ tracker=https://github.com/qgiscloud/qgis-cloud-plugin/issues
 repository=https://github.com/qgiscloud/qgis-cloud-plugin
 icon=icon.png
 
-experimental=False
+experimental=True
 ;deprecated=False
