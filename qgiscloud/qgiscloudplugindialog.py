@@ -347,7 +347,7 @@ class QgisCloudPluginDialog(QDockWidget):
         answer = False
         
         for layer in list(self.PROJECT_INSTANCE.mapLayers().values()):            
-            if QgsDataSourceURI(layer.publicSource()).database() == name:
+            if QgsDataSourceUri(layer.publicSource()).database() == name:
                 
                 if not answer:
                     answer = QMessageBox.question(
