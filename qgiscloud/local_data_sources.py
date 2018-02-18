@@ -59,7 +59,7 @@ class LocalDataSources(object):
 
             if provider == "postgres":
                 host = QgsDataSourceUri(layer.publicSource()).host()
-                    
+                print (host)
                 if host not in DbConnectionCfg.CLOUD_DB_HOSTS:
                     if layer.wkbType() != 0: 
                         local_layers.append(layer)
@@ -68,9 +68,7 @@ class LocalDataSources(object):
                         unsupported_layers.append(layer)
 
             elif provider in ["gdal"] and layer.dataProvider().crs().srsid() != 0:
-                metadata = layer.dataProvider().htmlMetadata()[0:13]
-                    
-                if  metadata == "PostGISRaster":
+                if  "PostGISRaster" in layer.dataProvider().htmlMetadata():
                     # FIXME: Temporary workaround for buggy QgsDataSourceURI parser which fails to parse URI strings starting with PG:
                     uri = layer.dataProvider().dataSourceUri()
                     uri = uri.strip("PG: ")
