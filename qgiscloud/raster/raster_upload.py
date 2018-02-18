@@ -78,8 +78,6 @@ class RasterUpload(QObject):
         
         # Create PostGIS Raster Tool Functions          
         raster_tools_file = "%s/raster_tools.sql" % os.path.dirname(__file__)
-        print (raster_tools_file)
-#        raster_tools = QFileInfo(raster_tools_file)
         sql = open(raster_tools_file).read().encode('ascii',errors='ignore')
         self.cursor.execute(sql)
         self.conn.commit()              
@@ -375,8 +373,6 @@ class RasterUpload(QObject):
         nx = float(raster_size[0]) / float(block_size[0])
         ny = float(raster_size[1]) / float(block_size[1])
     
-        # fix_print_with_import
-        print(int(round(nx)), int(round(ny)))
         return ( int(round(nx)), int(round(ny)))
     
     def calculate_block_pad_size(self,  band, xoff, yoff, block_size):
@@ -490,8 +486,13 @@ class RasterUpload(QObject):
         import struct
     
         # Binary to HEX
-        fmt_little = '<' +fmt
-        hexstr = binascii.hexlify(struct.pack(fmt_little, data)).upper().decode('utf-8')
+        try:
+            fmt_little = '<' +fmt
+            hexstr = binascii.hexlify(struct.pack(fmt_little, data)).upper().decode('utf-8')
+        except:
+            fmt = 'd'
+            fmt_little = '<' +fmt
+            hexstr = binascii.hexlify(struct.pack(fmt_little, data)).upper().decode('utf-8')            
 
         return hexstr
     
