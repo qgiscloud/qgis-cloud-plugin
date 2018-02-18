@@ -523,8 +523,11 @@ class QgisCloudPluginDialog(QDockWidget):
         
         if map == None:
             map = self.map()
-            
-#        map = map.decode('utf-8')
+        
+        try:
+            map = map.decode('utf-8')
+        except:
+            pass
             
         self.update_url(self.ui.lblWebmap, self.api_url(),
                         'https://', u'{0}/{1}'.format(self.user, map))
