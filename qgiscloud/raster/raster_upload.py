@@ -77,8 +77,10 @@ class RasterUpload(QObject):
         opts['register'] = None
         
         # Create PostGIS Raster Tool Functions          
-        raster_tools = QFileInfo(QgsApplication.qgisUserDbFilePath()).path() + "/python/plugins/qgiscloud/raster/raster_tools.sql"
-        sql = open(str(raster_tools)).read().encode('ascii',errors='ignore')
+        raster_tools_file = "%s/raster_tools.sql" % os.path.dirname(__file__)
+        print (raster_tools_file)
+#        raster_tools = QFileInfo(raster_tools_file)
+        sql = open(raster_tools_file).read().encode('ascii',errors='ignore')
         self.cursor.execute(sql)
         self.conn.commit()              
          
@@ -98,7 +100,7 @@ class RasterUpload(QObject):
             file_size /= 1024 * 1024
             size = size + file_size
             
-            if size > max_size:
+            if size > float(max_size):
                 QMessageBox.warning(None, self.tr("Database full"), self.tr("Upload would exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan."))
                 break
             
@@ -489,7 +491,7 @@ class RasterUpload(QObject):
     
         # Binary to HEX
         fmt_little = '<' +fmt
-        hexstr = binascii.hexlify(struct.pack(fmt_little, data)).upper()
+        hexstr = binascii.hexlify(struct.pack(fmt_little, data)).upper().decode('utf-8')
 
         return hexstr
     
@@ -595,7 +597,7 @@ class RasterUpload(QObject):
                                       target_block_size[0], target_block_size[1])
     
     
-            out_pixels = numpy.zeros((block_size[1], block_size[0]), self.pt2numpy(band.DataType))
+            out_pixels = numpy.zeros((block_size[1]+1, block_size[0]+1), self.pt2numpy(band.DataType))
     
             if target_padding_size[0] > 0 or target_padding_size[1] > 0:
     
@@ -603,18 +605,18 @@ class RasterUpload(QObject):
                 nodata_value = self.fetch_band_nodata(self,  band)
     
                 # Apply columns padding
-                pad_cols = numpy.array([nodata_value] * target_padding_size[0])
+                pad_cols = float(numpy.array([nodata_value]) * float(target_padding_size[0]))
                 for row in range (0, ysize_read_pixels):
                     out_line = numpy.append(pixels[row], pad_cols)
                     out_pixels[row] = out_line
     
                 # Fill rows padding with nodata value
-                for row in range(ysize_read_pixels, ysize_read_pixels + target_padding_size[1]):
+                for row in range(ysize_read_pixels, int(ysize_read_pixels + target_padding_size[1])):
                     out_pixels[row].fill(nodata_value)
             else:
                 out_pixels = pixels
     
-            hexwkb = binascii.hexlify(out_pixels)
+            hexwkb = binascii.hexlify(out_pixels).decode('utf-8')
     
 #        self.check_hex(hexwkb)
         return hexwkb
