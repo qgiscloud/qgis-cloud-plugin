@@ -11,7 +11,7 @@ about= QGIS Cloud is your powerful Web-GIS platform for publishing maps, data an
 
 changelog=
     3.0.0
-    - Migration from 2 to 3
+    - QGIS3 compatible
     1.5.7
     - QWC1 related links removed
     1.5.6
