@@ -48,7 +48,7 @@ class LocalDataSources(object):
         local_layers = []
         local_raster_layers = []
         layer_list = list(QgsProject.instance().mapLayers().values()) 
-           
+        
         for layer in layer_list:
             if layer.id() == skip_layer_id:
                 continue

@@ -227,6 +227,7 @@ class DataUpload(QObject):
                     conn.commit()
                     
             elif layer.type() == QgsMapLayer.RasterLayer:
+                raster_to_upload = {}
                 raster_to_upload[layer.id()] = {
                             'layer': layer,
                             'data_source': layer.source(),

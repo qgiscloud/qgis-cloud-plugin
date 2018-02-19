@@ -86,7 +86,6 @@ class RasterUpload(QObject):
          
         # Burn all specified input raster files into single WKTRaster table
         gt = None
-        
         for layer_id in list(raster.keys()):
             layer_info = raster[layer_id]
             opts['srid'] = layer_info['layer'].dataProvider().crs().postgisSrid()
