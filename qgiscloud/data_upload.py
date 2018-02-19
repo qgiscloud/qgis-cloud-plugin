@@ -26,7 +26,7 @@ from future import standard_library
 standard_library.install_aliases()
 from builtins import str
 from builtins import range
-from qgis.PyQt.QtCore import QObject, QVariant, QDate, QDateTime
+from qgis.PyQt.QtCore import Qt,  QObject, QVariant, QDate, QDateTime
 from qgis.PyQt.QtWidgets import QMessageBox, QApplication
 from qgis.PyQt.QtXml import QDomDocument
 from qgis.core import *
@@ -86,14 +86,14 @@ class DataUpload(QObject):
                 srid = layer.crs().postgisSrid()
                 geom_column = "wkb_geometry"
                 wkbType = layer.wkbType()
-
+                
                 if wkbType == QgsWkbTypes.NoGeometry:
                     cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"public\".\"%s\"" % (
                     db.database, db.host, db.port, db.username, db.password, item['table'])
                     geom_column = ""
                 else:
                     if not  QgsWkbTypes.isMultiType(wkbType):
-                        wkbType = QgsWkbTypes.isMultiType(wkbType)
+                        wkbType = QgsWkbTypes.multiType(wkbType)
 
                     # Create table (pk='' => always generate a new primary key)
                     cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"public\".\"%s\" (%s)" % (
@@ -142,6 +142,9 @@ class DataUpload(QObject):
                 self.progress_label.setText(self.tr("Uploading features..."))
                 QApplication.processEvents()
                 for feature in layer.getFeatures():
+                    f_geometry = feature.geometry()
+                    f_geometry.convertToMultiType()
+                    
                     # First field is primary key
                     importstr.extend(str(count).encode('utf-8'))
                     count += 1
@@ -149,12 +152,12 @@ class DataUpload(QObject):
                         if layer.hasGeometryType():
                             QgsMessageLog.logMessage(self.tr("Feature {id} of layer {layer} has no geometry").format(id=feature.id(), layer=layer.name()), "QGISCloud")
                             importstr.extend(b"\t" + b"\\N")
-                    elif feature.geometry().wkbType() != wkbType:
+                    elif f_geometry.wkbType() != wkbType:
                         QgsMessageLog.logMessage(self.tr("Feature {id} of layer {layer} has wrong geometry type {type}").format(id=feature.id(), layer=layer.name(), type= QgsWkbTypes.displayString(feature.geometry().wkbType())), "QGISCloud")
                         importstr.extend(b"\t" + b"\\N")
                     else:
                         # Second field is geometry in EWKB Hex format
-                        importstr.extend(b"\t" + self._wkbToEWkbHex(feature.geometry().asWkb(), srid))
+                        importstr.extend(b"\t" + self._wkbToEWkbHex(f_geometry.asWkb(), srid))
 
                     # Finally, copy data attributes
                     for attrib in attribs:
