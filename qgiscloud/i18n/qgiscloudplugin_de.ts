@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de_CH">
+<TS version="2.0" language="de_CH">
 <context>
     <name>DataUpload</name>
     <message>
@@ -96,7 +96,7 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui_qgiscloudplugin.py" line="335"/>
+        <location filename="../qgiscloudplugin.ui" line="106"/>
         <source>Public WMS</source>
         <translation>Öffentlicher WMS</translation>
     </message>
@@ -266,6 +266,11 @@ p, li { white-space: pre-wrap; }
         <source>Open Project</source>
         <translation>Projekt öffnen</translation>
     </message>
+    <message>
+        <location filename="../ui_qgiscloudplugin.py" line="335"/>
+        <source>WMS/WFS/WCS</source>
+        <translation>WMS/WFS/WCS</translation>
+    </message>
 </context>
 <context>
     <name>QgisCloudPluginDialog</name>
@@ -365,12 +370,12 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <translation>Die lokalen Daten wurden hoch geladen</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="881"/>
+        <location filename="../qgiscloudplugindialog.py" line="882"/>
         <source>Network Error</source>
         <translation>Netzwerk Fehler</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="888"/>
+        <location filename="../qgiscloudplugindialog.py" line="889"/>
         <source>Uploading data...</source>
         <translation>Daten werden hoch geladen...</translation>
     </message>
@@ -380,12 +385,12 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <translation></translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="978"/>
+        <location filename="../qgiscloudplugindialog.py" line="979"/>
         <source>QGIS Cloud Error</source>
         <translation>QGIS Cloud Fehler</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="980"/>
+        <location filename="../qgiscloudplugindialog.py" line="981"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
@@ -415,17 +420,17 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <translation>Unbekannter Typ</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1040"/>
+        <location filename="../qgiscloudplugindialog.py" line="1041"/>
         <source>Used DB Storage: </source>
         <translation>Verwendeter Datenbankspeicher: </translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="872"/>
+        <location filename="../qgiscloudplugindialog.py" line="873"/>
         <source>No database selected</source>
         <translation>Keine Datenbank ausgewählt</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="872"/>
+        <location filename="../qgiscloudplugindialog.py" line="873"/>
         <source>Please select a database to upload data.</source>
         <translation>Bitte wählen Sie eine Datenbank aus um Daten hochzuladen.</translation>
     </message>
@@ -435,12 +440,12 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <translation>Keine Datenbanken</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="868"/>
+        <location filename="../qgiscloudplugindialog.py" line="869"/>
         <source>No database available</source>
         <translation>Keine Datenbanken verfügbar</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="868"/>
+        <location filename="../qgiscloudplugindialog.py" line="869"/>
         <source>Please create a database in the &apos;Account&apos; tab.</source>
         <translation>Bitte legen Sie eine Datenbank in &apos;Benutzerkonto&apos; Registerkarte an.</translation>
     </message>
@@ -455,32 +460,32 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <translation>Ein Fehler ist aufgetreten</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="920"/>
+        <location filename="../qgiscloudplugindialog.py" line="921"/>
         <source>Upload errors occurred</source>
         <translation>Fehler beim Hochladen der Daten</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="920"/>
+        <location filename="../qgiscloudplugindialog.py" line="921"/>
         <source>Upload errors occurred. Not all data could be uploaded.</source>
         <translation>Fehler beim Hochladen der Daten sind aufgetreten. Nicht alle Daten konnten hochgeladen werden.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="952"/>
+        <location filename="../qgiscloudplugindialog.py" line="953"/>
         <source>Save Project</source>
         <translation>Projekt speichern</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="944"/>
+        <location filename="../qgiscloudplugindialog.py" line="945"/>
         <source>Choose were to save the modified project:</source>
         <translation>Wählen Sie, wo das geänderte Projekt gespeichert werden soll.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="952"/>
+        <location filename="../qgiscloudplugindialog.py" line="953"/>
         <source>QGIS Project Files</source>
         <translation>QGIS Projektdateien</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="941"/>
+        <location filename="../qgiscloudplugindialog.py" line="942"/>
         <source>Upload complete. The local layers in the project were replaced with the layers uploaded to the qgiscloud database.</source>
         <translation>Die Daten wurden hochgeladen. Die lokalen Ebenen im Projekt wurden mit den Layers in der qgiscloud Datenbank ersetzt.</translation>
     </message>
@@ -515,7 +520,7 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <translation>Die Anzahl der %s erlaubten Datenbanken ist überschritten! Bitte kaufen Sie weitere Datenbanken hinzu!</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="881"/>
+        <location filename="../qgiscloudplugindialog.py" line="882"/>
         <source>Could not connect to database server ({0}) on port {1}. Please contact your system administrator or internet provider to open port {1} in the firewall</source>
         <translation>Der Datenbank-Server ({0}) kann nicht über den Port {1} verbunden werden. Bitten Sie den Systemadministrator oder Internet-Provider den Port {1} in der Firewall zu öffnen</translation>
     </message>
@@ -605,42 +610,42 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
 <context>
     <name>RasterUpload</name>
     <message>
-        <location filename="../raster/raster_upload.py" line="109"/>
+        <location filename="../raster/raster_upload.py" line="107"/>
         <source>Creating table &apos;{table}&apos;...</source>
         <translation>Die Tabelle &apos;{table}&apos; wird erstellt...</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="689"/>
+        <location filename="../raster/raster_upload.py" line="687"/>
         <source>{table}: {count} of {sum_tiles} tiles uploaded</source>
         <translation>{table}: {count} von {sum_tiles} Kacheln hochgeladen</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="654"/>
+        <location filename="../raster/raster_upload.py" line="652"/>
         <source>Uploading tiles...</source>
         <translation>Kacheln werden hochgeladen...</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="104"/>
+        <location filename="../raster/raster_upload.py" line="102"/>
         <source>Database full</source>
         <translation>Die Datenbank ist voll</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="104"/>
+        <location filename="../raster/raster_upload.py" line="102"/>
         <source>Upload would exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan.</source>
         <translation>Der Upload würde die maximale Datenbankgrösse Ihres aktuellen QGIS Cloud Abos überschreiten. Bitte machen Sie Platz in der DB oder bestellen Sie QGIS Cloud Pro.</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="132"/>
+        <location filename="../raster/raster_upload.py" line="130"/>
         <source>Creating overview-level {level} for table &apos;{table}&apos;...</source>
         <translation>Erstelle Übersicht-Level {level} für die Tabelle &apos;{table}&apos;...</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="142"/>
+        <location filename="../raster/raster_upload.py" line="140"/>
         <source>Registering raster columns of table &apos;%s&apos;...</source>
         <translation>Registrieren der Raster-Spalten der Tabelle &apos;%s&apos;...</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="699"/>
+        <location filename="../raster/raster_upload.py" line="697"/>
         <source>Calculating raster params for {sum_tiles} tiles ...</source>
         <translation>Berechne die Raster-Parameter für {sum_tiles} Kacheln ...</translation>
     </message>
