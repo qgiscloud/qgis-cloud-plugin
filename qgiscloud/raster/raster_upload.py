@@ -86,60 +86,59 @@ class RasterUpload(QObject):
          
         # Burn all specified input raster files into single WKTRaster table
         gt = None
-        for layer_id in list(raster.keys()):
-            layer_info = raster[layer_id]
-            opts['srid'] = layer_info['layer'].dataProvider().crs().postgisSrid()
-            infile = layer_info['data_source']
-            
-            file_info = QFileInfo(infile)
-            file_size = file_info.size()
-            size = DbConnections().db_size()
-            file_size /= 1024 * 1024
-            size = size + file_size
-            
-            if size > float(max_size):
-                QMessageBox.warning(None, self.tr("Database full"), self.tr("Upload would exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan."))
-                break
-            
-            opts['table'] = layer_info['table_name']
-                
-            self.progress_label.setText(self.tr("Creating table '{table}'...").format(table=opts['table']))
-            QApplication.processEvents()
-            
-            self.cursor.execute(self.make_sql_drop_raster_table(opts['table']))
-            self.conn.commit()
-            
-            self.cursor.execute(self.make_sql_create_table(opts,  opts['table']))
-            self.conn.commit()
+        layer_info = raster
+        opts['srid'] = layer_info['layer'].dataProvider().crs().postgisSrid()
+        infile = layer_info['data_source']
         
-            gt = self.wkblify_raster(opts,  infile.replace( '\\', '/') , i, gt)
-            i += 1
+        file_info = QFileInfo(infile)
+        file_size = file_info.size()
+        size = DbConnections().db_size()
+        file_size /= 1024 * 1024
+        size = size + file_size
+        
+        if size > float(max_size):
+            QMessageBox.warning(None, self.tr("Database full"), self.tr("Upload would exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan."))
+            return False
+        
+        opts['table'] = layer_info['table_name']
             
-            self.cursor.execute(self.make_sql_create_gist(opts['table'],  opts['column']))
-            self.conn.commit()            
-
-       # create raster overviews
-            for level in [4, 8, 16, 32]:
-                
-                sql = 'drop table if exists o_%d_%s' %(level,  opts['table'])
-                self.cursor.execute(sql)
-                self.conn.commit()
-                
-                sql = "select st_createoverview_qgiscloud('%s'::regclass, '%s'::name, %d)" % (opts['table'],  opts['column'],  level)
-                self.progress_label.setText(self.tr("Creating overview-level {level} for table '{table}'...").format(level=level,  table=opts['table']))
-                QApplication.processEvents()
-                self.cursor.execute(sql)
-                self.conn.commit()
-                
-                index_table = 'o_'+str(level)+'_'+opts['table']
-                self.cursor.execute(self.make_sql_create_gist(index_table,  opts['column']))
-                self.conn.commit()
-                    
+        self.progress_label.setText(self.tr("Creating table '{table}'...").format(table=opts['table']))
+        QApplication.processEvents()
+        
+        self.cursor.execute(self.make_sql_drop_raster_table(opts['table']))
+        self.conn.commit()
+        
+        self.cursor.execute(self.make_sql_create_table(opts,  opts['table']))
+        self.conn.commit()
     
-            self.progress_label.setText(self.tr("Registering raster columns of table '%s'..." % (opts['table'])))
-            QApplication.processEvents()
-            self.cursor.execute(self.make_sql_addrastercolumn(opts))
+        gt = self.wkblify_raster(opts,  infile.replace( '\\', '/') , i, gt)
+        i += 1
+        
+        self.cursor.execute(self.make_sql_create_gist(opts['table'],  opts['column']))
+        self.conn.commit()            
+
+   # create raster overviews
+        for level in [4, 8, 16, 32]:
+            
+            sql = 'drop table if exists o_%d_%s' %(level,  opts['table'])
+            self.cursor.execute(sql)
             self.conn.commit()
+            
+            sql = "select st_createoverview_qgiscloud('%s'::regclass, '%s'::name, %d)" % (opts['table'],  opts['column'],  level)
+            self.progress_label.setText(self.tr("Creating overview-level {level} for table '{table}'...").format(level=level,  table=opts['table']))
+            QApplication.processEvents()
+            self.cursor.execute(sql)
+            self.conn.commit()
+            
+            index_table = 'o_'+str(level)+'_'+opts['table']
+            self.cursor.execute(self.make_sql_create_gist(index_table,  opts['column']))
+            self.conn.commit()
+                
+
+        self.progress_label.setText(self.tr("Registering raster columns of table '%s'..." % (opts['table'])))
+        QApplication.processEvents()
+        self.cursor.execute(self.make_sql_addrastercolumn(opts))
+        self.conn.commit()
             
             
                     # VACUUM

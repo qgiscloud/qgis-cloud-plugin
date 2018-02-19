@@ -227,8 +227,7 @@ class DataUpload(QObject):
                     conn.commit()
                     
             elif layer.type() == QgsMapLayer.RasterLayer:
-                raster_to_upload = {}
-                raster_to_upload[layer.id()] = {
+                raster_to_upload = {
                             'layer': layer,
                             'data_source': layer.source(),
                             'db_name': db.database,
@@ -236,7 +235,7 @@ class DataUpload(QObject):
                             'geom_column': 'rast'
                         }
                 RasterUpload(conn,  cursor,  raster_to_upload,  maxSize,  self.progress_label)
-                layers_to_replace[layer.id()] = raster_to_upload[layer.id()]
+                layers_to_replace[layer.id()] = raster_to_upload
 
         sql = "SELECT 'SELECT SETVAL(' || quote_literal(quote_ident(PGT.schemaname) || '.' || quote_ident(S.relname)) ||  \
         ', COALESCE(MAX(' ||quote_ident(C.attname)|| ')+1, 1) ) \
