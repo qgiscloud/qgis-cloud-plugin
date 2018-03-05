@@ -251,6 +251,7 @@ class DataUpload(QObject):
       AND D.refobjid = C.attrelid     \
       AND D.refobjsubid = C.attnum     \
       AND T.relname = PGT.tablename     \
+      and S.relnamespace = 2200 \
       AND schemaname = 'public'     \
       AND tablename = '%s' ORDER BY S.relname;" % (item['table']) 
         
