@@ -244,14 +244,15 @@ class DataUpload(QObject):
         ', COALESCE(MAX(' ||quote_ident(C.attname)|| ')+1, 1) ) \
             FROM ' || quote_ident(PGT.schemaname)|| '.' ||quote_ident(T.relname)|| ';' \
     FROM pg_class AS S,      pg_depend AS D,      pg_class AS T,      pg_attribute AS C,      \
-         pg_tables AS PGT \
+         pg_tables AS PGT, pg_namespace as PGNS \
     WHERE S.relkind = 'S'     \
       AND S.oid = D.objid     \
+      AND S.relnamespace = PGNS.oid \
+      AND PGNS.nspname = 'public'     \
       AND D.refobjid = T.oid     \
       AND D.refobjid = C.attrelid     \
       AND D.refobjsubid = C.attnum     \
       AND T.relname = PGT.tablename     \
-      and S.relnamespace = 2200 \
       AND schemaname = 'public'     \
       AND tablename = '%s' ORDER BY S.relname;" % (item['table']) 
         
