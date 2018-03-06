@@ -252,21 +252,21 @@ class DataUpload(QObject):
                 RasterUpload(conn,  cursor,  raster_to_upload,  maxSize,  self.progress_label)
                 layers_to_replace[layer.id()] = raster_to_upload[layer.id()]
 
-        sql = "SELECT 'SELECT SETVAL(' || quote_literal(quote_ident(PGT.schemaname) || '.' || quote_ident(S.relname)) ||  \
-        ', COALESCE(MAX(' ||quote_ident(C.attname)|| ')+1, 1) ) \
-            FROM ' || quote_ident(PGT.schemaname)|| '.' ||quote_ident(T.relname)|| ';' \
-    FROM pg_class AS S,      pg_depend AS D,      pg_class AS T,      pg_attribute AS C,      \
-         pg_tables AS PGT, pg_namespace as PGNS \
-    WHERE S.relkind = 'S'     \
-      AND S.oid = D.objid     \
-      AND S.relnamespace = PGNS.oid \
-      AND PGNS.nspname = 'public'     \
-      AND D.refobjid = T.oid     \
-      AND D.refobjid = C.attrelid     \
-      AND D.refobjsubid = C.attnum     \
-      AND T.relname = PGT.tablename     \
-      AND schemaname = 'public'     \
-      AND tablename = '%s' ORDER BY S.relname;" % (item['table']) 
+        sql = """SELECT 'SELECT SETVAL(' || quote_literal(quote_ident(PGT.schemaname) || '.' || quote_ident(S.relname)) ||  
+                            ', COALESCE(MAX(' ||quote_ident(C.attname)|| ')+1, 1) ) 
+                                FROM ' || quote_ident(PGT.schemaname)|| '.' ||quote_ident(T.relname)|| ';' 
+                        FROM pg_class AS S,      pg_depend AS D,      pg_class AS T,      pg_attribute AS C,      
+                             pg_tables AS PGT, pg_namespace as PGNS 
+                        WHERE S.relkind = 'S'     
+                          AND S.oid = D.objid     
+                          AND S.relnamespace = PGNS.oid 
+                          AND PGNS.nspname = 'public'     
+                          AND D.refobjid = T.oid     
+                          AND D.refobjid = C.attrelid     
+                          AND D.refobjsubid = C.attnum     
+                          AND T.relname = PGT.tablename     
+                          AND schemaname = 'public'     
+                          AND tablename = '%s' ORDER BY S.relname;""" % (item['table']) 
         
         cursor.execute(sql)
         rows = cursor.fetchall()
