@@ -258,10 +258,10 @@ class QgisCloudPluginDialog(QDockWidget):
     def _version_info(self):
         return {
             'versions': {
-                'plugin': self.version.encode('utf-8'),
-                'QGIS': Qgis.QGIS_VERSION.encode('utf-8'),
-                'OS': platform.platform().encode('utf-8'),
-                'Python': sys.version.encode('utf-8')
+                'plugin': self.version.encode('utf-8').decode('utf-8'),
+                'QGIS': Qgis.QGIS_VERSION.encode('utf-8').decode('utf-8'),
+                'OS': platform.platform().encode('utf-8').decode('utf-8'),
+                'Python': sys.version.encode('utf-8').decode('utf-8')
             }
         }
 
