@@ -6,7 +6,7 @@
     <message>
         <location filename="../data_upload.py" line="76"/>
         <source>Database full</source>
-        <translation>Die Datenbanl ist voll</translation>
+        <translation>Die Datenbank ist voll</translation>
     </message>
     <message>
         <location filename="../data_upload.py" line="76"/>
@@ -352,7 +352,8 @@ p, li { white-space: pre-wrap; }
         <source>Raster, plugin or geometryless layers are not supported:
 
 </source>
-        <translation>Raster, Plugin oder geometrielose Layer können nicht verarbeitet werden:</translation>
+        <translation>Raster, Plugin oder geometrielose Layer können nicht verarbeitet werden:
+</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="703"/>
@@ -440,7 +441,7 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
     <message>
         <location filename="../qgiscloudplugindialog.py" line="876"/>
         <source>Please select a database to upload data.</source>
-        <translation>Bitte wählen Sie eine Datenbank aus um Daten hochzuladen.</translation>
+        <translation>Bitte wählen Sie eine Datenbank aus, um Daten hochzuladen.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="441"/>
@@ -495,7 +496,7 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
     <message>
         <location filename="../qgiscloudplugindialog.py" line="946"/>
         <source>Upload complete. The local layers in the project were replaced with the layers uploaded to the qgiscloud database.</source>
-        <translation>Die Daten wurden hochgeladen. Die lokalen Ebenen im Projekt wurden mit den Layers in der qgiscloud Datenbank ersetzt.</translation>
+        <translation>Die Daten wurden hochgeladen. Die lokalen Ebenen im Projekt wurden mit den Ebenen in der qgiscloud Datenbank ersetzt.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="572"/>
@@ -550,7 +551,7 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
     <message>
         <location filename="../qgiscloudplugindialog.py" line="309"/>
         <source>New plugin release {version} is available! Please upgrade the QGIS Cloud plugin.</source>
-        <translation>Die neue Version {version} des QGIS CLoud Plugins ist verfügbar! Bitte aktualisieren Sie das Plugin.</translation>
+        <translation>Die neue Version {version} des QGIS Cloud Plugins ist verfügbar! Bitte aktualisieren Sie das Plugin.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="335"/>
@@ -560,7 +561,7 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
     <message>
         <location filename="../qgiscloudplugindialog.py" line="335"/>
         <source>Account {username} is disabled! Please contact support@qgiscloud.com</source>
-        <translation>Das KOnto mit dem Benutzernamen {username} ist gesperrt! Bitte wenden Sie sich an support@qgiscloud.com</translation>
+        <translation>Das Konto mit dem Benutzernamen {username} ist gesperrt! Bitte wenden Sie sich an support@qgiscloud.com</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="340"/>
@@ -572,7 +573,8 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <source>Some layers are using local data. Please upload local layers to your cloud database in the &apos;Upload Data&apos; tab before publishing.
 
 </source>
-        <translation>Einige Ebenen verwenden lokale Daten. Bitte diese Daten im &apos;Daten in die Cloud laden&apos; Reiter in dei Datenbank laden, befor das Projekt publiziert wird.</translation>
+        <translation>Einige Ebenen verwenden lokale Daten. Bitte diese Daten im &apos;Daten in die Cloud laden&apos; Reiter in die Datenbank laden, bevor das Projekt publiziert wird.
+</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="368"/>
