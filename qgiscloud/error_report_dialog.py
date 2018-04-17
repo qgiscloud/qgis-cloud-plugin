@@ -69,7 +69,7 @@ class ErrorReportDialog(QDialog):
                 " QGIS Cloud Plugin: %s\n\n"
                 "Username: %s\n") % (
                     self.plainTextEdit.toPlainText(),
-                    QGis.QGIS_VERSION,
+                    Qgis.QGIS_VERSION,
                     sys.version.replace("\n", " "),
                     platform.platform(),
                     self.metadata.version(),
