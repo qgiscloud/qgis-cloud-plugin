@@ -149,7 +149,7 @@ class DataUpload(QObject):
                     importstr.extend(str(count).encode('utf-8'))
                     count += 1
                     if not feature.geometry():
-                        if layer.hasGeometryType():
+                        if layer.isSpatial():
                             QgsMessageLog.logMessage(self.tr("Feature {id} of layer {layer} has no geometry").format(id=feature.id(), layer=layer.name()), "QGISCloud")
                             importstr.extend(b"\t" + b"\\N")
                     elif f_geometry.wkbType() != wkbType:
