@@ -592,7 +592,40 @@ class QgisCloudPluginDialog(QDockWidget):
             
         layers = self.iface.legendInterface().layers()
         layerList = ''
+        
+
         for layer in layers:
+            
+##        Exclude all serial types from WFS
+#            if layer.type() == QgsMapLayer.VectorLayer:
+#                if QgsDataSourceURI(layer.dataProvider().dataSourceUri()).schema() == '':
+#                    schema = 'public'
+#                else:
+#                    schema = QgsDataSourceURI(layer.dataProvider().dataSourceUri()).schema()
+#                    
+#                db_name = QgsDataSourceURI(layer.dataProvider().dataSourceUri()).database()
+#                table = QgsDataSourceURI(layer.dataProvider().dataSourceUri()).table()
+#                
+#                sql = """
+#                        select column_name
+#                        from information_schema.columns
+#                        where table_schema = '{}'
+#                            and table_name = '{}' 
+#                            and column_default ilike 'nextval%' 
+#                """.format(schema, table)
+#                
+#                conn = self.db_connections.db(db_name).psycopg_connection()
+#                cursor = conn.cursor()
+#                cursor.execute(sql)
+#                conn.commit()
+#                attributes_to_exclude = []
+#                for attrib in cursor.fetchall():
+#                    attributes_to_exclude.append(attrib[0])
+#                
+#                layer.setExcludeAttributesWFS(attributes_to_exclude)
+#                cursor.close()
+#                conn.close()
+                
             if "USER" in layer.crs().authid():
                  layerList += "'"+layer.name()+"' "
         
