@@ -10,6 +10,8 @@ about= QGIS Cloud is your powerful Web-GIS platform for publishing maps, data an
 ; Optional items:
 
 changelog=
+    1.5.11
+    -  Confusing message "Different raster size in one table" fixed
     1.5.10
     - minor bugfixes
     1.5.9
