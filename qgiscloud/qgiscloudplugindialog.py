@@ -145,7 +145,11 @@ class QgisCloudPluginDialog(QDockWidget):
             "<li>Python: %s</li>" % sys.version.replace("\n", " ") +
             "<li>OS: %s</li>" % platform.platform() +
             "</ul></p>")
-        self.ui.lblVersionPlugin.setText(self.version)
+        
+        data_protection_link = """<a href="http://qgiscloud.com/pages/privacy">%s</a>""" % (self.tr("Privacy Policy"))
+            
+        self.ui.lblVersionPlugin.setText("%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%s" % (self.version,  data_protection_link))
+        self.ui.lblVersionPlugin.setOpenExternalLinks(True)
 
         self.ui.tblLocalLayers.setColumnCount(5)
         header = ["Layers", "Data source",
