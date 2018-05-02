@@ -461,7 +461,7 @@ class QgisCloudPluginDialog(QDockWidget):
         result = self.api.load_map_project(map_name,  map_id)
         qgs_file_name = '%s/%s.qgs' % (tempfile.gettempdir(), map_name)
         qgs_file = open(qgs_file_name,  'w')
-        qgs_file.write(result)
+        qgs_file.write(result.encode('utf-8'))
         qgs_file.close()
         project = QgsProject.instance()
         if project.isDirty():
