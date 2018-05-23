@@ -308,7 +308,7 @@ class QgisCloudPluginDialog(QDockWidget):
                         result = QMessageBox.information(
                             None,
                             self.tr("Accept new Privacy Policy"),
-                            self.tr("""Due to the GDPR qgiscloud.com has a new <a href='http://qgiscloud.com/en/pages/privacy'> Privacy Policy </a>. 
+                            self.tr("""Due to the GDPR qgiscloud.com has a new <a href='http://qgiscloud.com/pages/privacy'> Privacy Policy </a>. 
                             To continue using qgiscloud.com services, please accept the new policy. """),
                             QMessageBox.StandardButtons(
                                 QMessageBox.No |
