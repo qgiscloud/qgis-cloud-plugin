@@ -125,6 +125,16 @@ class API(object):
             Reset user/password for authentication.
         """
         self.user = self.password = None
+        
+    def accept_tos(self):
+        """
+        Accept GDPR complient privacy policy
+        """
+        self.requires_auth()
+        resource = '/account/accept_tos.json'
+        request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
+        request.post(resource)
+        return True     
 
     def check_auth(self):
         """

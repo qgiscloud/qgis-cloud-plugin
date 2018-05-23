@@ -291,6 +291,22 @@ class QgisCloudPluginDialog(QDockWidget):
                     login_info = self.api.check_login(
                         version_info=self._version_info())
 
+                    if not login_info['tos_accepted']:
+                        result = QMessageBox.information(
+                            None,
+                            self.tr("Accept new Privacy Policy"),
+                            self.tr("""Due to the GDPR qgiscloud.com has a new <a href='http://qgiscloud.com/en/pages/privacy'> Privacy Policy </a>. 
+                            To continue using qgiscloud.com, you must accept the new policy. """),
+                            QMessageBox.StandardButtons(
+                                QMessageBox.No |
+                                QMessageBox.Yes))
+                        
+                        if result == QMessageBox.No:
+                            login_ok = False
+                            return
+                        else:
+                            result = self.api.accept_tos()
+                            
                     self.user = login_dialog.ui.editUser.text()
                     self._update_clouddb_mode(login_info['clouddb'])
                     version_ok = StrictVersion(self.version) >= StrictVersion(login_info['current_plugin'])
