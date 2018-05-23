@@ -610,7 +610,7 @@ class Request():
                 # add PUT and DELETE methods
                 req.get_method = lambda: request_method
             response = urllib2.urlopen(req).read()
-        except urllib2.HTTPError, e:
+        except urllib2.HTTPError as e:
             #
             # Handle the possible responses according to their HTTP STATUS
             # CODES.
