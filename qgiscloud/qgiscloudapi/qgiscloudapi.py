@@ -196,6 +196,17 @@ class API():
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
         content = request.get(resource)
         return json.loads(content)        
+        
+        
+    def accept_tos(self):
+        """
+        Accept GDPR complient privacy policy
+        """
+        self.requires_auth()
+        resource = '/account/accept_tos.json'
+        request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
+        request.post(resource)
+        return True  
 
     def delete_database(self, db_name):
         """

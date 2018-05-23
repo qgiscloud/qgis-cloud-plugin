@@ -304,6 +304,22 @@ class QgisCloudPluginDialog(QDockWidget):
                     login_info = self.api.check_login(
                         version_info=self._version_info())
 
+                    print (login_info)
+                    
+                    if not login_info['tos_accepted']:
+                        result = QMessageBox.information(
+                            None,
+                            self.tr("Accept new Privacy Policy"),
+                            self.tr("""Due to the GDPR qgiscloud.com has a new <a href='http://qgiscloud.com/en/pages/privacy'> Privacy Policy </a>. 
+                            To continue using qgiscloud.com services, please accept the new policy. """),
+                            QMessageBox.StandardButtons(
+                                QMessageBox.No |
+                                QMessageBox.Yes))
+                        
+                        if result == QMessageBox.No:
+                            login_ok = False
+                            return
+                            
                     self.user = login_dialog.ui.editUser.text()
                     self._update_clouddb_mode(login_info['clouddb'])
                     version_ok = StrictVersion(self.version) >= StrictVersion(login_info['current_plugin'])
@@ -316,7 +332,7 @@ class QgisCloudPluginDialog(QDockWidget):
                     self.ui.btnLogout.show()
                     self.ui.widgetDatabases.setEnabled(True)
                     self.ui.widgetMaps.setEnabled(True)
-
+                    
                     self.ui.lblLoginStatus.setText(
                         self.tr("Logged in as {0} ({1})").format(self.user, login_info['plan']))
                     self.ui.lblLoginStatus.show()
@@ -333,7 +349,8 @@ class QgisCloudPluginDialog(QDockWidget):
                         self.ui.tabWidget.setCurrentWidget(self.ui.aboutTab)
                     login_ok = True
                     self.update_local_layers()
-            
+                    self.api.accept_tos()
+                
                 except ForbiddenError:
                     QMessageBox.critical(
                         self, self.tr("Account Disabled"),
