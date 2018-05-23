@@ -303,9 +303,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 try:
                     login_info = self.api.check_login(
                         version_info=self._version_info())
-
-                    print (login_info)
-                    
+                        
                     if not login_info['tos_accepted']:
                         result = QMessageBox.information(
                             None,
@@ -366,6 +364,7 @@ class QgisCloudPluginDialog(QDockWidget):
                         self, self.tr("Login failed"),
                         self.tr("Login failed: %s") % str(e))
                     login_ok = False
+        
         return version_ok
 
     def create_database(self):
