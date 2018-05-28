@@ -40,5 +40,5 @@ tracker=https://github.com/qgiscloud/qgis-cloud-plugin/issues
 repository=https://github.com/qgiscloud/qgis-cloud-plugin
 icon=icon.png
 
-experimental=True
+experimental=False
 ;deprecated=False
