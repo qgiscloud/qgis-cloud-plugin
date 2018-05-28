@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 from builtins import str
 from . import raster.raster_upload as raster_upload
 from osgeo import gdal
