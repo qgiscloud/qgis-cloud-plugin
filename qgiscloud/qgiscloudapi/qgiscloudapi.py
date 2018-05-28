@@ -27,8 +27,6 @@ limitations under the License.
 # maps = api.read_maps()
 
 """
- from future import standard_library
-standard_library.install_aliases()
 from builtins import str
 from builtins import object
 from qgis.core import *

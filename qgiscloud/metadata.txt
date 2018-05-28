@@ -12,6 +12,7 @@ about= QGIS Cloud is your powerful Web-GIS platform for publishing maps, data an
 changelog=
     3.0.10
     - Experimental flag removed
+    - code cleaning
     3.0.9
     - Accept Privacy Policy message added
     3.0.8
