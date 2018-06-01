@@ -22,7 +22,7 @@
 from builtins import str
 from builtins import object
 
-from qgis.PyQt.QtCore import QSettings
+from qgis.PyQt.QtCore import QCoreApplication, QSettings
 import psycopg2
 from qgis.core import *
 

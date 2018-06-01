@@ -68,7 +68,7 @@ class API(object):
         # token = json.loads('{"token": "A2wY7qgUNM5eTRM3Lz6D4RZHuGmYPP"}')
         # api = API(token=token)
     """
-    
+
     user = None
     password = None
     _token = None
@@ -109,8 +109,8 @@ class API(object):
         """
         self.user = bytearray()
         self.user.extend(map(ord, user))
-        self.password = bytearray() 
-        
+        self.password = bytearray()
+
         if password != None:
             self.password.extend(map(ord,  password))
             return True
@@ -148,18 +148,18 @@ class API(object):
             'type': 'Login',
             'info': version_info
         }
-        
-        request = Request(user=self.user, 
-                                       password=self.password, 
-                                       token=self.get_token(), 
-                                       cache=self.cache, 
-                                       url=self.url)        
-#        request = Request(user=self.user.encode('utf-8'), 
-#                                       password=self.password.encode('utf-8'), 
-#                                       token=self.get_token(), 
-#                                       cache=self.cache, 
+
+        request = Request(user=self.user,
+                                       password=self.password,
+                                       token=self.get_token(),
+                                       cache=self.cache,
+                                       url=self.url)
+#        request = Request(user=self.user.encode('utf-8'),
+#                                       password=self.password.encode('utf-8'),
+#                                       token=self.get_token(),
+#                                       cache=self.cache,
 #                                       url=self.url)
-                                       
+
         content = request.post(resource, data)
         login_info = json.loads(content)
         if 'clouddb' not in login_info:
@@ -216,7 +216,7 @@ class API(object):
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
         content = request.get(resource)
         return json.loads(content)
-        
+
     def read_maps(self):
         """
             Returns a list of databases.
@@ -225,7 +225,7 @@ class API(object):
         resource = '/maps.json'
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
         content = request.get(resource)
-        return json.loads(content)        
+        return json.loads(content)
 
     def delete_database(self, db_name):
         """
@@ -288,7 +288,7 @@ class API(object):
             Create a new map and return it.
         """
         name = name.decode('utf-8')
-            
+
         self.requires_auth()
         resource = '/maps.json'
         file = open(mapfile, "rb")
@@ -323,7 +323,7 @@ class API(object):
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
         content = request.get(resource)
         return json.loads(content)
-        
+
     def load_map_project(self,  map_name,  map_id):
         """
             Download of QGIS project file.
@@ -334,7 +334,7 @@ class API(object):
         headers['Content-Type'] = 'application/x-qgis-project'
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
         content = request.get(resource,  headers)
-        
+
         return content
 
     def delete_map(self, map_id):
@@ -346,6 +346,16 @@ class API(object):
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
         request.delete(resource)
         return True
+
+    def update_map(self, map_id, data):
+        """
+            Returns a list of maps.
+        """
+        self.requires_auth()
+        resource = '/maps/%s.json' % (map_id)
+        request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
+        content = request.put(resource, data)
+        return json.loads(content)
 
     def create_graphic(self, name, symbol):
         """
@@ -365,6 +375,25 @@ class API(object):
         content = request.post(resource, data)
         return json.loads(content)
 
+    def read_viewers(self):
+        """
+            Returns all viewers.
+        """
+        self.requires_auth()
+        resource = '/viewers.json'
+        request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
+        content = request.get(resource)
+        return json.loads(content)
+
+    def read_map_options(self):
+        """
+            Returns all map select field options.
+        """
+        self.requires_auth()
+        resource = '/maps/edit_options.json'
+        request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
+        content = request.get(resource)
+        return json.loads(content)
 
     def create_exception(self, exception, version_info, project_fname):
         """
@@ -502,10 +531,10 @@ class ThrottledError(Exception):
 #                    passman.add_password(None, url, username, password)
 #                    urllib.request.install_opener(urllib.request.build_opener(urllib.request.HTTPBasicAuthHandler(passman)))
 #                    urllib.request.install_opener(urllib.request.build_opener(urllib.request.HTTPCookieProcessor()))
-#                    
+#
 #                    request = urllib.request.Request(url)
 #                    base64string = base64.b64encode(b'%s:%s' % (username, password))
-#                    request.add_header("Authorization", b"Basic %s" % base64string)   
+#                    request.add_header("Authorization", b"Basic %s" % base64string)
 
 class HTTPBasicAuthHandlerLimitRetries(urllib.request.HTTPBasicAuthHandler):
     def __init__(self, *args, **kwargs):
@@ -527,11 +556,11 @@ class HTTPBasicAuthHandlerLimitRetries(urllib.request.HTTPBasicAuthHandler):
         user, pw = self.passwd.find_user_password(realm, host)
         if pw is not None:
 #                        base64string = base64.b64encode(b'%s:%s' % (username, password))
-#                        request.add_header("Authorization", b"Basic %s" % base64string)             
+#                        request.add_header("Authorization", b"Basic %s" % base64string)
 #            raw = ("%s:%s" % (user, pw)).encode('utf8')
 #            auth = 'Basic %s' % base64.b64encode(raw).strip()
             raw = base64.b64encode(b"%s:%s" % (user, pw))
-            auth = 'Basic %s' % raw            
+            auth = 'Basic %s' % raw
             if req.get_header(self.auth_header, None) == auth:
                 return None
             req.add_unredirected_header(self.auth_header, auth)
@@ -594,17 +623,17 @@ class Request(object):
         if self.token is not None:
             headers['Authorization'] = 'auth_token="%s"' % (self.token['token'])
         elif self.user is not None and self.password is not None:
-            
+
 #passman = urllib.request.HTTPPasswordMgrWithDefaultRealm()
 #passman.add_password(None, url, username, password)
 #urllib.request.install_opener(urllib.request.build_opener(urllib.request.HTTPBasicAuthHandler(passman)))
 #urllib.request.install_opener(urllib.request.build_opener(urllib.request.HTTPCookieProcessor()))
-#         
+#
             password_manager = urllib.request.HTTPPasswordMgrWithDefaultRealm()
             password_manager.add_password(None, self.url, self.user, self.password)
             auth_handler = HTTPBasicAuthHandlerLimitRetries(password_manager)
             opener = urllib.request.build_opener(auth_handler)
-            urllib.request.install_opener(opener)            
+            urllib.request.install_opener(opener)
         #
         # The API expects the body to be urlencoded. If data was passed to
         # the request method we therefore use urlencode from urllib.
@@ -643,8 +672,8 @@ class Request(object):
 #request = urllib.request.Request(url)
         base64string = base64.b64encode(b'%s:%s' % (self.user, self.password))
         headers['Authorization'] = b"Basic %s" % base64string
-#request.add_header("Authorization", b"Basic %s" % base64string)   
-#u = urllib.request.urlopen(request)   
+#request.add_header("Authorization", b"Basic %s" % base64string)
+#u = urllib.request.urlopen(request)
         try:
             request_method = method.upper()
             if request_method in ['PUT', 'POST']:
@@ -655,7 +684,7 @@ class Request(object):
                 # add PUT and DELETE methods
                 req.get_method = lambda: request_method
             response = urllib.request.urlopen(req).read()
-            
+
         except urllib.error.HTTPError as e:
             #
             # Handle the possible responses according to their HTTP STATUS
