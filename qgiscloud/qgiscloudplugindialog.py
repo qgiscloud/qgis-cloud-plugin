@@ -44,7 +44,8 @@ import time
 import platform
 import tempfile
 from distutils.version import StrictVersion
-    
+from .mapsettingsdialog import MapSettingsDialog
+
 class QgisCloudPluginDialog(QDockWidget):
     COLUMN_LAYERS = 0
     COLUMN_DATA_SOURCE = 1
@@ -56,7 +57,7 @@ class QgisCloudPluginDialog(QDockWidget):
         QgsWkbTypes.Unknown: "Unknown",
         QgsWkbTypes.NoGeometry: "No geometry",
         QgsWkbTypes.Point: "Point",
-        QgsWkbTypes.MultiPoint: "MultiPoint",               
+        QgsWkbTypes.MultiPoint: "MultiPoint",
         QgsWkbTypes.PointZ: "PointZ",
         QgsWkbTypes.MultiPointZ: "MultiPointZ",
         QgsWkbTypes.PointM: "PointM",
@@ -75,41 +76,41 @@ class QgisCloudPluginDialog(QDockWidget):
         QgsWkbTypes.MultiLineStringZM: "LineStringZM",
         QgsWkbTypes.LineString25D: "LineString25D",
         QgsWkbTypes.MultiLineString25D: "MultiLineString25D",
-        QgsWkbTypes.Polygon: "Polygon",            
-        QgsWkbTypes.MultiPolygon: "MultiPolygon", 
-        QgsWkbTypes.PolygonZ: "PolygonZ",            
-        QgsWkbTypes.MultiPolygonZ: "MultiPolygonZ", 
-        QgsWkbTypes.PolygonM: "PolygonM",            
-        QgsWkbTypes.MultiPolygonM: "MultiPolygonM", 
-        QgsWkbTypes.PolygonZM: "PolygonZM",            
-        QgsWkbTypes.MultiPolygonZM: "MultiPolygonZM", 
-        QgsWkbTypes.Polygon25D: "Polygon25D",            
-        QgsWkbTypes.MultiPolygon25D: "MultiPolygon25D", 
+        QgsWkbTypes.Polygon: "Polygon",
+        QgsWkbTypes.MultiPolygon: "MultiPolygon",
+        QgsWkbTypes.PolygonZ: "PolygonZ",
+        QgsWkbTypes.MultiPolygonZ: "MultiPolygonZ",
+        QgsWkbTypes.PolygonM: "PolygonM",
+        QgsWkbTypes.MultiPolygonM: "MultiPolygonM",
+        QgsWkbTypes.PolygonZM: "PolygonZM",
+        QgsWkbTypes.MultiPolygonZM: "MultiPolygonZM",
+        QgsWkbTypes.Polygon25D: "Polygon25D",
+        QgsWkbTypes.MultiPolygon25D: "MultiPolygon25D",
         QgsWkbTypes.CircularString: "CircularString",
         QgsWkbTypes.CompoundCurve: "CompoundCurve",
-        QgsWkbTypes.CurvePolygon: "CurvePolygon", 
+        QgsWkbTypes.CurvePolygon: "CurvePolygon",
         QgsWkbTypes.MultiCurve: "MultiCurve",
         QgsWkbTypes.MultiSurface: "MultiSurface",
         QgsWkbTypes.CircularStringZ: "CircularStringZ",
         QgsWkbTypes.CompoundCurveZ: "CompoundCurveZ",
-        QgsWkbTypes.CurvePolygonZ: "CurvePolygonZ", 
+        QgsWkbTypes.CurvePolygonZ: "CurvePolygonZ",
         QgsWkbTypes.MultiCurveZ: "MultiCurveZ",
         QgsWkbTypes.MultiSurfaceZ: "MultiSurfaceZ",
         QgsWkbTypes.CircularStringM: "CircularStringM",
         QgsWkbTypes.CompoundCurveM: "CompoundCurveM",
-        QgsWkbTypes.CurvePolygonM: "CurvePolygonM", 
+        QgsWkbTypes.CurvePolygonM: "CurvePolygonM",
         QgsWkbTypes.MultiCurveM: "MultiCurveM",
         QgsWkbTypes.MultiSurfaceM: "MultiSurfaceM",
         QgsWkbTypes.CircularStringZM: "CircularStringZM",
         QgsWkbTypes.CompoundCurveZM: "CompoundCurveZM",
-        QgsWkbTypes.CurvePolygonZM: "CurvePolygonZM", 
+        QgsWkbTypes.CurvePolygonZM: "CurvePolygonZM",
         QgsWkbTypes.MultiCurveZM: "MultiCurveZM",
         QgsWkbTypes.MultiSurfaceZM: "MultiSurfaceZM",
     }
-        
-    PROJECT_INSTANCE = QgsProject.instance()     
-    
-    
+
+    PROJECT_INSTANCE = QgsProject.instance()
+
+
     def __init__(self, iface, version):
         QDockWidget.__init__(self, None)
         self.iface = iface
@@ -119,7 +120,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui = Ui_QgisCloudPlugin()
         self.ui.setupUi(self)
         self.storage_exceeded = True
-        
+
         myAbout = DlgAbout()
         self.ui.aboutText.setText(
             myAbout.aboutString() +
@@ -130,11 +131,11 @@ class QgisCloudPluginDialog(QDockWidget):
             "<li>Python: %s</li>" % sys.version.replace("\n", " ") +
             "<li>OS: %s</li>" % platform.platform() +
             "</ul></p>")
-            
+
         data_protection_link = """<a href="http://qgiscloud.com/pages/privacy">%s</a>""" % (self.tr("Privacy Policy"))
-            
+
         self.ui.lblVersionPlugin.setText("%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%s" % (self.version,  data_protection_link))
-        self.ui.lblVersionPlugin.setOpenExternalLinks(True)            
+        self.ui.lblVersionPlugin.setOpenExternalLinks(True)
 #        self.ui.lblVersionPlugin.setText(self.version)
 
         self.ui.tblLocalLayers.setColumnCount(5)
@@ -147,6 +148,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.btnUploadData.setEnabled(False)
         self.ui.btnPublishMap.setEnabled(False)
         self.ui.btnMapDelete.setEnabled(False)
+        self.ui.btnMapEdit.setEnabled(False)
         self.ui.progressWidget.hide()
         self.ui.btnLogout.hide()
         self.ui.lblLoginStatus.hide()
@@ -172,6 +174,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.btnDbDelete.clicked.connect(self.delete_database)
         self.ui.btnDbRefresh.clicked.connect(self.refresh_databases)
         self.ui.btnMapDelete.clicked.connect(self.delete_map)
+        self.ui.btnMapEdit.clicked.connect(self.edit_map)
         self.ui.btnMapLoad.clicked.connect(self.map_load)
         self.ui.tabMaps.itemDoubleClicked.connect(self.map_load)
         self.ui.tabDatabases.itemSelectionChanged.connect(self.select_database)
@@ -183,7 +186,7 @@ class QgisCloudPluginDialog(QDockWidget):
 
         self.PROJECT_INSTANCE.layerWillBeRemoved.connect(self.remove_layer)
         self.PROJECT_INSTANCE.layerWasAdded.connect(self.add_layer)
-        
+
         self.ui.cbUploadDatabase.currentIndexChanged.connect(lambda idx: self.activate_upload_button())
         self.ui.btnUploadData.clicked.connect(self.upload_data)
 
@@ -211,11 +214,11 @@ class QgisCloudPluginDialog(QDockWidget):
         if self.iface:
             self.iface.newProjectCreated.disconnect(self.reset_load_data)
             self.iface.projectRead.disconnect(self.reset_load_data)
-        
+
         if self.PROJECT_INSTANCE:
             self.PROJECT_INSTANCE.layerWillBeRemoved.disconnect(self.remove_layer)
             self.PROJECT_INSTANCE.layerWasAdded.disconnect(self.add_layer)
-        
+
 
     def statusBar(self):
         return self.iface.mainWindow().statusBar()
@@ -223,10 +226,10 @@ class QgisCloudPluginDialog(QDockWidget):
     def map(self):
         project = QgsProject.instance()
         name = os.path.splitext(os.path.basename(str(project.fileName())))[0]
-            
+
         # Allowed chars for QGISCloud map name: /\A[A-Za-z0-9\_\-]*\Z/
         name = str(name).encode('ascii', 'replace')  # Replace non-ascii chars
-        
+
         # Replace withespace
         name = name.replace(b" ",  b"_")
         return name
@@ -294,18 +297,18 @@ class QgisCloudPluginDialog(QDockWidget):
                         result = QMessageBox.information(
                             None,
                             self.tr("Accept new Privacy Policy"),
-                            self.tr("""Due to the GDPR qgiscloud.com has a new <a href='http://qgiscloud.com/en/pages/privacy'> Privacy Policy </a>. 
+                            self.tr("""Due to the GDPR qgiscloud.com has a new <a href='http://qgiscloud.com/en/pages/privacy'> Privacy Policy </a>.
                             To continue using qgiscloud.com, you must accept the new policy. """),
                             QMessageBox.StandardButtons(
                                 QMessageBox.No |
                                 QMessageBox.Yes))
-                        
+
                         if result == QMessageBox.No:
                             login_ok = False
                             return
                         else:
                             result = self.api.accept_tos()
-                            
+
                     self.user = login_dialog.ui.editUser.text()
                     self._update_clouddb_mode(login_info['clouddb'])
                     version_ok = StrictVersion(self.version) >= StrictVersion(login_info['current_plugin'])
@@ -335,12 +338,12 @@ class QgisCloudPluginDialog(QDockWidget):
                         self.ui.tabWidget.setCurrentWidget(self.ui.aboutTab)
                     login_ok = True
                     self.update_local_layers()
-            
+
                 except ForbiddenError:
                     QMessageBox.critical(
                         self, self.tr("Account Disabled"),
                         self.tr("Account {username} is disabled! Please contact support@qgiscloud.com").format(username=login_dialog.ui.editUser.text()))
-                    login_ok = False                    
+                    login_ok = False
                 except UnauthorizedError:
                     QMessageBox.critical(
                         self, self.tr("Login for user {username} failed").format(username=login_dialog.ui.editUser.text()),
@@ -363,12 +366,12 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def delete_database(self):
         name = self.ui.tabDatabases.currentItem().text()
-        
+
         answer = False
-        
-        for layer in list(self.PROJECT_INSTANCE.mapLayers().values()):            
+
+        for layer in list(self.PROJECT_INSTANCE.mapLayers().values()):
             if QgsDataSourceUri(layer.publicSource()).database() == name:
-                
+
                 if not answer:
                     answer = QMessageBox.question(
                         self,
@@ -380,11 +383,11 @@ class QgisCloudPluginDialog(QDockWidget):
 
                 if answer == QMessageBox.Yes:
                      self.PROJECT_INSTANCE.removeMapLayer(layer.id())
-                     
+
         if answer == QMessageBox.Cancel:
             QMessageBox.warning(None,  self.tr('Warning'),  self.tr('Deletion of database "{name}" interrupted!').format(name=name))
             return
-            
+
         msgBox = QMessageBox()
         msgBox.setWindowTitle(self.tr("Delete QGIS Cloud database."))
         msgBox.setText(
@@ -393,7 +396,7 @@ class QgisCloudPluginDialog(QDockWidget):
         msgBox.setDefaultButton(QMessageBox.Cancel)
         msgBox.setIcon(QMessageBox.Question)
         ret = msgBox.exec_()
-        
+
         if ret == QMessageBox.Ok:
             self.setCursor(Qt.WaitCursor)
             result = self.api.delete_database(name)
@@ -405,9 +408,10 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def select_database(self):
         self.ui.btnDbDelete.setEnabled(len(self.ui.tabDatabases.selectedItems()) > 0)
-            
+
     def select_map(self):
         self.ui.btnMapDelete.setEnabled(len(self.ui.tabMaps.selectedItems()) > 0)
+        self.ui.btnMapEdit.setEnabled(len(self.ui.tabMaps.selectedItems()) > 0)
         self.ui.btnMapLoad.setEnabled(len(self.ui.tabMaps.selectedItems()) > 0)
         self.update_urls(map=self.ui.tabMaps.currentItem().text())
 
@@ -458,8 +462,8 @@ class QgisCloudPluginDialog(QDockWidget):
 
         self.db_size(self.db_connections)
         QApplication.restoreOverrideCursor()
-        
-    def map_load(self,  item=None,  row=None):     
+
+    def map_load(self,  item=None,  row=None):
         self.ui.widgetServices.close()
         self.setCursor(Qt.WaitCursor)
         map_id = self.ui.tabMaps.currentItem().data(Qt.UserRole)
@@ -480,17 +484,17 @@ class QgisCloudPluginDialog(QDockWidget):
                     QMessageBox.Discard |
                     QMessageBox.Save))
             if ok:
-                project.write()           
-                
+                project.write()
+
         project.read(qgs_file_name)
         project.setDirty(False)
         self.iface.mainWindow().setWindowTitle("QGIS %s - %s" % (Qgis.QGIS_VERSION,  map_name))
         self.unsetCursor()
-            
+
     def delete_map(self):
         name = self.ui.tabMaps.currentItem().text()
         map_id = self.ui.tabMaps.currentItem().data(Qt.UserRole)
-        
+
         msgBox = QMessageBox()
         msgBox.setWindowTitle(self.tr("Delete QGIS Cloud map."))
         msgBox.setText(
@@ -499,24 +503,33 @@ class QgisCloudPluginDialog(QDockWidget):
         msgBox.setDefaultButton(QMessageBox.Cancel)
         msgBox.setIcon(QMessageBox.Question)
         ret = msgBox.exec_()
-        
+
         if ret == QMessageBox.Ok:
             self.ui.widgetServices.close()
             self.setCursor(Qt.WaitCursor)
             success = self.api.delete_map(map_id)
-            
+
             if success:
                 self.ui.btnMapDelete.setEnabled(False)
                 self.refresh_maps()
             else:
                 self.show_api_error(success)
-                
+
             self.unsetCursor()
             self.ui.widgetServices.close()
         else:
             QMessageBox.warning(None,  self.tr('Warning'),  self.tr('Deletion of map "{name}" interrupted!').format(name=name))
-            
-            
+
+    def edit_map(self):
+        map_id = self.ui.tabMaps.currentItem().data(Qt.UserRole)
+        plan = self.api.check_login(
+            version_info=self._version_info())["plan"]
+
+        mapsettings = MapSettingsDialog(self.api, map_id, self.db_connections,
+                                        plan)
+
+        mapsettings.exec_()
+
     def refresh_maps(self):
         QApplication.setOverrideCursor(Qt.WaitCursor)
         if self.clouddb:
@@ -527,31 +540,32 @@ class QgisCloudPluginDialog(QDockWidget):
 
             self.ui.tabMaps.clear()
             self.ui.btnMapDelete.setEnabled(False)
+            self.ui.btnMapEdit.setEnabled(False)
             self.ui.btnMapLoad.setEnabled(False)
-            
+
             for map in map_list:
                 it = QListWidgetItem(map['map']['name'])
                 self.ui.tabMaps.addItem(it)
                 it.setData(Qt.UserRole,  map['map']['id'])
 
-        QApplication.restoreOverrideCursor()        
+        QApplication.restoreOverrideCursor()
 
     def api_url(self):
         return str(self.ui.editServer.text())
-        
+
     def update_urls(self,  map=None):
-        
+
         if map == None:
             map = self.map()
-        
+
         try:
             map = map.decode('utf-8')
         except:
             pass
-            
+
         self.update_url(self.ui.lblWebmap, self.api_url(),
                         'https://', u'{0}/{1}/'.format(self.user, map))
-                        
+
         if self.clouddb:
             self.update_url(
                 self.ui.lblWMS, self.api_url(),
@@ -567,7 +581,7 @@ class QgisCloudPluginDialog(QDockWidget):
             base_url = string.replace(api_url, 'https://api.', prefix)
         except:
             base_url = api_url.replace('https://api.', prefix)
-            
+
         url = u'{0}/{1}'.format(base_url, path)
         text = re.sub(r'http[^"]+', url, str(label.text()))
         label.setText(text)
@@ -598,25 +612,25 @@ class QgisCloudPluginDialog(QDockWidget):
         QApplication.setOverrideCursor(Qt.WaitCursor)
         canvas = self.iface.mapCanvas()
         srs=QgsMapSettings().destinationCrs()
-        
+
         if "USER" in srs.authid():
             QMessageBox.warning(None, self.tr('Warning!'),  self.tr("The project has a user defined CRS. The use of user defined CRS is not supported. Please correct the project CRS before publishing!"))
             QApplication.restoreOverrideCursor()
-            return 
-            
+            return
+
         layer_dict = QgsProject.instance().mapLayers()
-        layers = list(layer_dict.values())                    
+        layers = list(layer_dict.values())
         layerList = ''
-        
+
         for layer in layers:
             if "USER" in layer.crs().authid():
                  layerList += "'"+layer.name()+"' "
-        
+
         if len(layerList) > 0:
             QMessageBox.warning(None, self.tr('Warning!'),  self.tr("The layer(s) {layerlist}have user defined CRS. The use of user defined CRS is not supported. Please correct the CRS before publishing!").format(layerlist=layerList))
             QApplication.restoreOverrideCursor()
             return
-                 
+
         saved = self.check_project_saved()
         if not saved:
             self.statusBar().showMessage(self.tr("Cancelled"))
@@ -695,8 +709,8 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def check_layers(self):
         local_layers, unsupported_layers,  local_raster_layers = self.update_local_layers()
-        
-        
+
+
         if ((local_layers or local_raster_layers) and self.clouddb) or unsupported_layers:
             message = ""
 
@@ -730,12 +744,12 @@ class QgisCloudPluginDialog(QDockWidget):
         # update table names lookup
         local_layers += local_raster_layers
         self.update_data_sources_table_names()
-        
+
         self.local_data_sources.update_local_data_sources(local_layers)
 
         # update GUI
         self.ui.tblLocalLayers.setRowCount(0)
-        
+
         for data_source, layers in list(self.local_data_sources.iteritems()):
             layer_names = []
             for layer in layers:
@@ -750,14 +764,14 @@ class QgisCloudPluginDialog(QDockWidget):
             if data_source in self.data_sources_table_names:
                 # use current table name if available to keep changes by user
                 table_name = self.data_sources_table_names[data_source]
-                
+
             table_name_item = QTableWidgetItem(self.launder_pg_name(table_name).decode('utf-8'))
-        
+
             if layers[0].providerType() == 'gdal':
                 geometry_type_item = QTableWidgetItem('Raster')
             else:
                 wkbType = layers[0].wkbType()
-                
+
                 if wkbType not in self.GEOMETRY_TYPES:
                     QMessageBox.warning(self.iface.mainWindow(), self.tr("Unsupported geometry type"), self.tr(
                         "Unsupported geometry type '{type}' in layer '{layer}'").format(type=self.__wkbTypeString(wkbType), layer=layers[0].name()))
@@ -766,9 +780,9 @@ class QgisCloudPluginDialog(QDockWidget):
                 if layers[0].providerType() == "ogr":
                     geometry_type_item.setToolTip(
                         self.tr("Note: OGR features will be converted to MULTI-type"))
-                        
+
             srid_item = QTableWidgetItem(layers[0].crs().authid())
-    
+
             row = self.ui.tblLocalLayers.rowCount()
             self.ui.tblLocalLayers.insertRow(row)
             self.ui.tblLocalLayers.setItem(
@@ -825,7 +839,7 @@ class QgisCloudPluginDialog(QDockWidget):
             return "WkbLineStringZM"
         elif wkbType == QgsWkbTypes.MultiLineStringZM:
             return "WkbMultiLineStringZM"
-        
+
         return self.tr("Unknown type")
 
 #    @staticmethod
@@ -833,15 +847,15 @@ class QgisCloudPluginDialog(QDockWidget):
         # OGRPGDataSource::LaunderName
         # return re.sub(r"[#'-]", '_', unicode(name).lower())
         input_string = str(name).lower().encode('ascii', 'replace')
-        input_string = input_string.replace(b" ",b"_")    
-        input_string = input_string.replace(b".",b"_")    
+        input_string = input_string.replace(b" ",b"_")
+        input_string = input_string.replace(b".",b"_")
 
         # check if table_name starts with number
-        
+
         if re.search("^\d", input_string.decode('utf-8')):
-           input_string = '_'+input_string.decode('utf-8') 
+           input_string = '_'+input_string.decode('utf-8')
            input_string = input_string.decode('utf-8')
-           
+
         return input_string
 
     def refresh_local_data_sources(self):
@@ -925,7 +939,7 @@ class QgisCloudPluginDialog(QDockWidget):
                         u'table': unicode(table_name), u'layers': layers}
 
             login_info = self.api.check_login(version_info=self._version_info())
-            try:            
+            try:
                 self.maxSize = login_info['max_storage']
                 self.maxDBs = login_info['max_dbs']
             except:
@@ -1023,8 +1037,8 @@ class QgisCloudPluginDialog(QDockWidget):
         usedSpace /= 1024 * 1024
 
         login_info = self.api.check_login(version_info=self._version_info())
-        
-        try:            
+
+        try:
             self.maxSize = login_info['max_storage']
             self.maxDBs = login_info['max_dbs']
         except:
@@ -1034,7 +1048,7 @@ class QgisCloudPluginDialog(QDockWidget):
         lblPalette = QPalette(self.ui.lblDbSize.palette())
         usage = usedSpace / float(self.maxSize)
         self.storage_exceeded = False
-    
+
         if usage < 0.8:
             bg_color = QColor(255, 0, 0, 0)
             text_color = QColor(Qt.black)
@@ -1048,7 +1062,7 @@ class QgisCloudPluginDialog(QDockWidget):
 
         lblPalette.setColor(QPalette.Window, QColor(bg_color))
         lblPalette.setColor(QPalette.Foreground,QColor(text_color))
-        
+
         self.ui.lblDbSize.setAutoFillBackground(True)
         self.ui.lblDbSize.setPalette(lblPalette)
         self.ui.lblDbSize.setText(
