@@ -559,7 +559,7 @@ class QgisCloudPluginDialog(QDockWidget):
             map = self.map()
             
         self.update_url(self.ui.lblWebmap, self.api_url(),
-                        'https://', u'{0}/{1}'.format(self.user, map))
+                        'https://', u'{0}/{1}/'.format(self.user, map))
                         
         if self.clouddb:
             self.update_url(
