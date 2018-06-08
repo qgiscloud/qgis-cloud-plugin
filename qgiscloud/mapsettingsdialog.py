@@ -58,6 +58,7 @@ class MapSettingsDialog(QDialog):
         self.set_combobox_options()
         self.set_scales()
         self.set_search_type()
+        self.enable_DBsearch()
 
         # set connections
         self.ui.generate_scales_btn.clicked.connect(self.generate_scales)
@@ -136,7 +137,8 @@ class MapSettingsDialog(QDialog):
         scaleDialog.ui = Ui_generate_scales()
         scaleDialog.ui.setupUi(scaleDialog)
         generate = scaleDialog.exec_()
-        all_scales = self.ui.scales_lineedit.text().split(",")
+        all_scales = list(filter(
+            str.isdigit, (self.ui.scales_lineedit.text().split(","))))
 
         minscale = scaleDialog.ui.min_lineedit.text()
         maxscale = scaleDialog.ui.max_lineedit.text()
@@ -222,6 +224,8 @@ class MapSettingsDialog(QDialog):
             # labels
             self.ui.search_db_lbl.setVisible(True)
             self.ui.search_sql_lbl.setVisible(True)
+            self.resize(673, 794)
+            self.ui.sql_editor_box.setMaximumHeight(16777215)
         else:
             self.ui.search_db_combobox.setVisible(False)
             self.ui.search_sql_textedit.setVisible(False)
@@ -229,6 +233,8 @@ class MapSettingsDialog(QDialog):
             # labels
             self.ui.search_db_lbl.setVisible(False)
             self.ui.search_sql_lbl.setVisible(False)
+            self.resize(680, 700)
+            self.ui.sql_editor_box.setMaximumHeight(150)
 
     def set_sql_query(self):
         """
@@ -614,6 +620,12 @@ class MapSettingsDialog(QDialog):
         dialog.close()
 
     def add_predefined_user_list(self):
+        if not self.ui.user_list_combobox.currentText():
+            QMessageBox.information(
+                self,
+                self.tr(""),
+                self.tr("No user list selected."))
+            return
         QGuiApplication.setOverrideCursor(Qt.WaitCursor)
         user_list_name = self.ui.user_list_combobox.currentText()
         all_user_names = QSettings().value(

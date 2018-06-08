@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="de_CH">
+<!DOCTYPE TS><TS version="2.0" language="de_CH" sourcelanguage="">
 <context>
     <name>DataUpload</name>
     <message>
@@ -73,7 +72,7 @@
 <context>
     <name>MapSettingsDialog</name>
     <message>
-        <location filename="../mapsettingsdialog.py" line="462"/>
+        <location filename="../mapsettingsdialog.py" line="468"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
@@ -85,12 +84,12 @@ Please try again</source>
 Bitte nochmals versuchen</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="266"/>
+        <location filename="../mapsettingsdialog.py" line="272"/>
         <source>Sql Error</source>
         <translation>Sql Fehler</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="331"/>
+        <location filename="../mapsettingsdialog.py" line="337"/>
         <source>User error</source>
         <translation>Benutzerfehler</translation>
     </message>
@@ -100,7 +99,7 @@ Bitte nochmals versuchen</translation>
         <translation type="obsolete">Der Benutzer:%s existiert nicht oder er wurde schon hinzugefügt</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="452"/>
+        <location filename="../mapsettingsdialog.py" line="458"/>
         <source>Success</source>
         <translation>Erfolg</translation>
     </message>
@@ -189,22 +188,22 @@ Bitte benutzen Sie nur ganze Zahlen</translation>
         <translation type="obsolete">Den Benutzer: %s gibt es in der Benutzerliste nicht</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="375"/>
+        <location filename="../mapsettingsdialog.py" line="381"/>
         <source>Do you really want to delete the user %s?</source>
         <translation>Wollen Sie den Benutzer %s wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="151"/>
+        <location filename="../mapsettingsdialog.py" line="153"/>
         <source>Please fill everything out.</source>
         <translation>Bitte alle Felder ausfüllen.</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="157"/>
+        <location filename="../mapsettingsdialog.py" line="159"/>
         <source>No negativ numbers allowed.</source>
         <translation>Keine negativen Werte erlaubt.</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="163"/>
+        <location filename="../mapsettingsdialog.py" line="165"/>
         <source>The minimum scale mustn&apos;t be bigger than the maximum scale.</source>
         <translation>Der Wert des Minimums darf nicht grösser sein, als der Wert des Maximums.</translation>
     </message>
@@ -214,12 +213,12 @@ Bitte benutzen Sie nur ganze Zahlen</translation>
         <translation type="obsolete">Die Benutzer: %s wurden schon hinzugefügt.</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="331"/>
+        <location filename="../mapsettingsdialog.py" line="337"/>
         <source>The users: %s don&apos;t exist.</source>
         <translation>Die Benutzer: %s existieren nicht.</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="339"/>
+        <location filename="../mapsettingsdialog.py" line="345"/>
         <source>The users: %s have been added.</source>
         <translation>Die Benutzer: %s wurden hinzugefügt.</translation>
     </message>
@@ -234,22 +233,22 @@ Bitte benutzen Sie nur ganze Zahlen</translation>
         <translation type="obsolete">Den Benutzer: %s gibt es in der Benutzerliste nicht.</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="452"/>
+        <location filename="../mapsettingsdialog.py" line="458"/>
         <source>The user list has been copied.</source>
         <translation>Die Benutzerliste wurde in der Zwischenablage gespeichert.</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="457"/>
+        <location filename="../mapsettingsdialog.py" line="463"/>
         <source>Please select only one user list.</source>
         <translation>Bitte wählen sie nur eine Benutzerliste aus.</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="462"/>
+        <location filename="../mapsettingsdialog.py" line="624"/>
         <source>No user list selected.</source>
         <translation>Keine Benutzerliste ausgewählt.</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="177"/>
+        <location filename="../mapsettingsdialog.py" line="179"/>
         <source>A character was found!
 Please use numbers only.</source>
         <translation>Es wurde ein Buchstabe gefunden!
@@ -261,27 +260,27 @@ Bitte benutzen Sie nur ganze Zahlen.</translation>
         <translation type="obsolete">Benutzer konnte nicht gelöscht werden, weil kein Benutzername gegeben wurde.</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="347"/>
+        <location filename="../mapsettingsdialog.py" line="353"/>
         <source>Can&apos;t add user, because there was no username given.</source>
         <translation>Benutzer konnte nicht hinzugefügt werden, weil kein Benutzername gegeben wurde.</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="402"/>
+        <location filename="../mapsettingsdialog.py" line="408"/>
         <source>Can&apos;t delete user, because there was no username given.</source>
         <translation>Benutzer konnte nicht gelöscht werden, weil kein Benutzername gegeben wurde.</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="419"/>
+        <location filename="../mapsettingsdialog.py" line="425"/>
         <source>Map</source>
         <translation>Karte</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="419"/>
+        <location filename="../mapsettingsdialog.py" line="425"/>
         <source>allowed users</source>
         <translation>autorisierte Benutzer</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="393"/>
+        <location filename="../mapsettingsdialog.py" line="399"/>
         <source>The users: %s has been deleted.</source>
         <translation>Die Benutzer: %s wurden gelöscht.</translation>
     </message>
@@ -291,12 +290,12 @@ Bitte benutzen Sie nur ganze Zahlen.</translation>
         <translation type="obsolete">Die Benutzer: %s gibt es in der Benutzerliste nicht.</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="483"/>
+        <location filename="../mapsettingsdialog.py" line="489"/>
         <source>There are no user lists defined.</source>
         <translation>Es sind keine Benutzerlisten definiert.</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="536"/>
+        <location filename="../mapsettingsdialog.py" line="542"/>
         <source>Do you really want to delete the user?</source>
         <translation>Wollen Sie den Benutzer wirklich löschen?</translation>
     </message>
@@ -306,34 +305,34 @@ Bitte benutzen Sie nur ganze Zahlen.</translation>
         <translation type="obsolete">Es wurde kein Benutzer ausgewählt.</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="563"/>
+        <location filename="../mapsettingsdialog.py" line="569"/>
         <source>Do you really want to save?</source>
         <translation>Wollen Sie wirklich speichern?</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="594"/>
+        <location filename="../mapsettingsdialog.py" line="600"/>
         <source>Name Error</source>
         <translation>Namensfehler</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="594"/>
+        <location filename="../mapsettingsdialog.py" line="600"/>
         <source>This listname already exists.
 Please choose another one.</source>
         <translation>Eine Benutzerliste mit dem gleichen Namen existiert bereichts.
 Bitte ändern Sie den Namen.</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="601"/>
+        <location filename="../mapsettingsdialog.py" line="607"/>
         <source>Do you really want to delete the list?</source>
         <translation>Wollen Sie wirklich die Benutzerliste löschen?</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="637"/>
+        <location filename="../mapsettingsdialog.py" line="649"/>
         <source>The users have been added.</source>
         <translation>Die Benutzer wurden hinzugefügt.</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="546"/>
+        <location filename="../mapsettingsdialog.py" line="552"/>
         <source>No user has been selected.</source>
         <translation>Es wurde kein Benutzer ausgewählt.</translation>
     </message>
@@ -965,7 +964,7 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
 <context>
     <name>map_settings</name>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="195"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="200"/>
         <source>Map Settings</source>
         <translation>Karteneinstellungen</translation>
     </message>
@@ -975,89 +974,89 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <translation type="obsolete">Karteneinstellungen bearbeiten</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="198"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="203"/>
         <source>Search DB</source>
         <translation>Datenbanksuche</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="202"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="207"/>
         <source>Viewer</source>
         <translation>Viewer</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="203"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="208"/>
         <source>Language</source>
         <translation>Sprache</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="215"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="218"/>
         <source>Users</source>
         <translation>Benutzer</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="204"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="209"/>
         <source>Viewer active</source>
         <translation>Viewer aktiv</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="216"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="219"/>
         <source>You can add only one user at a time</source>
         <translation>Es kann nur ein Benutzer aufs mal hinzugefügt werden</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="200"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="205"/>
         <source>Search type</source>
         <translation>Suchfunktion</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="199"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="204"/>
         <source>Search SQL</source>
         <translation>SQL für DB-Suche</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="205"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="210"/>
         <source>WMS public</source>
         <translation>WMS öffentlich</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="219"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="222"/>
         <source>show user list</source>
         <translation>Benutzerliste</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="206"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="211"/>
         <source>Map public</source>
         <translation>Karte öffentlich</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="207"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="212"/>
         <source>generate scales</source>
         <translation>Massstäbe generieren</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="197"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="202"/>
         <source>preview</source>
         <translation>Vorschau</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="217"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="220"/>
         <source>add user</source>
         <translation>Benutzer hinzufügen</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="208"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="213"/>
         <source>Scales</source>
         <translation>Massstäbe</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="218"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="221"/>
         <source>delete user</source>
         <translation>Benutzer löschen</translation>
     </message>
     <message>
         <location filename="../mapsettingsUI/ui_mapsettings.py" line="209"/>
         <source>*only whole numbers are allowed</source>
-        <translation>*Nur ganze Zahlen sind erlaubt</translation>
+        <translation type="obsolete">*Nur ganze Zahlen sind erlaubt</translation>
     </message>
     <message>
         <location filename="../mapsettingsUI/ui_mapsettings.py" line="186"/>
@@ -1065,37 +1064,37 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <translation type="obsolete">*Es kann nur ein Benutzer aufs mal hinzugefügt werden</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="196"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="201"/>
         <source>search settings</source>
         <translation>Sucheinstellungen</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="210"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="214"/>
         <source>user management</source>
         <translation>Benutzerverwaltung</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="201"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="206"/>
         <source>general settings</source>
         <translation>Allgemeine Einstellungen</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="211"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="215"/>
         <source>User Lists</source>
         <translation>Benutzerlisten</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="212"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="216"/>
         <source>create list</source>
         <translation>Benutzerliste erstellen</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="213"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="217"/>
         <source>manage list</source>
         <translation>Benutzerliste verwalten</translation>
     </message>
     <message>
-        <location filename="../mapsettingsUI/ui_mapsettings.py" line="214"/>
+        <location filename="../mapsettingsUI/ui_mapsettings.py" line="223"/>
         <source>add user list to users</source>
         <translation>Benutzerliste hinzufügen</translation>
     </message>
