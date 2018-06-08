@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>695</width>
-    <height>730</height>
+    <width>683</width>
+    <height>833</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,40 +20,15 @@
       <string>search settings</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
-      <item row="2" column="1">
-       <widget class="QComboBox" name="search_db_combobox"/>
+      <item row="3" column="2">
+       <widget class="QPushButton" name="sql_preview_btn">
+        <property name="text">
+         <string>preview</string>
+        </property>
+       </widget>
       </item>
       <item row="0" column="1">
        <widget class="QListWidget" name="search_type_list"/>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="search_type_lbl">
-        <property name="font">
-         <font>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Search type</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QgsCodeEditorSQL" name="search_sql_textedit"/>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="search_sql_lbl">
-        <property name="font">
-         <font>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Search SQL</string>
-        </property>
-       </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="search_db_lbl">
@@ -68,41 +43,8 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="2">
-       <widget class="QPushButton" name="sql_preview_btn">
-        <property name="text">
-         <string>preview</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="6" column="0">
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>user management</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_3">
-      <item row="1" column="2">
-       <widget class="QPushButton" name="delete_user_btn">
-        <property name="text">
-         <string>delete user</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="users_lineedit">
-        <property name="toolTip">
-         <string>You can add only one user at a time</string>
-        </property>
-        <property name="toolTipDuration">
-         <number>4</number>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="users_lbl">
+      <item row="3" column="0">
+       <widget class="QLabel" name="search_sql_lbl">
         <property name="font">
          <font>
           <weight>75</weight>
@@ -110,23 +52,28 @@
          </font>
         </property>
         <property name="text">
-         <string>Users</string>
+         <string>Search SQL</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QPushButton" name="add_users_btn">
+      <item row="0" column="0">
+       <widget class="QLabel" name="search_type_lbl">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="text">
-         <string>add user</string>
+         <string>Search type</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
-       <widget class="QPushButton" name="show_userlist_btn">
-        <property name="text">
-         <string>show user list</string>
-        </property>
-       </widget>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="search_db_combobox"/>
+      </item>
+      <item row="3" column="1">
+       <widget class="QgsCodeEditorSQL" name="search_sql_textedit"/>
       </item>
      </layout>
     </widget>
@@ -297,6 +244,96 @@
      <property name="standardButtons">
       <set>QDialogButtonBox::Apply|QDialogButtonBox::Close</set>
      </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>user management</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QLabel" name="user_list_lbl">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>User Lists</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="user_list_combobox"/>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="create_pre_list_btn">
+        <property name="text">
+         <string>create list</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QPushButton" name="manage_pre_list_btn">
+        <property name="text">
+         <string>manage list</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QPushButton" name="add_pre_list_btn">
+        <property name="text">
+         <string>add user list to users</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="users_lbl">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Users</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="users_lineedit">
+        <property name="toolTip">
+         <string>You can add only one user at a time</string>
+        </property>
+        <property name="toolTipDuration">
+         <number>4</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QPushButton" name="add_users_btn">
+        <property name="text">
+         <string>add user</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QPushButton" name="delete_user_btn">
+        <property name="text">
+         <string>delete user</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2">
+       <widget class="QPushButton" name="show_user_list_btn">
+        <property name="text">
+         <string>show user list</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
