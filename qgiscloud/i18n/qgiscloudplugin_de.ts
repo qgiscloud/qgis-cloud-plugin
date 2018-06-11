@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="de_CH" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.1" language="de_CH">
 <context>
     <name>DataUpload</name>
     <message>
@@ -190,7 +191,7 @@ Bitte benutzen Sie nur ganze Zahlen</translation>
     <message>
         <location filename="../mapsettingsdialog.py" line="381"/>
         <source>Do you really want to delete the user %s?</source>
-        <translation>Wollen Sie den Benutzer %s wirklich löschen?</translation>
+        <translation type="obsolete">Wollen Sie den Benutzer %s wirklich löschen?</translation>
     </message>
     <message>
         <location filename="../mapsettingsdialog.py" line="153"/>
@@ -282,7 +283,7 @@ Bitte benutzen Sie nur ganze Zahlen.</translation>
     <message>
         <location filename="../mapsettingsdialog.py" line="399"/>
         <source>The users: %s has been deleted.</source>
-        <translation>Die Benutzer: %s wurden gelöscht.</translation>
+        <translation type="obsolete">Die Benutzer: %s wurden gelöscht.</translation>
     </message>
     <message>
         <location filename="../mapsettingsdialog.py" line="398"/>
@@ -335,6 +336,21 @@ Bitte ändern Sie den Namen.</translation>
         <location filename="../mapsettingsdialog.py" line="552"/>
         <source>No user has been selected.</source>
         <translation>Es wurde kein Benutzer ausgewählt.</translation>
+    </message>
+    <message>
+        <location filename="../mapsettingsdialog.py" line="381"/>
+        <source>Do you really want to delete the users %s?</source>
+        <translation type="obsolete">Wollen Sie die Benutzer %s ,wirklich löschen?</translation>
+    </message>
+    <message>
+        <location filename="../mapsettingsdialog.py" line="399"/>
+        <source>The users: %s have been deleted.</source>
+        <translation>Die Benutzer: %s wurden gelöscht.</translation>
+    </message>
+    <message>
+        <location filename="../mapsettingsdialog.py" line="381"/>
+        <source>Do you really want to delete the users: %s?</source>
+        <translation>Wollen Sie die Benutzer: %s ,wirklich löschen?</translation>
     </message>
 </context>
 <context>
@@ -1135,7 +1151,7 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
     <message>
         <location filename="../mapsettingsUI/ui_user_list_manager.py" line="50"/>
         <source>Dialog</source>
-        <translation>Dialog</translation>
+        <translation type="obsolete">Dialog</translation>
     </message>
     <message>
         <location filename="../mapsettingsUI/ui_user_list_manager.py" line="51"/>
@@ -1161,6 +1177,11 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <location filename="../mapsettingsUI/ui_user_list_manager.py" line="55"/>
         <source>delete list</source>
         <translation>Benutzerliste löschen</translation>
+    </message>
+    <message>
+        <location filename="../mapsettingsUI/ui_user_list_manager.py" line="50"/>
+        <source>user list management</source>
+        <translation>Benutzerlistenverwaltung</translation>
     </message>
 </context>
 </TS>

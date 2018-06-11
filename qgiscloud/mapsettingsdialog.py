@@ -381,7 +381,7 @@ class MapSettingsDialog(QDialog):
         res = QMessageBox.information(
             self,
             self.tr(""),
-            self.tr("Do you really want to delete the user %s?") %
+            self.tr("Do you really want to delete the users: %s?") %
             (", ".join(users_to_delete)), QMessageBox.Yes | QMessageBox.No)
 
         if res == QMessageBox.No:
@@ -399,7 +399,7 @@ class MapSettingsDialog(QDialog):
             QMessageBox.information(
                 self,
                 self.tr("Success"),
-                self.tr("The users: %s has been deleted.") %
+                self.tr("The users: %s have been deleted.") %
                 (", ".join(deleted_users)))
             self.ui.users_lineedit.clear()
             self.ui.users_lineedit.selectAll()

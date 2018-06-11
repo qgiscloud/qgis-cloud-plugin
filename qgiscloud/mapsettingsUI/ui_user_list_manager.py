@@ -47,7 +47,7 @@ class Ui_user_list_manager(object):
 
     def retranslateUi(self, user_list_manager):
         _translate = QtCore.QCoreApplication.translate
-        user_list_manager.setWindowTitle(_translate("user_list_manager", "Dialog"))
+        user_list_manager.setWindowTitle(_translate("user_list_manager", "user list management"))
         self.list_box.setTitle(_translate("user_list_manager", "User List"))
         self.add_user_btn.setText(_translate("user_list_manager", "+"))
         self.remove_user_btn.setText(_translate("user_list_manager", "-"))
