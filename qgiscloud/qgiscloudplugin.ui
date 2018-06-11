@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>556</width>
-    <height>652</height>
+    <width>501</width>
+    <height>703</height>
    </rect>
   </property>
   <property name="locale">
@@ -18,10 +18,10 @@
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout_3">
-    <item row="0" column="0">
+    <item row="1" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="mapTab">
        <attribute name="title">
@@ -243,7 +243,7 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
-              <item row="1" column="0" colspan="4">
+              <item row="1" column="0" colspan="3">
                <widget class="QListWidget" name="tabMaps"/>
               </item>
               <item row="2" column="0">
@@ -253,7 +253,7 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
-              <item row="2" column="2">
+              <item row="2" column="1">
                <widget class="QPushButton" name="btnMapDelete">
                 <property name="enabled">
                  <bool>false</bool>
@@ -263,7 +263,7 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
-              <item row="2" column="3">
+              <item row="2" column="2">
                <spacer name="horizontalSpacer_5">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
@@ -275,13 +275,6 @@ p, li { white-space: pre-wrap; }
                  </size>
                 </property>
                </spacer>
-              </item>
-              <item row="2" column="1">
-               <widget class="QPushButton" name="btnMapEdit">
-                <property name="text">
-                 <string>Edit</string>
-                </property>
-               </widget>
               </item>
              </layout>
             </widget>
@@ -495,16 +488,7 @@ p, li { white-space: pre-wrap; }
            </sizepolicy>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
+           <property name="margin">
             <number>0</number>
            </property>
            <item>
