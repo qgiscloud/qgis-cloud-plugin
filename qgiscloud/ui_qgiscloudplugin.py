@@ -1,18 +1,17 @@
-from builtins import object
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/hdus/dev/qgis/qgis-cloud-plugin/qgiscloud/qgiscloudplugin.ui'
+# Form implementation generated from reading ui file 'qgiscloudplugin.ui'
 #
-# Created by: PyQt5 UI code generator 5.5.1
+# Created by: PyQt5 UI code generator 5.9.1
 #
 # WARNING! All changes made in this file will be lost!
 
-from qgis.PyQt  import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_QgisCloudPlugin(object):
     def setupUi(self, QgisCloudPlugin):
         QgisCloudPlugin.setObjectName("QgisCloudPlugin")
-        QgisCloudPlugin.resize(501, 703)
+        QgisCloudPlugin.resize(556, 652)
         QgisCloudPlugin.setLocale(QtCore.QLocale(QtCore.QLocale.English, QtCore.QLocale.UnitedStates))
         self.dockWidgetContents = QtWidgets.QWidget()
         self.dockWidgetContents.setObjectName("dockWidgetContents")
@@ -121,16 +120,19 @@ class Ui_QgisCloudPlugin(object):
         self.gridLayout_2.addWidget(self.lblMaps_3, 0, 0, 1, 1)
         self.tabMaps = QtWidgets.QListWidget(self.widgetMaps)
         self.tabMaps.setObjectName("tabMaps")
-        self.gridLayout_2.addWidget(self.tabMaps, 1, 0, 1, 3)
+        self.gridLayout_2.addWidget(self.tabMaps, 1, 0, 1, 4)
         self.btnMapLoad = QtWidgets.QPushButton(self.widgetMaps)
         self.btnMapLoad.setObjectName("btnMapLoad")
         self.gridLayout_2.addWidget(self.btnMapLoad, 2, 0, 1, 1)
         self.btnMapDelete = QtWidgets.QPushButton(self.widgetMaps)
         self.btnMapDelete.setEnabled(False)
         self.btnMapDelete.setObjectName("btnMapDelete")
-        self.gridLayout_2.addWidget(self.btnMapDelete, 2, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.btnMapDelete, 2, 2, 1, 1)
         spacerItem1 = QtWidgets.QSpacerItem(145, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout_2.addItem(spacerItem1, 2, 2, 1, 1)
+        self.gridLayout_2.addItem(spacerItem1, 2, 3, 1, 1)
+        self.btnMapEdit = QtWidgets.QPushButton(self.widgetMaps)
+        self.btnMapEdit.setObjectName("btnMapEdit")
+        self.gridLayout_2.addWidget(self.btnMapEdit, 2, 1, 1, 1)
         self.gridLayout_6.addWidget(self.widgetMaps, 0, 0, 1, 1)
         self.gridLayout_4.addWidget(self.frame, 8, 0, 1, 1)
         self.tabWidget.addTab(self.mapTab, "")
@@ -318,12 +320,12 @@ class Ui_QgisCloudPlugin(object):
         self.aboutText.setObjectName("aboutText")
         self.verticalLayout.addWidget(self.aboutText)
         self.tabWidget.addTab(self.aboutTab, "")
-        self.gridLayout_3.addWidget(self.tabWidget, 1, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.tabWidget, 0, 0, 1, 1)
         QgisCloudPlugin.setWidget(self.dockWidgetContents)
         self.label_2.setBuddy(self.editServer)
 
         self.retranslateUi(QgisCloudPlugin)
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(QgisCloudPlugin)
 
     def retranslateUi(self, QgisCloudPlugin):
@@ -332,7 +334,7 @@ class Ui_QgisCloudPlugin(object):
         self.btnBackgroundLayer.setText(_translate("QgisCloudPlugin", "Add background layer"))
         self.labelOpenLayersPlugin.setText(_translate("QgisCloudPlugin", "<i>To add a background layer to the map, install the OpenLayers plugin.</i>"))
         self.btnPublishMap.setText(_translate("QgisCloudPlugin", "Publish Map"))
-        self.label.setText(_translate("QgisCloudPlugin", "WMS/WFS/WCS"))
+        self.label.setText(_translate("QgisCloudPlugin", "Public WMS"))
         self.lblWMS.setText(_translate("QgisCloudPlugin", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -359,6 +361,7 @@ class Ui_QgisCloudPlugin(object):
         self.lblMaps_3.setText(_translate("QgisCloudPlugin", "Published Maps"))
         self.btnMapLoad.setText(_translate("QgisCloudPlugin", "Open Project"))
         self.btnMapDelete.setText(_translate("QgisCloudPlugin", "Delete"))
+        self.btnMapEdit.setText(_translate("QgisCloudPlugin", "Edit"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.mapTab), _translate("QgisCloudPlugin", "Maps"))
         self.label_10.setText(_translate("QgisCloudPlugin", "Database:"))
         self.btnRefreshLocalLayers.setText(_translate("QgisCloudPlugin", "Refresh layers"))
@@ -386,13 +389,3 @@ class Ui_QgisCloudPlugin(object):
 
 from .spinner import Spinner
 from .resources_rc import *
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    QgisCloudPlugin = QtWidgets.QDockWidget()
-    ui = Ui_QgisCloudPlugin()
-    ui.setupUi(QgisCloudPlugin)
-    QgisCloudPlugin.show()
-    sys.exit(app.exec_())
-
