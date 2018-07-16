@@ -840,7 +840,7 @@ class QgisCloudPluginDialog(QDockWidget):
         
         if re.search("^\d", input_string.decode('utf-8')):
            input_string = '_'+input_string.decode('utf-8') 
-           input_string = input_string.decode('utf-8')
+#           input_string = input_string.decode('utf-8')
            
         return input_string
 
