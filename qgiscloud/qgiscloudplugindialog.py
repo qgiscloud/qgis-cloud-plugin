@@ -751,7 +751,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 # use current table name if available to keep changes by user
                 table_name = self.data_sources_table_names[data_source]
                 
-            table_name_item = QTableWidgetItem(self.launder_pg_name(table_name).decode('utf-8'))
+            table_name_item = QTableWidgetItem(self.launder_pg_name(table_name))
         
             if layers[0].providerType() == 'gdal':
                 geometry_type_item = QTableWidgetItem('Raster')
