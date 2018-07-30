@@ -75,7 +75,7 @@ class ErrorReportDialog(QDialog):
                     self.metadata.version(),
                     self.username)
         url = QUrl()
-        url.setEncodedUrl("mailto:support@qgiscloud.com?subject=%s&body=%s" % (
+        url.toEncoded("mailto:support@qgiscloud.com?subject=%s&body=%s" % (
                 urllib.parse.quote(pystring(self.windowTitle())),
                 urllib.parse.quote(body)),
         )
