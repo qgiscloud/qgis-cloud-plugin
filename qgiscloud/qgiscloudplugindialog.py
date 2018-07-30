@@ -750,7 +750,7 @@ class QgisCloudPluginDialog(QDockWidget):
             if data_source in self.data_sources_table_names:
                 # use current table name if available to keep changes by user
                 table_name = self.data_sources_table_names[data_source]
-                
+            
             table_name_item = QTableWidgetItem(self.launder_pg_name(table_name))
         
             if layers[0].providerType() == 'gdal':
@@ -840,9 +840,8 @@ class QgisCloudPluginDialog(QDockWidget):
         
         if re.search("^\d", input_string.decode('utf-8')):
            input_string = '_'+input_string.decode('utf-8') 
-#           input_string = input_string.decode('utf-8')
            
-        return input_string
+        return input_string.decode('utf-8')
 
     def refresh_local_data_sources(self):
         self.do_update_local_data_sources = True
@@ -864,10 +863,8 @@ class QgisCloudPluginDialog(QDockWidget):
 
             # update table names
             for row in range(0, self.ui.tblLocalLayers.rowCount()):
-                data_source = str(
-                    self.ui.tblLocalLayers.item(row, self.COLUMN_DATA_SOURCE).text())
-                table_name = str(
-                    self.ui.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text())
+                data_source = self.ui.tblLocalLayers.item(row, self.COLUMN_DATA_SOURCE).text()
+                table_name = self.ui.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text()
                 self.data_sources_table_names[data_source] = table_name
 
     def activate_upload_button(self):
