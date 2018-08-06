@@ -23,6 +23,7 @@ from builtins import str
 from builtins import object
 
 from qgis.PyQt.QtCore import QCoreApplication, QSettings
+from qgis.PyQt.QtWidgets import QMessageBox
 import psycopg2
 from qgis.core import *
 
@@ -76,7 +77,8 @@ class DbConnectionCfg(object):
         username = settings.value("username")
         password = settings.value("password")
 #        sslmode = settings.value("sslmode", type=int)
-        sslmode = int(settings.value("sslmode"))
+        sslmode = settings.value("sslmode")
+#        QMessageBox.information(None,'',sslmode)
         estimatedMetadata = settings.value("estimatedMetadata", type=bool)
         return cls(
             host, port, database, username, password,
@@ -139,7 +141,7 @@ class DbConnectionCfg(object):
             self.database,
             self.username,
             self.password,
-            QgsDataSourceUri.SslMode(self.sslmode)
+            QgsDataSourceUri.SslMode(QgsDataSourceUri.decodeSslMode(self.sslmode))
         )            
         uri.setUseEstimatedMetadata(self.estimatedMetadata)
         return uri
