@@ -75,7 +75,8 @@ class DbConnectionCfg(object):
         database = settings.value("database")
         username = settings.value("username")
         password = settings.value("password")
-        sslmode = settings.value("sslmode", type=int)
+#        sslmode = settings.value("sslmode", type=int)
+        sslmode = int(settings.value("sslmode"))
         estimatedMetadata = settings.value("estimatedMetadata", type=bool)
         return cls(
             host, port, database, username, password,

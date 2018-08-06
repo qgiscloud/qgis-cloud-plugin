@@ -29,6 +29,7 @@ from qgis.core import *
 from .resources_rc import *
 # Import the code for the dialog
 from .qgiscloudplugindialog import QgisCloudPluginDialog
+
 import os
 
 
@@ -38,6 +39,7 @@ class QgisCloudPlugin(object):
         # Save reference to the QGIS interface
         self.iface = iface
         self.version = version
+        
 
     def initGui(self):
         # Create action that will start plugin configuration
