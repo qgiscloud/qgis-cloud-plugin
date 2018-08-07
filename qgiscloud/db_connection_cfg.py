@@ -135,14 +135,24 @@ class DbConnectionCfg(object):
 
     def data_source_uri(self):
         uri = QgsDataSourceUri()
-        uri.setConnection(
-            self.host,
-            str(self.port),
-            self.database,
-            self.username,
-            self.password,
-            QgsDataSourceUri.SslMode(QgsDataSourceUri.decodeSslMode(self.sslmode))
-        )            
+        try:
+            uri.setConnection(
+                self.host,
+                str(self.port),
+                self.database,
+                self.username,
+                self.password,
+                QgsDataSourceUri.SslMode(QgsDataSourceUri.decodeSslMode(self.sslmode))
+            )            
+        except:
+            uri.setConnection(
+                self.host,
+                str(self.port),
+                self.database,
+                self.username,
+                self.password,
+                QgsDataSourceUri.SslMode(self.sslmode)
+            )                   
         uri.setUseEstimatedMetadata(self.estimatedMetadata)
         return uri
 
