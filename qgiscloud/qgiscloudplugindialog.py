@@ -640,15 +640,8 @@ class QgisCloudPluginDialog(QDockWidget):
                         # 'svgPaths': QgsApplication.svgPaths() #For resolving absolute symbol paths in print composer
                     }
                 }
+                
                 fname = str(QgsProject.instance().fileName())
-                fname_qgs = fname.replace('.qgz',  '.qgs')
-                                
-                if os.path.splitext(fname)[1] == '.qgz'.lower():
-                    from zipfile import ZipFile
-                    with ZipFile(fname,  'r') as zip:
-                        zip.extract(os.path.basename(fname_qgs))
-                        
-                    fname = fname_qgs
                     
                 map = self.api.create_map(self.map(), fname, config)['map']
                 self.show_api_error(map)
@@ -983,7 +976,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 initialPath = QgsProject.instance().fileName()
                 if not initialPath:
                     initialPath = QSettings().value("/UI/lastProjectDir", ".")
-                fd = QFileDialog(None, self.tr("Save Project"), initialPath, "%s (*.qgs)" % self.tr("QGIS Project Files"))
+                fd = QFileDialog(None, self.tr("Save Project"), initialPath, "%s (*.qgz *.qgs)" % self.tr("QGIS Project Files"))
                 fd.setParent(save_dialog, Qt.Widget)
                 fd.setOption(QFileDialog.DontUseNativeDialog)
                 fd.setAcceptMode(QFileDialog.AcceptSave)
