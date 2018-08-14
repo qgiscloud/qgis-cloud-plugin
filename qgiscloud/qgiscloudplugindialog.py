@@ -719,7 +719,7 @@ class QgisCloudPluginDialog(QDockWidget):
                     "Raster, plugin or geometryless layers are not supported:\n\n")
                 layer_types = ["No geometry", "Raster", "Plugin"]
                 for layer in sorted(unsupported_layers, key=lambda layer: layer.name()):
-                    message += self.tr_uni("  -  %s (%s)\n") % (
+                    message += self.tr("  -  %s (%s)\n") % (
                         layer.name(), layer_types[layer.type()])
                 message += self.tr(
                     "\nPlease remove or replace above layers before publishing your map.\n")
@@ -1009,8 +1009,8 @@ class QgisCloudPluginDialog(QDockWidget):
         else:
             return False
 
-    def tr_uni(self, str):
-        return str(self.tr(str))
+#    def tr_uni(self, str):
+#        return str(self.tr(str))
 
     def db_size(self,  db_connections):
         usedSpace = 0
