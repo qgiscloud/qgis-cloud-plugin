@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="es_ES" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.1" language="es_ES">
 <context>
     <name>DataUpload</name>
     <message>
@@ -217,7 +218,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="362"/>
         <source>Maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapa</translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="336"/>
@@ -226,7 +227,7 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://wms.qgiscloud.com/user/map&quot;&gt;&lt;span style=&quot; font-size:9pt; text-decoration: underline; color:#0057ae;&quot;&gt;https://wms.qgiscloud.com/user/map&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="342"/>
@@ -235,7 +236,7 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://qgiscloud.com/maps&quot;&gt;&lt;span style=&quot; font-size:9pt; text-decoration: underline; color:#0057ae;&quot;&gt;https://qgiscloud.com/maps&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="354"/>
@@ -244,27 +245,27 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://qgiscloud.com/user/map&quot;&gt;&lt;span style=&quot; font-size:9pt; text-decoration: underline; color:#0057ae;&quot;&gt;https://qgiscloud.com/user/map&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="359"/>
         <source>Published Maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapas Publicados</translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="360"/>
         <source>Open Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Proyecto Abierto</translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="367"/>
         <source>&amp;Server:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="335"/>
         <source>WMS/WFS/WCS</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -558,73 +559,74 @@ Please remove or replace above layers before publishing your map.
     <message>
         <location filename="../qgiscloudplugindialog.py" line="134"/>
         <source>Privacy Policy</source>
-        <translation type="unfinished"></translation>
+        <translation>Política de privacidad</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="275"/>
         <source>QGIS 3 message</source>
-        <translation type="unfinished"></translation>
+        <translation>Mensaje de QGIS 3</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="275"/>
         <source>You have started the QGIS Cloud Plugin with QGIS 3. This configuration is not stable and is not intended for productive use. A lot can still change in QGIS before the first QGIS 3 LTR. Therefore, it is possible that the plugin does not work as you expect or terminates with errors. If you need a stable version of QGIS Cloud, please continue working with QGIS 2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Usted ha iniciado el plugin de QGIS Cloud con QGIS 3. Esta configuración no es estable y no está diseñada para un uso productivo. Mucho puede cambiar en QGIS antes del primer QGIS 3 LTR. Por lo tanto, es posible que el plugin no funcione como usted espera o termine con errores. Si necesita una versión estable de QGIS Cloud, por favor continúe trabajando con QGIS 2.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="300"/>
         <source>Accept new Privacy Policy</source>
-        <translation type="unfinished"></translation>
+        <translation>Acepto la nueva Política de Privacidad</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="300"/>
         <source>Due to the GDPR qgiscloud.com has a new &lt;a href=&apos;http://qgiscloud.com/en/pages/privacy&apos;&gt; Privacy Policy &lt;/a&gt;. 
                             To continue using qgiscloud.com, you must accept the new policy. </source>
-        <translation type="unfinished"></translation>
+        <translation>Debido a la GDPR qgiscloud.com tiene una nueva &lt;a href=&apos;http://qgiscloud.com/en/pages/privacy&apos;&gt; Política de Privacidad &lt;/a&gt;. 
+                            Para continuar utilizando qgiscloud.com, debe aceptar la nueva política. </translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="328"/>
         <source>Logged in as {0} ({1})</source>
-        <translation type="unfinished"></translation>
+        <translation>Conectado como {0} ({1})</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="331"/>
         <source>Logged in as {0}</source>
-        <translation type="unfinished"></translation>
+        <translation>Conectado como {0}</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="379"/>
         <source>You have layers from database &quot;{name}&quot; loaded in your project! Do you want to remove them before you delete database &quot;{name}&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiene capas de la base de datos &quot;{name}&quot; cargadas en su proyecto! ¿Desea eliminarlos antes de eliminar la base de datos &quot;{name}&quot;?</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="391"/>
         <source>Deletion of database &quot;{name}&quot; interrupted!</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrado de la base de datos &quot;{name}&quot; interrumpido!</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="396"/>
         <source>Do you want to delete the database &quot;%s&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿Desea borrar la base de datos &quot;%s&quot;?</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="480"/>
         <source>Your actual project has changes. Do you want to save the project?</source>
-        <translation type="unfinished"></translation>
+        <translation>Su proyecto actual tiene cambios. ¿Quieres salvar el proyecto?</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="501"/>
         <source>Delete QGIS Cloud map.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eliminar el mapa de QGIS Cloud.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="502"/>
         <source>Do you want to delete the map &quot;%s&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿Desea borrar el mapa &quot;%s&quot;?</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="523"/>
         <source>Deletion of map &quot;{name}&quot; interrupted!</source>
-        <translation type="unfinished"></translation>
+        <translation>Se interrumpe el borrado del mapa &quot;{name}&quot;!</translation>
     </message>
 </context>
 <context>
@@ -667,7 +669,7 @@ Please remove or replace above layers before publishing your map.
     <message>
         <location filename="../raster/raster_upload.py" line="694"/>
         <source>Calculating raster params for {sum_tiles} tiles ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Cálculo de parametros raster para {sum_tiles} tiles ....</translation>
     </message>
 </context>
 </TS>

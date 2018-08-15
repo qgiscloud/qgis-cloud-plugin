@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="nl_NL" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.1" language="nl_NL">
 <context>
     <name>DataUpload</name>
     <message>
@@ -290,7 +291,7 @@ p, li { white-space: pre-wrap; }
         <translation>Ingelogd als {0} ({1})</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="659"/>
+        <location filename="../qgiscloudplugindialog.py" line="652"/>
         <source>QGIS Cloud</source>
         <translation></translation>
     </message>
@@ -380,7 +381,7 @@ p, li { white-space: pre-wrap; }
         <translation>Database selecteren</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="988"/>
+        <location filename="../qgiscloudplugindialog.py" line="981"/>
         <source>Save Project</source>
         <translation>Project opslaan</translation>
     </message>
@@ -440,37 +441,37 @@ p, li { white-space: pre-wrap; }
         <translation>Uitgeverij kaart</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="661"/>
+        <location filename="../qgiscloudplugindialog.py" line="654"/>
         <source>Map successfully published</source>
         <translation>Kaart met succes gepubliceerd</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="665"/>
+        <location filename="../qgiscloudplugindialog.py" line="658"/>
         <source>Error uploading project</source>
         <translation>Fout tijdens het uploaden van het project</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="708"/>
+        <location filename="../qgiscloudplugindialog.py" line="701"/>
         <source>An error occured.</source>
         <translation>Er is een fout opgetreden.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="670"/>
+        <location filename="../qgiscloudplugindialog.py" line="663"/>
         <source>Uploading SVG symbols</source>
         <translation>SVG-symbolen uploaden</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="708"/>
+        <location filename="../qgiscloudplugindialog.py" line="701"/>
         <source>Error checking local data sources</source>
         <translation>Fout bij het controleren van lokale gegevens</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="721"/>
+        <location filename="../qgiscloudplugindialog.py" line="714"/>
         <source>Local layers found</source>
         <translation>Gevonden lokale lagen</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="722"/>
+        <location filename="../qgiscloudplugindialog.py" line="715"/>
         <source>Some layers are using local data. Please upload local layers to your cloud database in the &apos;Upload Data&apos; tab before publishing.
 
 </source>
@@ -479,12 +480,12 @@ p, li { white-space: pre-wrap; }
 </translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="726"/>
+        <location filename="../qgiscloudplugindialog.py" line="719"/>
         <source>Unsupported layers found</source>
         <translation>Gevonden niet-ondersteunde lagen</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="727"/>
+        <location filename="../qgiscloudplugindialog.py" line="720"/>
         <source>Raster, plugin or geometryless layers are not supported:
 
 </source>
@@ -493,7 +494,7 @@ p, li { white-space: pre-wrap; }
 </translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="733"/>
+        <location filename="../qgiscloudplugindialog.py" line="726"/>
         <source>
 Please remove or replace above layers before publishing your map.
 </source>
@@ -502,107 +503,107 @@ Verwijder of vervang bovenstaande lagen voordat u uw kaart publiceert.
 </translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="735"/>
+        <location filename="../qgiscloudplugindialog.py" line="728"/>
         <source>For raster data you can use public WMS layers or the OpenLayers Plugin.</source>
         <translation>Voor rastergegevens kunt u openbare WMS-lagen of de OpenLayers Plugin gebruiken.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="779"/>
+        <location filename="../qgiscloudplugindialog.py" line="772"/>
         <source>Unsupported geometry type</source>
         <translation>Geometrietype zonder drager</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="779"/>
+        <location filename="../qgiscloudplugindialog.py" line="772"/>
         <source>Unsupported geometry type &apos;{type}&apos; in layer &apos;{layer}&apos;</source>
         <translation>Niet-ondersteund geometrietype &apos;{type}&apos; in laag &apos;{layer}&apos;</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="784"/>
+        <location filename="../qgiscloudplugindialog.py" line="777"/>
         <source>Note: OGR features will be converted to MULTI-type</source>
         <translation>Opmerking: OGR-functies zullen worden geconverteerd naar MULTI-type</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="810"/>
+        <location filename="../qgiscloudplugindialog.py" line="803"/>
         <source>Updated local data sources</source>
         <translation>Geactualiseerde lokale gegevens</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="846"/>
+        <location filename="../qgiscloudplugindialog.py" line="839"/>
         <source>Unknown type</source>
         <translation>Onbekend type</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="904"/>
+        <location filename="../qgiscloudplugindialog.py" line="897"/>
         <source>No database available</source>
         <translation>Geen database beschikbaar</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="904"/>
+        <location filename="../qgiscloudplugindialog.py" line="897"/>
         <source>Please create a database in the &apos;Account&apos; tab.</source>
         <translation>Maak een database aan in het tabblad &apos;Account&apos;.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="908"/>
+        <location filename="../qgiscloudplugindialog.py" line="901"/>
         <source>No database selected</source>
         <translation>Geen databank geselecteerd</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="908"/>
+        <location filename="../qgiscloudplugindialog.py" line="901"/>
         <source>Please select a database to upload data.</source>
         <translation>Selecteer een database om gegevens te uploaden.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="917"/>
+        <location filename="../qgiscloudplugindialog.py" line="910"/>
         <source>Network Error</source>
         <translation>Fout in het netwerk</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="917"/>
+        <location filename="../qgiscloudplugindialog.py" line="910"/>
         <source>Could not connect to database server ({0}) on port {1}. Please contact your system administrator or internet provider to open port {1} in the firewall</source>
         <translation>Kon geen verbinding maken met de databaseserver ({0}) op poort {1}. Neem contact op met uw systeembeheerder of internetprovider om de poort {1} in de firewall te openen.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="924"/>
+        <location filename="../qgiscloudplugindialog.py" line="917"/>
         <source>Uploading data...</source>
         <translation>Gegevens uploaden...</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="956"/>
+        <location filename="../qgiscloudplugindialog.py" line="949"/>
         <source>Upload errors occurred</source>
         <translation>Er hebben zich uploadfouten voorgedaan</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="956"/>
+        <location filename="../qgiscloudplugindialog.py" line="949"/>
         <source>Upload errors occurred. Not all data could be uploaded.</source>
         <translation>Er zijn uploadfouten opgetreden. Niet alle gegevens konden worden geüpload.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="977"/>
+        <location filename="../qgiscloudplugindialog.py" line="970"/>
         <source>Upload complete. The local layers in the project were replaced with the layers uploaded to the qgiscloud database.</source>
         <translation>Uploaden voltooid. De lokale lagen in het project zijn vervangen door de lagen die zijn geüpload naar de qgiscloud database.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="980"/>
+        <location filename="../qgiscloudplugindialog.py" line="973"/>
         <source>Choose were to save the modified project:</source>
         <translation>Kiezen was om het gewijzigde project op te slaan:</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="988"/>
+        <location filename="../qgiscloudplugindialog.py" line="981"/>
         <source>QGIS Project Files</source>
         <translation>QGIS Projectbestanden</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1014"/>
+        <location filename="../qgiscloudplugindialog.py" line="1007"/>
         <source>QGIS Cloud Error</source>
         <translation>QGIS Cloud Fout</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1016"/>
+        <location filename="../qgiscloudplugindialog.py" line="1009"/>
         <source>Error</source>
         <translation>Fout</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1076"/>
+        <location filename="../qgiscloudplugindialog.py" line="1069"/>
         <source>Used DB Storage: </source>
         <translation>Gebruikt DB Storage: </translation>
     </message>
@@ -633,46 +634,52 @@ Verwijder of vervang bovenstaande lagen voordat u uw kaart publiceert.
         <translation>Door de GDPR heeft qgiscloud.com een nieuwe &lt;a href=&apos;http://qgiscloud.com/en/pages/privacy&apos;&gt; Privacybeleid &lt;/a&gt;. 
                             Om qgiscloud.com te kunnen blijven gebruiken, moet u het nieuwe beleid accepteren.</translation>
     </message>
+    <message>
+        <location filename="../qgiscloudplugindialog.py" line="724"/>
+        <source>  -  %s (%s)
+</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>RasterUpload</name>
     <message>
-        <location filename="../raster/raster_upload.py" line="99"/>
+        <location filename="../raster/raster_upload.py" line="96"/>
         <source>Database full</source>
         <translation>Gehele database</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="99"/>
+        <location filename="../raster/raster_upload.py" line="96"/>
         <source>Upload would exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan.</source>
         <translation>Uploaden zou de maximale databasegrootte voor uw huidige QGIS Cloud plan overschrijden. Maak wat ruimte vrij of upgrade uw QGIS Cloud plan.</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="104"/>
+        <location filename="../raster/raster_upload.py" line="101"/>
         <source>Creating table &apos;{table}&apos;...</source>
         <translation>Tabel &apos;{table}&apos; maken...</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="127"/>
+        <location filename="../raster/raster_upload.py" line="124"/>
         <source>Creating overview-level {level} for table &apos;{table}&apos;...</source>
         <translation>Een overview-niveau creëren {level} voor tabel &apos;{table}&apos;...</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="137"/>
+        <location filename="../raster/raster_upload.py" line="134"/>
         <source>Registering raster columns of table &apos;%s&apos;...</source>
         <translation>Raster kolommen van tabel &apos;%s&apos; registreren ...</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="649"/>
+        <location filename="../raster/raster_upload.py" line="646"/>
         <source>Uploading tiles...</source>
         <translation>Tegels uploaden...</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="684"/>
+        <location filename="../raster/raster_upload.py" line="681"/>
         <source>{table}: {count} of {sum_tiles} tiles uploaded</source>
         <translation>{table}: {count} van {sum_tiles} geüploade tegels</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="694"/>
+        <location filename="../raster/raster_upload.py" line="691"/>
         <source>Calculating raster params for {sum_tiles} tiles ...</source>
         <translation>Berekenen rasterparameters voor {sum_tiles} tegels ...</translation>
     </message>
