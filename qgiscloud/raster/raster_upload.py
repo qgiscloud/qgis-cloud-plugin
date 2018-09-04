@@ -438,11 +438,11 @@ class RasterUpload(QObject):
                 
                 for i in range (max,  min-1,  -1):
                         if j < 1:
-                            d = dimX / i
-                            r = float (dimX) / float (i)
+                            d = dimX // i
+                            r = dimX / i
                         else: 
-                            d = dimY / i
-                            r = float (dimY) /  float (i)
+                            d = dimY // i
+                            r = dimY /  i
                             
                         r = r -  float (d)
                         if  abs(_r   -  (-1)) <= 0.001 or r < _r  or  abs(_r   -  r ) <= 0.001:
@@ -583,8 +583,8 @@ class RasterUpload(QObject):
     
     
             if read_padding_size[0] > 0 or read_padding_size[1] > 0:
-                target_block_size = (valid_read_block_size[0] / level, valid_read_block_size[1] / level)
-                target_padding_size = (read_padding_size[0] / level, read_padding_size[1] / level)
+                target_block_size = (valid_read_block_size[0] // level, valid_read_block_size[1] //level)
+                target_padding_size = (read_padding_size[0] //level, read_padding_size[1] //level)
             else:
                 target_block_size = block_size
                 target_padding_size = ( 0, 0 )
@@ -602,7 +602,8 @@ class RasterUpload(QObject):
                 nodata_value = self.fetch_band_nodata(self,  band)
     
                 # Apply columns padding
-                pad_cols = float(numpy.array([nodata_value]) * float(target_padding_size[0]))
+                pad_cols = numpy.full(target_padding_size[0],  nodata_value)
+
                 for row in range (0, ysize_read_pixels):
                     out_line = numpy.append(pixels[row], pad_cols)
                     out_pixels[row] = out_line
