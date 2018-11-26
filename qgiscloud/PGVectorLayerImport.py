@@ -117,6 +117,8 @@ class PGVectorLayerImport(object):
             return ("MULTIPOINT",  3)
         elif wkbType ==  QgsWkbTypes.MultiLineStringZ:
             return ("MULTILINESTRING",  3)
+        elif wkbType ==  QgsWkbTypes.MultiLineStringM:
+            return ("MULTILINESTRING",  3)            
         elif wkbType ==  QgsWkbTypes.MultiPolygonZ:
             return ("MULTIPOLYGON",  3)
         elif wkbType ==  QgsWkbTypes.PointM:
