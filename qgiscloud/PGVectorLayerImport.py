@@ -129,62 +129,64 @@ class PGVectorLayerImport:
                 return ("Unknown", 0)
             elif wkbType == QgsWKBTypes.Point:
                 return ("POINT",  2)
+            elif wkbType ==  QgsWKBTypes.PointZ:
+                return ("POINTZ",  3)
+            elif wkbType ==  QgsWKBTypes.PointM:
+                return ("POINTM",  3)                
+            elif wkbType ==  QgsWKBTypes.PointZM:
+                return ("POINT",  4)                
+            elif wkbType ==  QgsWKBTypes.Point25D:
+                return ("POINT",  3)                
+            elif wkbType ==  QgsWKBTypes.MultiPoint:
+                return ("MULTIPOINT",  2)                
+            elif wkbType ==  QgsWKBTypes.MultiPointZ:
+                return ("MULTIPOINTZ",  3)                
+            elif wkbType ==  QgsWKBTypes.MultiPointM:
+                return ("MULTIPOINTM",  3)                
+            elif wkbType ==  QgsWKBTypes.MultiPoint25D:
+                return ("MULTIPOINT",  3)                                                
+            elif wkbType ==  QgsWKBTypes.MultiPointZM:
+                return ("MULTIPOINT",  4)                                
             elif wkbType == QgsWKBTypes.LineString:
                  return ("LINESTRING",  2)
-            elif wkbType == QgsWKBTypes.Polygon:
-                return ("POLYGON",  2)
-            elif wkbType ==  QgsWKBTypes.MultiPoint:
-                return ("MULTIPOINT",  2)
-            elif wkbType ==  QgsWKBTypes.MultiLineString:
-                return ("MULTILINESTRING",  2)
-            elif wkbType ==  QgsWKBTypes.MultiPolygon:
-                return ("MULTIPOLYGON",  2)
-            elif wkbType ==  QgsWKBTypes.PointZ:
-                return ("POINT",  3)
             elif wkbType ==  QgsWKBTypes.LineStringZ:
-                return ("LINESTRING",  3)
-            elif wkbType ==  QgsWKBTypes.PolygonZ:
-                return ("POLYGON",  3)
-            elif wkbType ==  QgsWKBTypes.MultiPointZ:
-                return ("MULTIPOINT",  3)
-            elif wkbType ==  QgsWKBTypes.MultiLineStringZ:
-                return ("MULTILINESTRING",  3)
-            elif wkbType ==  QgsWKBTypes.MultiPolygonZ:
-                return ("MULTIPOLYGON",  3)
-            elif wkbType ==  QgsWKBTypes.PointM:
-                return ("POINT",  3)
+                return ("LINESTRINGZ",  3)
             elif wkbType ==  QgsWKBTypes.LineStringM:
-               return ("LINESTRING", 3)
-            elif wkbType ==  QgsWKBTypes.PolygonM:
-                return ("POLYGON",  3)
-            elif wkbType ==  QgsWKBTypes.MultiPointM:
-               return ("MULTIPOINT",  3)
-            elif wkbType ==  QgsWKBTypes.MultiPolygonM:
-                return ("MULTIPOLYGON",  3)
-            elif wkbType ==  QgsWKBTypes.PointZM:
-                return ("POINT",  4)
-            elif wkbType == QgsWKBTypes.LineStringZM:
-                return ("LINESTRING", 4)
-            elif wkbType ==  QgsWKBTypes.PolygonZM:
-                return ("POLYGON",  4)
-            elif wkbType ==  QgsWKBTypes.MultiPointZM:
-                return ("MULTIPOINT",  4)
-            elif wkbType == QgsWKBTypes.MultiLineStringZM:
-                return ("MULTILINESTRING", 4)
-            elif wkbType ==  QgsWKBTypes.MultiPolygonZM:
-                return ("MULTIPOLYGON",  4)
-            elif wkbType ==  QgsWKBTypes.Point25D:
-                return ("POINT",  3)
+                return ("LINESTRINGM",  3)                
             elif wkbType ==  QgsWKBTypes.LineString25D:
-                return ("LINESTRING", 3)
-            elif wkbType ==  QgsWKBTypes.Polygon25D:
-                return ("POLYGON",  3)
-            elif wkbType ==  QgsWKBTypes.MultiPoint25D:
-                return ("MULTIPOINT",  3)
+                return ("LINESTRING",  3)           
+            elif wkbType == QgsWKBTypes.LineStringZM:
+                return ("LINESTRING", 4)                
+            elif wkbType ==  QgsWKBTypes.MultiLineString:
+                return ("MULTILINESTRING",  2)      
+            elif wkbType ==  QgsWKBTypes.MultiLineStringM:
+                return ("MULTILINESTRINGM",  3)            
+            elif wkbType ==  QgsWKBTypes.MultiLineStringZ:
+                return ("MULTILINESTRINGZ",  3)     
             elif wkbType ==  QgsWKBTypes.MultiLineString25D:
                 return ("MULTILINESTRING",  3)
+            elif wkbType == QgsWKBTypes.MultiLineStringZM:
+                return ("MULTILINESTRING", 4)         
+            elif wkbType == QgsWKBTypes.Polygon:
+                return ("POLYGON",  2)
+            elif wkbType ==  QgsWKBTypes.PolygonZ:
+                return ("POLYGONZ",  3)                        
+            elif wkbType ==  QgsWKBTypes.PolygonM:
+                return ("POLYGONM",  3)           
+            elif wkbType ==  QgsWKBTypes.Polygon25D:
+                return ("POLYGON",  3)     
+            elif wkbType ==  QgsWKBTypes.PolygonZM:
+                return ("POLYGON",  4)                     
+            elif wkbType ==  QgsWKBTypes.MultiPolygon:
+                return ("MULTIPOLYGON",  2)                
+            elif wkbType ==  QgsWKBTypes.MultiPolygonZ:
+                return ("MULTIPOLYGONZ",  3)
+            elif wkbType ==  QgsWKBTypes.MultiPolygonM:
+                return ("MULTIPOLYGONM",  3)                
             elif wkbType ==  QgsWKBTypes.MultiPolygon25D:
-                return ("MULTIPOLYGON",  3)
+                return ("MULTIPOLYGON",  3)                
+            elif wkbType ==  QgsWKBTypes.MultiPolygonZM:
+                return ("MULTIPOLYGON",  4)                                  
             elif wkbType ==  QgsWKBTypes.CircularString:
                 return ("CIRCULARSTRING",  2)
             elif wkbType ==  QgsWKBTypes.CompoundCurve:
@@ -343,6 +345,7 @@ class PGVectorLayerImport:
                     srid=srid,
                     geometryType=self.__quotedValue(geometryType),
                     dim=dim)
+                    
                 cursor.execute(sql)
             else:
                 geometryColumn = ""
