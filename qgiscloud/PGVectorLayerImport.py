@@ -97,64 +97,64 @@ class PGVectorLayerImport(object):
             return ("Unknown", 0)
         elif wkbType == QgsWkbTypes.Point:
             return ("POINT",  2)
+        elif wkbType ==  QgsWkbTypes.PointZ:
+            return ("POINTZ",  3)
+        elif wkbType ==  QgsWkbTypes.PointM:
+            return ("POINTM",  3)                
+        elif wkbType ==  QgsWkbTypes.PointZM:
+            return ("POINT",  4)                
+        elif wkbType ==  QgsWkbTypes.Point25D:
+            return ("POINT",  3)                
+        elif wkbType ==  QgsWkbTypes.MultiPoint:
+            return ("MULTIPOINT",  2)                
+        elif wkbType ==  QgsWkbTypes.MultiPointZ:
+            return ("MULTIPOINTZ",  3)                
+        elif wkbType ==  QgsWkbTypes.MultiPointM:
+            return ("MULTIPOINTM",  3)                
+        elif wkbType ==  QgsWkbTypes.MultiPoint25D:
+            return ("MULTIPOINT",  3)                                                
+        elif wkbType ==  QgsWkbTypes.MultiPointZM:
+            return ("MULTIPOINT",  4)                                
         elif wkbType == QgsWkbTypes.LineString:
              return ("LINESTRING",  2)
-        elif wkbType == QgsWkbTypes.Polygon:
-            return ("POLYGON",  2)
-        elif wkbType ==  QgsWkbTypes.MultiPoint:
-            return ("MULTIPOINT",  2)
-        elif wkbType ==  QgsWkbTypes.MultiLineString:
-            return ("MULTILINESTRING",  2)
-        elif wkbType ==  QgsWkbTypes.MultiPolygon:
-            return ("MULTIPOLYGON",  2)
-        elif wkbType ==  QgsWkbTypes.PointZ:
-            return ("POINT",  3)
         elif wkbType ==  QgsWkbTypes.LineStringZ:
-            return ("LINESTRING",  3)
-        elif wkbType ==  QgsWkbTypes.PolygonZ:
-            return ("POLYGON",  3)
-        elif wkbType ==  QgsWkbTypes.MultiPointZ:
-            return ("MULTIPOINT",  3)
-        elif wkbType ==  QgsWkbTypes.MultiLineStringZ:
-            return ("MULTILINESTRING",  3)
-        elif wkbType ==  QgsWkbTypes.MultiLineStringM:
-            return ("MULTILINESTRING",  3)            
-        elif wkbType ==  QgsWkbTypes.MultiPolygonZ:
-            return ("MULTIPOLYGON",  3)
-        elif wkbType ==  QgsWkbTypes.PointM:
-            return ("POINT",  3)
+            return ("LINESTRINGZ",  3)
         elif wkbType ==  QgsWkbTypes.LineStringM:
-           return ("LINESTRING", 3)
-        elif wkbType ==  QgsWkbTypes.PolygonM:
-            return ("POLYGON",  3)
-        elif wkbType ==  QgsWkbTypes.MultiPointM:
-           return ("MULTIPOINT",  3)
-        elif wkbType ==  QgsWkbTypes.MultiPolygonM:
-            return ("MULTIPOLYGON",  3)
-        elif wkbType ==  QgsWkbTypes.PointZM:
-            return ("POINT",  4)
-        elif wkbType == QgsWkbTypes.LineStringZM:
-            return ("LINESTRING", 4)
-        elif wkbType ==  QgsWkbTypes.PolygonZM:
-            return ("POLYGON",  4)
-        elif wkbType ==  QgsWkbTypes.MultiPointZM:
-            return ("MULTIPOINT",  4)
-        elif wkbType == QgsWkbTypes.MultiLineStringZM:
-            return ("MULTILINESTRING", 4)
-        elif wkbType ==  QgsWkbTypes.MultiPolygonZM:
-            return ("MULTIPOLYGON",  4)
-        elif wkbType ==  QgsWkbTypes.Point25D:
-            return ("POINT",  3)
+            return ("LINESTRINGM",  3)                
         elif wkbType ==  QgsWkbTypes.LineString25D:
-            return ("LINESTRING", 3)
-        elif wkbType ==  QgsWkbTypes.Polygon25D:
-            return ("POLYGON",  3)
-        elif wkbType ==  QgsWkbTypes.MultiPoint25D:
-            return ("MULTIPOINT",  3)
+            return ("LINESTRING",  3)           
+        elif wkbType == QgsWkbTypes.LineStringZM:
+            return ("LINESTRING", 4)                
+        elif wkbType ==  QgsWkbTypes.MultiLineString:
+            return ("MULTILINESTRING",  2)      
+        elif wkbType ==  QgsWkbTypes.MultiLineStringM:
+            return ("MULTILINESTRINGM",  3)            
+        elif wkbType ==  QgsWkbTypes.MultiLineStringZ:
+            return ("MULTILINESTRINGZ",  3)     
         elif wkbType ==  QgsWkbTypes.MultiLineString25D:
             return ("MULTILINESTRING",  3)
+        elif wkbType == QgsWkbTypes.MultiLineStringZM:
+            return ("MULTILINESTRING", 4)         
+        elif wkbType == QgsWkbTypes.Polygon:
+            return ("POLYGON",  2)
+        elif wkbType ==  QgsWkbTypes.PolygonZ:
+            return ("POLYGONZ",  3)                        
+        elif wkbType ==  QgsWkbTypes.PolygonM:
+            return ("POLYGONM",  3)           
+        elif wkbType ==  QgsWkbTypes.Polygon25D:
+            return ("POLYGON",  3)     
+        elif wkbType ==  QgsWkbTypes.PolygonZM:
+            return ("POLYGON",  4)                     
+        elif wkbType ==  QgsWkbTypes.MultiPolygon:
+            return ("MULTIPOLYGON",  2)                
+        elif wkbType ==  QgsWkbTypes.MultiPolygonZ:
+            return ("MULTIPOLYGONZ",  3)
+        elif wkbType ==  QgsWkbTypes.MultiPolygonM:
+            return ("MULTIPOLYGONM",  3)                
         elif wkbType ==  QgsWkbTypes.MultiPolygon25D:
-            return ("MULTIPOLYGON",  3)
+            return ("MULTIPOLYGON",  3)                
+        elif wkbType ==  QgsWkbTypes.MultiPolygonZM:
+            return ("MULTIPOLYGON",  4)                                  
         elif wkbType ==  QgsWkbTypes.CircularString:
             return ("CIRCULARSTRING",  2)
         elif wkbType ==  QgsWkbTypes.CompoundCurve:
