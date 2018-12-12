@@ -3,13 +3,15 @@ name=QGIS Cloud Plugin
 qgisMinimumVersion=1.8
 qgisMaximumVersion=2.99
 description=Publish maps on qgiscloud.com
-version=1.5.18
+version=1.5.19
 author=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich, Switzerland
 email=support@qgiscloud.com
 about= QGIS Cloud is your powerful Web-GIS platform for publishing maps, data and services on the internet. Create and edit professional maps with all the capabilities from QGIS. With only a few short mouse-clicks you can share your work on qgiscloud.com with the public.
 ; Optional items:
 
 changelog=
+    1.5.19
+    - Version bug fixed
     1.5.18
     - Geometrytype identifying fixed
     1.5.17
