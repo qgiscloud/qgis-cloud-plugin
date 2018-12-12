@@ -326,9 +326,9 @@ class QgisCloudPluginDialog(QDockWidget):
                     self.user = login_dialog.ui.editUser.text()
                     self._update_clouddb_mode(login_info['clouddb'])
                     version_ok = StrictVersion(self.version) >= StrictVersion(login_info['current_plugin'])
-#                    if not version_ok:
-#                        self.ui.lblVersionPlugin.setPalette(self.palette_red)
-#                        QMessageBox.information(None, self.tr('New Version'),  self.tr('New plugin release {version} is available! Please upgrade the QGIS Cloud plugin.').format(version=login_info['current_plugin']))
+                    if not version_ok:
+                        self.ui.lblVersionPlugin.setPalette(self.palette_red)
+                        QMessageBox.information(None, self.tr('New Version'),  self.tr('New plugin release {version} is available! Please upgrade the QGIS Cloud plugin.').format(version=login_info['current_plugin']))
                     self.store_settings()
                     self.ui.btnLogin.hide()
                     self.ui.lblSignup.hide()
