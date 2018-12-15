@@ -287,12 +287,7 @@ class QgisCloudPluginDialog(QDockWidget):
         version_ok = True
         if not self.api.check_auth():
             self._qgis3_info()
-#            res = QMessageBox.information(
-#                self,
-#                self.tr("QGIS 3 message"),
-#                self.tr("""You have started the QGIS Cloud Plugin with QGIS 3. This configuration is not stable and is not intended for productive use. A lot can still change in QGIS before the first QGIS 3 LTR. Therefore, it is possible that the plugin does not work as you expect or terminates with errors. If you need a stable version of QGIS Cloud, please continue working with QGIS 2."""),
-#                QMessageBox.StandardButtons(
-#                QMessageBox.Close))        	
+
             login_dialog = QDialog(self)
             login_dialog.ui = Ui_LoginDialog()
             login_dialog.ui.setupUi(login_dialog)
