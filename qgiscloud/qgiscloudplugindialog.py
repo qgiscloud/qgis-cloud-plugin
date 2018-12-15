@@ -44,6 +44,7 @@ import time
 import platform
 import tempfile
 from distutils.version import StrictVersion
+from .qgis3_warning_dialog import Qgis3Warning
     
 class QgisCloudPluginDialog(QDockWidget):
     COLUMN_LAYERS = 0
@@ -268,10 +269,24 @@ class QgisCloudPluginDialog(QDockWidget):
                 'Python': sys.version.encode('utf-8').decode('utf-8')
             }
         }
+        
+    def _qgis3_info(self):
+        cloud_info_off = QSettings().value("Plugin-QgisCloud/qgis3_info_off", defaultValue=False, type=bool)
+        lastInfo = QSettings().value("Plugin-QgisCloud/qgis3_info_ts", defaultValue=0.0, type=float)
+        
+        day = 3600*24
+        now = time.time()
+        days = (now-lastInfo)/day
+        
+        if days >= 20 or not cloud_info_off:
+            self.qgis3_info_dlg = Qgis3Warning()
+            self.qgis3_info_dlg.show()
+            QSettings().setValue("Plugin-QgisCloud/qgis3_info_ts", now)
 
     def check_login(self):
         version_ok = True
         if not self.api.check_auth():
+            self._qgis3_info()
 #            res = QMessageBox.information(
 #                self,
 #                self.tr("QGIS 3 message"),
