@@ -83,13 +83,13 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;If you need a stable production environment, please use QGIS 2.18.&lt;/span&gt; &lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;QGIS 2.18 is very mature and very suitable for professional and productive use of QGIS Cloud.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0///EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0///EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: Vorverpackung; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Sie haben das QGIS Cloud Plugin mit QGIS 3 gestartet. Bitte beachten Sie, dass QGIS Cloud mit QGIS 3 aufgrund mehrerer Fehler in QGIS Server 3 noch nicht für den produktiven Einsatz geeignet ist. &lt;/p&gt;
 &lt;p style=&quot;-qt-agraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Wenn Sie eine stabile Produktionsumgebung benötigen, verwenden Sie bitte QGIS 2.18.&lt;/span&gt; &lt;/p&gt;.
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Wenn Sie eine stabile Produktionsumgebung benötigen, verwenden Sie bitte QGIS 2.18.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-agraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;QGIS 2.18 ist sehr ausgereift und sehr gut geeignet für den professionellen und produktiven Einsatz von QGIS Cloud.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
@@ -101,7 +101,7 @@ p, li { white-space: Vorverpackung; }
     <message>
         <location filename="../qgis3_warning_dialog.ui" line="17"/>
         <source>QGIS 3 Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>QGIS 3 Warnung</translation>
     </message>
 </context>
 <context>
@@ -660,7 +660,8 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <location filename="../qgiscloudplugindialog.py" line="317"/>
         <source>Due to the GDPR qgiscloud.com has a new &lt;a href=&apos;http://qgiscloud.com/en/pages/privacy&apos;&gt; Privacy Policy &lt;/a&gt;. 
                                 To continue using qgiscloud.com, you must accept the new policy. </source>
-        <translation type="unfinished"></translation>
+        <translation>Aufgrund der GDPR hat qgiscloud.com eine neue &lt;a href=&apos;http://qgiscloud.com/en/pages/privacy&apos;&gt; Datenschutzerklärung &lt;/a&gt;. 
+                                Um qgiscloud.com weiterhin nutzen zu können, müssen Sie die neue Richtlinie akzeptieren.</translation>
     </message>
 </context>
 <context>
