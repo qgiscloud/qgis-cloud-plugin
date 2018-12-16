@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="es_ES" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="es_ES">
 <context>
     <name>DataUpload</name>
     <message>
@@ -100,7 +101,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../qgis3_warning_dialog.ui" line="59"/>
         <source>Don&apos;t show again</source>
-        <translation type="unfinished">No vuelvas a aparecer.</translation>
+        <translation type="unfinished">No vuelvas a aparecer</translation>
     </message>
 </context>
 <context>
