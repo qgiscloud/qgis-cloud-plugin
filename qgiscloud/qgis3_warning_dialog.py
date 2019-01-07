@@ -6,15 +6,11 @@ Module implementing Qgis3Warning.
 
 from qgis.PyQt.QtCore import pyqtSlot,  QSettings
 from qgis.PyQt.QtWidgets import QDialog
-
+from .Ui_qgis3_warning_dialog import Ui_Qgis3Warning
 from qgis.PyQt import uic
 import os
 
-FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'qgis3_warning_dialog.ui'))
-
-
-class Qgis3Warning(QDialog, FORM_CLASS):
+class Qgis3Warning(QDialog, Ui_Qgis3Warning):
     """
     Class documentation goes here.
     """
