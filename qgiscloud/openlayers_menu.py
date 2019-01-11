@@ -52,7 +52,7 @@ class OpenlayersMenu(QMenu):
 
         self._olLayerTypeRegistry.register(OlOpenStreetMapLayer())
         self._olLayerTypeRegistry.register(OlOSMHumanitarianDataModelLayer())
-                
+
         self._olLayerTypeRegistry.register(OlOpenCycleMapLayer())
         self._olLayerTypeRegistry.register(OlOCMLandscapeLayer())
         self._olLayerTypeRegistry.register(OlOCMPublicTransportLayer())
@@ -61,8 +61,7 @@ class OpenlayersMenu(QMenu):
         self._olLayerTypeRegistry.register(OlOCMSpinalMapLayer())
         self._olLayerTypeRegistry.register(OlOCMPioneerLayer())
         self._olLayerTypeRegistry.register(OlOCMMobileAtlasLayer())
-        self._olLayerTypeRegistry.register(OlOCMNeighbourhoodLayer())        
-
+        self._olLayerTypeRegistry.register(OlOCMNeighbourhoodLayer())
 
         self._olLayerTypeRegistry.register(OlBingRoadLayer())
         self._olLayerTypeRegistry.register(OlBingAerialLayer())
@@ -88,21 +87,20 @@ class OpenlayersMenu(QMenu):
             self.iface, self.setReferenceLayer, self._olLayerTypeRegistry)
         QgsApplication.pluginLayerRegistry().addPluginLayerType(self.pluginLayerType)
 
-        
-
     def addLayer(self, layerType):
         layer = None
         if layerType.hasXYZUrl():
             xyzUrl = layerType.xyzUrlConfig()
-            layer = QgsRasterLayer( 'url=' + xyzUrl + '&type=xyz', layerType.displayName, 'wms' )
+            layer = QgsRasterLayer(
+                'url=' + xyzUrl + '&type=xyz', layerType.displayName, 'wms')
         else:
             layer = OpenlayersLayer(self.iface, self._olLayerTypeRegistry)
             layer.setName(layerType.displayName)
             layer.setLayerType(layerType)
-            
+
         if not layer.isValid():
             return
-        
+
         coordRefSys = layerType.coordRefSys(self.canvasCrs())
         self.setMapCrs(coordRefSys)
         QgsProject.instance().addMapLayer(layer)
@@ -131,10 +129,11 @@ class OpenlayersMenu(QMenu):
         mapCanvas = self.iface.mapCanvas()
         canvasCrs = self.canvasCrs()
         if canvasCrs != coordRefSys:
-            coordTrans = QgsCoordinateTransform(canvasCrs, coordRefSys,  QgsProject.instance())
+            coordTrans = QgsCoordinateTransform(
+                canvasCrs, coordRefSys,  QgsProject.instance())
             extMap = mapCanvas.extent()
-            extMap = coordTrans.transform(extMap, QgsCoordinateTransform.ForwardTransform)
-            QgsProject.instance().setCrs( coordRefSys )
+            extMap = coordTrans.transform(
+                extMap, QgsCoordinateTransform.ForwardTransform)
+            QgsProject.instance().setCrs(coordRefSys)
             mapCanvas.freeze(False)
             mapCanvas.setExtent(extMap)
-
