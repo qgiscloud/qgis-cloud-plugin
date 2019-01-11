@@ -91,16 +91,24 @@ class OpenlayersMenu(QMenu):
         
 
     def addLayer(self, layerType):
-        layer = OpenlayersLayer(self.iface, self._olLayerTypeRegistry)
-        layer.setName(layerType.displayName)
-        layer.setLayerType(layerType)
-        if layer.isValid():
-            coordRefSys = layerType.coordRefSys(self.canvasCrs())
-            self.setMapCrs(coordRefSys)
-            QgsProject.instance().addMapLayer(layer)
+        layer = None
+        if layerType.hasXYZUrl():
+            xyzUrl = layerType.xyzUrlConfig()
+            layer = QgsRasterLayer( 'url=' + xyzUrl + '&type=xyz', layerType.displayName, 'wms' )
+        else:
+            layer = OpenlayersLayer(self.iface, self._olLayerTypeRegistry)
+            layer.setName(layerType.displayName)
+            layer.setLayerType(layerType)
+            
+        if not layer.isValid():
+            return
+        
+        coordRefSys = layerType.coordRefSys(self.canvasCrs())
+        self.setMapCrs(coordRefSys)
+        QgsProject.instance().addMapLayer(layer)
 
-            # last added layer is new reference
-            self.setReferenceLayer(layer)
+        # last added layer is new reference
+        self.setReferenceLayer(layer)
 
     def setReferenceLayer(self, layer):
         self.layer = layer
