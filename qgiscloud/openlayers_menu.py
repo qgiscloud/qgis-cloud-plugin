@@ -103,7 +103,9 @@ class OpenlayersMenu(QMenu):
 
         coordRefSys = layerType.coordRefSys(self.canvasCrs())
         self.setMapCrs(coordRefSys)
-        QgsProject.instance().addMapLayer(layer)
+        QgsProject.instance().addMapLayer(layer, False)
+        legendRootGroup = self.iface.layerTreeView().layerTreeModel().rootGroup()
+        legendRootGroup.insertLayer(len(legendRootGroup.children()), layer)
 
         # last added layer is new reference
         self.setReferenceLayer(layer)
