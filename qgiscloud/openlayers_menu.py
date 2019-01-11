@@ -126,7 +126,7 @@ class OpenlayersMenu(QMenu):
             coordTrans = QgsCoordinateTransform(canvasCrs, coordRefSys,  QgsProject.instance())
             extMap = mapCanvas.extent()
             extMap = coordTrans.transform(extMap, QgsCoordinateTransform.ForwardTransform)
-            mapCanvas.setDestinationCrs(coordRefSys)
+            QgsProject.instance().setCrs( coordRefSys )
             mapCanvas.freeze(False)
             mapCanvas.setExtent(extMap)
 
