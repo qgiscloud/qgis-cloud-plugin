@@ -10,6 +10,8 @@ about= QGIS Cloud is your powerful Web-GIS platform for publishing maps, data an
 ; Optional items:
 
 changelog=
+    1.5.20
+    - Keep custom layer order in project when replacing layers
     1.5.19
     - Version bug fixed
     1.5.18
