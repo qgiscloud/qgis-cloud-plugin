@@ -325,9 +325,30 @@ class DataUpload(QObject):
 
     def _replace_local_layers(self, layers_to_replace):
         if len(layers_to_replace) > 0:
+            
+            
+            
             if QGis.QGIS_VERSION_INT >= 20600:
                 root = QgsProject.instance().layerTreeRoot()
+                
+                #save/restore custom layer order
+                treeCanvasBridge = self.iface.layerTreeCanvasBridge()
+                hasCustomLayerOrder = treeCanvasBridge.hasCustomLayerOrder()
+                customLayerOrder = []
+                if hasCustomLayerOrder:
+                    customLayerOrder = treeCanvasBridge.customLayerOrder()
+                
                 self._replace_local_layers_in_layer_tree(root, layers_to_replace)
+                
+                if hasCustomLayerOrder:
+                    newCustomLayerOrder = []
+                    for oldId in customLayerOrder:
+                        if oldId in layers_to_replace:
+                            if 'new_layer_id' in layers_to_replace[oldId]:
+                                newId = layers_to_replace[oldId]['new_layer_id']
+                                newCustomLayerOrder.append( newId )
+                    treeCanvasBridge.setCustomLayerOrder( newCustomLayerOrder )
+                
             else:
                 # using old legendInterface API
 
@@ -372,7 +393,7 @@ class DataUpload(QObject):
             layer_id = node.layerId()
             if layer_id in layers_to_replace:
                 layer_info = layers_to_replace[layer_id]
-                self.replace_local_layer(
+                newLayerId = self.replace_local_layer(
                     node,
                     layer_info['layer'],
                     layer_info['data_source'],
@@ -380,6 +401,8 @@ class DataUpload(QObject):
                     layer_info['table_name'],
                     layer_info['geom_column']
                 )
+                if newLayerId:
+                    layer_info['new_layer_id'] = newLayerId
 
     def replace_local_layer(self, node, local_layer, data_source, db_name, table_name, geom_column):
         self.status_bar.showMessage(u"Replace layer %s ..." % local_layer.name())
@@ -426,6 +449,7 @@ class DataUpload(QObject):
                 QgsMapLayerRegistry.instance().removeMapLayer(local_layer.id())
 
             self.status_bar.showMessage(u"Replaced layer %s" % remote_layer.name())
+            return remote_layer.id()
 
     def copy_layer_settings(self, source_layer, target_layer):
         # copy filter
