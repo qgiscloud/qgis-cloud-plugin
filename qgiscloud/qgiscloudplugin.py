@@ -24,7 +24,6 @@ from builtins import object
 from qgis.PyQt.QtCore import Qt, QCoreApplication, QSettings, QFileInfo, QTranslator, qVersion
 from qgis.PyQt.QtWidgets import QAction
 from qgis.PyQt.QtGui import QIcon
-from qgis.core import *
 # Initialize Qt resources from file resources_rc.py
 from .resources_rc import *
 # Import the code for the dialog
@@ -53,7 +52,6 @@ class QgisCloudPlugin(object):
 
         self.plugin_dir = os.path.dirname(__file__)
         # initialize locale
-        localePath = ""
         locale_short = QSettings().value("locale/userLocale", type=str)[0:2]
         locale_long = QSettings().value("locale/userLocale", type=str)
                 
