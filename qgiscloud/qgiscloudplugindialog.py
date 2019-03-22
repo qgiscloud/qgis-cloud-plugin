@@ -21,7 +21,7 @@
 """
 from builtins import str
 from builtins import range
-from qgis.PyQt.QtCore import Qt, QSettings, QFileInfo, pyqtSlot
+from qgis.PyQt.QtCore import Qt, QSettings, pyqtSlot
 from qgis.PyQt.QtWidgets import QApplication, QDockWidget,   QTableWidgetItem, QListWidgetItem, \
                                                         QDialog, QMessageBox, QAbstractItemView, QWidget, QLabel,  QVBoxLayout,  \
                                                         QFileDialog
@@ -136,7 +136,6 @@ class QgisCloudPluginDialog(QDockWidget):
             
         self.ui.lblVersionPlugin.setText("%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%s" % (self.version,  data_protection_link))
         self.ui.lblVersionPlugin.setOpenExternalLinks(True)            
-#        self.ui.lblVersionPlugin.setText(self.version)
 
         self.ui.tblLocalLayers.setColumnCount(5)
         header = ["Layers", "Data source",
@@ -616,7 +615,6 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def publish_map(self):
         QApplication.setOverrideCursor(Qt.WaitCursor)
-        canvas = self.iface.mapCanvas()
         srs=QgsMapSettings().destinationCrs()
         
         if "USER" in srs.authid():
