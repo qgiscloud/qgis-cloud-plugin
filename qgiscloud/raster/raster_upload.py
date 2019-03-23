@@ -98,11 +98,12 @@ class RasterUpload(QObject):
             return False
         
         opts['table'] = layer_info['table_name']
+        opts['schema'] = layer_info['schema_name']
             
         self.progress_label.setText(self.tr("Creating table '{table}'...").format(table=opts['table']))
         QApplication.processEvents()
         
-        self.cursor.execute(self.make_sql_drop_raster_table(opts['table']))
+        self.cursor.execute(self.make_sql_drop_raster_table(opts['schema'],  opts['table']))
         self.conn.commit()
         
         self.cursor.execute(self.make_sql_create_table(opts,  opts['table']))
@@ -283,8 +284,9 @@ class RasterUpload(QObject):
         self.logit("SQL: %s" % sql)
         return sql
     
-    def make_sql_drop_raster_table(self,  table):
-        st = self.make_sql_schema_table_names(table)
+    def make_sql_drop_raster_table(self,  schema_table):
+        
+        st = self.make_sql_schema_table_names(schema_table)
     
         if len(st[0]) == 0:
             target = "public.\"%s\"" % st[1]
@@ -296,7 +298,7 @@ class RasterUpload(QObject):
     
     def make_sql_create_table(self,  options, table,  is_overview = False):
         sql = "CREATE TABLE %s (rid serial PRIMARY KEY, %s RASTER);\n" \
-              % (self.make_sql_full_table_name(table), self.quote_sql_name(options['column']))
+              % (self.make_sql_full_table_name(schema,  table), self.quote_sql_name(options['column']))
         return sql
     
     

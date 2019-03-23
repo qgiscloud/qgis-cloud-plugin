@@ -85,16 +85,16 @@ class DataUpload(QObject):
                 wkbType = layer.wkbType()
                 
                 if wkbType == QgsWkbTypes.NoGeometry:
-                    cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"public\".\"%s\"" % (
-                    db.database, db.host, db.port, db.username, db.password, item['table'])
+                    cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"%s\".\"%s\"" % (
+                    db.database, db.host, db.port, db.username, db.password, item['schema'],  item['table'])
                     geom_column = ""
                 else:
                     if not  QgsWkbTypes.isMultiType(wkbType):
                         wkbType = QgsWkbTypes.multiType(wkbType)
 
                     # Create table (pk='' => always generate a new primary key)
-                    cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"public\".\"%s\" (%s)" % (
-                        db.database, db.host, db.port, db.username, db.password, item['table'], geom_column
+                    cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"%s\".\"%s\" (%s)" % (
+                        db.database, db.host, db.port, db.username, db.password, item['schema'],  item['table'], geom_column
                     )
 
                 self.progress_label.setText(self.tr("Creating table '{table}'...").format(table=item['table']))
@@ -179,7 +179,7 @@ class DataUpload(QObject):
                     # Upload in chunks
                     if (count % 100) == 0:
                         try:
-                            cursor.copy_from(StringIO(importstr.decode('utf-8')), '"public"."%s"' % item['table'])
+                            cursor.copy_from(StringIO(importstr.decode('utf-8')), '"%s"."%s"' % (item['schema'],  item['table']))
                         except Exception as e:
                             messages += str(e) + "\n"
                             ok = False
@@ -195,7 +195,7 @@ class DataUpload(QObject):
 
                 if ok and importstr:
                     try:
-                        cursor.copy_from(StringIO(importstr.decode('utf-8')), '"public"."%s"' % item['table'])
+                        cursor.copy_from(StringIO(importstr.decode('utf-8')), '"%s"."%s"' % (item['schema'],  item['table']))
                     except Exception as e:
                         messages += str(e) + "\n"
                         ok = False
@@ -217,12 +217,13 @@ class DataUpload(QObject):
                             'layer': layer,
                             'data_source': data_source,
                             'db_name': db.database,
+                            'schema_name':item['schema'], 
                             'table_name': item['table'],
                             'geom_column': geom_column
                         }
 
                 if wkbType != QgsWkbTypes.NoGeometry:
-                    sql = 'create index "%s_%s_idx" on "public"."%s" using gist ("%s");' % (item['table'],  geom_column,  item['table'], geom_column)
+                    sql = 'create index "{1}_{2}_idx" on "{0}"."{1}" using gist ("{2}");'.format(item['schema'],  item['table'],  geom_column)
                     cursor.execute(sql)
                     conn.commit()
                     
@@ -231,6 +232,7 @@ class DataUpload(QObject):
                             'layer': layer,
                             'data_source': layer.source(),
                             'db_name': db.database,
+                            'schema_name': item['schema'], 
                             'table_name': item['table'],
                             'geom_column': 'rast'
                         }
@@ -245,13 +247,13 @@ class DataUpload(QObject):
                         WHERE S.relkind = 'S'     
                           AND S.oid = D.objid     
                           AND S.relnamespace = PGNS.oid 
-                          AND PGNS.nspname = 'public'     
+                          AND PGNS.nspname = '{0}'     
                           AND D.refobjid = T.oid     
                           AND D.refobjid = C.attrelid     
                           AND D.refobjsubid = C.attnum     
                           AND T.relname = PGT.tablename     
-                          AND schemaname = 'public'     
-                          AND tablename = '%s' ORDER BY S.relname;""" % (item['table']) 
+                          AND schemaname = '{0}'     
+                          AND tablename = '{1}' ORDER BY S.relname;""".format(item['schema'],  item['table'])
         
         cursor.execute(sql)
         rows = cursor.fetchall()
@@ -344,18 +346,19 @@ class DataUpload(QObject):
                     layer_info['layer'],
                     layer_info['data_source'],
                     layer_info['db_name'],
+                    layer_info['schema_name'], 
                     layer_info['table_name'],
                     layer_info['geom_column']
                 )
                 if newLayerId:
                     layer_info['new_layer_id'] = newLayerId
 
-    def replace_local_layer(self, node, local_layer, data_source, db_name, table_name, geom_column):
+    def replace_local_layer(self, node, local_layer, data_source, db_name, schema_name,  table_name, geom_column):
         self.status_bar.showMessage(u"Replace layer %s ..." % local_layer.name())
 
         if local_layer.type() == QgsMapLayer.VectorLayer:
             # create remote layer
-            uri = self.db_connections.cloud_layer_uri(db_name, table_name, geom_column)
+            uri = self.db_connections.cloud_layer_uri(db_name, schema_name,  table_name, geom_column)
 
             #Workaround for loading geometryless layers
             uri2 = QgsDataSourceUri(uri.uri().replace(' ()',  ''))
@@ -363,8 +366,8 @@ class DataUpload(QObject):
             remote_layer = QgsVectorLayer(uri2.uri(), local_layer.name(), 'postgres')
         elif local_layer.type() == QgsMapLayer.RasterLayer:
             uri = self.db_connections.cloud_layer_uri(db_name, table_name, geom_column)
-            connString = "PG: dbname=%s host=%s user=%s password=%s port=%s mode=2 schema=public column=rast table=%s" \
-                  % (uri.database(), uri.host(),  uri.database(),  uri.password(),  uri.port(),  table_name )
+            connString = "PG: dbname=%s host=%s user=%s password=%s port=%s mode=2 schema=%s column=rast table=%s" \
+                  % (uri.database(), uri.host(),  uri.database(),  uri.password(),  uri.port(),  schema_name,  table_name )
 
             remote_layer = QgsRasterLayer( connString, local_layer.name() )
 

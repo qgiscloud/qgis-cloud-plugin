@@ -24,7 +24,7 @@ from builtins import range
 from qgis.PyQt.QtCore import Qt, QSettings, pyqtSlot
 from qgis.PyQt.QtWidgets import QApplication, QDockWidget,   QTableWidgetItem, QListWidgetItem, \
                                                         QDialog, QMessageBox, QAbstractItemView, QWidget, QLabel,  QVBoxLayout,  \
-                                                        QFileDialog
+                                                        QFileDialog,  QComboBox
 from qgis.PyQt.QtGui import QPalette, QColor
 from qgis.core import *
 from .ui_qgiscloudplugin import Ui_QgisCloudPlugin
@@ -49,9 +49,10 @@ from .qgis3_warning_dialog import Qgis3Warning
 class QgisCloudPluginDialog(QDockWidget):
     COLUMN_LAYERS = 0
     COLUMN_DATA_SOURCE = 1
-    COLUMN_TABLE_NAME = 2
-    COLUMN_GEOMETRY_TYPE = 3
-    COLUMN_SRID = 4
+    COLUMN_SCHEMA_NAME = 2
+    COLUMN_TABLE_NAME = 3
+    COLUMN_GEOMETRY_TYPE = 4
+    COLUMN_SRID = 5
 
     GEOMETRY_TYPES = {
         QgsWkbTypes.Unknown: "Unknown",
@@ -137,13 +138,12 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.lblVersionPlugin.setText("%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%s" % (self.version,  data_protection_link))
         self.ui.lblVersionPlugin.setOpenExternalLinks(True)            
 
-        self.ui.tblLocalLayers.setColumnCount(5)
-        header = ["Layers", "Data source",
-                  "Table name", "Geometry type", "SRID"]
+        self.ui.tblLocalLayers.setColumnCount(6)
+        header = ["Layers", "Data Source","Table Schema","Table name", "Geometry type", "SRID"]
         self.ui.tblLocalLayers.setHorizontalHeaderLabels(header)
         self.ui.tblLocalLayers.resizeColumnsToContents()
         self.ui.tblLocalLayers.setEditTriggers(QAbstractItemView.NoEditTriggers)
-
+        
         self.ui.btnUploadData.setEnabled(False)
         self.ui.btnPublishMap.setEnabled(False)
         self.ui.btnMapDelete.setEnabled(False)
@@ -178,6 +178,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.tabMaps.itemSelectionChanged.connect(self.select_map)
         self.ui.btnPublishMap.clicked.connect(self.publish_map)
         self.ui.btnRefreshLocalLayers.clicked.connect(self.refresh_local_data_sources)
+        self.ui.cbUploadDatabase.currentTextChanged.connect(self.update_data_sources_table_names)
         self.iface.newProjectCreated.connect(self.reset_load_data)
         self.iface.projectRead.connect(self.reset_load_data)
 
@@ -756,6 +757,12 @@ class QgisCloudPluginDialog(QDockWidget):
         # update GUI
         self.ui.tblLocalLayers.setRowCount(0)
         
+        schema_list = []
+        if self.ui.cbUploadDatabase.count() == 1:
+            schema_list = self.fetch_schemas(self.ui.cbUploadDatabase.currentText())
+        elif self.ui.cbUploadDatabase.currentIndex() > 0:
+            schema_list = self.fetch_schemas(self.ui.cbUploadDatabase.currentText())
+
         for data_source, layers in list(self.local_data_sources.iteritems()):
             layer_names = []
             for layer in layers:
@@ -763,7 +770,8 @@ class QgisCloudPluginDialog(QDockWidget):
             layers_item = QTableWidgetItem(", ".join(layer_names))
             layers_item.setToolTip("\n".join(layer_names))
             data_source_item = QTableWidgetItem(data_source)
-            data_source_item.setToolTip(data_source)
+            data_source_item.setToolTip(data_source)            
+
             # find a better table name if there are multiple layers with same
             # data source?
             table_name = layers[0].name()
@@ -788,13 +796,20 @@ class QgisCloudPluginDialog(QDockWidget):
                         self.tr("Note: OGR features will be converted to MULTI-type"))
                         
             srid_item = QTableWidgetItem(layers[0].crs().authid())
-    
+
             row = self.ui.tblLocalLayers.rowCount()
             self.ui.tblLocalLayers.insertRow(row)
             self.ui.tblLocalLayers.setItem(
                 row, self.COLUMN_LAYERS, layers_item)
             self.ui.tblLocalLayers.setItem(
-                row, self.COLUMN_DATA_SOURCE, data_source_item)
+                row, self.COLUMN_DATA_SOURCE, data_source_item)                
+                
+# create combo box in schema column filled with all schema names of the selected database               
+            cmb_schema = QComboBox()
+            cmb_schema.setEditable(True)
+            cmb_schema.addItems(schema_list)
+            self.ui.tblLocalLayers.setCellWidget(row, 2, cmb_schema)
+            
             self.ui.tblLocalLayers.setItem(
                 row, self.COLUMN_TABLE_NAME, table_name_item)
             self.ui.tblLocalLayers.setItem(
@@ -870,8 +885,13 @@ class QgisCloudPluginDialog(QDockWidget):
         self.do_update_local_data_sources = True
         self.update_local_layers()
         self.activate_upload_button()
+        
 #
     def update_data_sources_table_names(self):
+        
+        schema_list = []
+        schema_list = self.fetch_schemas(self.ui.cbUploadDatabase.currentText())
+            
         if self.local_data_sources.count() == 0:
             self.data_sources_table_names.clear()
         else:
@@ -886,7 +906,12 @@ class QgisCloudPluginDialog(QDockWidget):
 
             # update table names
             for row in range(0, self.ui.tblLocalLayers.rowCount()):
+                data_source = self.ui.tblLocalLayers.item(row, self.COLUMN_LAYERS).text()
                 data_source = self.ui.tblLocalLayers.item(row, self.COLUMN_DATA_SOURCE).text()
+                cmb_schema = QComboBox()
+                cmb_schema.setEditable(True)
+                cmb_schema.addItems(schema_list)
+                self.ui.tblLocalLayers.setCellWidget(row, 2, cmb_schema)                
                 table_name = self.ui.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text()
                 self.data_sources_table_names[data_source] = table_name
 
@@ -930,7 +955,7 @@ class QgisCloudPluginDialog(QDockWidget):
             self.ui.spinner.start()
             self.ui.progressWidget.show()
 
-            # Map<data_source, {table: table, layers: layers}>
+            # Map<data_source, {schema: schema, table: table, layers: layers}>
             data_sources_items = {}
             for row in range(0, self.ui.tblLocalLayers.rowCount()):
                 data_source = unicode(
@@ -938,11 +963,14 @@ class QgisCloudPluginDialog(QDockWidget):
                         row, self.COLUMN_DATA_SOURCE).text())
                 layers = self.local_data_sources.layers(data_source)
                 if layers is not None:
+                    schema_name = unicode(
+                        self.ui.tblLocalLayers.cellWidget(
+                            row, self.COLUMN_SCHEMA_NAME).currentText())                    
                     table_name = unicode(
                         self.ui.tblLocalLayers.item(
                             row, self.COLUMN_TABLE_NAME).text())
                     data_sources_items[data_source] = {
-                        u'table': unicode(table_name), u'layers': layers}
+                        u'schema': unicode(schema_name), u'table': unicode(table_name), u'layers': layers}
 
             login_info = self.api.check_login(version_info=self._version_info())
             try:            
@@ -1021,8 +1049,39 @@ class QgisCloudPluginDialog(QDockWidget):
         else:
             return False
 
-#    def tr_uni(self, str):
-#        return str(self.tr(str))
+
+    @pyqtSlot(str)
+    def on_cmb_schema_currentIndexChanged(self, p0):
+        """
+        Slot documentation goes here.
+        
+        @param p0 DESCRIPTION
+        @type str
+        """
+        # TODO: not implemented yet
+        self.fetch_schemas(p0)
+        
+        
+    def fetch_schemas(self,  db):
+        if db != '' and self.ui.cbUploadDatabase.currentIndex() >= 0:
+            conn = self.db_connections.db(db).psycopg_connection()
+            cursor = conn.cursor()
+            sql = """
+                    select *
+                    from pg_catalog.pg_namespace
+                    where nspowner <> 10
+                      and nspname <> 'topology'
+            """
+            schema_list = []
+            schema_list.append('public')
+            cursor.execute(sql)
+            for record in cursor:
+                schema_list.append(list(record)[0])
+            cursor.close()
+            conn.close
+            return schema_list
+        else:
+            return None
 
     def db_size(self,  db_connections):
         usedSpace = 0
@@ -1080,3 +1139,4 @@ class QgisCloudPluginDialog(QDockWidget):
             self.tr("Used DB Storage: ") + "%d / %d MB" % (usedSpace, self.maxSize))
         self.ui.btnUploadData.setDisabled(self.storage_exceeded)
         self.ui.btnPublishMap.setDisabled(self.storage_exceeded)
+        
