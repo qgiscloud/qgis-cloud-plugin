@@ -359,6 +359,7 @@ class DataUpload(QObject):
         if local_layer.type() == QgsMapLayer.VectorLayer:
             # create remote layer
             uri = self.db_connections.cloud_layer_uri(db_name, schema_name,  table_name, geom_column)
+            print (uri)
 
             #Workaround for loading geometryless layers
             uri2 = QgsDataSourceUri(uri.uri().replace(' ()',  ''))

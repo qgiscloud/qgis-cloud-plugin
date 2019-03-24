@@ -106,7 +106,7 @@ class DbConnections(object):
         if len(connections) > 0:
             conn = DbConnectionCfg.from_settings(connections[0])
             uri = conn.data_source_uri()
-            uri.setDataSource(db_name, "%s.%s" % (schema_name,  table_name), geom_column)
+            uri.setDataSource(schema_name,  table_name, geom_column)
         return uri
 
     def isPortOpen(self, db_name):
