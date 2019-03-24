@@ -48,11 +48,12 @@ from .qgis3_warning_dialog import Qgis3Warning
     
 class QgisCloudPluginDialog(QDockWidget):
     COLUMN_LAYERS = 0
-    COLUMN_DATA_SOURCE = 1
-    COLUMN_SCHEMA_NAME = 2
-    COLUMN_TABLE_NAME = 3
-    COLUMN_GEOMETRY_TYPE = 4
-    COLUMN_SRID = 5
+    COLUMN_SCHEMA_NAME = 1
+    COLUMN_TABLE_NAME = 2
+    COLUMN_GEOMETRY_TYPE = 3
+    COLUMN_SRID = 4
+    COLUMN_DATA_SOURCE = 5
+
 
     GEOMETRY_TYPES = {
         QgsWkbTypes.Unknown: "Unknown",
@@ -808,7 +809,7 @@ class QgisCloudPluginDialog(QDockWidget):
             cmb_schema = QComboBox()
             cmb_schema.setEditable(True)
             cmb_schema.addItems(schema_list)
-            self.ui.tblLocalLayers.setCellWidget(row, 2, cmb_schema)
+            self.ui.tblLocalLayers.setCellWidget(row, self.COLUMN_SCHEMA_NAME, cmb_schema)
             
             self.ui.tblLocalLayers.setItem(
                 row, self.COLUMN_TABLE_NAME, table_name_item)
@@ -905,15 +906,16 @@ class QgisCloudPluginDialog(QDockWidget):
                 del self.data_sources_table_names[key]
 
             # update table names
-            for row in range(0, self.ui.tblLocalLayers.rowCount()):
-                data_source = self.ui.tblLocalLayers.item(row, self.COLUMN_LAYERS).text()
-                data_source = self.ui.tblLocalLayers.item(row, self.COLUMN_DATA_SOURCE).text()
-                cmb_schema = QComboBox()
-                cmb_schema.setEditable(True)
-                cmb_schema.addItems(schema_list)
-                self.ui.tblLocalLayers.setCellWidget(row, 2, cmb_schema)                
-                table_name = self.ui.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text()
-                self.data_sources_table_names[data_source] = table_name
+            if schema_list != None:
+                for row in range(0, self.ui.tblLocalLayers.rowCount()):
+                    data_source = self.ui.tblLocalLayers.item(row, self.COLUMN_LAYERS).text()
+                    data_source = self.ui.tblLocalLayers.item(row, self.COLUMN_DATA_SOURCE).text()
+                    cmb_schema = QComboBox()
+                    cmb_schema.setEditable(True)
+                    cmb_schema.addItems(schema_list)
+                    self.ui.tblLocalLayers.setCellWidget(row, self.COLUMN_SCHEMA_NAME, cmb_schema)                
+                    table_name = self.ui.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text()
+                    self.data_sources_table_names[data_source] = table_name
 
     def activate_upload_button(self):
         if not self.storage_exceeded:
