@@ -83,6 +83,13 @@ class DataUpload(QObject):
                 srid = layer.crs().postgisSrid()
                 geom_column = "wkb_geometry"
                 wkbType = layer.wkbType()
+
+# Check if database schema exists
+                cursor.execute("SELECT EXISTS(SELECT 1 FROM pg_namespace WHERE nspname = '%s')" % item['schema'])
+                schema_exists = cursor.fetchone()[0]
+                
+                if not schema_exists:
+                    cursor.execute("create schema %s" % item['schema'])
                 
                 if wkbType == QgsWkbTypes.NoGeometry:
                     cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"%s\".\"%s\"" % (
