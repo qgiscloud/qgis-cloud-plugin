@@ -103,7 +103,7 @@ class RasterUpload(QObject):
         self.progress_label.setText(self.tr("Creating table '{table}'...").format(table=opts['table']))
         QApplication.processEvents()
         
-        self.cursor.execute(self.make_sql_drop_raster_table(opts['schema'],  opts['table']))
+        self.cursor.execute(self.make_sql_drop_raster_table(opts['table']))
         self.conn.commit()
         
         self.cursor.execute(self.make_sql_create_table(opts,  opts['table']))
@@ -297,8 +297,9 @@ class RasterUpload(QObject):
     
     
     def make_sql_create_table(self,  options, table,  is_overview = False):
+        print (table)
         sql = "CREATE TABLE %s (rid serial PRIMARY KEY, %s RASTER);\n" \
-              % (self.make_sql_full_table_name(schema,  table), self.quote_sql_name(options['column']))
+              % (self.make_sql_full_table_name(table), self.quote_sql_name(options['column']))
         return sql
     
     
