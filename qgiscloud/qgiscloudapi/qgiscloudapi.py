@@ -287,7 +287,7 @@ class API(object):
         """
             Create a new map and return it.
         """
-        name = name.decode('utf-8')
+#        name = name.decode('utf-8')
             
         self.requires_auth()
         resource = '/maps.json'

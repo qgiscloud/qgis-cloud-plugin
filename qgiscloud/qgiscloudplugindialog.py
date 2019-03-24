@@ -227,10 +227,10 @@ class QgisCloudPluginDialog(QDockWidget):
         name = os.path.splitext(os.path.basename(str(project.fileName())))[0]
             
         # Allowed chars for QGISCloud map name: /\A[A-Za-z0-9\_\-]*\Z/
-        name = str(name).encode('ascii', 'replace')  # Replace non-ascii chars
-        
+#        name = str(name).encode('ascii', 'replace')  # Replace non-ascii chars
+        name = str(re.sub(r'[^\x00-\x7F]+','_', name))
         # Replace withespace
-        name = name.replace(b" ",  b"_")
+        name = name.replace(" ",  "_")
         return name
 
     def resetApiUrl(self):
@@ -656,8 +656,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 }
                 
                 fname = str(QgsProject.instance().fileName())
-                    
-                map = self.api.create_map(self.map(), fname, config)['map']
+                map = self.api.create_map( self.map(), fname, config)['map']
                 self.show_api_error(map)
                 if map['config']['missingSvgSymbols']:
                     self.publish_symbols(map['config']['missingSvgSymbols'])
