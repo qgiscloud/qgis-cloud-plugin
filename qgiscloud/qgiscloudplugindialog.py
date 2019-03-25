@@ -813,33 +813,33 @@ class QgisCloudPluginDialog(QDockWidget):
         self.statusBar().showMessage(self.tr("Updated local data sources"))
 
     def __wkbTypeString(self, wkbType):
-        if wkbType == Qgis.WkbUnknown:
+        if wkbType == QgsWkbTypes.Unknown:
             return "WkbUnknown"
-        elif wkbType == Qgis.WkbPoint:
+        elif wkbType == QgsWkbTypes.Point:
             return "WkbPoint"
-        elif wkbType == Qgis.WkbLineString:
+        elif wkbType == QgsWkbTypes.LineString:
             return "WkbLineString"
-        elif wkbType == Qgis.WkbMultiLineString:
+        elif wkbType == QgsWkbTypes.MultiLineString:
             return "WkbMultiLineString"
-        elif wkbType == Qgis.WkbPolygon:
+        elif wkbType == QgsWkbTypes.Polygon:
             return "WkbPolygon"
-        elif wkbType == Qgis.WkbMultiPoint:
+        elif wkbType == QgsWkbTypes.MultiPoint:
             return "WkbMultiPoint"
-        elif wkbType == Qgis.WkbMultiPolygon:
+        elif wkbType == QgsWkbTypes.MultiPolygon:
             return "WkbMultiPolygon"
-        elif wkbType == Qgis.WkbNoGeometry:
+        elif wkbType == QgsWkbTypes.NoGeometry:
             return "WkbNoGeometry"
-        elif wkbType == Qgis.WkbPoint25D:
+        elif wkbType == QgsWkbTypes.Point25D:
             return "WkbPoint25D"
-        elif wkbType == Qgis.WkbLineString25D:
+        elif wkbType == QgsWkbTypes.LineString25D:
             return "WkbLineString25D"
-        elif wkbType == Qgis.WkbPolygon25D:
+        elif wkbType == QgsWkbTypes.Polygon25D:
             return "WkbPolygon25D"
-        elif wkbType == Qgis.WkbMultiPoint25D:
+        elif wkbType == QgsWkbTypes.MultiPoint25D:
             return "WkbMultiPoint25D"
-        elif wkbType == Qgis.WkbMultiLineString25D:
+        elif wkbType == QgsWkbTypes.MultiLineString25D:
             return "WkbMultiLineString25D"
-        elif wkbType == Qgis.WkbMultiPolygon25D:
+        elif wkbType == QgsWkbTypes.MultiPolygon25D:
             return "WkbMultiPolygon25D"
         elif wkbType == QgsWkbTypes.LineStringZM:
             return "WkbLineStringZM"
