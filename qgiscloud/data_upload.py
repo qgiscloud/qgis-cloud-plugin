@@ -372,7 +372,7 @@ class DataUpload(QObject):
 
             remote_layer = QgsVectorLayer(uri2.uri(), local_layer.name(), 'postgres')
         elif local_layer.type() == QgsMapLayer.RasterLayer:
-            uri = self.db_connections.cloud_layer_uri(db_name, table_name, geom_column)
+            uri = self.db_connections.cloud_layer_uri(db_name, schema_name,  table_name, geom_column)
             connString = "PG: dbname=%s host=%s user=%s password=%s port=%s mode=2 schema=%s column=rast table=%s" \
                   % (uri.database(), uri.host(),  uri.database(),  uri.password(),  uri.port(),  schema_name,  table_name )
 

@@ -140,7 +140,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.lblVersionPlugin.setOpenExternalLinks(True)            
 
         self.ui.tblLocalLayers.setColumnCount(6)
-        header = ["Layers", "Data Source","Table Schema","Table name", "Geometry type", "SRID"]
+        header = ["Layers","Table Schema","Table name", "Geometry type", "SRID","Data Source"]
         self.ui.tblLocalLayers.setHorizontalHeaderLabels(header)
         self.ui.tblLocalLayers.resizeColumnsToContents()
         self.ui.tblLocalLayers.setEditTriggers(QAbstractItemView.NoEditTriggers)
