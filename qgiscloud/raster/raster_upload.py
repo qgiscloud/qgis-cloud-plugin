@@ -101,7 +101,7 @@ class RasterUpload(QObject):
         opts['table'] = layer_info['table_name']
         opts['schema'] =  layer_info['schema_name']
             
-        self.progress_label.setText(self.tr("Creating table '{table}'...").format(table=opts['schema_table']))
+        self.progress_label.setText(self.tr("Creating table '{table}'...").format(table=opts['schema_table'].replace('"',  '')))
         QApplication.processEvents()
         
         self.cursor.execute(self.make_sql_drop_raster_table(opts['schema_table']))
@@ -119,11 +119,11 @@ class RasterUpload(QObject):
    # create raster overviews
         for level in [4, 8, 16, 32]:
             
-            sql = 'drop table if exists "%s.o_%d_%s"' %(opts['schema'],  level,  opts['table'])
+            sql = 'drop table if exists "%s"."o_%d_%s"' %(opts['schema'],  level,  opts['table'])
             self.cursor.execute(sql)
             self.conn.commit()
             sql = "select st_createoverview_qgiscloud('%s'::text, '%s'::name, %d)" % (opts['schema_table'].replace('"',  ''),  opts['column'],  level)
-            self.progress_label.setText(self.tr("Creating overview-level {level} for table '{table}'...").format(level=level,  table=opts['schema_table']))
+            self.progress_label.setText(self.tr("Creating overview-level {level} for table '{table}'...").format(level=level,  table=opts['schema_table'].replace('"',  '')))
             QApplication.processEvents()
             self.cursor.execute(sql)
             self.conn.commit()
@@ -133,7 +133,7 @@ class RasterUpload(QObject):
             self.conn.commit()
                 
 
-        self.progress_label.setText(self.tr("Registering raster columns of table '%s'..." % (opts['schema_table'])))
+        self.progress_label.setText(self.tr("Registering raster columns of table '%s'..." % (opts['schema_table'].replace('"',  ''))))
         QApplication.processEvents()
         self.cursor.execute(self.make_sql_addrastercolumn(opts))
         self.conn.commit()
@@ -418,12 +418,15 @@ class RasterUpload(QObject):
     def calc_tile_size(self,  ds):
         dimX = ds.RasterXSize 
         dimY = ds.RasterYSize
+        tileX = dimX
+        tileY = dimY        
         min = 30
         max = 100
         
         for j in range(0, 2): 
                 _i = 0
                 _r = -1
+
                 
                 if j < 1 and dimX <= max: 
                         tileX = dimX
