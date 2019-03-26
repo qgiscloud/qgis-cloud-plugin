@@ -24,7 +24,7 @@ from builtins import range
 from qgis.PyQt.QtCore import Qt, QSettings, pyqtSlot
 from qgis.PyQt.QtWidgets import QApplication, QDockWidget,   QTableWidgetItem, QListWidgetItem, \
                                                         QDialog, QMessageBox, QAbstractItemView, QWidget, QLabel,  QVBoxLayout,  \
-                                                        QFileDialog,  QComboBox
+                                                        QFileDialog,  QComboBox,  QLineEdit
 from qgis.PyQt.QtGui import QPalette, QColor
 from qgis.core import *
 from .ui_qgiscloudplugin import Ui_QgisCloudPlugin
@@ -143,7 +143,7 @@ class QgisCloudPluginDialog(QDockWidget):
         header = ["Layers","Table Schema","Table name", "Geometry type", "SRID","Data Source"]
         self.ui.tblLocalLayers.setHorizontalHeaderLabels(header)
         self.ui.tblLocalLayers.resizeColumnsToContents()
-        self.ui.tblLocalLayers.setEditTriggers(QAbstractItemView.NoEditTriggers)
+#        self.ui.tblLocalLayers.setEditTriggers(QAbstractItemView.NoEditTriggers)
         
         self.ui.btnUploadData.setEnabled(False)
         self.ui.btnPublishMap.setEnabled(False)
@@ -799,8 +799,10 @@ class QgisCloudPluginDialog(QDockWidget):
 
             row = self.ui.tblLocalLayers.rowCount()
             self.ui.tblLocalLayers.insertRow(row)
+            layers_item.setFlags( Qt.ItemIsSelectable |  Qt.ItemIsEnabled )
             self.ui.tblLocalLayers.setItem(
                 row, self.COLUMN_LAYERS, layers_item)
+            data_source_item.setFlags( Qt.ItemIsSelectable |  Qt.ItemIsEnabled )
             self.ui.tblLocalLayers.setItem(
                 row, self.COLUMN_DATA_SOURCE, data_source_item)                
                 
@@ -809,11 +811,16 @@ class QgisCloudPluginDialog(QDockWidget):
             cmb_schema.setEditable(True)
             cmb_schema.addItems(schema_list)
             self.ui.tblLocalLayers.setCellWidget(row, self.COLUMN_SCHEMA_NAME, cmb_schema)
-            
+
+            table_name_item.setFlags( Qt.ItemIsSelectable | Qt.ItemIsEditable | Qt.ItemIsEnabled )
             self.ui.tblLocalLayers.setItem(
                 row, self.COLUMN_TABLE_NAME, table_name_item)
+
+            geometry_type_item.setFlags( Qt.ItemIsSelectable |  Qt.ItemIsEnabled )
             self.ui.tblLocalLayers.setItem(
                 row, self.COLUMN_GEOMETRY_TYPE, geometry_type_item)
+                
+            srid_item.setFlags( Qt.ItemIsSelectable |  Qt.ItemIsEnabled )
             self.ui.tblLocalLayers.setItem(row, self.COLUMN_SRID, srid_item)
 
         if self.local_data_sources.count() > 0:
@@ -907,7 +914,6 @@ class QgisCloudPluginDialog(QDockWidget):
             # update table names
             if schema_list != None:
                 for row in range(0, self.ui.tblLocalLayers.rowCount()):
-                    data_source = self.ui.tblLocalLayers.item(row, self.COLUMN_LAYERS).text()
                     data_source = self.ui.tblLocalLayers.item(row, self.COLUMN_DATA_SOURCE).text()
                     cmb_schema = QComboBox()
                     cmb_schema.setEditable(True)
