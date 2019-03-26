@@ -12,6 +12,7 @@ about= QGIS Cloud is your powerful Web-GIS platform for publishing maps, data an
 changelog=
     3.1.0
     - support of database schemas on upload added
+    - editable target table names
     - bugfixing
     3.0.28
     - Module import bug fixed
