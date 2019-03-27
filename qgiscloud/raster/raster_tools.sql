@@ -50,6 +50,7 @@ BEGIN
 
 
   ttab := 'o_' || factor || '_' || sinfo.tab;
+
   sql := 'CREATE TABLE ' || quote_ident(sinfo.sch)
       || '.' || quote_ident(ttab)
       || ' AS SELECT ST_Retile_qgiscloud($1, $2, $3, $4, $5, $6, $7) '
