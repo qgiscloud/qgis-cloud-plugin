@@ -292,7 +292,8 @@ class RasterUpload(QObject):
     
     
     def make_sql_create_table(self,  options, table,  is_overview = False):
-        sql = "CREATE TABLE %s (rid serial PRIMARY KEY, %s RASTER);\n" \
+        sql = "create schema if not exists \"%s\";" % options['schema']
+        sql += "CREATE TABLE %s (rid serial PRIMARY KEY, %s RASTER);\n" \
               % (self.make_sql_full_table_name(table), self.quote_sql_name(options['column']))
         return sql
     
