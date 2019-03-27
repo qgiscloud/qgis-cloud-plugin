@@ -1,3 +1,5 @@
+from builtins import str
+from builtins import range
 ################################################################################
 # Copyright (C) 2009-2010 Mateusz Loskot <mateusz@loskot.net>
 # Copyright (C) 2009-2011 Pierre Racine <pierre.racine@sbf.ulaval.ca>
@@ -20,13 +22,13 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ################################################################################
 #
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from qgis.PyQt.QtCore import QObject, QFileInfo
+from qgis.PyQt.QtWidgets import QApplication,  QMessageBox
 from qgis.core import *
 from osgeo import gdal
 from osgeo import osr
 import osgeo.gdalconst as gdalc
-from StringIO import StringIO
+from io import StringIO
 from qgiscloud.db_connections import DbConnections
 import binascii
 import glob
@@ -72,8 +74,8 @@ class RasterUpload(QObject):
         opts['register'] = None
         
         # Create PostGIS Raster Tool Functions          
-        raster_tools = QFileInfo(QgsApplication.qgisUserDbFilePath()).path() + "/python/plugins/qgiscloud/raster/raster_tools.sql"
-        sql = open(str(raster_tools)).read().encode('ascii',errors='ignore')
+        raster_tools_file = "%s/raster_tools.sql" % os.path.dirname(__file__)
+        sql = open(raster_tools_file).read().encode('ascii',errors='ignore')
         self.cursor.execute(sql)
         self.conn.commit()              
          
@@ -81,9 +83,6 @@ class RasterUpload(QObject):
          
         # Burn all specified input raster files into single WKTRaster table
         gt = None
-        
-#        for layer_id in raster.keys():
-#        layer_info = raster[layer_id]
         layer_info = raster
         opts['srid'] = layer_info['layer'].dataProvider().crs().postgisSrid()
         infile = layer_info['data_source']
@@ -94,27 +93,28 @@ class RasterUpload(QObject):
         file_size /= 1024 * 1024
         size = size + file_size
         
-        if size > max_size:
+        if size > float(max_size):
             QMessageBox.warning(None, self.tr("Database full"), self.tr("Upload would exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan."))
-#            break
-            return
-
+            return False
         
         opts['schema_table'] = "\"%s\".\"%s\"" % (layer_info['schema_name'],  layer_info['table_name'])
         opts['table'] = layer_info['table_name']
         opts['schema'] =  layer_info['schema_name']
             
-        self.progress_label.setText(self.tr("Creating table '{table}'...").format(table=opts['schema_table'].replace('"',  '')))        
+        self.progress_label.setText(self.tr("Creating table '{table}'...").format(table=opts['schema_table'].replace('"',  '')))
         QApplication.processEvents()
         
         self.cursor.execute(self.make_sql_drop_raster_table(opts['schema_table']))
         self.conn.commit()
         
+        self.cursor.execute(self.make_sql_create_table(opts,  opts['schema_table']))
+        self.conn.commit()
+    
         gt = self.wkblify_raster(opts,  infile.replace( '\\', '/') , i, gt)
         i += 1
         
         self.cursor.execute(self.make_sql_create_gist(opts['schema_table'],  opts['column']))
-        self.conn.commit()    
+        self.conn.commit()            
 
    # create raster overviews
         for level in [4, 8, 16, 32]:
@@ -122,7 +122,6 @@ class RasterUpload(QObject):
             sql = 'drop table if exists "%s"."o_%d_%s"' %(opts['schema'],  level,  opts['table'])
             self.cursor.execute(sql)
             self.conn.commit()
-            
             sql = "select st_createoverview_qgiscloud('%s'::text, '%s'::name, %d)" % (opts['schema_table'].replace('"',  ''),  opts['column'],  level)
             self.progress_label.setText(self.tr("Creating overview-level {level} for table '{table}'...").format(level=level,  table=opts['schema_table'].replace('"',  '')))
             QApplication.processEvents()
@@ -138,7 +137,7 @@ class RasterUpload(QObject):
         QApplication.processEvents()
         self.cursor.execute(self.make_sql_addrastercolumn(opts))
         self.conn.commit()
-        
+            
             
                     # VACUUM
 #            self.cursor.execute(self.make_sql_vacuum(opts['table']))
@@ -283,7 +282,11 @@ class RasterUpload(QObject):
     def make_sql_drop_raster_table(self,  schema_table):
         
         st = self.make_sql_schema_table_names(schema_table)
-        target = "%s.%s" % (st[0], st[1])
+    
+        if len(st[0]) == 0:
+            target = "public.%s" % st[1]
+        else:
+            target = "%s.%s" % (st[0], st[1])
         sql = "DROP TABLE IF EXISTS %s;\n" % target
         return sql
     
@@ -308,10 +311,9 @@ class RasterUpload(QObject):
         ts = self.make_sql_schema_table_names(options['schema_table'])
         schema = ts[0].replace('"', '')
         table = ts[1].replace('"', '')
-                 
+        
         sql = "SELECT AddRasterConstraints('%s','%s','%s',TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE);" \
                    % (schema,  table,  options['column'])
-
         return sql
         
     def make_sql_create_raster_overviews(self,  options):
@@ -325,7 +327,6 @@ class RasterUpload(QObject):
     
     
     def make_sql_register_overview(self,  options, ov_table, ov_factor):
-
 
         r_table = self.make_sql_table_name(ov_table)
     
@@ -418,13 +419,14 @@ class RasterUpload(QObject):
         dimX = ds.RasterXSize 
         dimY = ds.RasterYSize
         tileX = dimX
-        tileY = dimY         
+        tileY = dimY        
         min = 30
         max = 100
         
         for j in range(0, 2): 
                 _i = 0
                 _r = -1
+
                 
                 if j < 1 and dimX <= max: 
                         tileX = dimX
@@ -436,11 +438,11 @@ class RasterUpload(QObject):
                 
                 for i in range (max,  min-1,  -1):
                         if j < 1:
-                            d = dimX / i
-                            r = float (dimX) / float (i)
+                            d = dimX // i
+                            r = dimX / i
                         else: 
-                            d = dimY / i
-                            r = float (dimY) /  float (i)
+                            d = dimY // i
+                            r = dimY /  i
                             
                         r = r -  float (d)
                         if  abs(_r   -  (-1)) <= 0.001 or r < _r  or  abs(_r   -  r ) <= 0.001:
@@ -479,8 +481,14 @@ class RasterUpload(QObject):
         import struct
     
         # Binary to HEX
-        fmt_little = '<' +fmt
-        hexstr = binascii.hexlify(struct.pack(fmt_little, data)).upper()
+        try:
+            fmt_little = '<' +fmt
+            hexstr = binascii.hexlify(struct.pack(fmt_little, data)).upper().decode('utf-8')
+        except:
+            if fmt in ['H',  'h',  'i',  'I']:
+                data = int(data)
+                fmt_little = '<' +fmt
+                hexstr = binascii.hexlify(struct.pack(fmt_little, data)).upper().decode('utf-8')            
 
         return hexstr
     
@@ -575,8 +583,8 @@ class RasterUpload(QObject):
     
     
             if read_padding_size[0] > 0 or read_padding_size[1] > 0:
-                target_block_size = (valid_read_block_size[0] / level, valid_read_block_size[1] / level)
-                target_padding_size = (read_padding_size[0] / level, read_padding_size[1] / level)
+                target_block_size = (valid_read_block_size[0] // level, valid_read_block_size[1] //level)
+                target_padding_size = (read_padding_size[0] //level, read_padding_size[1] //level)
             else:
                 target_block_size = block_size
                 target_padding_size = ( 0, 0 )
@@ -594,18 +602,19 @@ class RasterUpload(QObject):
                 nodata_value = self.fetch_band_nodata(self,  band)
     
                 # Apply columns padding
-                pad_cols = numpy.array([nodata_value] * target_padding_size[0])
+                pad_cols = numpy.full(target_padding_size[0],  nodata_value)
+
                 for row in range (0, ysize_read_pixels):
                     out_line = numpy.append(pixels[row], pad_cols)
                     out_pixels[row] = out_line
     
                 # Fill rows padding with nodata value
-                for row in range(ysize_read_pixels, ysize_read_pixels + target_padding_size[1]):
+                for row in range(ysize_read_pixels, int(ysize_read_pixels + target_padding_size[1])):
                     out_pixels[row].fill(nodata_value)
             else:
                 out_pixels = pixels
     
-            hexwkb = binascii.hexlify(out_pixels)
+            hexwkb = binascii.hexlify(out_pixels).decode('utf-8')
     
 #        self.check_hex(hexwkb)
         return hexwkb
@@ -664,13 +673,20 @@ class RasterUpload(QObject):
                 if (tile_count % copy_size) == 0:
                     self.cursor.copy_from(StringIO(importString), '%s' % gen_table)
                     importString = ""
-                    self.progress_label.setText(pystring(self.tr("{table}: {count} of {sum_tiles} tiles uploaded").format(
-                        table=gen_table, count=tile_count,  sum_tiles= sum_tiles)))                
+                    self.progress_label.setText(self.tr("{table}: {count} of {sum_tiles} tiles uploaded").format(
+                        table=gen_table, 
+                        count=tile_count,  
+                        sum_tiles= sum_tiles))                
+                        
                     QApplication.processEvents()
 
         self.cursor.copy_from(StringIO(importString), '%s' % gen_table)
         self.conn.commit()
         
+        self.progress_label.setText(self.tr("Calculating raster params for {sum_tiles} tiles ...").format(
+            sum_tiles= sum_tiles))        
+        QApplication.processEvents()        
+
         self.cursor.execute(self.make_sql_addrastercolumn(options))
         self.conn.commit()
         
