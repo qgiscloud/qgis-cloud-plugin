@@ -42,11 +42,11 @@ import tempfile
 from distutils.version import StrictVersion
     
 class QgisCloudPluginDialog(QDockWidget):
-     COLUMN_LAYERS = 0
+    COLUMN_LAYERS = 0
     COLUMN_SCHEMA_NAME = 1
-     COLUMN_TABLE_NAME = 2
-     COLUMN_GEOMETRY_TYPE = 3
-     COLUMN_SRID = 4
+    COLUMN_TABLE_NAME = 2
+    COLUMN_GEOMETRY_TYPE = 3
+    COLUMN_SRID = 4
     COLUMN_DATA_SOURCE = 5
 
     if QGis.QGIS_VERSION_INT < 21400:
