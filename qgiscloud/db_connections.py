@@ -108,18 +108,18 @@ class DbConnections:
 
         self._dbs_refreshed = True
 
-    def cloud_layer_uri(self, db_name, table_name, geom_column):
+    def cloud_layer_uri(self, db_name, schema_name,  table_name, geom_column):
         uri = None
         # find db connection and create uri
         connections = DbConnectionCfg.get_cloud_db_connections(db_name)
         if len(connections) > 0:
             conn = DbConnectionCfg.from_settings(connections[0])
             uri = conn.data_source_uri()
-            uri.setDataSource("", table_name, geom_column)
+            uri.setDataSource(schema_name,  table_name, geom_column)
         return uri
 
     def isPortOpen(self, db_name):
-        uri = self.cloud_layer_uri(db_name, "", "")
+        uri = self.cloud_layer_uri(db_name, "", "", "")
         if not uri.port():
             return False
         host = str(uri.host())

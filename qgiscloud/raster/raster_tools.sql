@@ -1,5 +1,5 @@
 CREATE OR REPLACE FUNCTION st_createoverview_qgiscloud(
-    tab regclass,
+    tab text,
     col name,
     factor integer,
     algo text DEFAULT 'NearestNeighbour'::text)
@@ -9,7 +9,15 @@ DECLARE
   sinfo RECORD; -- source info
   sql TEXT;
   ttab TEXT;
+  pos INTEGER;
+  r_schema TEXT;
+  r_table TEXT;
+
 BEGIN
+  pos := strpos(tab::text,'.');
+  r_schema := substr(tab::text,0,pos);
+  pos := pos + 1; 
+  r_table := substr(tab::text,pos);
 
   -- 0. Check arguments, we need to ensure:
   --    a. Source table has a raster column with given name
@@ -17,14 +25,16 @@ BEGIN
   --    c. Source table has a known extent ? (we could actually compute it)
   --    d. Source table has a fixed tile size (or "factor" would have no meaning?)
   -- # all of the above can be checked with a query to raster_columns
-  sql := 'SELECT r.r_table_schema sch, r.r_table_name tab, '
+  sql := format('SELECT r.r_table_schema sch, r.r_table_name tab, '
       || 'r.scale_x sfx, r.scale_y sfy, r.blocksize_x tw, '
       || 'r.blocksize_y th, r.extent ext, r.srid FROM raster_columns r, '
-      || 'pg_class c, pg_namespace n WHERE r.r_table_schema = n.nspname '
-      || 'AND r.r_table_name = c.relname AND r_raster_column = $2 AND '
-      || ' c.relnamespace = n.oid AND c.oid = $1'
-  ;
-  EXECUTE sql INTO sinfo USING tab, col;
+      || 'pg_class c, pg_namespace n WHERE r.r_table_schema = n.nspname AND '
+      || 'r.r_table_name = c.relname AND '
+      || 'c.relnamespace = n.oid AND '
+      || 'r.r_table_schema = ''%1$s'' and r.r_table_name = ''%2$s'' and r.r_raster_column = ''%3$s''', r_schema, r_table, col);
+
+
+  EXECUTE sql INTO sinfo;
   IF sinfo IS NULL THEN
       RAISE EXCEPTION '%.% raster column does not exist', tab::text, col;
   END IF;

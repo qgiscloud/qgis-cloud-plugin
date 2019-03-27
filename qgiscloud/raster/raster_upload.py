@@ -98,43 +98,43 @@ class RasterUpload(QObject):
             QMessageBox.warning(None, self.tr("Database full"), self.tr("Upload would exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan."))
 #            break
             return
+
         
+        opts['schema_table'] = "\"%s\".\"%s\"" % (layer_info['schema_name'],  layer_info['table_name'])
         opts['table'] = layer_info['table_name']
+        opts['schema'] =  layer_info['schema_name']
             
-        self.progress_label.setText(pystring(self.tr("Creating table '{table}'...").format(table=opts['table'])))
+        self.progress_label.setText(self.tr("Creating table '{table}'...").format(table=opts['schema_table'].replace('"',  '')))        
         QApplication.processEvents()
         
-        self.cursor.execute(self.make_sql_drop_raster_table(opts['table']))
+        self.cursor.execute(self.make_sql_drop_raster_table(opts['schema_table']))
         self.conn.commit()
         
-        self.cursor.execute(self.make_sql_create_table(opts,  opts['table']))
-        self.conn.commit()
-    
         gt = self.wkblify_raster(opts,  infile.replace( '\\', '/') , i, gt)
         i += 1
         
-        self.cursor.execute(self.make_sql_create_gist(opts['table'],  opts['column']))
-        self.conn.commit()            
+        self.cursor.execute(self.make_sql_create_gist(opts['schema_table'],  opts['column']))
+        self.conn.commit()    
 
    # create raster overviews
         for level in [4, 8, 16, 32]:
             
-            sql = 'drop table if exists o_%d_%s' %(level,  opts['table'])
+            sql = 'drop table if exists "%s"."o_%d_%s"' %(opts['schema'],  level,  opts['table'])
             self.cursor.execute(sql)
             self.conn.commit()
             
-            sql = "select st_createoverview_qgiscloud('%s'::regclass, '%s'::name, %d)" % (opts['table'],  opts['column'],  level)
-            self.progress_label.setText(pystring(self.tr("Creating overview-level {level} for table '{table}'...").format(level=level,  table=opts['table'])))
+            sql = "select st_createoverview_qgiscloud('%s'::text, '%s'::name, %d)" % (opts['schema_table'].replace('"',  ''),  opts['column'],  level)
+            self.progress_label.setText(self.tr("Creating overview-level {level} for table '{table}'...").format(level=level,  table=opts['schema_table'].replace('"',  '')))
             QApplication.processEvents()
             self.cursor.execute(sql)
             self.conn.commit()
             
-            index_table = 'o_'+str(level)+'_'+opts['table']
+            index_table = opts['schema']+'.o_'+str(level)+'_'+opts['table']
             self.cursor.execute(self.make_sql_create_gist(index_table,  opts['column']))
             self.conn.commit()
                 
 
-        self.progress_label.setText(pystring(self.tr("Registering raster columns of table '%s'..." % (opts['table']))))
+        self.progress_label.setText(self.tr("Registering raster columns of table '%s'..." % (opts['schema_table'].replace('"',  ''))))
         QApplication.processEvents()
         self.cursor.execute(self.make_sql_addrastercolumn(opts))
         self.conn.commit()
@@ -263,21 +263,16 @@ class RasterUpload(QObject):
     
     def make_sql_schema_table_names(self,  schema_table):
         st = schema_table.split('.')
-        if len(st) == 1:
-            # TODO: Should we warn user that public is used implicitly?
-            st.insert(0, "public")
         return (st[0], st[1])
     
     def make_sql_full_table_name(self,  schema_table):
         st = self.make_sql_schema_table_names(schema_table)
-        table = "\"%s\".\"%s\"" % (st[0], st[1])
+        table = "%s.%s" % (st[0], st[1])
         return table
     
     def make_sql_table_name(self,  schema_table):
         st = schema_table.split('.')
-        if len(st) == 2:
-            return st[1]
-        return st[0]
+        return st[1].replace('"',  '')
     
     def make_sql_drop_table(self,  table):
         sql = "DROP TABLE IF EXISTS %s CASCADE;\n" \
@@ -285,13 +280,10 @@ class RasterUpload(QObject):
         self.logit("SQL: %s" % sql)
         return sql
     
-    def make_sql_drop_raster_table(self,  table):
-        st = self.make_sql_schema_table_names(table)
-    
-        if len(st[0]) == 0:
-            target = "public.\"%s\"" % st[1]
-        else:
-            target = "\"%s\".\"%s\"" % (st[0], st[1])
+    def make_sql_drop_raster_table(self,  schema_table):
+        
+        st = self.make_sql_schema_table_names(schema_table)
+        target = "%s.%s" % (st[0], st[1])
         sql = "DROP TABLE IF EXISTS %s;\n" % target
         return sql
     
@@ -313,10 +305,12 @@ class RasterUpload(QObject):
     
     
     def make_sql_addrastercolumn(self,  options):
-        ts = self.make_sql_schema_table_names(options['table'])
-                
+        ts = self.make_sql_schema_table_names(options['schema_table'])
+        schema = ts[0].replace('"', '')
+        table = ts[1].replace('"', '')
+                 
         sql = "SELECT AddRasterConstraints('%s','%s','%s',TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE);" \
-                   % (ts[0],  ts[1],  options['column'])
+                   % (schema,  table,  options['column'])
 
         return sql
         
@@ -325,18 +319,18 @@ class RasterUpload(QObject):
         sql = ""
 
         for level in options['overview_level'].split(","):
-          sql += "select st_createoverview('%s'::regclass, '%s'::name, %s);\n" % (options['table'],  'rast',  level)
+          sql += "select st_createoverview('%s'::regclass, '%s'::name, %s);\n" % (options['schema_table'],  'rast',  level)
           
         return sql
     
     
     def make_sql_register_overview(self,  options, ov_table, ov_factor):
 
-        schema = self.make_sql_schema_table_names(options['table'])[0]
+
         r_table = self.make_sql_table_name(ov_table)
     
         sql = "SELECT AddOverviewConstraints('%s','%s', '%s', '%s','%s','%s',%d);" \
-            % (schema,  r_table,  options['column'],  schema,  options['table'],  options['column'],  ov_factor)
+            % (options['schema'],  r_table,  options['column'],  options['schema'],  options['table'],  options['column'],  ov_factor)
         
         return sql
     
@@ -423,6 +417,8 @@ class RasterUpload(QObject):
     def calc_tile_size(self,  ds):
         dimX = ds.RasterXSize 
         dimY = ds.RasterYSize
+        tileX = dimX
+        tileY = dimY         
         min = 30
         max = 100
         
@@ -630,7 +626,7 @@ class RasterUpload(QObject):
             read_block_size = block_size
             grid_size = (1, 1)
     
-        gen_table = options['table']
+        gen_table = options['schema_table']
     
         # Write (original) raster to hex binary output
         tile_count = 0
@@ -666,13 +662,13 @@ class RasterUpload(QObject):
                 
             # Periodically update ui
                 if (tile_count % copy_size) == 0:
-                    self.cursor.copy_from(StringIO(importString), '"public"."%s"' % gen_table)
+                    self.cursor.copy_from(StringIO(importString), '%s' % gen_table)
                     importString = ""
                     self.progress_label.setText(pystring(self.tr("{table}: {count} of {sum_tiles} tiles uploaded").format(
                         table=gen_table, count=tile_count,  sum_tiles= sum_tiles)))                
                     QApplication.processEvents()
 
-        self.cursor.copy_from(StringIO(importString), '"public"."%s"' % gen_table)
+        self.cursor.copy_from(StringIO(importString), '%s' % gen_table)
         self.conn.commit()
         
         self.cursor.execute(self.make_sql_addrastercolumn(options))
