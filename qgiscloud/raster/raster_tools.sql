@@ -49,20 +49,20 @@ BEGIN
   END IF;
 
 
-  ttab := 'o_' || factor || '_' || sinfo.tab;
+  ttab := '"'||r_schema ||'"."' || 'o_' || factor || '_' || r_table||'"';
 
-  sql := 'CREATE TABLE ' || quote_ident(sinfo.sch)
-      || '.' || quote_ident(ttab)
-      || ' AS SELECT ST_Retile_qgiscloud($1, $2, $3, $4, $5, $6, $7) '
+  sql := 'CREATE TABLE ' || ttab
+      || ' AS SELECT ST_Retile_qgiscloud($1, $2, $3, $4, $5, $6, $7, $8) '
       || quote_ident(col);
-  EXECUTE sql USING tab, col, sinfo.ext,
+
+  EXECUTE sql USING r_schema, r_table, col, sinfo.ext,
                     sinfo.sfx * factor, sinfo.sfy * factor,
                     sinfo.tw, sinfo.th, algo;
 
-  PERFORM AddRasterConstraints(sinfo.sch, ttab, col);
+  PERFORM AddRasterConstraints(r_schema, r_table, col);
 
-  PERFORM AddOverviewConstraints(sinfo.sch, ttab, col,
-                                 sinfo.sch, sinfo.tab, col, factor);
+  PERFORM AddOverviewConstraints(r_schema, r_table, col,
+                                 r_schema, r_table, col, factor);
 
   RETURN ttab;
 END;
@@ -73,7 +73,8 @@ $BODY$
 
 
 CREATE OR REPLACE FUNCTION st_retile_qgiscloud(
-    tab regclass,
+    schema text,
+    tab text,
     col name,
     ext geometry,
     sfx double precision,
@@ -94,8 +95,8 @@ DECLARE
   nlins int;
   srid int;
   sql TEXT;
-BEGIN
 
+BEGIN
   RAISE DEBUG 'Target coverage will have sfx=%, sfy=%', sfx, sfy;
 
   -- 2. Loop over each target tile and build it from source tiles
@@ -121,7 +122,7 @@ BEGIN
 
       sql := 'with 
                 tile as 
-                (select ' || quote_ident(col) || ' from ' || tab::text  ||' where st_intersects(' || quote_ident(col) ||', $3))
+                (select ' || quote_ident(col) || ' from ' || quote_ident(schema)  ||'.' || quote_ident(tab)  ||' where st_intersects(' || quote_ident(col) ||', $3))
                 select st_rescale(st_union(tile.rast), $1, $2, $4) as rast from tile';
 
       FOR rec IN EXECUTE sql USING sfx, sfy, te, algo LOOP
