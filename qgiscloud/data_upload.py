@@ -101,8 +101,8 @@ class DataUpload(QObject):
                         wkbType = QGis.multiType(wkbType)
 
                     # Create table (pk='' => always generate a new primary key)
-                    cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"public\".\"%s\" (%s)" % (
-                        db.database, db.host, db.port, db.username, db.password, item['table'], geom_column
+                    cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"%s\".\"%s\" (%s)" % (
+                            db.database, db.host, db.port, db.username, db.password, item['schema'], item['table'], geom_column
                     )
 
                 self.progress_label.setText(pystring(self.tr("Creating table '{table}'...")).format(table=item['table']))
@@ -217,7 +217,7 @@ class DataUpload(QObject):
 
                 if ok and importstr:
                     try:
-                        cursor.copy_from(StringIO(importstr), '"public"."%s"' % item['table'])
+                        cursor.copy_from(StringIO(importstr.decode('utf-8')), '"%s"."%s"' % (item['schema'], item['table']))       
                     except Exception as e:
                         messages += str(e) + "\n"
                         ok = False
@@ -408,6 +408,7 @@ class DataUpload(QObject):
                     layer_info['layer'],
                     layer_info['data_source'],
                     layer_info['db_name'],
+                    layer_info['schema_name'],                     
                     layer_info['table_name'],
                     layer_info['geom_column']
                 )
@@ -493,8 +494,6 @@ class DataUpload(QObject):
 
     def schema_from_uri(self, uri):
         schema = uri.schema()
-        if len(schema) == 0:
-            schema = "public"
         return schema
 
     def show_api_error(self, result):

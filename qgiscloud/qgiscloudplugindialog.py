@@ -197,7 +197,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.tabMaps.itemSelectionChanged.connect(self.select_map)
         self.ui.btnPublishMap.clicked.connect(self.publish_map)
         self.ui.btnRefreshLocalLayers.clicked.connect(self.refresh_local_data_sources)
-        self.ui.cbUploadDatabase.currentTextChanged.connect(self.update_data_sources_table_names)        
+        self.ui.cbUploadDatabase.editTextChanged.connect(self.update_data_sources_table_names)        
         self.iface.newProjectCreated.connect(self.reset_load_data)
         self.iface.projectRead.connect(self.reset_load_data)
         QgsMapLayerRegistry.instance().layerWillBeRemoved.connect(self.remove_layer)
