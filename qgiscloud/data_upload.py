@@ -173,6 +173,13 @@ class DataUpload(QObject):
                             if not val:
                                 val = b"\\N"
                         else:
+                            if isinstance( val, list ):
+                                listString = '{'
+                                if len( val ) > 0:
+                                    listString = listString + ('"' + '","'.join( val ) + '"')
+                                listString = listString + '}'
+                                val = listString
+                                             
                             val = bytearray(str(val).encode('utf-8'))
                             val = val.replace(b'\x00',b'?')
                             val = val.replace(b'\t', b"E'\t'")

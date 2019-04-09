@@ -84,6 +84,10 @@ class PGVectorLayerImport(object):
             else:
                 fieldType = "float8"
             fieldPrec = -1
+        elif field.type() == QVariant.Bool:
+            fieldType = "boolean"
+        elif field.type() == QVariant.StringList:
+            fieldType = "varchar[]"
         else:
             return False
 
