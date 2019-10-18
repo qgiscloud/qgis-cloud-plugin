@@ -14,7 +14,7 @@
    <locale language="English" country="UnitedStates"/>
   </property>
   <property name="windowTitle">
-   <string>&amp;QGIS Cloud</string>
+   <string>QGIS Cloud</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout_3">
