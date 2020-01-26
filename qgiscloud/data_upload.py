@@ -182,6 +182,7 @@ class DataUpload(QObject):
                                              
                             val = bytearray(str(val).encode('utf-8'))
                             val = val.replace(b'\x00',b'?')
+                            val = val.replace(b'\r\n', b'\\n')
                             val = val.replace(b'\t', b"E'\t'")
                             val = val.replace(b'\n', b"E'\n'")
                             val = val.replace(b'\r', b"E'\r'")
