@@ -179,14 +179,14 @@ class DataUpload(QObject):
                                     listString = listString + ('"' + '","'.join( val ) + '"')
                                 listString = listString + '}'
                                 val = listString
-                                             
+
                             val = bytearray(str(val).encode('utf-8'))
-                            val = val.replace(b'\x00',b'?')
-                            val = val.replace(b'\r\n', b'\\n')
-                            val = val.replace(b'\t', b"E'\t'")
-                            val = val.replace(b'\n', b"E'\n'")
-                            val = val.replace(b'\r', b"E'\r'")
-                            val = val.replace(b'\\', b"\\")
+                            val = val.replace(b'\x00', b'?')
+                            val = val.replace(b'\\', b'\\\\')
+                            val = val.replace(b'\t', b'\\t')
+                            val = val.replace(b'\n', b'\\n')
+                            val = val.replace(b'\r', b'\\r')
+
                         importstr += b"\t" + val
 
                     importstr += b"\n"
