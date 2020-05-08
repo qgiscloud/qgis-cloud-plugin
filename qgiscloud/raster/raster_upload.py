@@ -486,7 +486,7 @@ class RasterUpload(QObject):
             fmt_little = '<' +fmt
             hexstr = binascii.hexlify(struct.pack(fmt_little, data)).upper().decode('utf-8')
         except:
-            if fmt in ['H',  'h',  'i',  'I']:
+            if fmt in ['H',  'h',  'i',  'I', 'B']:
                 data = int(data)
                 fmt_little = '<' +fmt
                 hexstr = binascii.hexlify(struct.pack(fmt_little, data)).upper().decode('utf-8')            
