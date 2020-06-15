@@ -601,12 +601,19 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def publish_map(self):
         QApplication.setOverrideCursor(Qt.WaitCursor)
-        srs=QgsMapSettings().destinationCrs()
+        mapCrs=QgsProject.instance().crs()
         
-        if "USER" in srs.authid():
-            QMessageBox.warning(None, self.tr('Warning!'),  self.tr("The project has a user defined CRS. The use of user defined CRS is not supported. Please correct the project CRS before publishing!"))
+        crsError = ''
+        if not mapCrs.authid():
+            crsError = self.tr("The project has an unknown CRS. Please set a valid map CRS in Project->Properties...->CRS before publishing!" )
+
+        if "USER" in mapCrs.authid():
+            crsError = self.tr("The project has a user defined CRS. The use of user defined CRS is not supported. Please correct the project CRS before publishing!")
+
+        if crsError:
+            QMessageBox.critical( None, self.tr('Error'), crsError )
             QApplication.restoreOverrideCursor()
-            return 
+            return
             
         layer_dict = QgsProject.instance().mapLayers()
         layers = list(layer_dict.values())                    
