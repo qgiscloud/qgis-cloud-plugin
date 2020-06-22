@@ -598,6 +598,30 @@ class QgisCloudPluginDialog(QDockWidget):
             else:
                 return False
         return True
+    
+    def checkSameLayerNames( self, layers ):
+        sameLayerNames = []
+        
+        layerNameDict = {} #name / nReferences
+        
+        for layer in layers:
+            name = layer.shortName()
+            if not name:
+                name = layer.name()
+                
+            if name in layerNameDict:
+                layerNameDict[name] = layerNameDict[name] + 1
+            else:
+                layerNameDict[name] = 1
+                
+        for key, value in layerNameDict.items():
+            print(key, '->', value)
+            if value > 1:
+                sameLayerNames.append( key )
+                
+            
+        
+        return sameLayerNames
 
     def publish_map(self):
         QApplication.setOverrideCursor(Qt.WaitCursor)
@@ -619,6 +643,13 @@ class QgisCloudPluginDialog(QDockWidget):
         layers = list(layer_dict.values())                    
         layerList = ''
         
+        #make sure every layer has a unique WMS name
+        notUniqueLayerNames = self.checkSameLayerNames( layers )
+        if len( notUniqueLayerNames ) > 0:
+            QMessageBox.critical( None, self.tr('Error'), self.tr("The following WMS layer names are not unique: {}. Please make sure the names are unique, then publish the project again. The layer WMS short name can be set in the layer properties dialog under 'QGIS Server -> Short name'.").format( notUniqueLayerNames ) )
+            QApplication.restoreOverrideCursor()
+            return
+        
         for layer in layers:
             if "USER" in layer.crs().authid():
                  layerList += "'"+layer.name()+"' "
@@ -627,6 +658,8 @@ class QgisCloudPluginDialog(QDockWidget):
             QMessageBox.warning(None, self.tr('Warning!'),  self.tr("The layer(s) {layerlist}have user defined CRS. The use of user defined CRS is not supported. Please correct the CRS before publishing!").format(layerlist=layerList))
             QApplication.restoreOverrideCursor()
             return
+        
+        #check if several layers use the same wms name
         
         #check if bottom layer is reprojected WMS/WMTS/XYZ and warn user that published webmap will be slow
         layersRenderingOrder = self.iface.mapCanvas().mapSettings().layers()
