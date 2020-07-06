@@ -598,7 +598,7 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <source>Some layers are using local data. Please upload local layers to your cloud database in the &apos;Upload Data&apos; tab before publishing.
 
 </source>
-        <translation>Einige Ebenen verwenden lokale Daten. Bitte diese Daten im &apos;Daten in die Cloud laden&apos; Reiter in dei Datenbank laden, befor das Projekt publiziert wird.</translation>
+        <translation>Einige Ebenen verwenden lokale Daten. Bitte diese Daten im &apos;Daten in die Cloud laden&apos; Reiter in die Datenbank laden, bevor das Projekt publiziert wird.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="398"/>
