@@ -35,6 +35,7 @@ from .local_data_sources import LocalDataSources
 from .data_upload import DataUpload
 from .doAbout import DlgAbout
 from .error_report_dialog import ErrorReportDialog
+from .mapsettingsdialog import MapSettingsDialog
 import os.path
 import sys
 import traceback
@@ -149,6 +150,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.btnUploadData.setEnabled(False)
         self.ui.btnPublishMap.setEnabled(False)
         self.ui.btnMapDelete.setEnabled(False)
+        self.ui.btnMapEdit.setEnabled(False)
         self.ui.progressWidget.hide()
         self.ui.btnLogout.hide()
         self.ui.lblLoginStatus.hide()
@@ -172,6 +174,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.btnLogin.clicked.connect(self.check_login)
         self.ui.btnDbCreate.clicked.connect(self.create_database)
         self.ui.btnDbDelete.clicked.connect(self.delete_database)
+        self.ui.btnMapEdit.clicked.connect(self.edit_map)
         self.ui.btnDbRefresh.clicked.connect(self.refresh_databases)
         self.ui.btnMapDelete.clicked.connect(self.delete_map)
         self.ui.btnMapLoad.clicked.connect(self.map_load)
@@ -302,7 +305,7 @@ class QgisCloudPluginDialog(QDockWidget):
                             result = QMessageBox.information(
                                 None,
                                 self.tr("Accept new Privacy Policy"),
-                                self.tr("""Due to the GDPR qgiscloud.com has a new <a href='http://qgiscloud.com/en/pages/privacy'> Privacy Policy </a>. 
+                                self.tr("""Due to the GDPR qgiscloud.com has a new <a href='http://qgiscloud.com/en/pages/privacy'> Privacy Policy </a>.
                                 To continue using qgiscloud.com, you must accept the new policy. """),
                                 QMessageBox.StandardButtons(
                                     QMessageBox.No |
@@ -426,8 +429,9 @@ class QgisCloudPluginDialog(QDockWidget):
     def select_map(self):
         self.ui.btnMapDelete.setEnabled(
             len(self.ui.tabMaps.selectedItems()) > 0)
-        self.ui.btnMapLoad.setEnabled(len(self.ui.tabMaps.selectedItems()) > 0)
-        self.update_urls(map=self.ui.tabMaps.currentItem().text())
+        self.ui.btnMapEdit.setEnabled(
+            len(self.ui.tabMaps.selectedItems()) > 0)
+        self.ui.btnDbDelete.setEnabled(len(self.ui.tabDatabases.selectedItems()) > 0)
 
     @pyqtSlot()
     def on_btnLogout_clicked(self):
@@ -538,6 +542,17 @@ class QgisCloudPluginDialog(QDockWidget):
             QMessageBox.warning(None,  self.tr('Warning'),  self.tr(
                 'Deletion of map "{name}" interrupted!').format(name=name))
 
+    def edit_map(self):
+        map_id = self.ui.tabMaps.currentItem().data(Qt.UserRole)
+        plan = self.api.check_login(
+            version_info=self._version_info())["plan"]
+
+        mapsettings = MapSettingsDialog(self.api, map_id, self.db_connections,
+                                        plan)
+        mapsettings.prepare_ui()
+
+        mapsettings.exec_()
+
     def refresh_maps(self):
         QApplication.setOverrideCursor(Qt.WaitCursor)
         if self.clouddb:
@@ -548,6 +563,7 @@ class QgisCloudPluginDialog(QDockWidget):
 
             self.ui.tabMaps.clear()
             self.ui.btnMapDelete.setEnabled(False)
+            self.ui.btnMapEdit.setEnabled(False)
             self.ui.btnMapLoad.setEnabled(False)
 
             for map in map_list:
