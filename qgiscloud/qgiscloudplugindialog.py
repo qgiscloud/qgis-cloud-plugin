@@ -429,9 +429,14 @@ class QgisCloudPluginDialog(QDockWidget):
     def select_map(self):
         self.ui.btnMapDelete.setEnabled(
             len(self.ui.tabMaps.selectedItems()) > 0)
+        self.ui.btnMapLoad.setEnabled(
+            len(self.ui.tabMaps.selectedItems()) > 0)
         self.ui.btnMapEdit.setEnabled(
             len(self.ui.tabMaps.selectedItems()) > 0)
-        self.ui.btnDbDelete.setEnabled(len(self.ui.tabDatabases.selectedItems()) > 0)
+        self.ui.btnDbDelete.setEnabled(
+            len(self.ui.tabDatabases.selectedItems()) > 0)
+        self.update_urls(
+            map=self.ui.tabMaps.currentItem().text())
 
     @pyqtSlot()
     def on_btnLogout_clicked(self):
