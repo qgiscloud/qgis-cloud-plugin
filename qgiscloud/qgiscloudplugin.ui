@@ -21,7 +21,7 @@
     <item row="1" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="mapTab">
        <attribute name="title">
@@ -230,6 +230,19 @@ p, li { white-space: pre-wrap; }
               </sizepolicy>
              </property>
              <layout class="QGridLayout" name="gridLayout_2">
+              <item row="1" column="0" colspan="4">
+               <widget class="QListWidget" name="tabMaps"/>
+              </item>
+              <item row="2" column="2">
+               <widget class="QPushButton" name="btnMapDelete">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Delete</string>
+                </property>
+               </widget>
+              </item>
               <item row="0" column="0">
                <widget class="QLabel" name="lblMaps_3">
                 <property name="font">
@@ -243,27 +256,7 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
-              <item row="1" column="0" colspan="3">
-               <widget class="QListWidget" name="tabMaps"/>
-              </item>
-              <item row="2" column="0">
-               <widget class="QPushButton" name="btnMapLoad">
-                <property name="text">
-                 <string>Open Project</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QPushButton" name="btnMapDelete">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="text">
-                 <string>Delete</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="2">
+              <item row="2" column="3">
                <spacer name="horizontalSpacer_5">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
@@ -275,6 +268,20 @@ p, li { white-space: pre-wrap; }
                  </size>
                 </property>
                </spacer>
+              </item>
+              <item row="2" column="0">
+               <widget class="QPushButton" name="btnMapLoad">
+                <property name="text">
+                 <string>Open Project</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QPushButton" name="btnMapEdit">
+                <property name="text">
+                 <string>Map Settings</string>
+                </property>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -488,7 +495,16 @@ p, li { white-space: pre-wrap; }
            </sizepolicy>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <item>
