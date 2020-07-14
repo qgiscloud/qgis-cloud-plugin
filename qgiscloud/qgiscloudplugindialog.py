@@ -36,6 +36,7 @@ from .data_upload import DataUpload
 from .doAbout import DlgAbout
 from .error_report_dialog import ErrorReportDialog
 from .mapsettingsdialog import MapSettingsDialog
+from .background_layers_menu import BackgroundLayersMenu
 import os.path
 import sys
 import traceback
@@ -159,12 +160,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.widgetMaps.setEnabled(False)
         self.ui.labelOpenLayersPlugin.hide()
 
-        try:
-            from .openlayers_menu import OpenlayersMenu
-            self.ui.btnBackgroundLayer.setMenu(OpenlayersMenu(self.iface))
-        except:
-            self.ui.btnBackgroundLayer.hide()
-            self.ui.labelOpenLayersPlugin.show()
+        self.ui.btnBackgroundLayer.setMenu(BackgroundLayersMenu(self.iface))
 
         # map<data source, table name>
         self.data_sources_table_names = {}
