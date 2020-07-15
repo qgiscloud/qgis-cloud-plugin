@@ -141,7 +141,7 @@ class BackgroundLayersMenu(QMenu):
                 xyzUrl = xyzUrl + "?apikey=%s" % thunderforest_api_key
 
             layer = QgsRasterLayer(
-                'url=' + xyzUrl + '&type=xyz', displayName, 'wms')
+                'type=xyz' + '&url=' + xyzUrl, displayName, 'wms')
         else:
             layer = OpenlayersLayer(self.iface, self._olLayerTypeRegistry)
             layer.setName(layerType.displayName)
