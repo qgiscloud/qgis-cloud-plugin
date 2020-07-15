@@ -95,6 +95,11 @@ class BackgroundLayersMenu(QMenu):
             "Wikipedia Maps": {
                 "Wikipedia Labelled Layer": 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png',
                 "Wikipedia Unlabelled Layer": 'https://maps.wikimedia.org/osm/{z}/{x}/{y}.png'
+            },
+            "Bing Maps": {
+                "Bing Roads": 'http://ecn.t3.tiles.virtualearth.net/tiles/r{q}.jpeg?g=1',
+                "Bing Aerial": 'http://ecn.t3.tiles.virtualearth.net/tiles/a{q}.jpeg?g=1',
+                "Bing Aerial with labels": 'http://ecn.t3.tiles.virtualearth.net/tiles/h{q}.jpeg?g=1'
             }
         }
 
