@@ -81,6 +81,17 @@ class BackgroundLayersMenu(QMenu):
                 "Stamen Watercolor / OSM": 'http://tile.stamen.com/watercolor/{z}/{x}/{y}.jpg',
                 "Stamen Terrain / OSM": 'http://tile.stamen.com/terrain/{z}/{x}/{y}.png'
             },
+            "OSM/Thunderforest": {
+                "OpenCycleMap": 'https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png',
+                "OCM Landscape": 'https://tile.thunderforest.com/landscape/{z}/{x}/{y}.png',
+                "OCM Public Transport": 'https://tile.thunderforest.com/transport/{z}/{x}/{y}.png',
+                "Outdoors": 'https://tile.thunderforest.com/outdoors/{z}/{x}/{y}.png',
+                "Transport Dark": 'https://tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png',
+                "Spinal Map": 'https://tile.thunderforest.com/spinal-map/{z}/{x}/{y}.png',
+                "Pioneer": 'https://tile.thunderforest.com/pioneer/{z}/{x}/{y}.png',
+                "Mobile Atlas": 'https://tile.thunderforest.com/mobile-atlas/{z}/{x}/{y}.png',
+                "Neighbourhood": 'https://tile.thunderforest.com/neighbourhood/{z}/{x}/{y}.png'
+            },
             "Wikipedia Maps": {
                 "Wikipedia Labelled Layer": 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png',
                 "Wikipedia Unlabelled Layer": 'https://maps.wikimedia.org/osm/{z}/{x}/{y}.png'
@@ -93,6 +104,11 @@ class BackgroundLayersMenu(QMenu):
                 action = self.create_add_layer_action(
                     xyz_layers[layer_type][layer], layer, menu)
                 menu.addAction(action)
+            if "Thunderforest" in layer_type:
+                add_api_key_action = QAction("Set api Key", menu)
+                add_api_key_action.triggered.connect(
+                    self.showThunderforestApiKeyDialog)
+                menu.addAction(add_api_key_action)
             self.addMenu(menu)
 
     def create_add_layer_action(self, url, title, parent):
@@ -102,8 +118,23 @@ class BackgroundLayersMenu(QMenu):
                         None, xyzUrl=url, displayName=title))
         return action
 
+    def showThunderforestApiKeyDialog(self):
+        apiKey = QSettings().value("qgis-cloud-plugin/thunderforestApiKey")
+        newApiKey, ok = QInputDialog.getText(
+            self.iface.mainWindow(), "API key",
+            "Enter your API key (<a href=\"https://thunderforest.com/pricing/\">https://thunderforest.com</a>)", QLineEdit.Normal, apiKey)
+        if ok:
+            QSettings().setValue("qgis-cloud-plugin/thunderforestApiKey",
+                                 newApiKey)
+
     def addLayer(self, layerType, xyzUrl=None, displayName=None):
         if layerType is None:
+            thunderforest_api_key = QSettings().value(
+                    "qgis-cloud-plugin/thunderforestApiKey")
+
+            if "thunderforest" in xyzUrl and thunderforest_api_key:
+                xyzUrl = xyzUrl + "?apikey=%s" % thunderforest_api_key
+
             layer = QgsRasterLayer(
                 'url=' + xyzUrl + '&type=xyz', displayName, 'wms')
         else:
