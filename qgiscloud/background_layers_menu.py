@@ -61,6 +61,12 @@ class BackgroundLayersMenu(QMenu):
             groupMenu = group.menu()
             for layer in self._olLayerTypeRegistry.groupLayerTypes(group):
                 layer.addMenuEntry(groupMenu, self.iface.mainWindow())
+
+            add_api_key_action = QAction("Set api Key", groupMenu)
+            add_api_key_action.triggered.connect(
+                self.showGoogleApiKeyDialog)
+            groupMenu.addAction(add_api_key_action)
+
             self.addMenu(groupMenu)
 
         # Register plugin layer type
@@ -132,13 +138,27 @@ class BackgroundLayersMenu(QMenu):
             QSettings().setValue("qgis-cloud-plugin/thunderforestApiKey",
                                  newApiKey)
 
+    def showGoogleApiKeyDialog(self):
+        apiKey = QSettings().value("Plugin-OpenLayers/googleMapsApiKey")
+        newApiKey, ok = QInputDialog.getText(
+            self.iface.mainWindow(), "API key",
+            "Enter your API key", QLineEdit.Normal, apiKey)
+        if ok:
+            QSettings().setValue("Plugin-OpenLayers/googleMapsApiKey",
+                                 newApiKey)
+
     def addLayer(self, layerType, xyzUrl=None, displayName=None):
         if layerType is None:
             thunderforest_api_key = QSettings().value(
                     "qgis-cloud-plugin/thunderforestApiKey")
 
+            google_api_key = QSettings().value(
+                    "Plugin-OpenLayers/googleMapsApiKey")
+
             if "thunderforest" in xyzUrl and thunderforest_api_key:
                 xyzUrl = xyzUrl + "?apikey=%s" % thunderforest_api_key
+            elif "google" in xyzUrl and google_api_key:
+                xyzUrl = xyzUrl + "?key=%s" % google_api_key
 
             layer = QgsRasterLayer(
                 'type=xyz' + '&url=' + xyzUrl, displayName, 'wms')
