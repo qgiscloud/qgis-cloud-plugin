@@ -34,7 +34,7 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(
 
 class MapSettingsDialog(QDialog, FORM_CLASS):
 
-    def __init__(self, api, map_id, db_connections, plan):
+    def __init__(self, api, map_id, map_name,  db_connections, plan):
         """
         This is the contructor of the MapSettingsDialog class.
         """
@@ -42,6 +42,7 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
         self.setupUi(self)
         self.api = api
         self.map_id = map_id
+        self.setWindowTitle(self.tr("Map settings for map: %s") % map_name)
         self.db_connections = db_connections
         self.plan = plan
         # get map settings

@@ -545,10 +545,11 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def edit_map(self):
         map_id = self.ui.tabMaps.currentItem().data(Qt.UserRole)
+        map_name = self.ui.tabMaps.currentItem().text()
         plan = self.api.check_login(
             version_info=self._version_info())["plan"]
 
-        mapsettings = MapSettingsDialog(self.api, map_id, self.db_connections,
+        mapsettings = MapSettingsDialog(self.api, map_id, map_name,  self.db_connections,
                                         plan)
         mapsettings.prepare_ui()
 
