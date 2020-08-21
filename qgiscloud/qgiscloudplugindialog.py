@@ -801,7 +801,7 @@ class QgisCloudPluginDialog(QDockWidget):
             if unsupported_layers:
                 title = self.tr("Unsupported layers found")
                 message += self.tr(
-                    "Raster, plugin or geometryless layers are not supported:\n\n")
+                    "Plugin or geometryless layers are not supported:\n\n")
                 layer_types = ["No geometry", "Raster", "Plugin"]
                 for layer in sorted(unsupported_layers, key=lambda layer: layer.name()):
                     message += self.tr("  -  %s (%s)\n") % (

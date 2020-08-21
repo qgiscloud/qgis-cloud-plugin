@@ -19,10 +19,11 @@
  *                                                                         *
  ***************************************************************************/
 """
-from builtins import str
-from builtins import object
+#from builtins import str
+#from builtins import object
 from qgis.core import *
 from .db_connection_cfg import DbConnectionCfg
+from qgis.PyQt.QtWidgets import QMessageBox
 
 class LocalDataSources(object):
 
@@ -80,7 +81,7 @@ class LocalDataSources(object):
                 else:
                     local_raster_layers.append(layer)
 
-            elif provider not in ["wms", "openlayers"]:
+            elif provider not in ["wms", "openlayers",  "arcgismapserver"]:
                 if layer.type() == QgsMapLayer.VectorLayer:
                     local_layers.append(layer)
                 else:
