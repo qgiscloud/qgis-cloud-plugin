@@ -1188,14 +1188,16 @@ class QgisCloudPluginDialog(QDockWidget):
             except:
                 continue
             cursor = conn.cursor()
-            sql = "SELECT pg_database_size('" + str(db) + "')"
+            sql = """
+                select round(sum(pg_total_relation_size(oid)) / (1024*1024)) - 11 as size
+                from pg_class
+                where relkind in ('r','m','S')
+                  and not relisshared            
+            """        
             cursor.execute(sql)
-            usedSpace += int(cursor.fetchone()[0])-(11*1024*1024)
+            usedSpace += int(cursor.fetchone()[0])
             cursor.close()
             conn.close
-
-        # Used space in MB
-        usedSpace /= 1024 * 1024
 
         login_info = self.api.check_login(version_info=self._version_info())
 
