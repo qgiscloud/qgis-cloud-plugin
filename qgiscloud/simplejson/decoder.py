@@ -1,8 +1,5 @@
 """Implementation of JSONDecoder
 """
-from builtins import chr
-from builtins import str
-from builtins import object
 import re
 import sys
 import struct

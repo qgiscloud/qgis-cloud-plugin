@@ -19,9 +19,6 @@
  *                                                                         *
  ***************************************************************************/
 """
-from builtins import str
-from builtins import object
-
 from qgis.PyQt.QtCore import QSettings
 from qgis.core import *
 from .db_connection_cfg import DbConnectionCfg

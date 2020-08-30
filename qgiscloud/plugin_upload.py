@@ -1,4 +1,3 @@
-from builtins import input
 #!/usr/bin/env python
 # This script uploads a plugin package on the server
 #

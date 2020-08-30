@@ -19,9 +19,6 @@
  *                                                                         *
  ***************************************************************************/
 """
-from builtins import str
-from builtins import object
-
 from qgis.PyQt.QtCore import QCoreApplication, QSettings
 from qgis.PyQt.QtWidgets import QMessageBox
 import psycopg2

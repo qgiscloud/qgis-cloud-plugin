@@ -1,9 +1,5 @@
 """Implementation of JSONEncoder
 """
-from builtins import chr
-from builtins import str
-from builtins import range
-from builtins import object
 import re
 from decimal import Decimal
 

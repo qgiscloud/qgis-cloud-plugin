@@ -19,8 +19,6 @@
  *                                                                         *
  ***************************************************************************/
 """
-from builtins import range
-
 from qgis.PyQt.QtCore import Qt, QRect
 from qgis.PyQt.QtWidgets import QWidget
 from qgis.PyQt.QtGui import QPainter, QColor

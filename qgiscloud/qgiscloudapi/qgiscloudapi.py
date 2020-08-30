@@ -27,8 +27,6 @@ limitations under the License.
 # maps = api.read_maps()
 
 """
-from builtins import str
-from builtins import object
 from qgis.core import *
 
 # python versions below 2.6 do not have json included we need simplejson then

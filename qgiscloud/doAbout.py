@@ -19,8 +19,6 @@
  *                                                                         *
  ***************************************************************************/
 """
-from builtins import object
-
 class DlgAbout(object):
     def aboutString(self):
         return '<p><center><b>Publish maps on qgiscloud.com<b></center></p>'

@@ -21,8 +21,6 @@
 
 # NOTE: always convert features in OGR layers or PostGIS layers of type GEOMETRY to MULTI-type geometry, as geometry type detection of e.g. shapefiles is unreliable
 """
-from builtins import str
-from builtins import range
 from qgis.PyQt.QtCore import Qt,  QObject, QVariant, QDate, QDateTime
 from qgis.PyQt.QtWidgets import QMessageBox, QApplication
 from qgis.PyQt.QtXml import QDomDocument

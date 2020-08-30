@@ -19,8 +19,6 @@
  *                                                                         *
  ***************************************************************************/
 """
-from builtins import str
-from builtins import range
 from qgis.PyQt.QtCore import Qt, QSettings, pyqtSlot
 from qgis.PyQt.QtWidgets import QApplication, QDockWidget,   QTableWidgetItem, QListWidgetItem, \
     QDialog, QMessageBox, QAbstractItemView, QWidget, QLabel,  QVBoxLayout,  \

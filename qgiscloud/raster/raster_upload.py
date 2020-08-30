@@ -1,5 +1,3 @@
-from builtins import str
-from builtins import range
 ################################################################################
 # Copyright (C) 2009-2010 Mateusz Loskot <mateusz@loskot.net>
 # Copyright (C) 2009-2011 Pierre Racine <pierre.racine@sbf.ulaval.ca>

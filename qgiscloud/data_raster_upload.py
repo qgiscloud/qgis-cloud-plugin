@@ -1,4 +1,3 @@
-from builtins import str
 from . import raster.raster_upload as raster_upload
 from osgeo import gdal
 from osgeo import osr
@@ -10,6 +9,26 @@ import math
 import numpy
 import os
 import sys
+"""
+/***************************************************************************
+ RasterUpload
+
+ Copy local QGIS layers to QGISCloud database
+                             -------------------
+        begin                : 2011-09-21
+        copyright            : (C) 2011 by Sourcepole
+        email                : pka@sourcepole.ch
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+ """
 import tempfile
  
 class RasterUpload(QObject):

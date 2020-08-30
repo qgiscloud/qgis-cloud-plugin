@@ -3,8 +3,6 @@
 http://code.activestate.com/recipes/576693/
 
 """
-from builtins import next
-from builtins import zip
 from UserDict import DictMixin
 
 # Modified from original to support Python 2.4, see

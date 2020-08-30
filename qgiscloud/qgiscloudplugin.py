@@ -19,7 +19,6 @@
  *                                                                         *
  ***************************************************************************/
 """
-from builtins import object
 # Import the PyQt and QGIS libraries
 from qgis.PyQt.QtCore import Qt, QCoreApplication, QSettings, QFileInfo, QTranslator, qVersion
 from qgis.PyQt.QtWidgets import QAction

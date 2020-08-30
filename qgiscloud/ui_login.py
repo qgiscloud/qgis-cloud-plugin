@@ -1,4 +1,3 @@
-from builtins import object
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file '/home/hdus/dev/qgis/qgis-cloud-plugin/qgiscloud/ui_login.ui'
