@@ -955,6 +955,7 @@ class QgisCloudPluginDialog(QDockWidget):
         input_string = str(name).lower().encode('ascii', 'replace')
         input_string = input_string.replace(b" ", b"_")
         input_string = input_string.replace(b".", b"_")
+        input_string = input_string.replace(b"-", b"_")
 
         # check if table_name starts with number
 
