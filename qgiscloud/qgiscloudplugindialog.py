@@ -21,8 +21,8 @@
 """
 from qgis.PyQt.QtCore import Qt, QSettings, pyqtSlot
 from qgis.PyQt.QtWidgets import QApplication, QDockWidget,   QTableWidgetItem, QListWidgetItem, \
-    QDialog, QMessageBox, QAbstractItemView, QWidget, QLabel,  QVBoxLayout,  \
-    QFileDialog,  QComboBox,  QLineEdit
+    QDialog, QMessageBox, QWidget, QLabel,  QVBoxLayout,  \
+    QFileDialog,  QComboBox
 from qgis.PyQt.QtGui import QPalette, QColor
 from qgis.core import *
 from .ui_qgiscloudplugin import Ui_QgisCloudPlugin
@@ -144,8 +144,6 @@ class QgisCloudPluginDialog(QDockWidget):
                   "Geometry type", "SRID", "Data Source"]
         self.ui.tblLocalLayers.setHorizontalHeaderLabels(header)
         self.ui.tblLocalLayers.resizeColumnsToContents()
-#        self.ui.tblLocalLayers.setEditTriggers(QAbstractItemView.NoEditTriggers)
-
         self.ui.btnUploadData.setEnabled(False)
         self.ui.btnPublishMap.setEnabled(False)
         self.ui.btnMapDelete.setEnabled(False)
