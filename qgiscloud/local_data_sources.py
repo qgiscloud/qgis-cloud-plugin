@@ -54,7 +54,6 @@ class LocalDataSources(object):
                 provider = layer.dataProvider().name()
             else:
                 provider = layer.pluginLayerType()
-
             if provider == "postgres":
                 host = QgsDataSourceUri(layer.publicSource()).host()
                 if host not in DbConnectionCfg.CLOUD_DB_HOSTS:
@@ -84,7 +83,7 @@ class LocalDataSources(object):
                     local_layers.append(layer)
                 else:
                     unsupported_layers.append(layer)
-
+                    
         return local_layers, unsupported_layers,  local_raster_layers
 
     def update_local_data_sources(self, local_layers):

@@ -796,16 +796,11 @@ class QgisCloudPluginDialog(QDockWidget):
 
             if unsupported_layers:
                 title = self.tr("Unsupported layers found")
-                message += self.tr(
-                    "Plugin or geometryless layers are not supported:\n\n")
-                layer_types = ["No geometry", "Raster", "Plugin"]
                 for layer in sorted(unsupported_layers, key=lambda layer: layer.name()):
                     message += self.tr("  -  %s (%s)\n") % (
                         layer.name(), layer_types[layer.type()])
                 message += self.tr(
                     "\nPlease remove or replace above layers before publishing your map.\n")
-                message += self.tr(
-                    "For raster data you can use public WMS layers or the OpenLayers Plugin.")
 
             QMessageBox.warning(self, title, message)
 
