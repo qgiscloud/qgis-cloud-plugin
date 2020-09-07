@@ -4,12 +4,12 @@
 <context>
     <name>BackgroundLayersMenu</name>
     <message>
-        <location filename="../background_layers_menu.py" line="219"/>
+        <location filename="../background_layers_menu.py" line="218"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../background_layers_menu.py" line="219"/>
+        <location filename="../background_layers_menu.py" line="218"/>
         <source>A serious error has occurred during the coordinate transformation. Please set the reference system of the project to the WGS84 / Pseudo-Mercartor Projektion (EPSG: 3857) and reload the layer.</source>
         <translation>Es ist ein schwerwiegender Fehler bei der Koordinatentransformation aufgetreten. Bitte setzen Sie das Referenzsystem des Projektes auf die WGS84 / Pseudo-Mercartor Projektioin (EPSG: 3857)   und laden Sie den Layer erneut.</translation>
     </message>
@@ -755,6 +755,74 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <location filename="../raster/raster_upload.py" line="694"/>
         <source>Calculating raster params for {sum_tiles} tiles ...</source>
         <translation>Berechnen von Rasterparametern für {sum_tiles} Kacheln ...</translation>
+    </message>
+</context>
+<context>
+    <name>map_settings</name>
+    <message>
+        <location filename="../mapsettings.ui" line="14"/>
+        <source>Map Settings</source>
+        <translation>Karteneinstellungen</translation>
+    </message>
+    <message>
+        <location filename="../mapsettings.ui" line="20"/>
+        <source>General Settings</source>
+        <translation>Generelle Einstellungen</translation>
+    </message>
+    <message>
+        <location filename="../mapsettings.ui" line="53"/>
+        <source>Map public</source>
+        <translation>Karte öffentlich?</translation>
+    </message>
+    <message>
+        <location filename="../mapsettings.ui" line="104"/>
+        <source>Viewer</source>
+        <translation>Viewer</translation>
+    </message>
+    <message>
+        <location filename="../mapsettings.ui" line="123"/>
+        <source>Scales</source>
+        <translation>Maßstäbe</translation>
+    </message>
+    <message>
+        <location filename="../mapsettings.ui" line="139"/>
+        <source>Language</source>
+        <translation>Sprache</translation>
+    </message>
+    <message>
+        <location filename="../mapsettings.ui" line="152"/>
+        <source>Viewer active</source>
+        <translation>Viewer aktiviert?</translation>
+    </message>
+    <message>
+        <location filename="../mapsettings.ui" line="165"/>
+        <source>WMS public</source>
+        <translation>WMS öffentlich?</translation>
+    </message>
+    <message>
+        <location filename="../mapsettings.ui" line="177"/>
+        <source>Allowed Users</source>
+        <translation>Berechtigte Benutzer</translation>
+    </message>
+    <message>
+        <location filename="../mapsettings.ui" line="229"/>
+        <source>Search Settings</source>
+        <translation>Einstellungen für die Suche</translation>
+    </message>
+    <message>
+        <location filename="../mapsettings.ui" line="246"/>
+        <source>Search type</source>
+        <translation>Suchtyp</translation>
+    </message>
+    <message>
+        <location filename="../mapsettings.ui" line="259"/>
+        <source>Search DB</source>
+        <translation>Such DB</translation>
+    </message>
+    <message>
+        <location filename="../mapsettings.ui" line="292"/>
+        <source>Search SQL</source>
+        <translation>Such SQL</translation>
     </message>
 </context>
 </TS>
