@@ -26,7 +26,7 @@ from qgis.PyQt.QtWidgets import *
 from qgis.PyQt.QtGui import *
 from qgis.core import *
 # import resources_rc
-import imp
+import imp,  sys
 
 
 try:
@@ -175,13 +175,15 @@ class BackgroundLayersMenu(QMenu):
 
         coordRefSys = QgsCoordinateReferenceSystem()
         coordRefSys.createFromOgcWmsCrs("EPSG:3857")
-        self.setMapCrs(coordRefSys)
-        QgsProject.instance().addMapLayer(layer, False)
-        legendRootGroup = self.iface.layerTreeView().layerTreeModel().rootGroup()
-        legendRootGroup.insertLayer(len(legendRootGroup.children()), layer)
-
-        # last added layer is new reference
-        self.setReferenceLayer(layer)
+        success = self.setMapCrs(coordRefSys)
+        QMessageBox.information(None, '',  str(success))
+        if success:
+            QgsProject.instance().addMapLayer(layer, False)
+            legendRootGroup = self.iface.layerTreeView().layerTreeModel().rootGroup()
+            legendRootGroup.insertLayer(len(legendRootGroup.children()), layer)
+    
+            # last added layer is new reference
+            self.setReferenceLayer(layer)
 
     def setReferenceLayer(self, layer):
         self.layer = layer
@@ -198,14 +200,26 @@ class BackgroundLayersMenu(QMenu):
     def setMapCrs(self, coordRefSys):
         mapCanvas = self.iface.mapCanvas()
         canvasCrs = self.canvasCrs()
+        
         if canvasCrs != coordRefSys:
             coordTrans = QgsCoordinateTransform(
                 canvasCrs,
                 coordRefSys,
                 QgsProject.instance())
             extMap = mapCanvas.extent()
-            extMap = coordTrans.transform(
-                extMap, QgsCoordinateTransform.ForwardTransform)
-            QgsProject.instance().setCrs(coordRefSys)
-            mapCanvas.freeze(False)
-            mapCanvas.setExtent(extMap)
+            
+            try:
+                extMap = coordTrans.transform(
+                    extMap, QgsCoordinateTransform.ForwardTransform)
+                QgsProject.instance().setCrs(coordRefSys)
+                mapCanvas.freeze(False)
+                mapCanvas.setExtent(extMap)
+                return True
+            except:
+                res = QMessageBox.critical(
+                    self,
+                    self.tr("Error"),
+                    self.tr("""A serious error has occurred during the coordinate transformation. Please set the reference system of the project to the WGS84 / Pseudo-Mercartor Projektion (EPSG: 3857) and reload the layer."""))
+                return False
+        else:
+            return True
