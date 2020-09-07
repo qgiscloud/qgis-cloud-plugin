@@ -176,7 +176,6 @@ class BackgroundLayersMenu(QMenu):
         coordRefSys = QgsCoordinateReferenceSystem()
         coordRefSys.createFromOgcWmsCrs("EPSG:3857")
         success = self.setMapCrs(coordRefSys)
-        QMessageBox.information(None, '',  str(success))
         if success:
             QgsProject.instance().addMapLayer(layer, False)
             legendRootGroup = self.iface.layerTreeView().layerTreeModel().rootGroup()
