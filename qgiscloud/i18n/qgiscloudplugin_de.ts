@@ -11,7 +11,7 @@
     <message>
         <location filename="../background_layers_menu.py" line="218"/>
         <source>A serious error has occurred during the coordinate transformation. Please set the reference system of the project to the WGS84 / Pseudo-Mercartor Projektion (EPSG: 3857) and reload the layer.</source>
-        <translation>Es ist ein schwerwiegender Fehler bei der Koordinatentransformation aufgetreten. Bitte setzen Sie das Referenzsystem des Projektes auf die WGS84 / Pseudo-Mercartor Projektioin (EPSG: 3857)   und laden Sie den Layer erneut.</translation>
+        <translation>Es ist ein schwerwiegender Fehler bei der Koordinatentransformation aufgetreten. Bitte setzen Sie das Referenzsystem des Projektes auf die WGS84 / Pseudo-Mercartor Projektion (EPSG: 3857) und laden Sie den Layer erneut.</translation>
     </message>
 </context>
 <context>
