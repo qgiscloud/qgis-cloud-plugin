@@ -73,7 +73,10 @@ class RasterUpload(QObject):
         
         # Create PostGIS Raster Tool Functions          
         raster_tools_file = "%s/raster_tools.sql" % os.path.dirname(__file__)
-        sql = open(raster_tools_file).read().encode('ascii',errors='ignore')
+        with open(raster_tools_file) as f:
+            sql = f.read().encode('ascii',errors='ignore')
+            f.close()
+            
         self.cursor.execute(sql)
         self.conn.commit()              
          
