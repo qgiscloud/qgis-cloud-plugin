@@ -30,7 +30,8 @@ class DlgAbout(object):
         Pirmin Kalberer (project manager, developer and support)<br>
         Sandro Mani (developer)<br>
         Mathias Walker (developer and support)<br>
-        Dr. Marco Hugentobler (developer and support)
+        Dr. Marco Hugentobler (developer and support)<br>
+        Hussein Kabbout (developer and support)
         </p>
         <p><b>Translations:</b</p><br>
         Hebrew - Harel Dan <br>
