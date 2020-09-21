@@ -953,7 +953,7 @@ class QgisCloudPluginDialog(QDockWidget):
 
         # check if table_name starts with number
 
-        if re.search("^\d", input_string.decode('utf-8')):
+        if re.search(r"^\d", input_string.decode('utf-8')):
             input_string = '_'+input_string.decode('utf-8')
 
         try:
