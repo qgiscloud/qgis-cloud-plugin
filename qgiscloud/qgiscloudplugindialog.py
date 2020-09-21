@@ -35,6 +35,7 @@ from .doAbout import DlgAbout
 from .error_report_dialog import ErrorReportDialog
 from .mapsettingsdialog import MapSettingsDialog
 from .background_layers_menu import BackgroundLayersMenu
+from distutils.version import StrictVersion
 import os.path
 import sys
 import traceback
@@ -43,7 +44,9 @@ import re
 import time
 import platform
 import tempfile
-from distutils.version import StrictVersion
+import warnings
+warnings.simplefilter("ignore", ResourceWarning)
+
 
 
 class QgisCloudPluginDialog(QDockWidget):
