@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de_CH">
+<TS version="2.1" language="de_CH">
 <context>
     <name>BackgroundLayersMenu</name>
     <message>
@@ -123,7 +123,7 @@
     <message>
         <location filename="../mapsettingsdialog.py" line="304"/>
         <source>The user(s): %s have been added.</source>
-        <translation>Die Benutzer: %s wirden hinzugefügt.</translation>
+        <translation>Die Benutzer: %s wurden hinzugefügt.</translation>
     </message>
     <message>
         <location filename="../mapsettingsdialog.py" line="312"/>
