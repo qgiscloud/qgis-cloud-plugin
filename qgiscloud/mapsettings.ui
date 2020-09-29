@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>716</width>
-    <height>807</height>
+    <width>1332</width>
+    <height>842</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -229,6 +229,21 @@
       <string>Search Settings</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
+      <item row="1" column="1">
+       <widget class="QLabel" name="label">
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>SQL for search with return values displaytext and bbox in map coordinates, e.g. </string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="1">
        <layout class="QGridLayout" name="gridLayout_6">
         <item row="1" column="1">
@@ -297,6 +312,21 @@
          <widget class="QComboBox" name="search_type_combobox"/>
         </item>
        </layout>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="label_2">
+        <property name="font">
+         <font>
+          <family>Courier 10 Pitch</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>SELECT name AS displaytext, Box2D(st_transform(wkb_geometry, &lt;CRS&gt;)) AS bbox 
+FROM searchtable 
+WHERE name ILIKE '%?%';</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
