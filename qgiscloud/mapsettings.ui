@@ -173,6 +173,24 @@
    </item>
    <item row="6" column="0">
     <widget class="QGroupBox" name="user_management">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>20</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>100</height>
+      </size>
+     </property>
      <property name="title">
       <string>Allowed Users</string>
      </property>
