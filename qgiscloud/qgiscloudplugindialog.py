@@ -801,7 +801,7 @@ class QgisCloudPluginDialog(QDockWidget):
                 title = self.tr("Unsupported layers found")
                 for layer in sorted(unsupported_layers, key=lambda layer: layer.name()):
                     message += self.tr("  -  %s (%s)\n") % (
-                        layer.name(), layer_types[layer.type()])
+                        layer.name(), layer.type())
                 message += self.tr(
                     "\nPlease remove or replace above layers before publishing your map.\n")
 
