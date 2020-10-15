@@ -725,15 +725,28 @@ class QgisCloudPluginDialog(QDockWidget):
                 }
 
                 fname = str(QgsProject.instance().fileName())
-                map = self.api.create_map(self.map(), fname, config)['map']
-                self.show_api_error(map)
-                if map['config']['missingSvgSymbols']:
-                    self.publish_symbols(map['config']['missingSvgSymbols'])
-                self.update_urls()
-                self._push_message(self.tr("QGIS Cloud"), self.tr(
-                    "Map successfully published"), level=0, duration=2)
-                self.statusBar().showMessage(
-                    self.tr("Map successfully published"))
+                if 'qgs.qgz' in fname:
+                    QMessageBox.warning(
+                        None,
+                        self.tr("Error"),
+                        self.tr("""
+The name of the QGIS project 
+
+%s
+
+is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct the project name and publish the project again.""" % (fname)),
+                        QMessageBox.StandardButtons(
+                            QMessageBox.Close))
+                else:
+                    map = self.api.create_map(self.map(), fname, config)['map']
+                    self.show_api_error(map)
+                    if map['config']['missingSvgSymbols']:
+                        self.publish_symbols(map['config']['missingSvgSymbols'])
+                    self.update_urls()
+                    self._push_message(self.tr("QGIS Cloud"), self.tr(
+                        "Map successfully published"), level=0, duration=2)
+                    self.statusBar().showMessage(
+                        self.tr("Map successfully published"))
             except Exception as e:
                 self.statusBar().showMessage("")
                 ErrorReportDialog(self.tr("Error uploading project"), self.tr(
