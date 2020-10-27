@@ -700,7 +700,12 @@ class QgisCloudPluginDialog(QDockWidget):
         if len(layersRenderingOrder) > 0:
             bottomLayer = layersRenderingOrder[-1]
             if bottomLayer.providerType() == 'wms' and bottomLayer.crs() != mapCrs:
-                warningText = self.tr("The CRS of the background layer '{layerName}' is different to the  map CRS. This means that this layer will be reprojected in the published map and the webmap will therefore be slow. To improve this and make the webmap faster, go to 'Project -> Properties... -> CRS' and set the map CRS to {layerCRS}. Continue publishing?").format(
+                warningText = self.tr("""
+The CRS of the background layer '{layerName}' is different to the  map CRS. This means that this layer will be reprojected in the published map and the webmap will therefore be slow. To improve this and make the webmap faster, go to 
+
+'Project -> Properties... -> CRS' 
+
+and set the map CRS to {layerCRS}. Continue publishing?""").format(
                     layerName=bottomLayer.name(), layerCRS=bottomLayer.crs().authid())
                 if QMessageBox.question(None, self.tr('Warning'), warningText, QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes) == QMessageBox.No:
                     QApplication.restoreOverrideCursor()
