@@ -1202,7 +1202,7 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
                 continue
             cursor = conn.cursor()
             sql = """
-                select round(sum(pg_total_relation_size(oid)) / (1024*1024)) - 11 as size
+                select round(sum(pg_total_relation_size(oid)) / (1024*1024)) - 17 as size
                 from pg_class
                 where relkind in ('r','m','S')
                   and not relisshared            
