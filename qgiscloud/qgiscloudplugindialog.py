@@ -670,9 +670,14 @@ class QgisCloudPluginDialog(QDockWidget):
             QMessageBox.critical(None, self.tr('Error'), crsError)
             QApplication.restoreOverrideCursor()
             return
-
-        layer_dict = QgsProject.instance().mapLayers()
-        layers = list(layer_dict.values())
+        
+        #Read layers from the layertree, not from QgsProject. Due to a bug in QGIS, it sometimes happens that layers are still present in QgsProject even if they have been deleted in the user interface
+        layers = []
+        layerTreeLayers = self.iface.layerTreeView().layerTreeModel().rootGroup().findLayers()
+        for l in layerTreeLayers:
+            layers.append( l.layer() )
+        
+        
         layerList = ''
 
         # make sure every layer has a unique WMS name
