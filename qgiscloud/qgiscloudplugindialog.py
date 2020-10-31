@@ -1202,20 +1202,23 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
         self.numDbs = len(list(db_connections._dbs.keys()))
         for db in list(db_connections._dbs.keys()):
             try:
-                conn = db_connections.db(db).psycopg_connection()
+                try:
+                    conn = db_connections.db(db).psycopg_connection()
+                except:
+                    continue
+                cursor = conn.cursor()
+                sql = """
+                    select round(sum(pg_total_relation_size(oid)) / (1024*1024)) - 17 as size
+                    from pg_class
+                    where relkind in ('r','m','S')
+                      and not relisshared            
+                """        
+                cursor.execute(sql)
+                usedSpace += int(cursor.fetchone()[0])
+                cursor.close()
+                conn.close
             except:
                 continue
-            cursor = conn.cursor()
-            sql = """
-                select round(sum(pg_total_relation_size(oid)) / (1024*1024)) - 17 as size
-                from pg_class
-                where relkind in ('r','m','S')
-                  and not relisshared            
-            """        
-            cursor.execute(sql)
-            usedSpace += int(cursor.fetchone()[0])
-            cursor.close()
-            conn.close
 
         login_info = self.api.check_login(version_info=self._version_info())
 
