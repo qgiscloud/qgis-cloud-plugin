@@ -632,10 +632,10 @@ class QgisCloudPluginDialog(QDockWidget):
                 return False
         return True
 
-    def checkSameLayerNames(self, layers):
-        sameLayerNames = []
+    def check_same_layer_names(self, layers):
+        same_layer_names = []
 
-        layerNameDict = {}  # name / nReferences
+        layer_name_dict = {}  # name / nReferences
 
         for layer in layers:
             name = layer.shortName()
@@ -643,15 +643,15 @@ class QgisCloudPluginDialog(QDockWidget):
                 name = layer.name()
 
             if name in layerNameDict:
-                layerNameDict[name] = layerNameDict[name] + 1
+                layer_name_dict[name] = layer_name_dict[name] + 1
             else:
-                layerNameDict[name] = 1
+                layer_name_dict[name] = 1
 
-        for key, value in layerNameDict.items():
+        for key, value in layer_name_dict.items():
             if value > 1:
-                sameLayerNames.append(key)
+                same_layer_names.append(key)
 
-        return sameLayerNames
+        return same_layer_names
 
     def publish_map(self):
         QApplication.setOverrideCursor(Qt.WaitCursor)
@@ -681,7 +681,7 @@ class QgisCloudPluginDialog(QDockWidget):
         layerList = ''
 
         # make sure every layer has a unique WMS name
-        notUniqueLayerNames = self.checkSameLayerNames(layers)
+        notUniqueLayerNames = self.check_same_layer_names(layers)
         if len(notUniqueLayerNames) > 0:
             QMessageBox.critical(None, self.tr('Error'), self.tr(
                 "The following WMS layer names are not unique: {}. Please make sure the names are unique, then publish the project again. The layer WMS short name can be set in the layer properties dialog under 'QGIS Server -> Short name'.").format(notUniqueLayerNames))
@@ -857,6 +857,8 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
         for data_source, layers in list(self.local_data_sources.iteritems()):
             layer_names = []
             for layer in layers:
+                if ',' in layer.name():
+                    QMessageBox.information(None, '',  layer.name())
                 layer_names.append(str(layer.name()))
             layers_item = QTableWidgetItem(", ".join(layer_names))
             layers_item.setToolTip("\n".join(layer_names))
