@@ -25,7 +25,9 @@ from qgis.PyQt.QtWidgets import QDialog, QVBoxLayout, QLabel, QPlainTextEdit, QD
 from qgis.PyQt.QtGui import QDesktopServices
 from qgis.core import *
 from .about.metadata import MetaData
-import urllib.request, urllib.parse, urllib.error
+import urllib.request
+import urllib.parse
+import urllib.error
 import sys
 import platform
 

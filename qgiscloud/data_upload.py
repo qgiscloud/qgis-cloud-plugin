@@ -26,16 +26,12 @@ from qgis.PyQt.QtWidgets import QMessageBox, QApplication
 from qgis.PyQt.QtXml import QDomDocument
 from qgis.core import *
 from .db_connections import DbConnections
-#from osgeo import ogr
-#import os
+from .raster.raster_upload import RasterUpload
+from .PGVectorLayerImport import PGVectorLayerImport
 import re
-#import psycopg2
 from io import StringIO
 import struct
 import binascii
-from .raster.raster_upload import RasterUpload
-
-from .PGVectorLayerImport import PGVectorLayerImport
 
 
 class DataUpload(QObject):

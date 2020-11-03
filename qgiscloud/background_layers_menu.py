@@ -26,7 +26,8 @@ from qgis.PyQt.QtWidgets import *
 from qgis.PyQt.QtGui import *
 from qgis.core import *
 # import resources_rc
-import imp,  sys
+import imp
+import sys
 
 
 try:

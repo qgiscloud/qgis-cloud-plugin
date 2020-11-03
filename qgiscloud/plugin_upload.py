@@ -3,7 +3,9 @@
 #
 # Author: A. Pasotti, V. Picavet
 
-import xmlrpc.client, sys, os
+import xmlrpc.client
+import sys
+import os
 import getpass
 from optparse import OptionParser
 
