@@ -642,7 +642,7 @@ class QgisCloudPluginDialog(QDockWidget):
             if not name:
                 name = layer.name()
 
-            if name in layerNameDict:
+            if name in layer_name_dict:
                 layer_name_dict[name] = layer_name_dict[name] + 1
             else:
                 layer_name_dict[name] = 1
@@ -991,13 +991,14 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
         self.update_local_layers()
         self.activate_upload_button()
 
-#
     def update_data_sources_table_names(self):
 
         schema_list = []
         schema_list = self.fetch_schemas(
             self.ui.cbUploadDatabase.currentText())
-
+            
+        print (schema_list)
+        
         if self.local_data_sources.count() == 0:
             self.data_sources_table_names.clear()
         else:
@@ -1183,7 +1184,7 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
             conn = self.db_connections.db(db).psycopg_connection()
             cursor = conn.cursor()
             sql = """
-                    select *
+                    select nspname
                     from pg_catalog.pg_namespace
                     where nspowner <> 10
                       and nspname <> 'topology'
