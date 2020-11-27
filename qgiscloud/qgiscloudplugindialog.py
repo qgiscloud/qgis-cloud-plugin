@@ -992,13 +992,10 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
         self.activate_upload_button()
 
     def update_data_sources_table_names(self):
-
         schema_list = []
         schema_list = self.fetch_schemas(
             self.ui.cbUploadDatabase.currentText())
             
-        print (schema_list)
-        
         if self.local_data_sources.count() == 0:
             self.data_sources_table_names.clear()
         else:
