@@ -856,10 +856,10 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
 
         for data_source, layers in list(self.local_data_sources.iteritems()):
             layer_names = []
+            
             for layer in layers:
-                if ',' in layer.name():
-                    QMessageBox.information(None, '',  layer.name())
-                layer_names.append(str(layer.name()))
+                layer_names.append(layer.name())
+                
             layers_item = QTableWidgetItem(", ".join(layer_names))
             layers_item.setToolTip("\n".join(layer_names))
             data_source_item = QTableWidgetItem(data_source)
