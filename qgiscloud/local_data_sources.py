@@ -78,7 +78,7 @@ class LocalDataSources(object):
                 else:
                     local_raster_layers.append(layer)
 
-            elif provider not in ["wms", "openlayers",  "arcgismapserver"]:
+            elif provider not in ["wms", "openlayers",  "arcgismapserver",   "postgresraster"]:
                 if layer.type() == QgsMapLayer.VectorLayer:
                     local_layers.append(layer)
                 else:
