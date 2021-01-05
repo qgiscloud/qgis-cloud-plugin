@@ -10,6 +10,8 @@ about= QGIS Cloud is your powerful Web-GIS platform for publishing maps, data an
 ; Optional items:
 
 changelog=
+    3.1.21
+    - Unsupported raster bug fixed
     3.1.20
     - Fixes wrong error message when remote database raster is loaded in project (3.16)
     3.1.19
