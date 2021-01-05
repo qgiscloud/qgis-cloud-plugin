@@ -54,22 +54,23 @@ class LocalDataSources(object):
                 provider = layer.dataProvider().name()
             else:
                 provider = layer.pluginLayerType()
+            
+            QMessageBox.information(None, str(layer.dataProvider().crs().srsid()),  provider)
             if provider == "postgres":
-                host = QgsDataSourceUri(layer.publicSource()).host()
                 if host not in DbConnectionCfg.CLOUD_DB_HOSTS:
                     if layer.wkbType() != 0: 
                         local_layers.append(layer)
                     else:
                         # geometryless tables not supported
                         unsupported_layers.append(layer)
-
-            elif provider in ["gdal"] and layer.dataProvider().crs().srsid() != 0:
+            
+            elif provider in ["gdal"]:
                 if  "PostGISRaster" in layer.dataProvider().htmlMetadata():
                     # FIXME: Temporary workaround for buggy QgsDataSourceURI parser which fails to parse URI strings starting with PG:
                     uri = layer.dataProvider().dataSourceUri()
                     uri = uri.strip("PG: ")
                     host = QgsDataSourceUri(uri).host()
-                        
+                    
                     if host not in DbConnectionCfg.CLOUD_DB_HOSTS:
                         unsupported_layers.append(layer)
                 elif layer.customProperty('ol_layer_type', None) is not None:
