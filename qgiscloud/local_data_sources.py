@@ -55,8 +55,8 @@ class LocalDataSources(object):
             else:
                 provider = layer.pluginLayerType()
             
-            QMessageBox.information(None, str(layer.dataProvider().crs().srsid()),  provider)
             if provider == "postgres":
+                host = QgsDataSourceUri(layer.publicSource()).host()
                 if host not in DbConnectionCfg.CLOUD_DB_HOSTS:
                     if layer.wkbType() != 0: 
                         local_layers.append(layer)
