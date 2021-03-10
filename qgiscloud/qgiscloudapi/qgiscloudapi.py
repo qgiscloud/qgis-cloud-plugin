@@ -44,7 +44,7 @@ from .version import __version__
 API_URL = 'https://api.qgiscloud.com'
 
 __all__ = ['API', 'UnauthorizedError', 'ConnectionException', 'TokenRequiredError', 'BadRequestError', 'ForbiddenError',
-           'ConflictDuplicateError', 'GoneError', 'InternalServerError',
+           'ConflictDuplicateError', 'GoneError', 'InternalServerError', 'URLError',
            'NotImplementedError', 'ThrottledError']
 
 
@@ -461,6 +461,20 @@ class BadRequestError(Exception):
         msg = '\n'.join(self.msgs)
         return msg
 
+class URLError(Exception):
+    """
+        We raise this exception whenever we get an URLError from urllib,
+        one reason of which could be an invalid FQDN/host name.
+    """
+
+    msg = ""
+
+    def __init__(self, msg):
+        self.msg = msg
+
+    def __str__(self):
+        return self.msg
+
 class UnauthorizedError(Exception):
     """
         We raise this exception whenever the API answers with HTTP STATUS 401
@@ -683,6 +697,8 @@ class Request(object):
                 req.get_method = lambda: request_method
             response = urllib.request.urlopen(req).read()
 
+        except urllib.error.URLError as e:
+            raise URLError("Failed to access '{}'. '{}'".format(url, e.reason))
         except urllib.error.HTTPError as e:
             #
             # Handle the possible responses according to their HTTP STATUS
