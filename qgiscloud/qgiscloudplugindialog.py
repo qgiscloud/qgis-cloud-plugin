@@ -48,6 +48,22 @@ import warnings
 warnings.simplefilter("ignore", ResourceWarning)
 
 
+__all__ = ["QgisCloudPluginDialog", "SchemaListException"]
+
+class SchemaListException(Exception):
+    """
+        We raise this exception when fetching the schema_list
+        fails, on reason of which could be that the DB doesn't
+        exist any more.
+    """
+
+    msg = ""
+
+    def __init__(self, msg):
+        self.msg = msg
+
+    def __str__(self):
+        return self.msg
 
 class QgisCloudPluginDialog(QDockWidget):
     COLUMN_LAYERS = 0
@@ -993,8 +1009,12 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
 
     def update_data_sources_table_names(self):
         schema_list = []
+
+        try:
         schema_list = self.fetch_schemas(
             self.ui.cbUploadDatabase.currentText())
+        except BaseException as e:
+          raise SchemaListException("Failed to access '{}'".format(self.ui.cbUploadDatabase.currentText()))
             
         if self.local_data_sources.count() == 0:
             self.data_sources_table_names.clear()
