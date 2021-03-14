@@ -697,8 +697,6 @@ class Request(object):
                 req.get_method = lambda: request_method
             response = urllib.request.urlopen(req).read()
 
-        except urllib.error.URLError as e:
-            raise URLError("Failed to access '{}'. '{}'".format(url, e.reason))
         except urllib.error.HTTPError as e:
             #
             # Handle the possible responses according to their HTTP STATUS
@@ -739,6 +737,10 @@ class Request(object):
 #                # if we tried for the fifth time we give up - and cry a little
 #                if i == 5:
 #                    raise ConnectionException('Connection to server failed: %s' % str(e))
+        except urllib.error.URLError as e:
+            # HTTPError being a subclass of URLError we need to catch the more specific
+            # HTTPError first and URLError only after that.
+            raise URLError("Failed to access '{}'. '{}'".format(url, e.reason))
         else:
             #
             # 200 OK, 201 CREATED and 204 DELETED result in returning the actual
