@@ -51,7 +51,10 @@ class LocalDataSources(object):
             if layer.id() == skip_layer_id:
                 continue
             if layer.type() != QgsMapLayer.PluginLayer:
-                provider = layer.dataProvider().name()
+                try:
+                    provider = layer.dataProvider().name()
+                except:
+                    continue
             else:
                 provider = layer.pluginLayerType()
             
