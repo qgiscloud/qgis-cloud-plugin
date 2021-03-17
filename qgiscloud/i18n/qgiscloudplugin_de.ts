@@ -692,11 +692,11 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <translation></translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="316"/>
+        <location filename="../qgiscloudplugindialog.py" line="317"/>
         <source>Due to the GDPR qgiscloud.com has a new &lt;a href=&apos;http://qgiscloud.com/en/pages/privacy&apos;&gt; Privacy Policy &lt;/a&gt;.
                                 To continue using qgiscloud.com, you must accept the new policy. </source>
-        <translation type="obsolete">Aufgrund der DSGVO hat qgiscloud.com eine neue &lt;a href=&apos;http://qgiscloud.com/de/pages/privacy&apos;&gt; Datenschutzrichtlinie &lt;/a&gt;.
-                                Um qgiscloud.com weiterhin verwenden zu können, müssen Sie die neue Richtlinie akzeptieren.</translation>
+        <translation>Aufgrund der DSGVO hat qgiscloud.com eine neue &lt;a href=&apos;http://qgiscloud.com/de/pages/privacy&apos;&gt; Datenschutzrichtlinie &lt;/a&gt;.
+                                Um qgiscloud.com weiterhin verwenden zu können, müssen Sie die neue Richtlinie akzeptieren. </translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="689"/>
@@ -709,28 +709,30 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <translation>Die folgenden WMS-Layernamen sind nicht eindeutig: {}. Bitte stellen Sie sicher, dass die Namen eindeutig sind, und veröffentlichen Sie das Projekt erneut. Der Layer-WMS-Kurzname kann im Layer-Eigenschaftendialog unter &apos;QGIS Server -&gt; Kurzname&apos; festgelegt werden.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="755"/>
+        <location filename="../qgiscloudplugindialog.py" line="766"/>
         <source>
 The name of the QGIS project 
 
 %s
 
 is invalid. It has the extension &apos;qgs.qgz&apos;. This is not allowed. Please correct the project name and publish the project again.</source>
-        <translation type="obsolete">Der Name des QGIS Projektes 
+        <translation>
+Der Name des QGIS Projektes 
 
 %s
 
 ist ungültig. Er hat die Extension &apos;qgs.qgz&apos;. Das ist nicht zulässig. Bitte korrigieren Sie den Projektnamen und veröffentlichen Sie das Projekt erneut.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="724"/>
+        <location filename="../qgiscloudplugindialog.py" line="735"/>
         <source>
 The CRS of the background layer &apos;{layerName}&apos; is different to the  map CRS. This means that this layer will be reprojected in the published map and the webmap will therefore be slow. To improve this and make the webmap faster, go to 
 
 &apos;Project -&gt; Properties... -&gt; CRS&apos; 
 
 and set the map CRS to {layerCRS}. Continue publishing?</source>
-        <translation type="obsolete">Das CRS der Hintergrundebene &apos;{layerName}&apos; unterscheidet sich vom Karten-CRS. Dies bedeutet, dass dieser Layer in der veröffentlichten Karte neu projiziert wird und die Webmap daher langsam ist. Um dies zu verbessern und die Webmap zu beschleunigen, gehen Sie zu 
+        <translation>
+Das CRS der Hintergrundebene &apos;{layerName}&apos; unterscheidet sich vom Karten-CRS. Dies bedeutet, dass dieser Layer in der veröffentlichten Karte neu projiziert wird und die Webmap daher langsam ist. Um dies zu verbessern und die Webmap zu beschleunigen, gehen Sie zu 
 
 &apos;Projekt -&gt; Eigenschaften ... -&gt; CRS&apos; 
 
@@ -740,7 +742,7 @@ und setzen Sie das Karten-CRS auf {layerCRS}. Weiter veröffentlichen?</translat
         <location filename="../qgiscloudplugindialog.py" line="317"/>
         <source>Due to the GDPR qgiscloud.com has a new &lt;a href=&apos;http://qgiscloud.com/en/pages/privacy&apos;&gt; Privacy Policy &lt;/a&gt;.
                                     To continue using qgiscloud.com, you must accept the new policy. </source>
-        <translation>Aufgrund der GDPR hat qgiscloud.com eine neue &lt;a href=&apos;http://qgiscloud.com/de/pages/privacy&apos;&gt;Datenschutzrichtlinie&lt;/a&gt;.
+        <translation type="obsolete">Aufgrund der GDPR hat qgiscloud.com eine neue &lt;a href=&apos;http://qgiscloud.com/de/pages/privacy&apos;&gt;Datenschutzrichtlinie&lt;/a&gt;.
                                     Um qgiscloud.com weiterhin zu nutzen, müssen Sie die neue Richtlinie akzeptieren. </translation>
     </message>
     <message>
@@ -761,7 +763,7 @@ und setzen Sie das Karten-CRS auf {layerCRS}. Weiter veröffentlichen?</translat
     &apos;Project -&gt; Properties... -&gt; CRS&apos; 
 
     and set the map CRS to {layerCRS}. Continue publishing?</source>
-        <translation>
+        <translation type="obsolete">
     Das CRS der Hintergrundebene &apos;{layerName}&apos; ist anders als das Karten-CRS. Dies bedeutet, dass diese Ebene in der veröffentlichten Karte neu projiziert wird und die Webmap daher langsam ist. Um dies zu verbessern und die Webmap schneller zu machen, gehen Sie zu 
 
     &apos;Projekt -&gt; Eigenschaften... -&gt; CRS&apos; 
@@ -776,7 +778,7 @@ und setzen Sie das Karten-CRS auf {layerCRS}. Weiter veröffentlichen?</translat
     %s
 
     is invalid. It has the extension &apos;qgs.qgz&apos;. This is not allowed. Please correct the project name and publish the project again.</source>
-        <translation>
+        <translation type="obsolete">
     Der Name des QGIS-Projekts 
 
     %s
