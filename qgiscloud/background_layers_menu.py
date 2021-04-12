@@ -43,7 +43,8 @@ class BackgroundLayersMenu(QMenu):
     def __init__(self, iface, parent=None):
         QMenu.__init__(self, parent)
         self.iface = iface
-
+        
+        self.add_wmts_layergroup()
         self.add_google_layergroup()
         self.add_XYZ_layergroups()
 
@@ -75,6 +76,28 @@ class BackgroundLayersMenu(QMenu):
             self.iface, self.setReferenceLayer, self._olLayerTypeRegistry)
         QgsApplication.pluginLayerRegistry().addPluginLayerType(
             self.pluginLayerType)
+            
+    
+    def add_wmts_layergroup(self):
+        wmts_layers = {
+            "Swisstopo": {
+                "1 : 10'000":  "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/png&layers=ch.swisstopo.landeskarte-farbe-10&styles=ch.swisstopo.landeskarte-farbe-10&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_27&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml", 
+                "1 : 25'000":  "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.pixelkarte-farbe-pk25.noscale&styles=ch.swisstopo.pixelkarte-farbe-pk25.noscale&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_26&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml", 
+                "1 : 50'000":  "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.pixelkarte-farbe-pk50.noscale&styles=ch.swisstopo.pixelkarte-farbe-pk50.noscale&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_26&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml", 
+                "1 : 100'000":  "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.pixelkarte-farbe-pk100.noscale&styles=ch.swisstopo.pixelkarte-farbe-pk100.noscale&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_26&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml", 
+                "1 : 200'000":  "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.pixelkarte-farbe-pk200.noscale&styles=ch.swisstopo.pixelkarte-farbe-pk200.noscale&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_26&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml", 
+                "1 : 500'000":  "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.pixelkarte-farbe-pk500.noscale&styles=ch.swisstopo.pixelkarte-farbe-pk500.noscale&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_26&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml", 
+                "1 : 1000'000":  "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.pixelkarte-farbe-pk1000.noscale&styles=ch.swisstopo.pixelkarte-farbe-pk1000.noscale&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_26&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml", 
+                "Swissimage":  "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.swissimage&styles=ch.swisstopo.swissimage&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_28&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml", 
+            }
+        }
+        
+        for layer_type in wmts_layers:
+            menu = QMenu(layer_type, self)
+            for layer in wmts_layers[layer_type]:
+                action = self.create_add_layer_action(wmts_layers[layer_type][layer], layer, menu, 'wmts')
+                menu.addAction(action)
+            self.addMenu(menu)        
 
     def add_XYZ_layergroups(self):
         xyz_layers = {
@@ -126,11 +149,11 @@ class BackgroundLayersMenu(QMenu):
                 menu.addAction(add_api_key_action)
             self.addMenu(menu)
 
-    def create_add_layer_action(self, url, title, parent):
+    def create_add_layer_action(self, url, title, parent,  layerType=None):
         action = QAction(title, parent)
         action.triggered.connect(
                     lambda: self.addLayer(
-                        None, xyzUrl=url, displayName=title))
+                        layerType, xyzUrl=url, displayName=title))
         return action
 
     def showThunderforestApiKeyDialog(self):
@@ -152,6 +175,7 @@ class BackgroundLayersMenu(QMenu):
                                  newApiKey)
 
     def addLayer(self, layerType, xyzUrl=None, displayName=None):
+
         if layerType is None:
             thunderforest_api_key = QSettings().value(
                     "qgis-cloud-plugin/thunderforestApiKey")
@@ -166,6 +190,8 @@ class BackgroundLayersMenu(QMenu):
 
             layer = QgsRasterLayer(
                 'type=xyz' + '&url=' + xyzUrl, displayName, 'wms')
+        elif layerType == 'wmts':
+            layer = QgsRasterLayer(xyzUrl, displayName, 'wms')
         else:
             layer = OpenlayersLayer(self.iface, self._olLayerTypeRegistry)
             layer.setName(layerType.displayName)
@@ -175,8 +201,15 @@ class BackgroundLayersMenu(QMenu):
             return
 
         coordRefSys = QgsCoordinateReferenceSystem()
-        coordRefSys.createFromOgcWmsCrs("EPSG:3857")
+
+        if xyzUrl != None:
+            if "EPSG:2056" in xyzUrl:
+                coordRefSys.createFromOgcWmsCrs("EPSG:2056")
+        else:
+            coordRefSys.createFromOgcWmsCrs("EPSG:3857")
+            
         success = self.setMapCrs(coordRefSys)
+        
         if success:
             QgsProject.instance().addMapLayer(layer, False)
             legendRootGroup = self.iface.layerTreeView().layerTreeModel().rootGroup()
@@ -200,14 +233,13 @@ class BackgroundLayersMenu(QMenu):
     def setMapCrs(self, coordRefSys):
         mapCanvas = self.iface.mapCanvas()
         canvasCrs = self.canvasCrs()
-        
+
         if canvasCrs != coordRefSys:
             coordTrans = QgsCoordinateTransform(
                 canvasCrs,
                 coordRefSys,
                 QgsProject.instance())
             extMap = mapCanvas.extent()
-            
             try:
                 extMap = coordTrans.transform(
                     extMap, QgsCoordinateTransform.ForwardTransform)
