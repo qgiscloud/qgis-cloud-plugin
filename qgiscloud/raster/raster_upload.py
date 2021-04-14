@@ -53,11 +53,13 @@ VERBOSE = False
 SUMMARY = []
 
 class RasterUpload(QObject):
-    def __init__(self,  conn,  cursor,  raster,  max_size,  progress_label):
+    def __init__(self,  conn,  cursor,  raster,  max_size,  progress_label,  progress_bar):
         QObject.__init__(self)
         self.cursor = cursor
         self.conn = conn
         self.progress_label = progress_label
+        self.progress_bar = progress_bar
+        self.progress_bar.setValue(0)
         self.messages = ""
 
         opts = {}
@@ -645,6 +647,7 @@ class RasterUpload(QObject):
         self.progress_label.setText(self.tr("Uploading tiles..."))
         importString = ""
         sum_tiles = grid_size[0]*grid_size[1]
+        self.progress_bar.setMaximum(sum_tiles)
 
         copy_size = 500
         
@@ -675,13 +678,15 @@ class RasterUpload(QObject):
                 if (tile_count % copy_size) == 0:
                     self.cursor.copy_from(StringIO(importString), '%s' % gen_table)
                     importString = ""
-                    self.progress_label.setText(self.tr("{table}: {count} of {sum_tiles} tiles uploaded").format(
-                        table=gen_table, 
-                        count=tile_count,  
-                        sum_tiles= sum_tiles))                
+                    self.progress_bar.setValue(tile_count)
+#                    self.progress_label.setText(self.tr("{table}: {count} of {sum_tiles} tiles uploaded").format(
+#                        table=gen_table, 
+#                        count=tile_count,  
+#                        sum_tiles= sum_tiles))                
                         
                     QApplication.processEvents()
 
+        self.progress_bar.setValue(sum_tiles)
         self.cursor.copy_from(StringIO(importString), '%s' % gen_table)
         self.conn.commit()
         

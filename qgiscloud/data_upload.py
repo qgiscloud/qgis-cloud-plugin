@@ -250,7 +250,7 @@ class DataUpload(QObject):
                             'table_name': item['table'],
                             'geom_column': 'rast'
                         }
-                RasterUpload(conn,  cursor,  raster_to_upload,  maxSize,  self.progress_label)
+                RasterUpload(conn,  cursor,  raster_to_upload,  maxSize,  self.progress_label,  self.progress_bar)
                 layers_to_replace[layer.id()] = raster_to_upload
 
         sql = """SELECT 'SELECT SETVAL(' || quote_literal(quote_ident(PGT.schemaname) || '.' || quote_ident(S.relname)) ||  
