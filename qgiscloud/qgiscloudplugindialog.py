@@ -140,6 +140,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui = Ui_QgisCloudPlugin()
         self.ui.setupUi(self)
         self.storage_exceeded = True
+        self.ui.progressBar.setValue(0)
 
         myAbout = DlgAbout()
         self.ui.aboutText.setText(
@@ -216,7 +217,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.db_connections = DbConnections()
         self.local_data_sources = LocalDataSources()
         self.data_upload = DataUpload(
-            self.iface, self.statusBar(), self.ui.lblProgress, self.api,
+            self.iface, self.statusBar(), self.ui.lblProgress, self.ui.progressBar,  self.api,
             self.db_connections)
 
         if self.URL == "":

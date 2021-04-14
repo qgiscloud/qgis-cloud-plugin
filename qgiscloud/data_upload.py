@@ -36,11 +36,12 @@ import binascii
 
 class DataUpload(QObject):
     
-    def __init__(self, iface, status_bar, progress_label, api, db_connections):
+    def __init__(self, iface, status_bar, progress_label, progress_bar,  api, db_connections):
         QObject.__init__(self)
         self.iface = iface
         self.status_bar = status_bar
         self.progress_label = progress_label
+        self.progress_bar = progress_bar
         self.api = api
         self.db_connections = db_connections
         self.PROJECT_INSTANCE = QgsProject.instance()
@@ -139,6 +140,9 @@ class DataUpload(QObject):
 
                 self.progress_label.setText(self.tr("Uploading features..."))
                 QApplication.processEvents()
+                n_layer_features = layer.featureCount()
+                self.progress_bar.setMaximum(n_layer_features)
+                
                 for feature in layer.getFeatures():
                     f_geometry = feature.geometry()
                     f_geometry.convertToMultiType()
@@ -186,6 +190,7 @@ class DataUpload(QObject):
                     importstr += b"\n"
 
                     # Upload in chunks
+                    self.progress_bar.setValue(count)
                     if (count % 100) == 0:
                         try:
                             cursor.copy_from(StringIO(importstr.decode('utf-8')), '"%s"."%s"' % (item['schema'],  item['table']))
