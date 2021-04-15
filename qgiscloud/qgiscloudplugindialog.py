@@ -390,6 +390,23 @@ class QgisCloudPluginDialog(QDockWidget):
                         # we don't know what to do with the exception
                         # so let it escalate
                         raise e
+                        
+            self.numDbs = len(list(self.db_connections._dbs.keys()))
+            if self.numDbs == 0:
+                res = QMessageBox.question(
+                    self,
+                    self.tr("No Database"),
+                    self.tr("""
+To work with QGIS Cloud you need at least one QGIS Cloud database. Creating a database can take a few minutes, please be patient.
+
+Do you want to create a new database now?
+"""),
+                    QMessageBox.StandardButtons(
+                        QMessageBox.No |
+                        QMessageBox.Yes))
+                if res == QMessageBox.Yes:
+                    self.create_database()
+                            
         return version_ok
 
     def create_database(self):
@@ -1232,6 +1249,7 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
     def db_size(self,  db_connections):
         usedSpace = 0
         self.numDbs = len(list(db_connections._dbs.keys()))
+                
         for db in list(db_connections._dbs.keys()):
             try:
                 try:
