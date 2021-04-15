@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="de_CH">
+<!DOCTYPE TS><TS version="2.0" language="de_CH" sourcelanguage="">
 <context>
     <name>BackgroundLayersMenu</name>
     <message>
@@ -797,7 +796,18 @@ To work with QGIS Cloud you need at least one QGIS Cloud database. Creating a da
 
 Do you want to create a new database now?
 </source>
-        <translation>Um mit QGIS Cloud zu arbeiten benötigen Sie mindestens eine QGIS Cloud Datenbank. Das Anlegen einer Datenbank kann einen Moment dauern, bitte haben Sie etwas Geduld.
+        <translation type="obsolete">Um mit QGIS Cloud zu arbeiten benötigen Sie mindestens eine QGIS Cloud Datenbank. Das Anlegen einer Datenbank kann einen Moment dauern, bitte haben Sie etwas Geduld.
+
+Möchten Sie jetzt eine neue Datenbank anlegen?</translation>
+    </message>
+    <message>
+        <location filename="../qgiscloudplugindialog.py" line="396"/>
+        <source>
+To work with QGIS Cloud you need at least one QGIS Cloud database. Creating a database can take a few minutes, please be patient.
+
+Do you want to create a new database now?
+</source>
+        <translation>Um mit QGIS Cloud zu arbeiten benötigen Sie mindestens eine QGIS Cloud Datenbank. Das Anlegen einer Datenbank kann einige Minuten dauern, bitte haben Sie etwas Geduld.
 
 Möchten Sie jetzt eine neue Datenbank anlegen?</translation>
     </message>
