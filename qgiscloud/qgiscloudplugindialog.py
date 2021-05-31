@@ -697,6 +697,20 @@ Do you want to create a new database now?
                 same_layer_names.append(key)
 
         return same_layer_names
+        
+    def check_illegal_layer_names(self, layers):
+        illegal_layer_names = []
+#        layer_name_dict = {}  # name / nReferences
+
+        for layer in layers:
+            name = layer.shortName()
+            if not name:
+                name = layer.name()
+
+            if set(",.;:").intersection(set(name)):
+                illegal_layer_names.append(name)
+
+        return illegal_layer_names        
 
     def publish_map(self):
         QApplication.setOverrideCursor(Qt.WaitCursor)
@@ -722,9 +736,16 @@ Do you want to create a new database now?
         for l in layerTreeLayers:
             layers.append( l.layer() )
         
-        
         layerList = ''
 
+       # Remove extra characters like , ; : from layernames causing problems in QWC2
+        illegal_layer_names = self.check_illegal_layer_names(layers)
+        if len(illegal_layer_names) > 0:
+            QMessageBox.critical(None, self.tr('Error'), self.tr(
+                "The following layer names do contain non allowed characters like ', . : ;' : {}. Please rename the layers and save the project before publishing.").format(illegal_layer_names))
+            QApplication.restoreOverrideCursor()
+            return        
+        
         # make sure every layer has a unique WMS name
         notUniqueLayerNames = self.check_same_layer_names(layers)
         if len(notUniqueLayerNames) > 0:
