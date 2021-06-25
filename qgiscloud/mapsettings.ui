@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1332</width>
+    <width>1158</width>
     <height>842</height>
    </rect>
   </property>
@@ -25,7 +25,7 @@
         <item row="2" column="1">
          <widget class="QCheckBox" name="map_public_chkb">
           <property name="layoutDirection">
-           <enum>Qt::RightToLeft</enum>
+           <enum>Qt::LeftToRight</enum>
           </property>
           <property name="iconSize">
            <size>
@@ -57,7 +57,7 @@
         <item row="0" column="1">
          <widget class="QCheckBox" name="viewer_active_chkb">
           <property name="layoutDirection">
-           <enum>Qt::RightToLeft</enum>
+           <enum>Qt::LeftToRight</enum>
           </property>
           <property name="iconSize">
            <size>
@@ -76,7 +76,7 @@
         <item row="1" column="1">
          <widget class="QCheckBox" name="wms_public_chkb">
           <property name="layoutDirection">
-           <enum>Qt::RightToLeft</enum>
+           <enum>Qt::LeftToRight</enum>
           </property>
           <property name="iconSize">
            <size>
