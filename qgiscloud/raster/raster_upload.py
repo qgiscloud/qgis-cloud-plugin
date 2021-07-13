@@ -125,6 +125,7 @@ class RasterUpload(QObject):
             sql = 'drop table if exists "%s"."o_%d_%s"' %(opts['schema'],  level,  opts['table'])
             self.cursor.execute(sql)
             self.conn.commit()
+            
             sql = "select st_createoverview_qgiscloud('%s'::text, '%s'::name, %d)" % (opts['schema_table'].replace('"',  ''),  opts['column'],  level)
             self.progress_label.setText(self.tr("Creating overview-level {level} for table '{table}'...").format(level=level,  table=opts['schema_table'].replace('"',  '')))
             QApplication.processEvents()
@@ -135,7 +136,6 @@ class RasterUpload(QObject):
             self.cursor.execute(self.make_sql_create_gist(index_table,  opts['column']))
             self.conn.commit()
                 
-
         self.progress_label.setText(self.tr("Registering raster columns of table '%s'..." % (opts['schema_table'].replace('"',  ''))))
         QApplication.processEvents()
         self.cursor.execute(self.make_sql_addrastercolumn(opts))
@@ -320,28 +320,28 @@ class RasterUpload(QObject):
                    % (schema,  table,  options['column'])
         return sql
         
-    def make_sql_create_raster_overviews(self,  options):
-
-        sql = ""
-
-        for level in options['overview_level'].split(","):
-          sql += "select st_createoverview('%s'::regclass, '%s'::name, %s);\n" % (options['schema_table'],  'rast',  level)
-          
-        return sql
+#    def make_sql_create_raster_overviews(self,  options):
+#
+#        sql = ""
+#
+#        for level in options['overview_level'].split(","):
+#          sql += "select st_createoverview('%s'::regclass, '%s'::name, %s);\n" % (options['schema_table'],  'rast',  level)
+#          
+#        return sql
     
     
-    def make_sql_register_overview(self,  options, ov_table, ov_factor):
-
-        r_table = self.make_sql_table_name(ov_table)
-    
-        sql = "SELECT AddOverviewConstraints('%s','%s', '%s', '%s','%s','%s',%d);" \
-            % (options['schema'],  r_table,  options['column'],  options['schema'],  options['table'],  options['column'],  ov_factor)
-        
-        return sql
-    
-    def make_sql_vacuum(self,  table):
-        sql = 'VACUUM ANALYZE ' + self.make_sql_full_table_name(table) + ';\n'
-        return sql
+#    def make_sql_register_overview(self,  options, ov_table, ov_factor):
+#
+#        r_table = self.make_sql_table_name(ov_table)
+#    
+#        sql = "SELECT AddOverviewConstraints('%s','%s', '%s', '%s','%s','%s',%d);" \
+#            % (options['schema'],  r_table,  options['column'],  options['schema'],  options['table'],  options['column'],  ov_factor)
+#        
+#        return sql
+#    
+#    def make_sql_vacuum(self,  table):
+#        sql = 'VACUUM ANALYZE ' + self.make_sql_full_table_name(table) + ';\n'
+#        return sql
     
     ################################################################################
     # RASTER OPERATIONS
