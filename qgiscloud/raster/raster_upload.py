@@ -142,13 +142,6 @@ class RasterUpload(QObject):
         QApplication.processEvents()
         self.cursor.execute(self.make_sql_addrastercolumn(opts))
         self.conn.commit()
-            
-            
-                    # VACUUM
-#            self.cursor.execute(self.make_sql_vacuum(opts['table']))
-#            self.conn.commit
-            
-            
 
     
     ################################################################################ 
