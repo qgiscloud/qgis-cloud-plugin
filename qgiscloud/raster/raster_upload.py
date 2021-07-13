@@ -51,6 +51,7 @@ g_rt_schema = 'public'
 # UTILITIES
 VERBOSE = False
 SUMMARY = []
+CREATE_OVERVIEWS = False
 
 class RasterUpload(QObject):
     def __init__(self,  conn,  cursor,  raster,  max_size,  progress_label,  progress_bar):
@@ -120,21 +121,22 @@ class RasterUpload(QObject):
         self.conn.commit()            
 
    # create raster overviews
-        for level in [4, 8, 16, 32]:
-            
-            sql = 'drop table if exists "%s"."o_%d_%s"' %(opts['schema'],  level,  opts['table'])
-            self.cursor.execute(sql)
-            self.conn.commit()
-            
-            sql = "select st_createoverview_qgiscloud('%s'::text, '%s'::name, %d)" % (opts['schema_table'].replace('"',  ''),  opts['column'],  level)
-            self.progress_label.setText(self.tr("Creating overview-level {level} for table '{table}'...").format(level=level,  table=opts['schema_table'].replace('"',  '')))
-            QApplication.processEvents()
-            self.cursor.execute(sql)
-            self.conn.commit()
-            
-            index_table = opts['schema']+'.o_'+str(level)+'_'+opts['table']
-            self.cursor.execute(self.make_sql_create_gist(index_table,  opts['column']))
-            self.conn.commit()
+        if CREATE_OVERVIEWS:
+            for level in [2, 4, 8, 16, 32, 64, 128, 256]:
+                
+                sql = 'drop table if exists "%s"."o_%d_%s"' %(opts['schema'],  level,  opts['table'])
+                self.cursor.execute(sql)
+                self.conn.commit()
+                
+                sql = "select st_createoverview_qgiscloud('%s'::text, '%s'::name, %d)" % (opts['schema_table'].replace('"',  ''),  opts['column'],  level)
+                self.progress_label.setText(self.tr("Creating overview-level {level} for table '{table}'...").format(level=level,  table=opts['schema_table'].replace('"',  '')))
+                QApplication.processEvents()
+                self.cursor.execute(sql)
+                self.conn.commit()
+                
+                index_table = opts['schema']+'.o_'+str(level)+'_'+opts['table']
+                self.cursor.execute(self.make_sql_create_gist(index_table,  opts['column']))
+                self.conn.commit()
                 
         self.progress_label.setText(self.tr("Registering raster columns of table '%s'..." % (opts['schema_table'].replace('"',  ''))))
         QApplication.processEvents()
