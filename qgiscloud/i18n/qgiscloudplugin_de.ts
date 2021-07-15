@@ -256,7 +256,7 @@ p, li { white-space: pre-wrap; }
         <translation>Abmelden</translation>
     </message>
     <message>
-        <location filename="../ui_qgiscloudplugin.py" line="341"/>
+        <location filename="../qgiscloudplugin.ui" line="56"/>
         <source>Add background layer</source>
         <translation>Hintergrundebene hinzufügen</translation>
     </message>
@@ -338,14 +338,29 @@ p, li { white-space: pre-wrap; }
         <translation>QGIS Cloud</translation>
     </message>
     <message>
-        <location filename="../ui_qgiscloudplugin.py" line="344"/>
+        <location filename="../qgiscloudplugin.ui" line="106"/>
         <source>Public WMS</source>
-        <translation>Öffentlicher OWS Link</translation>
+        <translation type="obsolete">Öffentlicher OWS Link</translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="371"/>
         <source>Map Settings</source>
         <translation>Karteneinstellungen</translation>
+    </message>
+    <message>
+        <location filename="../qgiscloudplugin.ui" line="106"/>
+        <source>Public WMS/WFS/WCS</source>
+        <translation>Öffentliche WMS/WFS/WCS</translation>
+    </message>
+    <message>
+        <location filename="../ui_qgiscloudplugin.py" line="341"/>
+        <source>Add background` layer</source>
+        <translation>Hintergrundebene hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="../ui_qgiscloudplugin.py" line="344"/>
+        <source>Public WMS/WFS/WCS Link</source>
+        <translation>Öffentlicher WMS/WFS/WCS Link</translation>
     </message>
 </context>
 <context>
@@ -434,12 +449,12 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <translation>Die lokalen Daten wurden hoch geladen</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1125"/>
+        <location filename="../qgiscloudplugindialog.py" line="1127"/>
         <source>Network Error</source>
         <translation>Netzwerk Fehler</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1132"/>
+        <location filename="../qgiscloudplugindialog.py" line="1134"/>
         <source>Uploading data...</source>
         <translation>Daten werden hoch geladen...</translation>
     </message>
@@ -449,12 +464,12 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <translation></translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1231"/>
+        <location filename="../qgiscloudplugindialog.py" line="1235"/>
         <source>QGIS Cloud Error</source>
         <translation>QGIS Cloud Fehler</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1233"/>
+        <location filename="../qgiscloudplugindialog.py" line="1237"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
@@ -484,17 +499,17 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <translation>Unbekannter Typ</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1328"/>
+        <location filename="../qgiscloudplugindialog.py" line="1332"/>
         <source>Used DB Storage: </source>
         <translation>Verwendeter Datenbankspeicher: </translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1115"/>
+        <location filename="../qgiscloudplugindialog.py" line="1117"/>
         <source>No database selected</source>
         <translation>Keine Datenbank ausgewählt</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1115"/>
+        <location filename="../qgiscloudplugindialog.py" line="1117"/>
         <source>Please select a database to upload data.</source>
         <translation>Bitte wählen Sie eine Datenbank aus um Daten hochzuladen.</translation>
     </message>
@@ -504,12 +519,12 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <translation>Keine Datenbanken</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1110"/>
+        <location filename="../qgiscloudplugindialog.py" line="1112"/>
         <source>No database available</source>
         <translation>Keine Datenbanken verfügbar</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1110"/>
+        <location filename="../qgiscloudplugindialog.py" line="1112"/>
         <source>Please create a database in the &apos;Account&apos; tab.</source>
         <translation>Bitte legen Sie eine Datenbank in &apos;Benutzerkonto&apos; Registerkarte an.</translation>
     </message>
@@ -524,32 +539,32 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <translation>Ein Fehler ist aufgetreten</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1169"/>
+        <location filename="../qgiscloudplugindialog.py" line="1171"/>
         <source>Upload errors occurred</source>
         <translation>Fehler beim Hochladen der Daten</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1169"/>
+        <location filename="../qgiscloudplugindialog.py" line="1171"/>
         <source>Upload errors occurred. Not all data could be uploaded.</source>
         <translation>Fehler beim Hochladen der Daten sind aufgetreten. Nicht alle Daten konnten hochgeladen werden.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1204"/>
+        <location filename="../qgiscloudplugindialog.py" line="1208"/>
         <source>Save Project</source>
         <translation>Projekt speichern</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1195"/>
+        <location filename="../qgiscloudplugindialog.py" line="1199"/>
         <source>Choose were to save the modified project:</source>
         <translation>Wählen Sie, wo das geänderte Projekt gespeichert werden soll.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1204"/>
+        <location filename="../qgiscloudplugindialog.py" line="1208"/>
         <source>QGIS Project Files</source>
         <translation>QGIS Projektdateien</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1191"/>
+        <location filename="../qgiscloudplugindialog.py" line="1195"/>
         <source>Upload complete. The local layers in the project were replaced with the layers uploaded to the qgiscloud database.</source>
         <translation>Die Daten wurden hochgeladen. Die lokalen Ebenen im Projekt wurden mit den Layers in der qgiscloud Datenbank ersetzt.</translation>
     </message>
@@ -584,7 +599,7 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
         <translation>Die Anzahl der %s erlaubten Datenbanken ist überschritten! Bitte kaufen Sie weitere Datenbanken hinzu!</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1125"/>
+        <location filename="../qgiscloudplugindialog.py" line="1127"/>
         <source>Could not connect to database server ({0}) on port {1}. Please contact your system administrator or internet provider to open port {1} in the firewall</source>
         <translation>Der Datenbank-Server ({0}) kann nicht über den Port {1} verbunden werden. Bitten Sie den Systemadministrator oder Internet-Provider den Port {1} in der Firewall zu öffnen</translation>
     </message>
@@ -768,37 +783,37 @@ Möchten Sie jetzt eine neue Datenbank anlegen?</translation>
 <context>
     <name>RasterUpload</name>
     <message>
-        <location filename="../raster/raster_upload.py" line="100"/>
+        <location filename="../raster/raster_upload.py" line="101"/>
         <source>Database full</source>
         <translation>Die Datenbank ist voll</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="100"/>
+        <location filename="../raster/raster_upload.py" line="101"/>
         <source>Upload would exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan.</source>
         <translation>Der Upload würde die maximale Datenbankgröße für Ihren aktuellen QGIS Cloud-Plan überschreiten. Bitte geben Sie etwas Platz frei oder aktualisieren Sie Ihren QGIS Cloud Plan.</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="107"/>
+        <location filename="../raster/raster_upload.py" line="108"/>
         <source>Creating table &apos;{table}&apos;...</source>
         <translation>Die Tabelle &apos;{table}&apos; wird erstellt...</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="129"/>
+        <location filename="../raster/raster_upload.py" line="132"/>
         <source>Creating overview-level {level} for table &apos;{table}&apos;...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="139"/>
+        <location filename="../raster/raster_upload.py" line="141"/>
         <source>Registering raster columns of table &apos;%s&apos;...</source>
         <translation>Registrieren von Rasterspalten der Tabelle &apos;%s&apos;...</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="647"/>
+        <location filename="../raster/raster_upload.py" line="642"/>
         <source>Uploading tiles...</source>
         <translation>Kacheln hochladen...</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="693"/>
+        <location filename="../raster/raster_upload.py" line="688"/>
         <source>Calculating raster params for {sum_tiles} tiles ...</source>
         <translation>Berechnen von Rasterparametern für {sum_tiles} Kacheln ...</translation>
     </message>
