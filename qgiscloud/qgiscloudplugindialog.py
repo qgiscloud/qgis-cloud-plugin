@@ -1041,6 +1041,8 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
         input_string = input_string.replace(b" ", b"_")
         input_string = input_string.replace(b".", b"_")
         input_string = input_string.replace(b"-", b"_")
+        input_string = input_string.replace(b"+", b"_")
+        input_string = input_string.replace(b"'", b"_")
 
         # check if table_name starts with number
 
@@ -1175,12 +1177,14 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
             self.ui.btnUploadData.show()
             self.unsetCursor()
             self.statusBar().showMessage("")
+            
             # Refresh local layers
             self.do_update_local_data_sources = True
             self.update_local_layers()
+            
             # Refresh used space after upload
             self.db_size(self.db_connections)
-
+            
             if upload_ok:
                 # Show save project dialog
                 save_dialog = QDialog(self)
