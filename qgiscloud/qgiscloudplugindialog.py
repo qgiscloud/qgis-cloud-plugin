@@ -707,7 +707,7 @@ Do you want to create a new database now?
             if not name:
                 name = layer.name()
 
-            if set(",.;:").intersection(set(name)):
+            if set(",.;:+'").intersection(set(name)):
                 illegal_layer_names.append(name)
 
         return illegal_layer_names        
