@@ -203,7 +203,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="375"/>
         <source>Upload data</source>
-        <translation>Daten in die Cloud laden</translation>
+        <translation>Daten hochladen</translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="393"/>
@@ -436,7 +436,8 @@ p, li { white-space: pre-wrap; }
 Please remove or replace above layers before publishing your map.
 </source>
         <translation>
-Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</translation>
+Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.
+</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="956"/>
@@ -536,7 +537,7 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
     <message>
         <location filename="../qgiscloudplugindialog.py" line="873"/>
         <source>An error occured.</source>
-        <translation>Ein Fehler ist aufgetreten</translation>
+        <translation>Ein Fehler ist aufgetreten.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1171"/>
@@ -556,7 +557,7 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1199"/>
         <source>Choose were to save the modified project:</source>
-        <translation>Wählen Sie, wo das geänderte Projekt gespeichert werden soll.</translation>
+        <translation>Wählen Sie, wo das geänderte Projekt gespeichert werden soll:</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1208"/>
@@ -636,14 +637,16 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.</tran
     <message>
         <location filename="../qgiscloudplugindialog.py" line="373"/>
         <source>Login for user {username} failed</source>
-        <translation>Login für den Benutzer {username} gescheitert! </translation>
+        <translation>Login für den Benutzer {username} gescheitert</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="886"/>
         <source>Some layers are using local data. Please upload local layers to your cloud database in the &apos;Upload Data&apos; tab before publishing.
 
 </source>
-        <translation>Einige Ebenen verwenden lokale Daten. Bitte diese Daten im &apos;Daten in die Cloud laden&apos; Reiter in die Datenbank laden, bevor das Projekt veröffentlicht wird.</translation>
+        <translation>Einige Ebenen verwenden lokale Daten. Bitte diese Daten im &apos;Daten laden&apos; Reiter in die Datenbank laden, bevor das Projekt veröffentlicht wird.
+
+</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="430"/>
@@ -756,7 +759,7 @@ und setzen Sie das Karten-CRS auf {layerCRS}. Weiter veröffentlichen?</translat
     <message>
         <location filename="../qgiscloudplugindialog.py" line="385"/>
         <source>Could not access {url}. Please check that the URL is written correctly. The error: was &apos;{e}&apos;</source>
-        <translation>Konnte nicht auf {url} zugreifen. Bitte prüfen Sie, ob die URL richtig geschrieben ist. Der Fehler: war &apos;{e}&apos;.</translation>
+        <translation>Konnte nicht auf {url} zugreifen. Bitte prüfen Sie, ob die URL richtig geschrieben ist. Der Fehler: war &apos;{e}&apos;</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="396"/>
@@ -770,9 +773,11 @@ To work with QGIS Cloud you need at least one QGIS Cloud database. Creating a da
 
 Do you want to create a new database now?
 </source>
-        <translation>Um mit QGIS Cloud zu arbeiten benötigen Sie mindestens eine QGIS Cloud Datenbank. Das Anlegen einer Datenbank kann einige Minuten dauern, bitte haben Sie etwas Geduld.
+        <translation>
+Um mit QGIS Cloud zu arbeiten benötigen Sie mindestens eine QGIS Cloud Datenbank. Das Anlegen einer Datenbank kann einige Minuten dauern, bitte haben Sie etwas Geduld.
 
-Möchten Sie jetzt eine neue Datenbank anlegen?</translation>
+Möchten Sie jetzt eine neue Datenbank anlegen?
+</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="744"/>
@@ -833,7 +838,7 @@ Möchten Sie jetzt eine neue Datenbank anlegen?</translation>
     <message>
         <location filename="../mapsettings.ui" line="53"/>
         <source>Map public</source>
-        <translation>Karte öffentlich?</translation>
+        <translation>Karte öffentlich</translation>
     </message>
     <message>
         <location filename="../mapsettings.ui" line="104"/>
@@ -853,12 +858,12 @@ Möchten Sie jetzt eine neue Datenbank anlegen?</translation>
     <message>
         <location filename="../mapsettings.ui" line="152"/>
         <source>Viewer active</source>
-        <translation>Viewer aktiviert?</translation>
+        <translation>Viewer aktiviert</translation>
     </message>
     <message>
         <location filename="../mapsettings.ui" line="165"/>
         <source>WMS public</source>
-        <translation>WMS öffentlich?</translation>
+        <translation>WMS öffentlich</translation>
     </message>
     <message>
         <location filename="../mapsettings.ui" line="195"/>
