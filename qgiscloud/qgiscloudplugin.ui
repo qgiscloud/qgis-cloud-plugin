@@ -103,7 +103,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label">
              <property name="text">
-              <string>Public WMS/WFS/WCS</string>
+              <string>Public WMS/WFS/WCS:</string>
              </property>
             </widget>
            </item>
@@ -124,7 +124,7 @@ p, li { white-space: pre-wrap; }
            <item row="2" column="0">
             <widget class="QLabel" name="label_5">
              <property name="text">
-              <string>Map Admin</string>
+              <string>Map Admin:</string>
              </property>
             </widget>
            </item>
@@ -145,7 +145,7 @@ p, li { white-space: pre-wrap; }
            <item row="3" column="0">
             <widget class="QLabel" name="label_8">
              <property name="text">
-              <string>Support</string>
+              <string>Support:</string>
              </property>
             </widget>
            </item>
@@ -169,7 +169,7 @@ p, li { white-space: pre-wrap; }
            <item row="0" column="0">
             <widget class="QLabel" name="label_3">
              <property name="text">
-              <string>Webmap</string>
+              <string>Webmap:</string>
              </property>
             </widget>
            </item>
