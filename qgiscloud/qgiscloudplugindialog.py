@@ -571,7 +571,8 @@ Do you want to create a new database now?
         ret = msgBox.exec_()
 
         if ret == QMessageBox.Ok:
-            self.ui.widgetServices.close()
+#            self.ui.widgetServices.close()
+            self.clean_widgetServices()
             self.setCursor(Qt.WaitCursor)
             success = self.api.delete_map(map_id)
 
@@ -582,11 +583,17 @@ Do you want to create a new database now?
                 self.show_api_error(success)
 
             self.unsetCursor()
-            self.ui.widgetServices.close()
+#            self.ui.widgetServices.close()
+            self.clean_widgetServices()
         else:
             QMessageBox.warning(None,  self.tr('Warning'),  self.tr(
                 'Deletion of map "{name}" interrupted!').format(name=name))
 
+    def clean_widgetServices(self):
+        self.ui.lblWebmap.setText('')
+        self.ui.lblWMS.setText('')        
+        
+        
     def edit_map(self):
         map_id = self.ui.tabMaps.currentItem().data(Qt.UserRole)
         map_name = self.ui.tabMaps.currentItem().text()
