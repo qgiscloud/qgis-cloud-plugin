@@ -1004,6 +1004,7 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
             self.ui.tblLocalLayers.setColumnWidth(self.COLUMN_DATA_SOURCE, 100)
             self.ui.tblLocalLayers.sortItems(self.COLUMN_DATA_SOURCE)
             self.ui.tblLocalLayers.setSortingEnabled(False)
+            self.ui.btnUploadData.setEnabled(True)
         else:
             self.ui.btnUploadData.setEnabled(False)
 
@@ -1073,7 +1074,7 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
 
     def update_data_sources_table_names(self):
         schema_list = []
-
+        
         try:
           schema_list = self.fetch_schemas(
               self.ui.cbUploadDatabase.currentText())
@@ -1082,7 +1083,9 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
             
         if self.local_data_sources.count() == 0:
             self.data_sources_table_names.clear()
+            self.ui.btnUploadData.setDisabled(True)
         else:
+            self.ui.btnUploadData.setDisabled(False)
             # remove table names without data sources
             keys_to_remove = []
             for key in list(self.data_sources_table_names.keys()):
