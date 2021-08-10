@@ -23,7 +23,7 @@ from qgis.PyQt.QtCore import Qt, QSettings, pyqtSlot
 from qgis.PyQt.QtWidgets import QApplication, QDockWidget,   QTableWidgetItem, QListWidgetItem, \
     QDialog, QMessageBox, QWidget, QLabel,  QVBoxLayout,  \
     QFileDialog,  QComboBox
-from qgis.PyQt.QtGui import QPalette, QColor
+from qgis.PyQt.QtGui import QPalette, QColor,  QBrush
 from qgis.core import *
 from .ui_qgiscloudplugin import Ui_QgisCloudPlugin
 from .ui_login import Ui_LoginDialog
@@ -141,6 +141,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.setupUi(self)
         self.storage_exceeded = True
         self.ui.progressBar.setValue(0)
+        self.ui.btnUploadData.setEnabled(False)
 
         myAbout = DlgAbout()
         self.ui.aboutText.setText(
@@ -767,7 +768,7 @@ Do you want to create a new database now?
 
         if len(layerList) > 0:
             QMessageBox.warning(None, self.tr('Warning!'),  self.tr(
-                "The layer(s) {layerlist}have user defined CRS. The use of user defined CRS is not supported. Please correct the CRS before publishing!").format(layerlist=layerList))
+                "The layer(s) {layerlist} have user defined CRS. The use of user defined CRS is not supported. Please correct the CRS before publishing!").format(layerlist=layerList))
             QApplication.restoreOverrideCursor()
             return
 
@@ -875,7 +876,7 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
         local_layers, unsupported_layers,  local_raster_layers = self.local_data_sources.local_layers(
             skip_layer_id)
         try:
-            self.update_local_data_sources(local_layers,  local_raster_layers,  unsupported_layers)
+            self.update_local_data_sources(local_layers,  local_raster_layers)
         except Exception as e:
             ErrorReportDialog(self.tr("Error checking local data sources"), self.tr(
                 "An error occured."), str(e) + "\n" + traceback.format_exc(), self.user, self).exec_()
@@ -909,8 +910,9 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
 
         return True
 
-    def update_local_data_sources(self, local_layers,  local_raster_layers,  unsupported_layers):
+    def update_local_data_sources(self, local_layers,  local_raster_layers):
         # update table names lookup
+        self.ui.btnUploadData.setEnabled(False)
         local_layers += local_raster_layers
         self.update_data_sources_table_names()
 
@@ -947,11 +949,6 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
 
             table_name_item = QTableWidgetItem(
                 self.launder_pg_name(table_name))
-
-            if layers[0].crs().authid() ==  '' or   layers[0].crs().authid().split(':')[1] == '0':
-                    QMessageBox.warning(self.iface.mainWindow(), self.tr("Warning"), self.tr(
-                        "The layer '{layer} has no georeferencing! Please set a correct SRID for this layer.").format(layer=layers[0].name()))
-                    continue
                 
             if layers[0].providerType() == 'gdal':
                 geometry_type_item = QTableWidgetItem('Raster')
@@ -967,9 +964,14 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
                 if layers[0].providerType() == "ogr":
                     geometry_type_item.setToolTip(
                         self.tr("Note: OGR features will be converted to MULTI-type"))
-
-            srid_item = QTableWidgetItem(layers[0].crs().authid())
-
+                        
+            if layers[0].crs().authid() ==  '' or   layers[0].crs().authid().split(':')[1] == '0':
+                srid_item = QTableWidgetItem('SRID not valid')
+                srid_item.setBackground(QBrush(Qt.red))
+                srid_item.setForeground(QBrush(Qt.white))
+            else:           
+                srid_item = QTableWidgetItem(layers[0].crs().authid())
+            
             row = self.ui.tblLocalLayers.rowCount()
             self.ui.tblLocalLayers.insertRow(row)
             layers_item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
@@ -997,17 +999,18 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
 
             srid_item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
             self.ui.tblLocalLayers.setItem(row, self.COLUMN_SRID, srid_item)
-
+            
         if self.local_data_sources.count() > 0:
             self.ui.tblLocalLayers.resizeColumnsToContents()
             self.ui.tblLocalLayers.setColumnWidth(self.COLUMN_LAYERS, 100)
             self.ui.tblLocalLayers.setColumnWidth(self.COLUMN_DATA_SOURCE, 100)
             self.ui.tblLocalLayers.sortItems(self.COLUMN_DATA_SOURCE)
-            self.ui.tblLocalLayers.setSortingEnabled(False)
-            self.ui.btnUploadData.setEnabled(True)
-        else:
-            self.ui.btnUploadData.setEnabled(False)
-
+            
+#        if self.ui.tblLocalLayers.rowCount() > 0:
+#            self.ui.tblLocalLayers.setSortingEnabled(True)
+#        else:
+#            self.ui.tblLocalLayers.setSortingEnabled(False)
+            
         self.statusBar().showMessage(self.tr("Updated local data sources"))
 
     def __wkbTypeString(self, wkbType):
@@ -1085,7 +1088,7 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
             self.data_sources_table_names.clear()
             self.ui.btnUploadData.setDisabled(True)
         else:
-            self.ui.btnUploadData.setDisabled(False)
+#            self.ui.btnUploadData.setDisabled(False)
             # remove table names without data sources
             keys_to_remove = []
             for key in list(self.data_sources_table_names.keys()):
@@ -1117,6 +1120,10 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
         else:
             self.ui.btnUploadData.setDisabled(self.storage_exceeded)
             self.ui.btnPublishMap.setDisabled(self.storage_exceeded)
+        
+        for row in range(self.ui.tblLocalLayers.rowCount()):
+            if self.ui.tblLocalLayers.item(row, self.COLUMN_SRID).text() == 'SRID not valid':
+                self.ui.btnUploadData.setEnabled(False)        
 
     def upload_data(self):
         if self.check_login():
