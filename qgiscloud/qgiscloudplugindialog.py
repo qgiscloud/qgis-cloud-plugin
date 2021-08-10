@@ -875,7 +875,7 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
         local_layers, unsupported_layers,  local_raster_layers = self.local_data_sources.local_layers(
             skip_layer_id)
         try:
-            self.update_local_data_sources(local_layers,  local_raster_layers)
+            self.update_local_data_sources(local_layers,  local_raster_layers,  unsupported_layers)
         except Exception as e:
             ErrorReportDialog(self.tr("Error checking local data sources"), self.tr(
                 "An error occured."), str(e) + "\n" + traceback.format_exc(), self.user, self).exec_()
@@ -895,7 +895,7 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
 
             if unsupported_layers:
                 title = self.tr("Unsupported layers found")
-                for layer in sorted(unsupported_layers, key=lambda layer: layer.name()):
+                for layer in sorted(unsupported_layers[0], key=lambda layer: layer.name()):
                     message += self.tr("  -  %s (%s)\n") % (
                         layer.name(), layer.type())
                 message += self.tr(
@@ -909,7 +909,7 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
 
         return True
 
-    def update_local_data_sources(self, local_layers,  local_raster_layers):
+    def update_local_data_sources(self, local_layers,  local_raster_layers,  unsupported_layers):
         # update table names lookup
         local_layers += local_raster_layers
         self.update_data_sources_table_names()
@@ -948,6 +948,11 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
             table_name_item = QTableWidgetItem(
                 self.launder_pg_name(table_name))
 
+            if layers[0].crs().authid() ==  '' or   layers[0].crs().authid().split(':')[1] == '0':
+                    QMessageBox.warning(self.iface.mainWindow(), self.tr("Warning"), self.tr(
+                        "The layer '{layer} has no georeferencing! Please set a correct SRID for this layer.").format(layer=layers[0].name()))
+                    continue
+                
             if layers[0].providerType() == 'gdal':
                 geometry_type_item = QTableWidgetItem('Raster')
             else:
