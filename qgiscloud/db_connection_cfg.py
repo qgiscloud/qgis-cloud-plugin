@@ -154,10 +154,23 @@ class DbConnectionCfg(object):
         return uri
 
     def psycopg_connection(self):
-        return psycopg2.connect(
-            database=self.database,
-            user=self.username,
-            password=self.password,
-            host=self.host,
-            port=self.port
-        )
+        try:
+            connection = psycopg2.connect(
+                database=self.database,
+                user=self.username,
+                password=self.password,
+                host=self.host,
+                port=self.port
+            )
+            
+            return connection
+        except:
+            QMessageBox.critical(
+                None,
+                self.tr("DB Connection Failed"),
+                self.tr("""Could not connect to the QGIS Cloud Databases. Please check if Port 5432 is open in your firewall."""),
+                QMessageBox.StandardButtons(
+                    QMessageBox.Close))
+                    
+            return None
+            
