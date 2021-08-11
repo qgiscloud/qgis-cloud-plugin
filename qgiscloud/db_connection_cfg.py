@@ -40,6 +40,20 @@ class DbConnectionCfg(object):
         self.sslmode = sslmode
         self.estimatedMetadata = estimatedMetadata
         self.changed = self.migrate_old_connection_params()
+        
+    def tr(self,  message):
+        """Get the translation for a string using Qt translation API.
+
+        We implement this ourselves since we do not inherit QObject.
+
+        :param message: String for translation.
+        :type message: str, QString
+
+        :returns: Translated version of message.
+        :rtype: QString
+        """
+        # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
+        return QCoreApplication.translate('QGIS Cloud Plugin', message)        
 
     @staticmethod
     def conn_name(db_name):
@@ -162,7 +176,6 @@ class DbConnectionCfg(object):
                 host=self.host,
                 port=self.port
             )
-            
             return connection
         except:
             QMessageBox.critical(
