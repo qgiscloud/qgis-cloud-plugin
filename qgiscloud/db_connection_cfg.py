@@ -181,9 +181,15 @@ class DbConnectionCfg(object):
             QMessageBox.critical(
                 None,
                 self.tr("DB Connection Failed"),
-                self.tr("""Could not connect to the QGIS Cloud Databases. Please check if Port 5432 is open in your firewall."""),
+                                self.tr("""Could not connect to the Database <b>%s</b><br><br>. 
+
+Please check the following points:<br><br>
+
+- Is the computer connected to the Internet?<br>
+- Is port 5432 open in the firewall?<br>
+- Are the proxy settings correct?""" % self.database),
                 QMessageBox.StandardButtons(
                     QMessageBox.Close))
                     
             return None
-            
+
