@@ -51,7 +51,7 @@ g_rt_schema = 'public'
 # UTILITIES
 VERBOSE = False
 SUMMARY = []
-CREATE_OVERVIEWS = False
+CREATE_OVERVIEWS = True
 
 class RasterUpload(QObject):
     def __init__(self,  conn,  cursor,  raster,  max_size,  progress_label,  progress_bar):
