@@ -341,7 +341,7 @@ class Ui_QgisCloudPlugin(object):
         self.btnBackgroundLayer.setText(_translate("QgisCloudPlugin", "Add background` layer"))
         self.labelOpenLayersPlugin.setText(_translate("QgisCloudPlugin", "<i>To add a background layer to the map, install the OpenLayers plugin.</i>"))
         self.btnPublishMap.setText(_translate("QgisCloudPlugin", "Publish Map"))
-        self.label.setText(_translate("QgisCloudPlugin", "Public WMS/WFS/WCS Link"))
+        self.label.setText(_translate("QgisCloudPlugin", "WMS/WFS/WCS Link"))
         self.lblWMS.setText(_translate("QgisCloudPlugin", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
