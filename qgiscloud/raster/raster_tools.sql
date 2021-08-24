@@ -68,7 +68,7 @@ BEGIN
   PERFORM AddOverviewConstraints(r_schema, ttab, col,
                                  r_schema, r_table, col, factor);
 
-  RETURN r_schema||'.'||ttab;
+  RETURN quote_ident(r_schema)||'.'||quote_ident(ttab);
 END;
 $BODY$
   LANGUAGE plpgsql VOLATILE STRICT
