@@ -54,10 +54,14 @@ BEGIN
   sql := 'CREATE TABLE ' || quote_ident(r_schema) ||'.'||quote_ident(ttab)
       || ' AS SELECT ST_Retile_qgiscloud($1, $2, $3, $4, $5, $6, $7, $8) '
       || quote_ident(col);
-
+      
   EXECUTE sql USING r_schema, r_table, col, sinfo.ext,
                     sinfo.sfx * factor, sinfo.sfy * factor,
                     sinfo.tw, sinfo.th, algo;
+                    
+  sql := 'ALTER TABLE '|| quote_ident(r_schema) ||'.'||quote_ident(ttab) ||' ADD COLUMN rid bigserial PRIMARY KEY';
+  
+  EXECUTE sql;
 
   PERFORM AddRasterConstraints(r_schema, ttab, col);
 
