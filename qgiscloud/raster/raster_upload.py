@@ -304,7 +304,7 @@ class RasterUpload(QObject):
 
         sql = "CREATE INDEX \"%s_%s_gist_idx\" ON %s USING GIST (st_convexhull(%s));\n" % \
               (gist_table, column, target_table, column)
-        QMessageBox.information(None,  '',  sql)
+              
         return sql;
     
     
