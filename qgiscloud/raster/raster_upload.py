@@ -22,14 +22,11 @@
 #
 from qgis.PyQt.QtCore import QObject, QFileInfo
 from qgis.PyQt.QtWidgets import QApplication,  QMessageBox
-from qgis.core import *
 from osgeo import gdal
-from osgeo import osr
 import osgeo.gdalconst as gdalc
 from io import StringIO
 from qgiscloud.db_connections import DbConnections
 import binascii
-import glob
 import math
 import numpy
 import os
@@ -135,6 +132,7 @@ class RasterUpload(QObject):
                 self.conn.commit()
                 
                 index_table = opts['schema']+'.o_'+str(level)+'_'+opts['table']
+                self.progress_label.setText(self.tr("Creating GIST Index for table '{table}'...").format(table=opts['schema_table'].replace('"',  '')))
                 self.cursor.execute(self.make_sql_create_gist(index_table,  opts['column']))
                 self.conn.commit()
                 
@@ -291,7 +289,7 @@ class RasterUpload(QObject):
     
     def make_sql_create_table(self,  options, table,  is_overview = False):
         sql = "create schema if not exists \"%s\";" % options['schema']
-        sql += "CREATE TABLE %s (rid serial PRIMARY KEY, %s RASTER);\n" \
+        sql += "CREATE TABLE %s (rid bigserial PRIMARY KEY, %s RASTER);\n" \
               % (self.make_sql_full_table_name(table), self.quote_sql_name(options['column']))
         return sql
     
