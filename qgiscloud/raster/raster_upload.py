@@ -131,7 +131,11 @@ class RasterUpload(QObject):
                 self.cursor.execute(sql)
                 self.conn.commit()
                 
-                index_table = opts['schema']+'.o_'+str(level)+'_'+opts['table']
+                index_table = '"{schema}"."o_{level}_{table}"'.format(
+                                    schema = opts['schema'],
+                                    level = level, 
+                                    table = opts['table'])
+                                    
                 self.progress_label.setText(self.tr("Creating GIST Index for table '{table}'...").format(table=opts['schema_table'].replace('"',  '')))
                 self.cursor.execute(self.make_sql_create_gist(index_table,  opts['column']))
                 self.conn.commit()
@@ -300,7 +304,7 @@ class RasterUpload(QObject):
 
         sql = "CREATE INDEX \"%s_%s_gist_idx\" ON %s USING GIST (st_convexhull(%s));\n" % \
               (gist_table, column, target_table, column)
-
+        QMessageBox.information(None,  '',  sql)
         return sql;
     
     
