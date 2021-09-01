@@ -1149,6 +1149,11 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
                 QMessageBox.critical(self, self.tr("Network Error"),
                                      self.tr("Could not connect to database server ({0}) on port {1}. Please contact your system administrator or internet provider to open port {1} in the firewall".format(host, port)))
                 return
+            else:
+                self.upload_data_task()
+                
+                
+    def upload_data_task(self):
 
             # disable update of local data sources during upload, as there are
             # temporary layers added and removed
