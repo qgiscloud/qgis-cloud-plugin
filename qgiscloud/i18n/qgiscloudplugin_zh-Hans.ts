@@ -11,7 +11,7 @@
     <message>
         <location filename="../background_layers_menu.py" line="251"/>
         <source>A serious error has occurred during the coordinate transformation. Please set the reference system of the project to the WGS84 / Pseudo-Mercartor Projektion (EPSG: 3857) and reload the layer.</source>
-        <translation>坐标变换时发生了一个严重的错误. 清将坐标参照系设置为EPSG: 3857并重新载入图层。</translation>
+        <translation>坐标变换时发生了一个严重的错误。请将坐标参照系设置为EPSG: 3857并重新载入图层。</translation>
     </message>
 </context>
 <context>
@@ -113,7 +113,7 @@
     <message>
         <location filename="../mapsettingsdialog.py" line="296"/>
         <source>The user(s): %s don&apos;t exist.</source>
-        <translation>用户 %s 不存在.</translation>
+        <translation>用户 %s 不存在。</translation>
     </message>
     <message>
         <location filename="../mapsettingsdialog.py" line="360"/>
@@ -123,7 +123,7 @@
     <message>
         <location filename="../mapsettingsdialog.py" line="304"/>
         <source>The user(s): %s have been added.</source>
-        <translation>用户 %s 已添加.</translation>
+        <translation>用户 %s 已添加。</translation>
     </message>
     <message>
         <location filename="../mapsettingsdialog.py" line="312"/>
@@ -133,7 +133,7 @@
     <message>
         <location filename="../mapsettingsdialog.py" line="312"/>
         <source>No username given.</source>
-        <translation>没有用户名.</translation>
+        <translation>没有用户名。</translation>
     </message>
     <message>
         <location filename="../mapsettingsdialog.py" line="342"/>
@@ -143,7 +143,7 @@
     <message>
         <location filename="../mapsettingsdialog.py" line="360"/>
         <source>The user: %s has been deleted.</source>
-        <translation>用户 %s 已被删除.</translation>
+        <translation>用户 %s 已被删除。</translation>
     </message>
 </context>
 <context>
@@ -263,7 +263,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="342"/>
         <source>&lt;i&gt;To add a background layer to the map, install the OpenLayers plugin.&lt;/i&gt;</source>
-        <translation>&lt;i&gt;要添加背景图层, 请安装 OpenLayers 插件.&lt;/i&gt;</translation>
+        <translation>&lt;i&gt;要添加背景图层, 请安装 OpenLayers 插件。&lt;/i&gt;</translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="373"/>
@@ -403,7 +403,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../qgiscloudplugindialog.py" line="675"/>
         <source>The project has been modified.</source>
-        <translation>该工程已更改.</translation>
+        <translation>该工程已更改。</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="796"/>
@@ -446,7 +446,7 @@ p, li { white-space: pre-wrap; }
 Please remove or replace above layers before publishing your map.
 </source>
         <translation>
-请发布地图之前将上面的图层删除或者替换.
+请发布地图之前将上面的图层删除或者替换。
 </translation>
     </message>
     <message>
@@ -718,7 +718,7 @@ Please remove or replace above layers before publishing your map.
         <location filename="../qgiscloudplugindialog.py" line="318"/>
         <source>Due to the GDPR qgiscloud.com has a new &lt;a href=&apos;http://qgiscloud.com/en/pages/privacy&apos;&gt; Privacy Policy &lt;/a&gt;.
                                 To continue using qgiscloud.com, you must accept the new policy. </source>
-        <translation>由于GDPR，qgiscloud.com有一个新的 &lt;a href=&apos;http://qgiscloud.com/de/pages/privacy&apos;&gt; 隐私政策 &lt;/a&gt;.
+        <translation>由于GDPR，qgiscloud.com有一个新的 &lt;a href=&apos;http://qgiscloud.com/de/pages/privacy&apos;&gt; 隐私政策 &lt;/a&gt;。
                                 要继续使用qgiscloud.com，您必须接受新政策。</translation>
     </message>
     <message>
