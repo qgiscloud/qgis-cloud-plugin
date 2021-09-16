@@ -609,8 +609,9 @@ Do you want to create a new database now?
                 'Deletion of map "{name}" interrupted!').format(name=name))
 
     def clean_widgetServices(self):
-        self.ui.lblWebmap.setText('')
-        self.ui.lblWMS.setText('')        
+#        self.ui.lblWebmap.setText('')
+#        self.ui.lblWMS.setText('')        
+        pass
         
         
     def edit_map(self):
@@ -649,7 +650,6 @@ Do you want to create a new database now?
         return str(self.ui.editServer.text())
 
     def update_urls(self,  map=None):
-
         if map == None:
             map = self.map_name()
 
@@ -668,6 +668,7 @@ Do you want to create a new database now?
         else:
             self.update_url(self.ui.lblWMS, self.api_url(
             ), 'https://', u'{0}/{1}/wms'.format(self.user, map))
+            
         self.update_url(self.ui.lblMaps, self.api_url(), 'https://', 'maps')
         self.ui.widgetServices.show()
 
