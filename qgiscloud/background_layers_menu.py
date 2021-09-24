@@ -202,19 +202,18 @@ class BackgroundLayersMenu(QMenu):
 
         coordRefSys = QgsCoordinateReferenceSystem()
 
-        if xyzUrl != None:
-            if "EPSG:2056" in xyzUrl:
-                coordRefSys.createFromOgcWmsCrs("EPSG:2056")
+        if "EPSG:2056" in xyzUrl:
+            coordRefSys.createFromOgcWmsCrs("EPSG:2056")
         else:
             coordRefSys.createFromOgcWmsCrs("EPSG:3857")
-            
+
         success = self.setMapCrs(coordRefSys)
-        
+
         if success:
             QgsProject.instance().addMapLayer(layer, False)
             legendRootGroup = self.iface.layerTreeView().layerTreeModel().rootGroup()
             legendRootGroup.insertLayer(len(legendRootGroup.children()), layer)
-    
+
             # last added layer is new reference
             self.setReferenceLayer(layer)
 
