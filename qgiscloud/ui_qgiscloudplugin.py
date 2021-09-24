@@ -338,7 +338,7 @@ class Ui_QgisCloudPlugin(object):
     def retranslateUi(self, QgisCloudPlugin):
         _translate = QtCore.QCoreApplication.translate
         QgisCloudPlugin.setWindowTitle(_translate("QgisCloudPlugin", "QGIS Cloud"))
-        self.btnBackgroundLayer.setText(_translate("QgisCloudPlugin", "Add background` layer"))
+        self.btnBackgroundLayer.setText(_translate("QgisCloudPlugin", "Add background layer"))
         self.labelOpenLayersPlugin.setText(_translate("QgisCloudPlugin", "<i>To add a background layer to the map, install the OpenLayers plugin.</i>"))
         self.btnPublishMap.setText(_translate("QgisCloudPlugin", "Publish Map"))
         self.label.setText(_translate("QgisCloudPlugin", "WMS/WFS/WCS Link"))
