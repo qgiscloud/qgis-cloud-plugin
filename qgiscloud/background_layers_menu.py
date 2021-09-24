@@ -29,6 +29,7 @@ from qgis.core import *
 #import imp
 #import sys
 
+from collections import OrderedDict
 
 try:
     from openlayers_plugin.openlayers_layer import OpenlayersLayer
@@ -43,7 +44,7 @@ class BackgroundLayersMenu(QMenu):
     def __init__(self, iface, parent=None):
         QMenu.__init__(self, parent)
         self.iface = iface
-        
+
         self.add_wmts_layergroup()
         self.add_google_layergroup()
         self.add_XYZ_layergroups()
@@ -76,65 +77,64 @@ class BackgroundLayersMenu(QMenu):
             self.iface, self.setReferenceLayer, self._olLayerTypeRegistry)
         QgsApplication.pluginLayerRegistry().addPluginLayerType(
             self.pluginLayerType)
-            
-    
+
     def add_wmts_layergroup(self):
-        wmts_layers = {
-            "Swisstopo": {
-                "1 : 10'000":  "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/png&layers=ch.swisstopo.landeskarte-farbe-10&styles=ch.swisstopo.landeskarte-farbe-10&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_27&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml", 
-                "1 : 25'000":  "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.pixelkarte-farbe-pk25.noscale&styles=ch.swisstopo.pixelkarte-farbe-pk25.noscale&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_26&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml", 
-                "1 : 50'000":  "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.pixelkarte-farbe-pk50.noscale&styles=ch.swisstopo.pixelkarte-farbe-pk50.noscale&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_26&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml", 
-                "1 : 100'000":  "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.pixelkarte-farbe-pk100.noscale&styles=ch.swisstopo.pixelkarte-farbe-pk100.noscale&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_26&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml", 
-                "1 : 200'000":  "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.pixelkarte-farbe-pk200.noscale&styles=ch.swisstopo.pixelkarte-farbe-pk200.noscale&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_26&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml", 
-                "1 : 500'000":  "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.pixelkarte-farbe-pk500.noscale&styles=ch.swisstopo.pixelkarte-farbe-pk500.noscale&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_26&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml", 
-                "1 : 1000'000":  "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.pixelkarte-farbe-pk1000.noscale&styles=ch.swisstopo.pixelkarte-farbe-pk1000.noscale&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_26&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml", 
-                "Swissimage":  "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.swissimage&styles=ch.swisstopo.swissimage&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_28&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml", 
-            }
-        }
-        
+        wmts_layers = OrderedDict([
+            ("Swisstopo", OrderedDict([
+                ("1 : 10'000", "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/png&layers=ch.swisstopo.landeskarte-farbe-10&styles=ch.swisstopo.landeskarte-farbe-10&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_27&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml"),
+                ("1 : 25'000", "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.pixelkarte-farbe-pk25.noscale&styles=ch.swisstopo.pixelkarte-farbe-pk25.noscale&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_26&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml"),
+                ("1 : 50'000", "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.pixelkarte-farbe-pk50.noscale&styles=ch.swisstopo.pixelkarte-farbe-pk50.noscale&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_26&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml"),
+                ("1 : 100'000", "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.pixelkarte-farbe-pk100.noscale&styles=ch.swisstopo.pixelkarte-farbe-pk100.noscale&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_26&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml"),
+                ("1 : 200'000", "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.pixelkarte-farbe-pk200.noscale&styles=ch.swisstopo.pixelkarte-farbe-pk200.noscale&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_26&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml"),
+                ("1 : 500'000", "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.pixelkarte-farbe-pk500.noscale&styles=ch.swisstopo.pixelkarte-farbe-pk500.noscale&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_26&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml"),
+                ("1 : 1000'000", "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.pixelkarte-farbe-pk1000.noscale&styles=ch.swisstopo.pixelkarte-farbe-pk1000.noscale&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_26&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml"),
+                ("Swissimage", "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.swissimage&styles=ch.swisstopo.swissimage&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_28&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml")
+            ]))
+        ])
+
         for layer_type in wmts_layers:
             menu = QMenu(layer_type, self)
             for layer in wmts_layers[layer_type]:
                 action = self.create_add_layer_action(wmts_layers[layer_type][layer], layer, menu, 'wmts')
                 menu.addAction(action)
-            self.addMenu(menu)        
+            self.addMenu(menu)
 
     def add_XYZ_layergroups(self):
-        xyz_layers = {
-            "OpenStreetMap": {
-                "OpenStreetMap": 'http://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                "OSM Humanitarian Data Model": 'http://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', 
-            },
-            "OpenTopoMap": {
-                "OSM OpenTopoMap": 'http://c.tile.opentopomap.org/{z}/{x}/{y}.png'
-            },            
-#            "OSM/Stamen": {
-#                "Stamen Toner / OSM": 'http://tile.stamen.com/toner/{z}/{x}/{y}.png',
-#                "Stamen Toner Lite / OSM": 'http://tile.stamen.com/toner-lite/{z}/{x}/{y}.png',
-#                "Stamen Watercolor / OSM": 'http://tile.stamen.com/watercolor/{z}/{x}/{y}.jpg',
-#                "Stamen Terrain / OSM": 'http://tile.stamen.com/terrain/{z}/{x}/{y}.png'
-#            },
-            "OSM/Thunderforest": {
-                "OpenCycleMap": 'https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png',
-                "OCM Landscape": 'https://tile.thunderforest.com/landscape/{z}/{x}/{y}.png',
-                "OCM Public Transport": 'https://tile.thunderforest.com/transport/{z}/{x}/{y}.png',
-                "Outdoors": 'https://tile.thunderforest.com/outdoors/{z}/{x}/{y}.png',
-                "Transport Dark": 'https://tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png',
-                "Spinal Map": 'https://tile.thunderforest.com/spinal-map/{z}/{x}/{y}.png',
-                "Pioneer": 'https://tile.thunderforest.com/pioneer/{z}/{x}/{y}.png',
-                "Mobile Atlas": 'https://tile.thunderforest.com/mobile-atlas/{z}/{x}/{y}.png',
-                "Neighbourhood": 'https://tile.thunderforest.com/neighbourhood/{z}/{x}/{y}.png'
-            },
-            "Wikipedia Maps": {
-                "Wikipedia Labelled Layer": 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png',
-                "Wikipedia Unlabelled Layer": 'https://maps.wikimedia.org/osm/{z}/{x}/{y}.png'
-            },
-            "Bing Maps": {
-                "Bing Roads": 'http://ecn.t3.tiles.virtualearth.net/tiles/r{q}.jpeg?g=1',
-                "Bing Aerial": 'http://ecn.t3.tiles.virtualearth.net/tiles/a{q}.jpeg?g=1',
-                "Bing Aerial with labels": 'http://ecn.t3.tiles.virtualearth.net/tiles/h{q}.jpeg?g=1'
-            }
-        }
+        xyz_layers = OrderedDict([
+            ("OpenStreetMap", OrderedDict([
+                ("OpenStreetMap", 'http://tile.openstreetmap.org/{z}/{x}/{y}.png'),
+                ("OSM Humanitarian Data Model", 'http://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png')
+            ])),
+            ("OpenTopoMap", OrderedDict([
+                ("OSM OpenTopoMap", 'http://c.tile.opentopomap.org/{z}/{x}/{y}.png')
+            ])),
+#            ("OSM/Stamen", OrderedDict([
+#                ("Stamen Toner / OSM", 'http://tile.stamen.com/toner/{z}/{x}/{y}.png'),
+#                ("Stamen Toner Lite / OSM", 'http://tile.stamen.com/toner-lite/{z}/{x}/{y}.png'),
+#                ("Stamen Watercolor / OSM", 'http://tile.stamen.com/watercolor/{z}/{x}/{y}.jpg'),
+#                ("Stamen Terrain / OSM", 'http://tile.stamen.com/terrain/{z}/{x}/{y}.png')
+#            ])),
+            ("OSM/Thunderforest", OrderedDict([
+                ("OpenCycleMap", 'https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png'),
+                ("OCM Landscape", 'https://tile.thunderforest.com/landscape/{z}/{x}/{y}.png'),
+                ("OCM Public Transport", 'https://tile.thunderforest.com/transport/{z}/{x}/{y}.png'),
+                ("Transport Dark", 'https://tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png'),
+                ("Mobile Atlas", 'https://tile.thunderforest.com/mobile-atlas/{z}/{x}/{y}.png'),
+                ("Neighbourhood", 'https://tile.thunderforest.com/neighbourhood/{z}/{x}/{y}.png'),
+                ("Outdoors", 'https://tile.thunderforest.com/outdoors/{z}/{x}/{y}.png'),
+                ("Pioneer", 'https://tile.thunderforest.com/pioneer/{z}/{x}/{y}.png'),
+                ("Spinal Map", 'https://tile.thunderforest.com/spinal-map/{z}/{x}/{y}.png')
+            ])),
+            ("Wikipedia Maps", OrderedDict([
+                ("Wikipedia Labelled Layer", 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png'),
+                ("Wikipedia Unlabelled Layer", 'https://maps.wikimedia.org/osm/{z}/{x}/{y}.png')
+            ])),
+            ("Bing Maps", OrderedDict([
+                ("Bing Roads", 'http://ecn.t3.tiles.virtualearth.net/tiles/r{q}.jpeg?g=1'),
+                ("Bing Aerial", 'http://ecn.t3.tiles.virtualearth.net/tiles/a{q}.jpeg?g=1'),
+                ("Bing Aerial with labels", 'http://ecn.t3.tiles.virtualearth.net/tiles/h{q}.jpeg?g=1')
+            ]))
+        ])
 
         for layer_type in xyz_layers:
             menu = QMenu(layer_type, self)
