@@ -724,6 +724,11 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.
         <translation>Datenschutzrichtlinie</translation>
     </message>
     <message>
+        <location filename="../qgiscloudplugindialog.py" line="269"/>
+        <source>The map name has been changed to &apos;{name}&apos; to conform to allowed characters ({allowed_chars}).</source>
+        <translation>Der Kartenname wurde in &apos;{name}&apos; geändert, um den erlaubten Zeichen ({allowed_chars}) zu entsprechen.</translation>
+    </message>
+    <message>
         <location filename="../qgiscloudplugindialog.py" line="319"/>
         <source>Accept new Privacy Policy</source>
         <translation>Die neue Datenschutzrichtlinie akzeptieren</translation>

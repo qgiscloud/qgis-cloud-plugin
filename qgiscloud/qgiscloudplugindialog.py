@@ -44,6 +44,7 @@ import re
 import time
 import platform
 import tempfile
+import hashlib
 import warnings
 warnings.simplefilter("ignore", ResourceWarning)
 import urllib.error, socket # import exceptions!
@@ -243,15 +244,32 @@ class QgisCloudPluginDialog(QDockWidget):
     def statusBar(self):
         return self.iface.mainWindow().statusBar()
 
-    def map(self):
+    def map_name(self, show_notice=False):
         project = QgsProject.instance()
         name = os.path.splitext(os.path.basename(str(project.fileName())))[0]
+        original_name = name
 
         # Allowed chars for QGISCloud map name: /\A[A-Za-z0-9\_\-]*\Z/
-#        name = str(name).encode('ascii', 'replace')  # Replace non-ascii chars
-        name = str(re.sub(r'[^\x00-\x7F]+', '_', name))
-        # Replace withespace
+        # replace not allowed characters with '_'
+        name = str(re.sub(r'[^A-Za-z0-9\_\- ]+', '_', name))
+
+        if original_name != name and re.match(r'^[^A-Za-z]+$', name):
+            # name was modified and contains no allowed letters
+            # replace name with simple hash to avoid collisions with similar escaped map names
+            name = hashlib.md5(original_name.encode()).hexdigest()[0:8]
+
+        # Replace whitespace
         name = name.replace(" ",  "_")
+
+        if show_notice and original_name != name:
+            # show notice
+            self._push_message(
+                self.tr("QGIS Cloud"),
+                self.tr(
+                    "The map name has been changed to '{name}' to conform to allowed characters ({allowed_chars})."
+                ).format(name=name, allowed_chars="A-Z a-z 0-9 _ -"),
+                level=1)
+
         return name
 
     def resetApiUrl(self):
@@ -633,7 +651,7 @@ Do you want to create a new database now?
     def update_urls(self,  map=None):
 
         if map == None:
-            map = self.map()
+            map = self.map_name()
 
         try:
             map = map.decode('utf-8')
@@ -822,7 +840,7 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
                         QMessageBox.StandardButtons(
                             QMessageBox.Close))
                 else:
-                    map = self.api.create_map(self.map(), fname, config)['map']
+                    map = self.api.create_map(self.map_name(show_notice=True), fname, config)['map']
                     self.show_api_error(map)
                     if map['config']['missingSvgSymbols']:
                         self.publish_symbols(map['config']['missingSvgSymbols'])
