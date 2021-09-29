@@ -704,6 +704,11 @@ Please remove or replace above layers before publishing your map.
         <translation>隐私政策</translation>
     </message>
     <message>
+        <location filename="../qgiscloudplugindialog.py" line="269"/>
+        <source>The map name has been changed to &apos;{name}&apos; to conform to allowed characters ({allowed_chars}).</source>
+        <translation>地图名称已改为&apos;{name}&apos;，以符合允许的字符（{allowed_chars})。</translation>
+    </message>
+    <message>
         <location filename="../qgiscloudplugindialog.py" line="318"/>
         <source>Accept new Privacy Policy</source>
         <translation>接受新的隐私政策</translation>
