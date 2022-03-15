@@ -20,9 +20,9 @@
  ***************************************************************************/
 """
 from qgis.PyQt.QtCore import Qt, QSettings, pyqtSlot
-from qgis.PyQt.QtWidgets import QApplication, QDockWidget,   QTableWidgetItem, QListWidgetItem, \
-    QDialog, QMessageBox, QWidget, QLabel,  QVBoxLayout,  \
-    QFileDialog,  QComboBox
+from qgis.PyQt.QtWidgets import (QApplication, QDockWidget,   QTableWidgetItem, QListWidgetItem, 
+                                                            QDialog, QMessageBox, QWidget, QLabel,  QVBoxLayout,  QFileDialog,  QComboBox, 
+                                                            QCheckBox)
 from qgis.PyQt.QtGui import QPalette, QColor,  QBrush
 from qgis.core import *
 from .ui_qgiscloudplugin import Ui_QgisCloudPlugin
@@ -68,12 +68,13 @@ class SchemaListException(Exception):
         return self.msg
 
 class QgisCloudPluginDialog(QDockWidget):
-    COLUMN_LAYERS = 0
-    COLUMN_SCHEMA_NAME = 1
-    COLUMN_TABLE_NAME = 2
-    COLUMN_GEOMETRY_TYPE = 3
-    COLUMN_SRID = 4
-    COLUMN_DATA_SOURCE = 5
+    COLUMN_CHECKBOX = 0
+    COLUMN_LAYERS = 1
+    COLUMN_SCHEMA_NAME = 2
+    COLUMN_TABLE_NAME = 3
+    COLUMN_GEOMETRY_TYPE = 4
+    COLUMN_SRID = 5
+    COLUMN_DATA_SOURCE = 6
 
     GEOMETRY_TYPES = {
         QgsWkbTypes.Unknown: "Unknown",
@@ -162,9 +163,9 @@ class QgisCloudPluginDialog(QDockWidget):
             self.version,  data_protection_link))
         self.ui.lblVersionPlugin.setOpenExternalLinks(True)
 
-        self.ui.tblLocalLayers.setColumnCount(6)
-        header = ["Layers", "Table Schema", "Table name",
+        header = ["Upload","Layers", "Table Schema", "Table name",
                   "Geometry type", "SRID", "Data Source"]
+        self.ui.tblLocalLayers.setColumnCount(len(header))
         self.ui.tblLocalLayers.setHorizontalHeaderLabels(header)
         self.ui.tblLocalLayers.resizeColumnsToContents()
         self.ui.btnUploadData.setEnabled(False)
@@ -953,7 +954,7 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
             
             for layer in layers:
                 layer_names.append(layer.name())
-                
+            
             layers_item = QTableWidgetItem(", ".join(layer_names))
             layers_item.setToolTip("\n".join(layer_names))
             data_source_item = QTableWidgetItem(data_source)
@@ -992,9 +993,16 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
             
             row = self.ui.tblLocalLayers.rowCount()
             self.ui.tblLocalLayers.insertRow(row)
+            
+# add checkbox for uploading the selected layer
+            chk_upload_layer = QCheckBox()
+            chk_upload_layer.setChecked(True)
+            self.ui.tblLocalLayers.setCellWidget(row, self.COLUMN_CHECKBOX, chk_upload_layer)            
+            
             layers_item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
             self.ui.tblLocalLayers.setItem(
                 row, self.COLUMN_LAYERS, layers_item)
+                
             data_source_item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
             self.ui.tblLocalLayers.setItem(
                 row, self.COLUMN_DATA_SOURCE, data_source_item)
@@ -1023,11 +1031,6 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
             self.ui.tblLocalLayers.setColumnWidth(self.COLUMN_LAYERS, 100)
             self.ui.tblLocalLayers.setColumnWidth(self.COLUMN_DATA_SOURCE, 100)
             self.ui.tblLocalLayers.sortItems(self.COLUMN_DATA_SOURCE)
-            
-#        if self.ui.tblLocalLayers.rowCount() > 0:
-#            self.ui.tblLocalLayers.setSortingEnabled(True)
-#        else:
-#            self.ui.tblLocalLayers.setSortingEnabled(False)
             
         self.statusBar().showMessage(self.tr("Updated local data sources"))
 
@@ -1168,23 +1171,15 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
                                      self.tr("Could not connect to database server ({0}) on port {1}. Please contact your system administrator or internet provider to open port {1} in the firewall".format(host, port)))
                 return
 
-            # disable update of local data sources during upload, as there are
-            # temporary layers added and removed
-            self.do_update_local_data_sources = False
-            self.statusBar().showMessage(self.tr("Uploading data..."))
-            self.setCursor(Qt.WaitCursor)
-            self.ui.btnUploadData.hide()
-            self.ui.spinner.start()
-            self.ui.progressWidget.show()
-
             # Map<data_source, {schema: schema, table: table, layers: layers}>
             data_sources_items = {}
             for row in range(0, self.ui.tblLocalLayers.rowCount()):
+                
                 data_source = unicode(
                     self.ui.tblLocalLayers.item(
                         row, self.COLUMN_DATA_SOURCE).text())
                 layers = self.local_data_sources.layers(data_source)
-                if layers is not None:
+                if layers is not None and self.ui.tblLocalLayers.cellWidget(row, self.COLUMN_CHECKBOX).isChecked():
                     schema_name = unicode(
                         self.ui.tblLocalLayers.cellWidget(
                             row, self.COLUMN_SCHEMA_NAME).currentText())
@@ -1194,74 +1189,83 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
                     data_sources_items[data_source] = {
                         u'schema': unicode(schema_name), u'table': unicode(table_name), u'layers': layers}
 
-            login_info = self.api.check_login(
-                version_info=self._version_info())
-            try:
-                self.maxSize = login_info['max_storage']
-                self.maxDBs = login_info['max_dbs']
-            except:
-                self.maxSize = 50
-                self.maxDBs = 5
+            if len(data_sources_items) > 0:
+                # disable update of local data sources during upload, as there are
+                # temporary layers added and removed
+                self.do_update_local_data_sources = False
+                self.statusBar().showMessage(self.tr("Uploading data..."))
+                self.setCursor(Qt.WaitCursor)
+                self.ui.btnUploadData.hide()
+                self.ui.spinner.start()
+                self.ui.progressWidget.show()                
+                login_info = self.api.check_login(
+                    version_info=self._version_info())
+                try:
+                    self.maxSize = login_info['max_storage']
+                    self.maxDBs = login_info['max_dbs']
+                except:
+                    self.maxSize = 50
+                    self.maxDBs = 5
 
-            try:
-                self.data_upload.upload(self.db_connections.db(
-                    unicode(db_name)), data_sources_items, unicode(self.maxSize))
-                upload_ok = True
-            except Exception as e:
-                ErrorReportDialog(self.tr("Upload errors occurred"), self.tr("Upload errors occurred. Not all data could be uploaded."), str(
-                    e) + "\n" + traceback.format_exc(), self.user, self).exec_()
-                upload_ok = False
+                try:
+                    self.data_upload.upload(self.db_connections.db(
+                        unicode(db_name)), data_sources_items, unicode(self.maxSize))
+                    upload_ok = True
+                except Exception as e:
+                    ErrorReportDialog(self.tr("Upload errors occurred"), self.tr("Upload errors occurred. Not all data could be uploaded."), str(
+                        e) + "\n" + traceback.format_exc(), self.user, self).exec_()
+                    upload_ok = False
 
-            self.ui.spinner.stop()
-            self.ui.progressWidget.hide()
-            self.ui.btnUploadData.show()
-            self.unsetCursor()
-            self.statusBar().showMessage("")
-            
-            # Refresh local layers
-            self.do_update_local_data_sources = True
-            self.update_local_layers()
-            
-            # Refresh used space after upload
-            self.db_size(self.db_connections)
-            
-            if upload_ok:
-                # Show save project dialog
-                save_dialog = QDialog(self)
-                save_dialog.setWindowTitle(self.tr("Save Project"))
-                save_dialog.setLayout(QVBoxLayout())
-                header = QWidget()
-                header.setLayout(QVBoxLayout())
-                label = QLabel(self.tr(
-                    "Upload complete. The local layers in the project were replaced with the layers uploaded to the qgiscloud database."))
-                label.setWordWrap(True)
-                header.layout().addWidget(label)
-                label = QLabel(
-                    self.tr("Choose were to save the modified project:"))
-                label.setWordWrap(True)
-                header.layout().addWidget(label)
-                save_dialog.layout().setContentsMargins(0, 0, 0, 0)
-                save_dialog.layout().addWidget(header)
-                initialPath = QgsProject.instance().fileName()
-                if not initialPath:
-                    initialPath = QSettings().value("/UI/lastProjectDir", ".")
-                fd = QFileDialog(None, self.tr(
-                    "Save Project"), initialPath, "%s (*.qgz *.qgs)" % self.tr("QGIS Project Files"))
-                fd.setParent(save_dialog, Qt.Widget)
-                fd.setOption(QFileDialog.DontUseNativeDialog)
-                fd.setAcceptMode(QFileDialog.AcceptSave)
-                save_dialog.layout().addWidget(fd)
-                header.layout().setContentsMargins(fd.layout().contentsMargins())
-                fd.accepted.connect(save_dialog.accept)
-                fd.rejected.connect(save_dialog.reject)
-                if save_dialog.exec_() == QDialog.Accepted:
-                    files = list(fd.selectedFiles())
-                    if files:
-                        QgsProject.instance().setFileName(files[0])
-                        self.iface.actionSaveProject().trigger()
+                self.ui.spinner.stop()
+                self.ui.progressWidget.hide()
+                self.ui.btnUploadData.show()
+                self.unsetCursor()
+                self.statusBar().showMessage("")
+                
+                # Refresh local layers
+                self.do_update_local_data_sources = True
+                self.update_local_layers()
+                
+                # Refresh used space after upload
+                self.db_size(self.db_connections)
+                
+                if upload_ok:
+                    # Show save project dialog
+                    save_dialog = QDialog(self)
+                    save_dialog.setWindowTitle(self.tr("Save Project"))
+                    save_dialog.setLayout(QVBoxLayout())
+                    header = QWidget()
+                    header.setLayout(QVBoxLayout())
+                    label = QLabel(self.tr(
+                        "Upload complete. The local layers in the project were replaced with the layers uploaded to the qgiscloud database."))
+                    label.setWordWrap(True)
+                    header.layout().addWidget(label)
+                    label = QLabel(
+                        self.tr("Choose were to save the modified project:"))
+                    label.setWordWrap(True)
+                    header.layout().addWidget(label)
+                    save_dialog.layout().setContentsMargins(0, 0, 0, 0)
+                    save_dialog.layout().addWidget(header)
+                    initialPath = QgsProject.instance().fileName()
+                    if not initialPath:
+                        initialPath = QSettings().value("/UI/lastProjectDir", ".")
+                    fd = QFileDialog(None, self.tr(
+                        "Save Project"), initialPath, "%s (*.qgz *.qgs)" % self.tr("QGIS Project Files"))
+                    fd.setParent(save_dialog, Qt.Widget)
+                    fd.setOption(QFileDialog.DontUseNativeDialog)
+                    fd.setAcceptMode(QFileDialog.AcceptSave)
+                    save_dialog.layout().addWidget(fd)
+                    header.layout().setContentsMargins(fd.layout().contentsMargins())
+                    fd.accepted.connect(save_dialog.accept)
+                    fd.rejected.connect(save_dialog.reject)
+                    if save_dialog.exec_() == QDialog.Accepted:
+                        files = list(fd.selectedFiles())
+                        if files:
+                            QgsProject.instance().setFileName(files[0])
+                            self.iface.actionSaveProject().trigger()
 
-                # Switch to map tab
-                self.ui.tabWidget.setCurrentWidget(self.ui.mapTab)
+                    # Switch to map tab
+                    self.ui.tabWidget.setCurrentWidget(self.ui.mapTab)
 
     def _push_message(self, title, text, level=0, duration=0):
         # QGIS >= 2.0
