@@ -558,7 +558,7 @@ class HTTPBasicAuthHandlerLimitRetries(urllib.request.HTTPBasicAuthHandler):
 #            raw = ("%s:%s" % (user, pw)).encode('utf8')
 #            auth = 'Basic %s' % base64.b64encode(raw).strip()
             raw = base64.b64encode(b"%s:%s" % (user, pw))
-            auth = 'Basic %s' % raw
+            auth = b'Basic %s' % raw
             if req.get_header(self.auth_header, None) == auth:
                 return None
             req.add_unredirected_header(self.auth_header, auth)
