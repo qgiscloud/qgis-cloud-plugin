@@ -36,6 +36,10 @@ class DbConnections(object):
         self._dbs[db['name']] = DbConnectionCfg(
             db['host'], db['port'], db['name'], db['username'], db['password'])
 
+        # add DB host to list of supported cloud DB hosts
+        if db['host'] not in DbConnectionCfg.CLOUD_DB_HOSTS:
+            DbConnectionCfg.CLOUD_DB_HOSTS.append(db['host'])
+
     def count(self):
         return len(self._dbs)
 
