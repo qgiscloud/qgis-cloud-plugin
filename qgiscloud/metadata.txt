@@ -11,7 +11,7 @@ about= QGIS Cloud is your powerful Web-GIS platform for publishing maps, data an
 
 changelog=
     3.3.12
-    -  Fix missing links after deletion of project 
+    - Relax SRID validity check for non-geometry tables
     3.3.11
     - Fix handling of non-latin project names in upload
     - Fix map crs being unset when adding more than one background layers
