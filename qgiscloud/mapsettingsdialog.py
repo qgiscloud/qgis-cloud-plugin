@@ -394,8 +394,14 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
         if self.language_combobox.isEnabled():
             data['map[lang]'] = self.language_combobox.currentText()
         if self.scales_lineedit.isEnabled():
-            data['map[scales]'] = ",".join(list(filter(
-                str.isdigit, (self.scales_lineedit.text().split(",")))))
+            data['map[scales]'] = ",".join(
+                # remove non-numeric values
+                filter(
+                    str.isnumeric,
+                    # split input value and trim whitespace
+                    map(str.strip, self.scales_lineedit.text().split(','))
+                )
+            )
         if self.viewer_combobox.isEnabled():
             viewer_name = self.viewer_combobox.currentText()
             if viewer_name:
