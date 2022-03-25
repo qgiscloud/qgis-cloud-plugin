@@ -383,33 +383,34 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
         """
         QGuiApplication.setOverrideCursor(Qt.WaitCursor)
         data = {}
-        map_settings = self.api.read_map(self.map_id)
 
-        if self.viewer_active_chkb.isChecked():
-            data["map[viewer_active]"] = 1
-        else:
-            data["map[viewer_active]"] = 0
-        if self.wms_public_chkb.isChecked():
-            data["map[wms_public]"] = 1
-        else:
-            data["map[wms_public]"] = 0
-        if self.map_public_chkb.isChecked():
-            data["map[map_public]"] = 1
-        else:
-            data["map[map_public]"] = 0
+        # general settings
+        if self.viewer_active_chkb.isEnabled():
+            data['map[viewer_active]'] = int(self.viewer_active_chkb.isChecked())  # 0 or 1
+        if self.wms_public_chkb.isEnabled():
+            data['map[wms_public]'] = int(self.wms_public_chkb.isChecked())  # 0 or 1
+        if self.map_public_chkb.isEnabled():
+            data['map[map_public]'] = int(self.map_public_chkb.isChecked())  # 0 or 1
+        if self.language_combobox.isEnabled():
+            data['map[lang]'] = self.language_combobox.currentText()
+        if self.scales_lineedit.isEnabled():
+            data['map[scales]'] = ",".join(list(filter(
+                str.isdigit, (self.scales_lineedit.text().split(",")))))
+        if self.viewer_combobox.isEnabled():
+            viewer_name = self.viewer_combobox.currentText()
+            if viewer_name:
+                data['map[viewer_id]'] = self.get_viewer_id(viewer_name)
 
-        viewer_name = self.viewer_combobox.currentText()
-        if viewer_name:
-            data["map[viewer_id]"] = self.get_viewer_id(viewer_name)
-        data["map[lang]"] = self.language_combobox.currentText()
-        data["map[scales]"] = ",".join(list(filter(
-            str.isdigit, (self.scales_lineedit.text().split(",")))))
-        data["map[search_db]"] = self.search_db_combobox.currentText()
-        data["map[search_type"] = self.search_type_combobox.currentText()
+        # search settings
+        if self.search_type_combobox.isEnabled():
+            data['map[search_type]'] = self.search_type_combobox.currentText()
+        if self.search_db_combobox.isEnabled():
+            data['map[search_db]'] = self.search_db_combobox.currentText()
         if self.search_sql_textedit.isEnabled():
-            data["map[search_sql]"] = self.search_sql_textedit.text()
+            data['map[search_sql]'] = self.search_sql_textedit.text()
 
-        self.api.update_map(self.map_id, data)
+        if data:
+            self.api.update_map(self.map_id, data)
 
         # add userlist to settings
         QGuiApplication.restoreOverrideCursor()
