@@ -75,7 +75,7 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
         self.dialog_buttonBox.button(
             QDialogButtonBox.Save).clicked.connect(self.save_options)
 
-        self.check_plan(self.plan)
+        self.toggle_disabled_fields()
 
         QGuiApplication.restoreOverrideCursor()
 
@@ -414,27 +414,46 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
         # add userlist to settings
         QGuiApplication.restoreOverrideCursor()
 
-    def check_plan(self, plan):
-        # Disable GUI elements
-        if plan != "Free":
-            self.enable_DBsearch()
-        else:
-            for child in self.findChildren(QLineEdit):
-                child.setEnabled(False)
-            for child in self.findChildren(QComboBox):
-                child.setEnabled(False)
-            for child in self.findChildren(QCheckBox):
-                child.setEnabled(False)
-            for child in self.findChildren(QListWidget):
-                child.setEnabled(False)
-            for child in self.findChildren(QPushButton):
-                if child.objectName():
-                    child.setEnabled(False)
-            for child in self.findChildren(QgsCodeEditorSQL):
-                child.setEnabled(False)
-            # enable gui elements for free User
-            self.scales_lineedit.setEnabled(True)
-            self.language_combobox.setEnabled(True)
+    def toggle_disabled_fields(self):
+        # general settings
+        self.toggle_field('viewer_active', [self.viewer_active_lbl, self.viewer_active_chkb])
+        self.toggle_field('wms_public', [self.wms_public_lbl, self.wms_public_chkb])
+        self.toggle_field('map_public', [self.map_public_lbl, self.map_public_chkb])
+        self.toggle_field('lang', [self.language_lbl, self.language_combobox])
+        self.toggle_field('scales', [self.scales_lbl, self.scales_lineedit])
+        self.toggle_field('viewer_id', [self.viewer_lbl, self.viewer_combobox])
+
+        # search settings
+        enabled_fields = self.map_options.get('enabled_fields', [])
+        hide_disabled_fields = self.map_options.get('hide_disabled_fields', False)
+        search_enabled = len(
+            set(['search_type', 'search_db', 'search_sql']) & set(enabled_fields)
+        ) > 0
+        self.sql_editor_box.setEnabled(search_enabled)
+        self.sql_editor_box.setVisible(search_enabled or not hide_disabled_fields)
+
+        self.toggle_field('search_type', [self.search_type_lbl, self.search_type_combobox])
+        self.toggle_field('search_db', [self.search_db_lbl, self.search_db_combobox])
+        self.toggle_field('search_sql', [
+            self.search_sql_lbl, self.search_sql_textedit, self.sql_preview_btn, self.label, self.label_2
+        ])
+
+        # allowed users
+        self.toggle_field('users', [self.user_management])
+
+        # resize dialog window
+        self.adjustSize()
+        if self.width() < 500:
+            self.resize(500, self.height())
+
+    def toggle_field(self, field, widgets):
+        """Helper for toggling widgets of a form field."""
+        enabled_fields = self.map_options.get('enabled_fields', [])
+        hide_disabled_fields = self.map_options.get('hide_disabled_fields', False)
+        enabled = field in enabled_fields
+        for widget in widgets:
+            widget.setEnabled(enabled)
+            widget.setVisible(enabled or not hide_disabled_fields)
 
 
 class TableModel(QAbstractTableModel):
