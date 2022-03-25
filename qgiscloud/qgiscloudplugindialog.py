@@ -36,6 +36,7 @@ from .error_report_dialog import ErrorReportDialog
 from .mapsettingsdialog import MapSettingsDialog
 from .background_layers_menu import BackgroundLayersMenu
 from distutils.version import StrictVersion
+from urllib.parse import urljoin, urlparse
 import os.path
 import sys
 import traceback
@@ -229,6 +230,8 @@ class QgisCloudPluginDialog(QDockWidget):
 
         self.palette_red = QPalette(self.ui.lblVersionPlugin.palette())
         self.palette_red.setColor(QPalette.WindowText, Qt.red)
+
+        self.maps_lookup = {}
 
     def unload(self):
         self.do_update_local_data_sources = False
@@ -639,10 +642,14 @@ Do you want to create a new database now?
             self.ui.btnMapEdit.setEnabled(False)
             self.ui.btnMapLoad.setEnabled(False)
 
+            self.maps_lookup = {}
             for map in map_list:
                 it = QListWidgetItem(map['map']['name'])
                 self.ui.tabMaps.addItem(it)
                 it.setData(Qt.UserRole,  map['map']['id'])
+
+                # add map info to maps lookup
+                self.maps_lookup[map['map']['name']] = map['map']
 
         QApplication.restoreOverrideCursor()
 
@@ -658,27 +665,51 @@ Do you want to create a new database now?
         except:
             pass
 
-        self.update_url(self.ui.lblWebmap, self.api_url(),
-                        'https://', u'{0}/{1}/'.format(self.user, map))
+        # get base host URL from current API URL
+        api_uri = urlparse(self.api.url)
+        host = "%s://%s" % (api_uri.scheme, api_uri.netloc)
+        wms_host = host
+        if host.endswith('qgiscloud.com'):
+            # update subdomains for qgiscloud.com
+            orig_host = host
+            host = orig_host.replace('://api.', '://')
+            wms_host = orig_host.replace('://api.', '://wms.')
 
-        if self.clouddb:
-            self.update_url(
-                self.ui.lblWMS, self.api_url(),
-                'https://wms.', u'{0}/{1}/'.format(self.user, map))
+        map_info = self.maps_lookup.get(map, {})
+
+        # get any links from map info
+        links = self.maps_lookup.get(map, {}).get('links', {})
+
+        # default: https://qgiscloud.com/:user/:map/
+        viewer_path = links.get('viewer', "/%s/%s/" % (self.user, map))
+        self.update_url(self.ui.lblWebmap, host, viewer_path)
+
+        # default: https://wms.qgiscloud.com/:user/:map/
+        ows_path = links.get('ows', "/%s/%s/" % (self.user, map))
+        self.update_url(self.ui.lblWMS, wms_host, ows_path)
+
+        # default: https://qgiscloud.com/maps
+        map_admin_path = links.get('map_admin', '/maps')
+        if map_admin_path:
+            self.update_url(self.ui.lblMaps, host, map_admin_path)
+            self.ui.label_5.show()
+            self.ui.lblMaps.show()
         else:
-            self.update_url(self.ui.lblWMS, self.api_url(
-            ), 'https://', u'{0}/{1}/wms'.format(self.user, map))
-            
-        self.update_url(self.ui.lblMaps, self.api_url(), 'https://', 'maps')
+            self.ui.label_5.hide()
+            self.ui.lblMaps.hide()
+
+        # show support link only for qgiscloud.com
+        if host.endswith('qgiscloud.com'):
+            self.ui.label_8.show()
+            self.ui.lblMobileMap_2.show()
+        else:
+            self.ui.label_8.hide()
+            self.ui.lblMobileMap_2.hide()
+
         self.ui.widgetServices.show()
 
-    def update_url(self, label, api_url, prefix, path):
-        try:
-            base_url = string.replace(api_url, 'https://api.', prefix)
-        except:
-            base_url = api_url.replace('https://api.', prefix)
-
-        url = u'{0}/{1}'.format(base_url, path)
+    def update_url(self, label, api_url, path):
+        url = urljoin(api_url, path)
         text = re.sub(r'http[^"]+', url, str(label.text()))
         label.setText(text)
 
