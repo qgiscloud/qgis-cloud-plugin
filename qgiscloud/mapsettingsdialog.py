@@ -166,10 +166,11 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
         This method disables UI elements, based on the search type selection.
         """
         if self.search_type_combobox.currentText() == "DBSearch":
+            enabled_fields = self.map_options.get('enabled_fields', [])
             self.set_sql_query()
-            self.search_db_combobox.setEnabled(True)
-            self.search_sql_textedit.setEnabled(True)
-            self.sql_preview_btn.setEnabled(True)
+            self.search_db_combobox.setEnabled('search_db' in enabled_fields)
+            self.search_sql_textedit.setEnabled('search_sql' in enabled_fields)
+            self.sql_preview_btn.setEnabled('search_sql' in enabled_fields)
         else:
             self.search_db_combobox.setEnabled(False)
             self.search_sql_textedit.setEnabled(False)
@@ -444,6 +445,9 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
         self.toggle_field('search_sql', [
             self.search_sql_lbl, self.search_sql_textedit, self.sql_preview_btn, self.label, self.label_2
         ])
+
+        # toggle DB search fields according to selected search type
+        self.enable_DBsearch()
 
         # allowed users
         self.toggle_field('users', [self.user_management])
