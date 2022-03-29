@@ -710,7 +710,7 @@ Do you want to create a new database now?
 
     def update_url(self, label, api_url, path):
         url = urljoin(api_url, path)
-        text = re.sub(r'http[^"]+', url, str(label.text()))
+        text = re.sub(r'http[^"<]+', url, str(label.text()))
         label.setText(text)
 
     def read_maps(self):
@@ -876,6 +876,8 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
                     self.show_api_error(map)
                     if map['config']['missingSvgSymbols']:
                         self.publish_symbols(map['config']['missingSvgSymbols'])
+                    # update map info in maps lookup
+                    self.maps_lookup[map['name']] = map
                     self.update_urls()
                     self._push_message(self.tr("QGIS Cloud"), self.tr(
                         "Map successfully published"), level=0, duration=2)
