@@ -35,7 +35,7 @@ class Spinner(QWidget):
         self.setMinimumSize(16, 16)
 
     def start(self):
-        self.timer = self.startTimer(1000 / self.ticks)
+        self.timer = self.startTimer(int(1000 / self.ticks))
         self.counter = 0
 
     def stop(self):
@@ -61,7 +61,7 @@ class Spinner(QWidget):
             painter.rotate((360. * i) / self.ticks)
             painter.translate(0.4 * l, 0)
             k = float(self.ticks + (i - self.counter)) % self.ticks / self.ticks
-            painter.setBrush(QColor(0, 0, 0, 255 * (0.9 * k + 0.1)))
+            painter.setBrush(QColor(0, 0, 0, int(255 * (0.9 * k + 0.1))))
             painter.drawRoundedRect(
-                QRect(0, -0.1 * l, 0.6 * l, 0.2 * l), 0.15 * l, 0.1 * l)
+                QRect(0, int(-0.1 * l), int(0.6 * l), int(0.2 * l)), 0.15 * l, 0.1 * l)
             painter.restore()
