@@ -60,6 +60,9 @@ class ErrorReportDialog(QDialog):
         self.username = username
         self.metadata = MetaData()
 
+        self.adjustSize()
+        self.resize(600, self.height())
+
     def __reportError(self):
         body = ("Please provide any additional information here:\n\n\n"
                 "If you encountered an upload error, if possible please attach a zip file containing a minimal extract of the dataset, as well as the QGIS project file.\n\n\n"

@@ -886,7 +886,7 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
             except Exception as e:
                 self.statusBar().showMessage("")
                 ErrorReportDialog(self.tr("Error uploading project"), self.tr(
-                    "An error occured."), str(e) + "\n" + traceback.format_exc(), self.user, self).exec_()
+                    "An error occured."), str(e) + "\n\n\n" + traceback.format_exc(), self.user, self).exec_()
         self.refresh_maps()
         QApplication.restoreOverrideCursor()
 
@@ -931,7 +931,7 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
             self.update_local_data_sources(local_layers,  local_raster_layers)
         except Exception as e:
             ErrorReportDialog(self.tr("Error checking local data sources"), self.tr(
-                "An error occured."), str(e) + "\n" + traceback.format_exc(), self.user, self).exec_()
+                "An error occured."), str(e) + "\n\n\n" + traceback.format_exc(), self.user, self).exec_()
 
         return local_layers, unsupported_layers,  local_raster_layers
 
@@ -1242,7 +1242,7 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
                 upload_ok = True
             except Exception as e:
                 ErrorReportDialog(self.tr("Upload errors occurred"), self.tr("Upload errors occurred. Not all data could be uploaded."), str(
-                    e) + "\n" + traceback.format_exc(), self.user, self).exec_()
+                    e) + "\n\n\n" + traceback.format_exc(), self.user, self).exec_()
                 upload_ok = False
 
             self.ui.spinner.stop()
