@@ -279,7 +279,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.editServer.setText(self.api.api_url())
 
     def serverURL(self, URL):
-        self.URL = URL
+        self.URL = URL.strip()
         self.store_settings()
 
     def store_settings(self):
@@ -654,7 +654,7 @@ Do you want to create a new database now?
         QApplication.restoreOverrideCursor()
 
     def api_url(self):
-        return str(self.ui.editServer.text())
+        return str(self.ui.editServer.text().strip())
 
     def update_urls(self,  map=None):
         if map == None:
