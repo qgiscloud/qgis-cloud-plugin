@@ -219,7 +219,7 @@
      </layout>
     </widget>
    </item>
-   <item row="7" column="0">
+   <item row="8" column="0">
     <widget class="QDialogButtonBox" name="dialog_buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -333,6 +333,53 @@ FROM searchtable
 WHERE name ILIKE '%?%';</string>
         </property>
        </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QGroupBox" name="share_map">
+     <property name="title">
+      <string>Share Map</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_10">
+      <item row="0" column="0">
+       <layout class="QGridLayout" name="gridLayout_7" columnstretch="0,1">
+        <item row="0" column="0">
+         <widget class="QLabel" name="share_with_lbl">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Share with</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <layout class="QVBoxLayout" name="share_list_layout">
+          <item>
+           <widget class="QCheckBox" name="dummyCheckBox">
+            <property name="text">
+             <string>CheckBox</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="dummyCheckBox_2">
+            <property name="text">
+             <string>CheckBox</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>

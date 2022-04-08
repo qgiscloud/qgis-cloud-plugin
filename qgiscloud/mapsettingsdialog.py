@@ -59,6 +59,7 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
         self.enable_user_management()
         self.fill_users_listWidget()
         self.set_icons()
+        self.set_shared_groups()
 
         self.viewer_active_chkb.stateChanged.connect(
             self.enable_user_management)
@@ -136,6 +137,21 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
         self.add_users_btn.setIcon(add_icon)
         self.delete_user_btn.setIcon(delete_icon)
         self.sql_preview_btn.setIcon(preview_icon)
+
+    def set_shared_groups(self):
+        """Update checkboxes for sharing with groups."""
+        # clear previous checkboxes
+        for i in reversed(range(self.share_list_layout.count())):
+            self.share_list_layout.itemAt(i).widget().setParent(None)
+
+        # add group checkboxes
+        groups = self.map_settings['map'].get('groups', [])
+        for group in groups:
+            checkbox = QCheckBox(group['name'])
+            # NOTE: set and retrieve objectName, as text adds an ampersand prefix
+            checkbox.setObjectName(group['name'])
+            checkbox.setChecked(group.get('shared', False))
+            self.share_list_layout.addWidget(checkbox)
 
     def get_viewer_id(self, viewer_name):
         """
@@ -416,6 +432,16 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
         if self.search_sql_textedit.isEnabled():
             data['map[search_sql]'] = self.search_sql_textedit.text()
 
+        if self.share_map.isEnabled():
+            # collect selected groups to share with
+            shared_groups = []
+            for i in range(self.share_list_layout.count()):
+                checkbox = self.share_list_layout.itemAt(i).widget()
+                if checkbox.isChecked():
+                    # NOTE: use objectName as text has an ampersand prefix
+                    shared_groups.append(checkbox.objectName())
+            data['map[groups]'] = ','.join(shared_groups)
+
         if data:
             self.api.update_map(self.map_id, data)
 
@@ -451,6 +477,12 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
 
         # allowed users
         self.toggle_field('users', [self.user_management])
+
+        # shared groups
+        self.toggle_field('groups', [self.share_map])
+        if not self.map_settings['map'].get('groups', []):
+            # always hide if no groups available
+            self.share_map.hide()
 
         # resize dialog window
         self.adjustSize()

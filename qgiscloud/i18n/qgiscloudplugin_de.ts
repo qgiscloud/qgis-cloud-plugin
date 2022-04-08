@@ -942,5 +942,15 @@ FROM searchtable
 WHERE name ILIKE &apos;%?%&apos;;</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="../mapsettings.ui" line="343"/>
+        <source>Share Map</source>
+        <translation>Karte teilen</translation>
+    </message>
+    <message>
+        <location filename="../mapsettings.ui" line="357"/>
+        <source>Share with</source>
+        <translation>Teilen mit</translation>
+    </message>
 </context>
 </TS>
