@@ -28,10 +28,24 @@ from qgis.core import *
 from .db_connections import DbConnections
 from .raster.raster_upload import RasterUpload
 from .PGVectorLayerImport import PGVectorLayerImport
+from psycopg2 import sql as psycopg2_sql
 import re
 from io import StringIO
 import struct
 import binascii
+
+
+# get psycopg2 version
+psycopg2_version = 0
+try:
+    from psycopg2 import __version__ as psycopg2_version_string
+    m = re.match(r'\d+.\d+.\d+', psycopg2_version_string)
+    if m:
+        # convert version string to int, e.g. "2.9.1" -> 20901
+        major, minor, micro = [int(v) for v in m.group(0).split('.')]
+        psycopg2_version = major * 10000 + minor * 100 + micro
+except Exception as e:
+    QgsMessageLog.logMessage("Could not get psycopg2 version: %s" % e, "QGIS Cloud") 
 
 
 class DataUpload(QObject):
@@ -45,7 +59,8 @@ class DataUpload(QObject):
         self.api = api
         self.db_connections = db_connections
         self.PROJECT_INSTANCE = QgsProject.instance()
-        
+        self.psycopg2_version = psycopg2_version
+
     def upload(self, db, data_sources_items, maxSize):
         import_ok = True
         layers_to_replace = {}
@@ -132,6 +147,16 @@ class DataUpload(QObject):
 
                 vectorLayerImport = None
 
+                copy_table_sql = ""
+                if self.psycopg2_version >= 20900:
+                    # build SQL for copy_expert call
+                    copy_table_sql = psycopg2_sql.SQL(
+                        "COPY {schema}.{table} FROM STDIN"
+                    ).format(
+                        schema=psycopg2_sql.Identifier(item['schema']),
+                        table=psycopg2_sql.Identifier(item['table'])
+                    )
+
                 # Build import string
                 attribs = list(range(0, fields.count()))
                 count = 0
@@ -193,7 +218,10 @@ class DataUpload(QObject):
                     self.progress_bar.setValue(count)
                     if (count % 100) == 0:
                         try:
-                            cursor.copy_from(StringIO(importstr.decode('utf-8')), '"%s"."%s"' % (item['schema'],  item['table']))
+                            if self.psycopg2_version >= 20900:
+                                cursor.copy_expert(copy_table_sql, StringIO(importstr.decode('utf-8')))
+                            else:
+                                cursor.copy_from(StringIO(importstr.decode('utf-8')), '"%s"."%s"' % (item['schema'],  item['table']))
                         except Exception as e:
                             messages += str(e) + "\n"
                             ok = False
@@ -209,7 +237,10 @@ class DataUpload(QObject):
 
                 if ok and importstr:
                     try:
-                        cursor.copy_from(StringIO(importstr.decode('utf-8')), '"%s"."%s"' % (item['schema'],  item['table']))
+                        if self.psycopg2_version >= 20900:
+                            cursor.copy_expert(copy_table_sql, StringIO(importstr.decode('utf-8')))
+                        else:
+                            cursor.copy_from(StringIO(importstr.decode('utf-8')), '"%s"."%s"' % (item['schema'],  item['table']))
                     except Exception as e:
                         messages += str(e) + "\n"
                         ok = False
@@ -250,7 +281,7 @@ class DataUpload(QObject):
                             'table_name': item['table'],
                             'geom_column': 'rast'
                         }
-                RasterUpload(conn,  cursor,  raster_to_upload,  maxSize,  self.progress_label,  self.progress_bar)
+                RasterUpload(conn, cursor, raster_to_upload, maxSize, self.psycopg2_version, self.progress_label, self.progress_bar)
                 layers_to_replace[layer.id()] = raster_to_upload
 
         sql = """SELECT 'SELECT SETVAL(' || quote_literal(quote_ident(PGT.schemaname) || '.' || quote_ident(S.relname)) ||  
