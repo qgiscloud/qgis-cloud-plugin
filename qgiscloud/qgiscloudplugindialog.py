@@ -1139,7 +1139,7 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
             self.data_sources_table_names.clear()
             self.ui.btnUploadData.setDisabled(True)
         else:
-#            self.ui.btnUploadData.setDisabled(False)
+            self.ui.btnUploadData.setDisabled(False)
             # remove table names without data sources
             keys_to_remove = []
             for key in list(self.data_sources_table_names.keys()):
@@ -1155,6 +1155,7 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
                 for row in range(0, self.ui.tblLocalLayers.rowCount()):
                     table_length = len(self.ui.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text())
                     if  table_length > 62:
+                        self.ui.btnUploadData.setDisabled(True)
                         QApplication.restoreOverrideCursor()
                         answer = QMessageBox.question(
                             self,
