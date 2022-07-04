@@ -1151,7 +1151,37 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
 
             # update table names
             if schema_list != None:
+                shortened_table_number = 0
                 for row in range(0, self.ui.tblLocalLayers.rowCount()):
+                    table_length = len(self.ui.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text())
+                    if  table_length > 62:
+                        QApplication.restoreOverrideCursor()
+                        answer = QMessageBox.question(
+                            self,
+                            self.tr("Table name too long"),
+                            self.tr(
+"""The name of table 
+
+{table_name} 
+
+has more than 62 characters and cannot be processed like this. Please give the table a shorter name.
+
+Should the table name be shortened automatically?
+""".format(table_name=self.ui.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text())),
+                            QMessageBox.StandardButtons(
+                                QMessageBox.No |
+                                QMessageBox.Yes))
+                        if answer == QMessageBox.Yes:
+                            new_table_name = self.ui.tblLocalLayers.item(
+                                                                        row, 
+                                                                        self.COLUMN_TABLE_NAME).text()[:-1*(table_length - 59)]
+                            self.ui.tblLocalLayers.item(
+                                    row, 
+                                    self.COLUMN_TABLE_NAME).setText(new_table_name + '_'+str(shortened_table_number))
+                            shortened_table_number += 1
+                            
+                    table_name = self.ui.tblLocalLayers.item(
+                                            row, self.COLUMN_TABLE_NAME).text()
                     data_source = self.ui.tblLocalLayers.item(
                         row, self.COLUMN_DATA_SOURCE).text()
                     cmb_schema = QComboBox()
@@ -1159,8 +1189,6 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
                     cmb_schema.addItems(schema_list)
                     self.ui.tblLocalLayers.setCellWidget(
                         row, self.COLUMN_SCHEMA_NAME, cmb_schema)
-                    table_name = self.ui.tblLocalLayers.item(
-                        row, self.COLUMN_TABLE_NAME).text()
                     self.data_sources_table_names[data_source] = table_name
 
     def activate_upload_button(self):
@@ -1175,6 +1203,8 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
         for row in range(self.ui.tblLocalLayers.rowCount()):
             if self.ui.tblLocalLayers.item(row, self.COLUMN_SRID).text() == 'SRID not valid':
                 self.ui.btnUploadData.setEnabled(False)        
+            elif len(self.ui.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text()) > 62:
+                self.ui.btnUploadData.setEnabled(False)
 
     def upload_data(self):
         if self.check_login():
