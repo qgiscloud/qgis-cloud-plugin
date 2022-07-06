@@ -89,11 +89,17 @@ class DataUpload(QObject):
             # Layers contains all layers with shared data source
             layer = item['layers'][0]
             if layer.type() == QgsMapLayer.VectorLayer:
-                fields = QgsFields(layer.fields())
                 srid = layer.crs().postgisSrid()
                 geom_column = "wkb_geometry"
                 wkbType = layer.wkbType()
-
+                
+                #Remove Virtual Fields from Layer Fieldlist
+                fields = QgsFields()
+                for f in QgsFields(layer.fields()):
+                    i = layer.dataProvider().fieldNameIndex(f.name())
+                    if i >= 0:
+                        fields.append(f)
+                        
 # Check if database schema exists
                 cursor.execute("SELECT EXISTS(SELECT 1 FROM pg_namespace WHERE nspname = '%s')" % item['schema'])
                 schema_exists = cursor.fetchone()[0]
