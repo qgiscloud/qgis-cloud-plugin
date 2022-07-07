@@ -125,9 +125,9 @@ class BackgroundLayersMenu(QMenu):
                 ("Pioneer", 'https://tile.thunderforest.com/pioneer/{z}/{x}/{y}.png'),
                 ("Spinal Map", 'https://tile.thunderforest.com/spinal-map/{z}/{x}/{y}.png')
             ])),
-            ("Wikipedia Maps", OrderedDict([
-                ("Wikipedia Labelled Layer", 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png'),
-                ("Wikipedia Unlabelled Layer", 'https://maps.wikimedia.org/osm/{z}/{x}/{y}.png')
+            ("Wikimedia Maps", OrderedDict([
+                ("Wikimedia Labelled Layer", 'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png'),
+                ("Wikimedia Unlabelled Layer", 'https://maps.wikimedia.org/osm/{z}/{x}/{y}.png')
             ])),
             ("Bing Maps", OrderedDict([
                 ("Bing Roads", 'http://ecn.t3.tiles.virtualearth.net/tiles/r{q}.jpeg?g=1'),
