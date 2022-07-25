@@ -206,13 +206,17 @@ class PGVectorLayerImport(object):
             type = field.typeName()
             if type == "char" or type == "varchar":
                 if field.length() > 0:
-                    type = "%s(%d)" % (type, field.length()+20)
+                    if field.length() > 10485760:  #PG varchar maximum length 10 * 1024 * 1024 
+                        type = "%s(%d)" % (type, 10485760)
+                    else:
+                        type = "%s(%d)" % (type, field.length()+20)
             elif type == "numeric" or type == "decimal":
                 if field.length() > 0 and field.precision() >= 0:
                     type = "%s(%d,%d)" % (type, field.length(), field.precision())
             sql += "%sADD COLUMN %s %s" % (delim, self.__quotedIdentifier(field.name().lower()), type)
             delim = ","
 
+        print (sql)
         # send sql statement and do error handling
         cursor.execute(sql)
 
