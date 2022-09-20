@@ -81,6 +81,7 @@ class BackgroundLayersMenu(QMenu):
     def add_wmts_layergroup(self):
         wmts_layers = OrderedDict([
             ("Swisstopo", OrderedDict([
+                ("LK10 (grau)", "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/png&layers=ch.swisstopo.landeskarte-grau-10&styles=ch.swisstopo.landeskarte-grau-10&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_27&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml"),
                 ("LK10", "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/png&layers=ch.swisstopo.landeskarte-farbe-10&styles=ch.swisstopo.landeskarte-farbe-10&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_27&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml"),
                 ("LK25", "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.pixelkarte-farbe-pk25.noscale&styles=ch.swisstopo.pixelkarte-farbe-pk25.noscale&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_26&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml"),
                 ("LK50", "contextualWMSLegend=0&crs=EPSG:2056&dpiMode=7&featureCount=10&format=image/jpeg&layers=ch.swisstopo.pixelkarte-farbe-pk50.noscale&styles=ch.swisstopo.pixelkarte-farbe-pk50.noscale&tileDimensions=Time%3Dcurrent&tileMatrixSet=2056_26&url=https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml"),
