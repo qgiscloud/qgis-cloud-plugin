@@ -93,19 +93,24 @@ Bitte überprüfen Sie die folgenden Punkte:&lt;br&gt;&lt;br&gt;
 <context>
     <name>LoginDialog</name>
     <message>
-        <location filename="../ui_login.py" line="51"/>
+        <location filename="../ui_login.ui" line="14"/>
         <source>Login</source>
         <translation>Login</translation>
     </message>
     <message>
-        <location filename="../ui_login.py" line="52"/>
+        <location filename="../ui_login.ui" line="79"/>
         <source>User:</source>
         <translation>User:</translation>
     </message>
     <message>
-        <location filename="../ui_login.py" line="53"/>
+        <location filename="../ui_login.ui" line="33"/>
         <source>Password:</source>
         <translation>Passwort:</translation>
+    </message>
+    <message>
+        <location filename="../ui_login.ui" line="72"/>
+        <source>Token:</source>
+        <translation>Token:</translation>
     </message>
 </context>
 <context>
@@ -399,6 +404,11 @@ p, li { white-space: pre-wrap; }
         <location filename="../qgiscloudplugindialog.py" line="401"/>
         <source>Login failed</source>
         <translation>Anmeldung fehlgeschlagen</translation>
+    </message>
+    <message>
+        <location filename="../qgiscloudplugindialog.py" line="412"/>
+        <source>Invalid authentication token</source>
+        <translation>Ungültiges Authentifizierungstoken</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="395"/>

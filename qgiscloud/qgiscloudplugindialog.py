@@ -26,7 +26,7 @@ from qgis.PyQt.QtWidgets import QApplication, QDockWidget,   QTableWidgetItem, Q
 from qgis.PyQt.QtGui import QPalette, QColor,  QBrush
 from qgis.core import *
 from .ui_qgiscloudplugin import Ui_QgisCloudPlugin
-from .ui_login import Ui_LoginDialog
+from .login_dialog import LoginDialog
 from .qgiscloudapi.qgiscloudapi import *
 from .db_connections import DbConnections
 from .local_data_sources import LocalDataSources
@@ -316,25 +316,41 @@ class QgisCloudPluginDialog(QDockWidget):
     def check_login(self):
         version_ok = True
         if not self.api.check_auth():
-            login_dialog = QDialog(self)
-            login_dialog.ui = Ui_LoginDialog()
-            login_dialog.ui.setupUi(login_dialog)
-            login_dialog.ui.editUser.setText(self.user)
+            self.api.set_url(self.api_url())
+            api_info = self.api.api_info()
+            auth_method = api_info.get('auth_method', 'login')
+            use_token_auth = (auth_method == 'token')
+
             login_ok = False
             while not login_ok and version_ok:
-                self.api.set_url(self.api_url())
-                if not login_dialog.exec_():
+                login_dialog = LoginDialog(auth_method=auth_method)
+                login_dialog.editUser.setText(self.user)
+
+                if use_token_auth:
+                    # use token auth
+                    if not login_dialog.exec_():
+                        self.api.set_token(None)
+                        return login_ok
+
+                    self.api.set_token(login_dialog.editToken.text())
+                else:
+                    # use login auth
+                    if not login_dialog.exec_():
+                        self.api.set_auth(
+                            user=login_dialog.editUser.text(),
+                            password=None
+                        )
+                        return login_ok
+
                     self.api.set_auth(
-                        user=login_dialog.ui.editUser.text(), password=None)
-                    return login_ok
-                self.api.set_auth(
-                    user=login_dialog.ui.editUser.text(),
-                    password=login_dialog.ui.editPassword.text())
+                        user=login_dialog.editUser.text(),
+                        password=login_dialog.editPassword.text()
+                    )
                 try:
                     login_info = self.api.check_login(
                         version_info=self._version_info())
 
-# QGIS private Cloud has no tos_accepted
+                    # QGIS private Cloud has no tos_accepted
                     try:
                         if not login_info['tos_accepted']:
                             result = QMessageBox.information(
@@ -354,7 +370,7 @@ class QgisCloudPluginDialog(QDockWidget):
                     except:
                         pass
 
-                    self.user = login_dialog.ui.editUser.text()
+                    self.user = login_info.get('user', login_dialog.editUser.text())
                     self._update_clouddb_mode(login_info['clouddb'])
                     version_ok = StrictVersion(self.version) >= StrictVersion(
                         login_info['current_plugin'])
@@ -392,10 +408,16 @@ class QgisCloudPluginDialog(QDockWidget):
                         self.tr("Account {username} is disabled! Please contact support@qgiscloud.com").format(username=login_dialog.ui.editUser.text()))
                     login_ok = False
                 except UnauthorizedError:
-                    QMessageBox.critical(
-                        self, self.tr("Login for user {username} failed").format(
-                            username=login_dialog.ui.editUser.text()),
-                        self.tr("Wrong user name or password"))
+                    if use_token_auth:
+                        title = self.tr("Login failed")
+                        msg = self.tr("Invalid authentication token")
+                    else:
+                        title = self.tr(
+                            "Login for user {username} failed").format(
+                            username=login_dialog.editUser.text()
+                        )
+                        msg = self.tr("Wrong user name or password")
+                    QMessageBox.critical(self, title, msg)
                     login_ok = False
                 except (TokenRequiredError, ConnectionException) as e:
                     QMessageBox.critical(

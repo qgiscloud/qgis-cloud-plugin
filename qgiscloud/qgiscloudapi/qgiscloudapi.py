@@ -56,15 +56,10 @@ class API(object):
         It wraps the HTTP requests to resources in convenient methods and also
         takes care of authenticating each request with a token, if needed.
 
-        The create_token, check_token, get_token and set_token methods can be
+        The check_token, get_token and set_token methods can be
         used to work with the token from outside the API class. This might be
         useful when it is not intended to ask users for their user and
         password for new instances of the API class.
-
-        To instantiate API with a predefined token use something like:
-
-        # token = json.loads('{"token": "A2wY7qgUNM5eTRM3Lz6D4RZHuGmYPP"}')
-        # api = API(token=token)
     """
 
     user = None
@@ -89,14 +84,28 @@ class API(object):
         content = request.get('/.meta/version.json')
         return json.loads(content)
 
+    def api_info(self):
+        """Get API info from server"""
+        api_info = {
+            'auth_method': 'login'
+        }
+        try:
+            resource = '/api_info.json'
+            request = Request(url=self.url)
+            content = request.get(resource)
+            api_info = json.loads(content)
+        except Exception as e:
+            # NOTE: ignore missing endpoint
+            pass
+        return api_info
+
     def requires_auth(self):
         """
             requires_auth checks that methods that require
-            a token can't be called without a token.
+            authentication can't be called without a login or token.
 
-            If check_token doesn't return True a TokenRequiredError exception is
-            raised telling the caller to use the create_token method to get a
-            valid token.
+            If check_token doesn't return True a TokenRequiredError exception
+            is raised.
         """
         if not (self.check_auth() or self.check_token()):
             raise TokenRequiredError
@@ -117,9 +126,10 @@ class API(object):
 
     def reset_auth(self):
         """
-            Reset user/password for authentication.
+            Reset user/password and token for authentication.
         """
         self.user = self.password = None
+        self.set_token(None)
 
     def accept_tos(self):
         """
@@ -164,15 +174,6 @@ class API(object):
             login_info['clouddb'] = True
         return login_info
 
-    def create_token(self, user, password):
-        """
-            Queries the API for a new Token and saves it as self._token.
-        """
-        request = Request(user=user.encode('utf-8'), password=password.encode('utf-8'), cache=self.cache, url=self.url)
-        content = request.post('/token.json')
-        self.set_token(json.loads(content))
-        return True
-
     def check_token(self):
         """
             This method checks if there's a token.
@@ -186,7 +187,12 @@ class API(object):
         """
             We use set_token to set the token.
         """
-        self._token = token
+        if token is None:
+            self._token = None
+        else:
+            # NOTE: sanitize token by removing trailing whitespace and
+            #       replacing any newlines
+            self._token = token.strip().replace("\n", '')
 
     def get_token(self):
         """
@@ -431,13 +437,10 @@ class ConnectionException(Exception):
 
 class TokenRequiredError(Exception):
     """
-        We raise this exception if a method requires a token but self._token
-        is none.
-
-        Use the create_token() method to get a new token.
+        We raise this exception if a method requires authentication but none
+        is provided.
     """
-    def __unicode__(self):
-        return 'No valid token. Use create_token(user, password) to get a new one'
+    pass
 
 class BadRequestError(Exception):
     """
@@ -619,19 +622,19 @@ class Request(object):
         # header to the request to create a new token.
         #
         if self.token is not None:
-            headers['Authorization'] = 'auth_token="%s"' % (self.token['token'])
+            # send token in auth header
+            headers['Authorization'] = "Bearer %s" % self.token
         elif self.user is not None and self.password is not None:
-
-#passman = urllib.request.HTTPPasswordMgrWithDefaultRealm()
-#passman.add_password(None, url, username, password)
-#urllib.request.install_opener(urllib.request.build_opener(urllib.request.HTTPBasicAuthHandler(passman)))
-#urllib.request.install_opener(urllib.request.build_opener(urllib.request.HTTPCookieProcessor()))
-#
             password_manager = urllib.request.HTTPPasswordMgrWithDefaultRealm()
             password_manager.add_password(None, self.url, self.user, self.password)
             auth_handler = HTTPBasicAuthHandlerLimitRetries(password_manager)
             opener = urllib.request.build_opener(auth_handler)
             urllib.request.install_opener(opener)
+
+            # send basic auth in auth header
+            base64string = base64.b64encode(b'%s:%s' % (self.user, self.password))
+            headers['Authorization'] = b"Basic %s" % base64string
+
         #
         # The API expects the body to be urlencoded. If data was passed to
         # the request method we therefore use urlencode from urllib.
@@ -666,12 +669,6 @@ class Request(object):
         #
         # Finally we fire the actual request.
         #
-#        for i in range(1, 6):
-#request = urllib.request.Request(url)
-        base64string = base64.b64encode(b'%s:%s' % (self.user, self.password))
-        headers['Authorization'] = b"Basic %s" % base64string
-#request.add_header("Authorization", b"Basic %s" % base64string)
-#u = urllib.request.urlopen(request)
         try:
             request_method = method.upper()
             if request_method in ['PUT', 'POST']:
