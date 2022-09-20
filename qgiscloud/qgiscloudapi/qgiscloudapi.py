@@ -79,11 +79,6 @@ class API(object):
     def api_url(self):
         return API_URL
 
-    def check_versions(self):
-        request = Request(cache=self.cache, url=self.url)
-        content = request.get('/.meta/version.json')
-        return json.loads(content)
-
     def api_info(self):
         """Get API info from server"""
         api_info = {
@@ -397,30 +392,6 @@ class API(object):
         resource = '/maps/edit_options.json'
         request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
         content = request.get(resource)
-        return json.loads(content)
-
-    def create_exception(self, exception, version_info, project_fname):
-        """
-            Upload a plugin exception.
-        """
-        self.requires_auth()
-        resource = '/notifications.json'
-        encoded_file = ''
-        try:
-            file = open(project_fname, 'rb')
-            encoded_file = file.read()
-        except:
-            pass
-        try:
-            exception_info = exception + str(version_info) + encoded_file
-        except:
-            exception_info = 'No exception info (message has encoding problems)' + str(version_info)
-        data = {
-            'type': 'ClientException',
-            'info': exception_info
-        }
-        request = Request(user=self.user, password=self.password, token=self.get_token(), cache=self.cache, url=self.url)
-        content = request.post(resource, data)
         return json.loads(content)
 
 ###
