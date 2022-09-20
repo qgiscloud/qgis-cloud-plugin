@@ -598,8 +598,8 @@ class Request(object):
     def post(self, resource, data={}):
         return self.request(resource, method='POST', data=data)
 
-    def get(self, resource,  headers={}):
-        return self.request(resource, method='GET',  data=None,  headers=headers)
+    def get(self, resource, headers=None):
+        return self.request(resource, method='GET',  data=None, headers=headers)
 
     def put(self, resource, data={}):
         return self.request(resource, method='PUT', data=data)
@@ -607,12 +607,13 @@ class Request(object):
     def delete(self, resource):
         return self.request(resource, method='DELETE')
 
-    def request(self, resource, method='GET', data=None, headers={}):
+    def request(self, resource, method='GET', data=None, headers=None):
         """
             use urllib
         """
         url = self.url + resource
-
+        if headers is None:
+            headers = {}
         #
         # If the current API instance has a valid token we add the Authorization
         # header with the correct token.
