@@ -25,19 +25,8 @@ from qgis.PyQt.QtCore import *
 from qgis.PyQt.QtWidgets import *
 from qgis.PyQt.QtGui import *
 from qgis.core import *
-#import resources_rc
-#import imp
-#import sys
 
 from collections import OrderedDict
-
-try:
-    from openlayers_plugin.openlayers_layer import OpenlayersLayer
-    from openlayers_plugin.openlayers_plugin_layer_type import OpenlayersPluginLayerType
-    from openlayers_plugin.weblayers.weblayer_registry import WebLayerTypeRegistry
-    from openlayers_plugin.weblayers.google_maps import OlGooglePhysicalLayer, OlGoogleStreetsLayer, OlGoogleHybridLayer, OlGoogleSatelliteLayer
-except:
-    pass
 
 
 class BackgroundLayersMenu(QMenu):
@@ -46,37 +35,7 @@ class BackgroundLayersMenu(QMenu):
         self.iface = iface
 
         self.add_wmts_layergroup()
-        self.add_google_layergroup()
         self.add_XYZ_layergroups()
-
-    def add_google_layergroup(self):
-        try:
-            self._olLayerTypeRegistry = WebLayerTypeRegistry(self)
-        except:
-            return
-
-        self._olLayerTypeRegistry.register(OlGooglePhysicalLayer())
-        self._olLayerTypeRegistry.register(OlGoogleStreetsLayer())
-        self._olLayerTypeRegistry.register(OlGoogleHybridLayer())
-        self._olLayerTypeRegistry.register(OlGoogleSatelliteLayer())
-
-        for group in self._olLayerTypeRegistry.groups():
-            groupMenu = group.menu()
-            for layer in self._olLayerTypeRegistry.groupLayerTypes(group):
-                layer.addMenuEntry(groupMenu, self.iface.mainWindow())
-
-            add_api_key_action = QAction("Set api Key", groupMenu)
-            add_api_key_action.triggered.connect(
-                self.showGoogleApiKeyDialog)
-            groupMenu.addAction(add_api_key_action)
-
-            self.addMenu(groupMenu)
-
-        # Register plugin layer type
-        self.pluginLayerType = OpenlayersPluginLayerType(
-            self.iface, self.setReferenceLayer, self._olLayerTypeRegistry)
-        QgsApplication.pluginLayerRegistry().addPluginLayerType(
-            self.pluginLayerType)
 
     def add_wmts_layergroup(self):
         wmts_layers = OrderedDict([
@@ -183,17 +142,8 @@ class BackgroundLayersMenu(QMenu):
             QSettings().setValue("qgis-cloud-plugin/thunderforestApiKey",
                                  newApiKey)
 
-    def showGoogleApiKeyDialog(self):
-        apiKey = QSettings().value("Plugin-OpenLayers/googleMapsApiKey")
-        newApiKey, ok = QInputDialog.getText(
-            self.iface.mainWindow(), "API key",
-            "Enter your API key", QLineEdit.Normal, apiKey)
-        if ok:
-            QSettings().setValue("Plugin-OpenLayers/googleMapsApiKey",
-                                 newApiKey)
-
     def addLayer(self, layerType, xyzUrl=None, displayName=None):
-
+        layer = None
         if layerType is None:
             thunderforest_api_key = QSettings().value(
                     "qgis-cloud-plugin/thunderforestApiKey")
@@ -211,16 +161,17 @@ class BackgroundLayersMenu(QMenu):
         elif layerType == 'wmts':
             layer = QgsRasterLayer(xyzUrl, displayName, 'wms')
         else:
-            layer = OpenlayersLayer(self.iface, self._olLayerTypeRegistry)
-            layer.setName(layerType.displayName)
-            layer.setLayerType(layerType)
+            QgsMessageLog.logMessage(
+                "Could not create background layer %s for %s" %
+                (displayName, xyzUrl), 'QGIS Cloud'
+            )
 
-        if not layer.isValid():
+        if layer is None or not layer.isValid():
             return
 
         coordRefSys = QgsCoordinateReferenceSystem()
 
-        if "EPSG:2056" in xyzUrl:
+        if xyzUrl and "EPSG:2056" in xyzUrl:
             coordRefSys.createFromOgcWmsCrs("EPSG:2056")
         else:
             coordRefSys.createFromOgcWmsCrs("EPSG:3857")
