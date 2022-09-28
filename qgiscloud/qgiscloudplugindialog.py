@@ -315,7 +315,7 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def check_login(self):
         version_ok = True
-        if not self.api.check_auth():
+        if not (self.api.check_auth() or self.api.check_token()):
             self.api.set_url(self.api_url())
             api_info = self.api.api_info()
             auth_method = api_info.get('auth_method', 'login')
