@@ -7,13 +7,23 @@
     <x>0</x>
     <y>0</y>
     <width>268</width>
-    <height>160</height>
+    <height>184</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Login</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="labelUser">
+     <property name="text">
+      <string>User:</string>
+     </property>
+     <property name="buddy">
+      <cstring>editUser</cstring>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="1">
     <widget class="QLineEdit" name="editUser">
      <property name="enabled">
@@ -53,16 +63,6 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
-    <widget class="QLineEdit" name="editToken">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="echoMode">
-      <enum>QLineEdit::Password</enum>
-     </property>
-    </widget>
-   </item>
    <item row="2" column="0">
     <widget class="QLabel" name="labelToken">
      <property name="enabled">
@@ -73,17 +73,24 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="labelUser">
-     <property name="text">
-      <string>User:</string>
-     </property>
-     <property name="buddy">
-      <cstring>editUser</cstring>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="editToken">
+     <property name="enabled">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
    <item row="3" column="0" colspan="2">
+    <widget class="QLabel" name="labelTokenPage">
+     <property name="text">
+      <string>Copy your token from &lt;a href=&quot;{token_page_url}&quot;&gt;here&lt;/a&gt;</string>
+     </property>
+     <property name="openExternalLinks">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
