@@ -44,7 +44,7 @@ from .version import __version__
 API_URL = 'https://api.qgiscloud.com'
 
 __all__ = ['API', 'UnauthorizedError', 'ConnectionException', 'TokenRequiredError', 'BadRequestError', 'ForbiddenError',
-           'ConflictDuplicateError', 'GoneError', 'InternalServerError',
+           'NotFoundError', 'ConflictDuplicateError', 'GoneError', 'InternalServerError',
            'NotImplementedError', 'ThrottledError']
 
 

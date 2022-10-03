@@ -431,6 +431,12 @@ class QgisCloudPluginDialog(QDockWidget):
                         self, self.tr("Login failed"),
                         self.tr("Login failed: %s") % str(e))
                     login_ok = False
+                except NotFoundError as e:
+                    QMessageBox.critical(
+                        self, self.tr("Login failed"),
+                        self.tr("Could not access {url}. Please check that the URL is written correctly. The error: was '{e}'").format(url=self.api_url(), e="404 Not Found")
+                    )
+                    login_ok = False
                 except urllib.error.URLError as e:
                     if isinstance(e.reason, socket.gaierror):
                         QMessageBox.critical(
