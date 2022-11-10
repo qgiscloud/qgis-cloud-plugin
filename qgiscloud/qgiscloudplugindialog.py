@@ -983,7 +983,7 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
 
             if unsupported_layers:
                 title = self.tr("Unsupported layers found")
-                for layer in sorted(unsupported_layers[0], key=lambda layer: layer.name()):
+                for layer in sorted(unsupported_layers, key=lambda layer: layer.name()):
                     message += self.tr("  -  %s (%s)\n") % (
                         layer.name(), layer.type())
                 message += self.tr(
