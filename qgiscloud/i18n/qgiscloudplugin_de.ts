@@ -662,7 +662,7 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.
     <message>
         <location filename="../qgiscloudplugindialog.py" line="363"/>
         <source>New plugin release {version} is available! Please upgrade the QGIS Cloud plugin.</source>
-        <translation>Die neue Version {version} des QGIS CLoud Plugins ist verfügbar! Bitte aktualisieren Sie das Plugin.</translation>
+        <translation>Die neue Version {version} des QGIS Cloud Plugins ist verfügbar! Bitte aktualisieren Sie das Plugin.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="390"/>
@@ -759,7 +759,7 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.
     <message>
         <location filename="../qgiscloudplugindialog.py" line="779"/>
         <source>The project has an unknown CRS. Please set a valid map CRS in Project-&gt;Properties...-&gt;CRS before publishing!</source>
-        <translation>Das Projekt hat ein unbekanntes CRS. Bitte legen Sie vor der Veröffentlichung unter Projekt-&gt; Eigenschaften ...-&gt; CRS eine gültige Karten-CRS fest!</translation>
+        <translation>Das Projekt hat ein unbekanntes KBS. Bitte legen Sie vor der Veröffentlichung unter Projekt-&gt; Eigenschaften ...-&gt; KBS eine gültige Karten-KBS fest!</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="810"/>
