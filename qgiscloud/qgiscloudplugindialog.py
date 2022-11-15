@@ -321,15 +321,22 @@ class QgisCloudPluginDialog(QDockWidget):
             auth_method = api_info.get('auth_method', 'login')
             use_token_auth = (auth_method == 'token')
             token_page_url = None
+            registration_page_url = None
             if use_token_auth:
                 token_page_url = api_info.get('token_page_url')
                 if token_page_url:
                     token_page_url = urljoin(self.api_url(), token_page_url)
+                registration_page_url = api_info.get('registration_page_url')
+                if registration_page_url:
+                    registration_page_url = urljoin(
+                        self.api_url(), registration_page_url
+                    )
 
             login_ok = False
             while not login_ok and version_ok:
                 login_dialog = LoginDialog(
-                    auth_method=auth_method, token_page_url=token_page_url
+                    auth_method=auth_method, token_page_url=token_page_url,
+                    registration_page_url=registration_page_url
                 )
                 login_dialog.editUser.setText(self.user)
 

@@ -113,9 +113,14 @@ Bitte überprüfen Sie die folgenden Punkte:&lt;br&gt;&lt;br&gt;
         <translation>Token:</translation>
     </message>
     <message>
-        <location filename="../login_dialog.py" line="27"/>
+        <location filename="../login_dialog.py" line="29"/>
         <source>Copy your token from &lt;a href=&quot;{token_page_url}&quot;&gt;here&lt;/a&gt;</source>
         <translation>Kopieren Sie Ihr Token von &lt;a href=&quot;{token_page_url}&quot;&gt;hier&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <location filename="../login_dialog.py" line="36"/>
+        <source>First-time users register &lt;a href=&quot;{registration_page_url}&quot;&gt;here&lt;/a&gt;</source>
+        <translation>Erstnutzer registrieren sich &lt;a href=&quot;{registration_page_url}&quot;&gt;hier&lt;/a&gt;</translation>
     </message>
 </context>
 <context>
