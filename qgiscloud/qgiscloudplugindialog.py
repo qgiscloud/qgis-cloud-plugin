@@ -37,6 +37,7 @@ from .mapsettingsdialog import MapSettingsDialog
 from .background_layers_menu import BackgroundLayersMenu
 from distutils.version import StrictVersion
 from urllib.parse import urljoin, urlparse
+from datetime import datetime
 import os.path
 import sys
 import traceback
@@ -363,7 +364,6 @@ class QgisCloudPluginDialog(QDockWidget):
                 try:
                     login_info = self.api.check_login(
                         version_info=self._version_info())
-
                     # QGIS private Cloud has no tos_accepted
                     try:
                         if not login_info['tos_accepted']:
@@ -399,8 +399,18 @@ class QgisCloudPluginDialog(QDockWidget):
                     self.ui.widgetDatabases.setEnabled(True)
                     self.ui.widgetMaps.setEnabled(True)
 
-                    self.ui.lblLoginStatus.setText(
-                        self.tr("Logged in as {0} ({1})").format(self.user, login_info['plan']))
+                    if login_info['paid_until'] == None:
+                        paid_until = ''
+                        self.ui.lblLoginStatus.setText(
+                            self.tr("Logged in as {0} ({1})".format(self.user, login_info['plan'])))
+                    else:
+                        paid_until = login_info['paid_until']
+                        self.ui.lblLoginStatus.setText(
+                            self.tr("""Logged in as {0} ({1}) 
+Paid until: {2}""").format(self.user, 
+                                        login_info['plan'],
+                                        datetime.strftime(datetime.strptime(paid_until, "%Y-%m-%dT%H:%M:%SZ"), '%d.%m.%Y %H:%M')))
+                                        
                     self.ui.lblLoginStatus.show()
                     self._push_message(
                         self.tr("QGIS Cloud"),
