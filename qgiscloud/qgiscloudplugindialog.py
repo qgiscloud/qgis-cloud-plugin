@@ -399,8 +399,7 @@ class QgisCloudPluginDialog(QDockWidget):
                     self.ui.widgetDatabases.setEnabled(True)
                     self.ui.widgetMaps.setEnabled(True)
 
-                    if login_info['paid_until'] == None:
-                        paid_until = ''
+                    if login_info.get('paid_until') is None:
                         self.ui.lblLoginStatus.setText(
                             self.tr("Logged in as {0} ({1})".format(self.user, login_info['plan'])))
                     else:
