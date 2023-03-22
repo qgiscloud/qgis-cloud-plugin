@@ -219,6 +219,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.read_settings()
         self.api = API()
         self.db_connections = DbConnections()
+        self.numDbs = -1
         self.local_data_sources = LocalDataSources()
         self.data_upload = DataUpload(
             self.iface, self.statusBar(), self.ui.lblProgress, self.ui.progressBar,  self.api,
@@ -463,8 +464,7 @@ Paid until: {2}""").format(self.user,
                         # we don't know what to do with the exception
                         # so let it escalate
                         raise e
-                        
-            self.numDbs = len(list(self.db_connections._dbs.keys()))
+
             if self.numDbs == 0:
                 res = QMessageBox.question(
                     self,
@@ -568,9 +568,12 @@ Do you want to create a new database now?
 
     def refresh_databases(self):
         QApplication.setOverrideCursor(Qt.WaitCursor)
+        self.numDbs = -1
         if self.clouddb:
             db_list = self.api.read_databases()
             if self.show_api_error(db_list):
+                # mark as error
+                self.numDbs = -1
                 QApplication.restoreOverrideCursor()
                 return
             self.db_connections = DbConnections()
@@ -596,6 +599,8 @@ Do you want to create a new database now?
                     self.ui.cbUploadDatabase.setEditText(
                         self.tr("Select database"))
             self.db_connections.refresh(self.user)
+
+        self.numDbs = len(list(self.db_connections._dbs.keys()))
 
         self.db_size(self.db_connections)
         QApplication.restoreOverrideCursor()
@@ -1428,8 +1433,7 @@ Should the table name be shortened automatically?
 
     def db_size(self,  db_connections):
         usedSpace = 0
-        self.numDbs = len(list(db_connections._dbs.keys()))
-                
+
         for db in list(db_connections._dbs.keys()):
             try:
                 try:
