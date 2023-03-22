@@ -585,6 +585,7 @@ Do you want to create a new database now?
             if self.show_api_error(db_list):
                 # mark as error
                 self.numDbs = -1
+                self.ui.btnDbCreate.setEnabled(False)
                 QApplication.restoreOverrideCursor()
                 return
             self.db_connections = DbConnections()
@@ -592,6 +593,7 @@ Do you want to create a new database now?
                 self.db_connections.add_from_json(db)
 
             self.ui.tabDatabases.clear()
+            self.ui.btnDbCreate.setEnabled(True)
             self.ui.btnDbDelete.setEnabled(False)
             self.ui.cbUploadDatabase.clear()
             self.ui.cbUploadDatabase.setEditable(True)
