@@ -218,6 +218,8 @@ class QgisCloudPluginDialog(QDockWidget):
 
         self.read_settings()
         self.api = API()
+        self.maxSize = -1
+        self.maxDBs = -1
         self.db_connections = DbConnections()
         self.numDbs = -1
         self.local_data_sources = LocalDataSources()
@@ -416,6 +418,7 @@ Paid until: {2}""").format(self.user,
                         self.tr("QGIS Cloud"),
                         self.tr("Logged in as {0}").format(self.user),
                         level=0, duration=2)
+                    self.refresh_plan_limits(login_info)
                     self.refresh_databases()
                     self.refresh_maps()
                     if not version_ok:
@@ -565,6 +568,14 @@ Do you want to create a new database now?
         self.ui.cbUploadDatabase.clear()
         self.ui.widgetDatabases.setEnabled(False)
         self.activate_upload_button()
+
+    def refresh_plan_limits(self, login_info=None):
+        if login_info is None:
+            # request current login info
+            login_info = self.api.check_login(version_info=self._version_info())
+
+        self.maxSize = login_info.get('max_storage', 50)
+        self.maxDBs = login_info.get('max_dbs', 5)
 
     def refresh_databases(self):
         QApplication.setOverrideCursor(Qt.WaitCursor)
@@ -1314,15 +1325,6 @@ Should the table name be shortened automatically?
                     data_sources_items[data_source] = {
                         u'schema': unicode(schema_name), u'table': unicode(table_name), u'layers': layers}
 
-            login_info = self.api.check_login(
-                version_info=self._version_info())
-            try:
-                self.maxSize = login_info['max_storage']
-                self.maxDBs = login_info['max_dbs']
-            except:
-                self.maxSize = 50
-                self.maxDBs = 5
-
             try:
                 self.data_upload.upload(self.db_connections.db(
                     unicode(db_name)), data_sources_items, unicode(self.maxSize))
@@ -1453,15 +1455,6 @@ Should the table name be shortened automatically?
                 conn.close
             except:
                 continue
-
-        login_info = self.api.check_login(version_info=self._version_info())
-
-        try:
-            self.maxSize = login_info['max_storage']
-            self.maxDBs = login_info['max_dbs']
-        except:
-            self.maxSize = 50
-            self.maxDBs = 5
 
         lblPalette = QPalette(self.ui.lblDbSize.palette())
         usage = usedSpace / float(self.maxSize)
