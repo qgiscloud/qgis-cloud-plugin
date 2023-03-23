@@ -539,10 +539,22 @@ Do you want to create a new database now?
 
         if ret == QMessageBox.Ok:
             self.setCursor(Qt.WaitCursor)
-            result = self.api.delete_database(name)
-            self.show_api_error(result)
             self.ui.btnDbDelete.setEnabled(False)
-            time.sleep(2)
+            result = self.api.delete_database(name)
+            if not self.show_api_error(result):
+                # wait some time until removed DB is no longer present
+                db_removed = False
+                tries = 5
+                while not db_removed and tries > 0:
+                    tries -= 1
+                    QApplication.processEvents()
+                    time.sleep(2)
+                    db_list = self.api.read_databases()
+                    # check if removed DB is no longer in current list
+                    db_removed = len(
+                        [db for db in db_list if db['name'] == name]
+                    ) == 0
+
             self.refresh_databases()
             self.unsetCursor()
 
