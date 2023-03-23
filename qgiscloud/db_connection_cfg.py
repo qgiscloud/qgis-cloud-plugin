@@ -167,7 +167,7 @@ class DbConnectionCfg(object):
         uri.setUseEstimatedMetadata(self.estimatedMetadata)
         return uri
 
-    def psycopg_connection(self):
+    def psycopg_connection(self, silent=False):
         try:
             connection = psycopg2.connect(
                 database=self.database,
@@ -178,6 +178,9 @@ class DbConnectionCfg(object):
             )
             return connection
         except:
+            if silent:
+                return None
+
             QMessageBox.critical(
                 None,
                 self.tr("DB Connection Failed"),

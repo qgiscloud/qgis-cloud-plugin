@@ -487,9 +487,17 @@ Do you want to create a new database now?
 
     def create_database(self):
         if self.numDbs < self.maxDBs:
+            self.setCursor(Qt.WaitCursor)
+            self.ui.btnDbCreate.setEnabled(False)
             db = self.api.create_database()
-            self.show_api_error(db)
-            self.refresh_databases()
+            if not self.show_api_error(db):
+                # wait some time until new db is available
+                new_db_ready = DbConnections.wait_for_new_db(db)
+                if new_db_ready:
+                    self.refresh_databases()
+
+            self.ui.btnDbCreate.setEnabled(True)
+            self.unsetCursor()
         else:
             QMessageBox.warning(None, self.tr('Warning!'),  self.tr(
                 'Number of %s permitted databases exceeded! Please upgrade your account!') % self.maxDBs)

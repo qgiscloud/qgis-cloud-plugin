@@ -20,6 +20,7 @@
  ***************************************************************************/
 """
 from qgis.PyQt.QtCore import QSettings
+from qgis.PyQt.QtWidgets import QApplication
 from qgis.core import *
 from .db_connection_cfg import DbConnectionCfg
 import time
@@ -124,18 +125,30 @@ class DbConnections(object):
         except:
             return False
 
-    # Wait until cloud database is available (creation is asynchronous)
     @staticmethod
-    def wait_for_db(db, timeout=3, retries=5, sleeptime=3):
-        ok = False
-        while not ok and retries > 0:
-            try:
-                connection = db.psycopg_connection(timeout)
-                connection.close()
-                ok = True
-            except Exception:  # as err:
-                retries -= 1
-                if retries == 0:
-                    raise
-                else:
-                    time.sleep(sleeptime)
+    def wait_for_new_db(db):
+        """Wait until new cloud database is available after creation
+        (creation is asynchronous).
+
+        :param dict db: new DB connection as
+            {
+                host: '<host>',
+                port: <port>,
+                name: '<DB name>',
+                username: '<username>',
+                password: '<password>'
+            }
+        """
+        conn_cfg = DbConnectionCfg(db['host'], db['port'], db['name'], db['username'], db['password'])
+        new_db_ready = False
+        tries = 5
+        while not new_db_ready and tries > 0:
+            tries -= 1
+            QApplication.processEvents()
+            time.sleep(2)
+            conn = conn_cfg.psycopg_connection(silent=True)
+            if conn is not None:
+                conn.close()
+                new_db_ready = True
+
+        return new_db_ready
