@@ -28,6 +28,7 @@ limitations under the License.
 
 """
 from qgis.core import *
+from qgis.PyQt.QtCore import QCoreApplication
 
 # python versions below 2.6 do not have json included we need simplejson then
 try:
@@ -73,6 +74,10 @@ class API(object):
         self.cache = cache
         self.url = url
 
+    def tr(self,  message):
+        """Get translation for a message using the Qt translation API"""
+        return QCoreApplication.translate('API', message)
+
     def set_url(self, url):
         self.url = url
 
@@ -90,8 +95,15 @@ class API(object):
             content = request.get(resource)
             api_info = json.loads(content)
         except Exception as e:
-            # NOTE: ignore missing endpoint
-            pass
+            # API info request failed
+            error_msg = "%s<br><br><i>%s</i>" % (
+                self.tr("Failed to access QGIS Cloud API on {api_url}")
+                    .format(api_url=self.url + '/api_info.json'),
+                type(e).__name__
+            )
+            api_info = {
+                'error': error_msg
+            }
         return api_info
 
     def requires_auth(self):

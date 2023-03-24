@@ -322,6 +322,10 @@ class QgisCloudPluginDialog(QDockWidget):
         if not (self.api.check_auth() or self.api.check_token()):
             self.api.set_url(self.api_url())
             api_info = self.api.api_info()
+            if self.show_api_error(api_info):
+                # invalid API endpoint
+                return False
+
             auth_method = api_info.get('auth_method', 'login')
             use_token_auth = (auth_method == 'token')
             token_page_url = None

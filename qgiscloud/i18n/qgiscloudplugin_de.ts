@@ -2,6 +2,14 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="de_CH">
 <context>
+    <name>API</name>
+    <message>
+        <location filename="../qgiscloudapi/qgiscloudapi.py" line="99"/>
+        <source>Failed to access QGIS Cloud API on {api_url}</source>
+        <translation>QGIS Cloud API Zugriff auf {api_url} fehlgeschlagen</translation>
+    </message>
+</context>
+<context>
     <name>BackgroundLayersMenu</name>
     <message>
         <location filename="../background_layers_menu.py" line="250"/>
