@@ -30,12 +30,7 @@ limitations under the License.
 from qgis.core import *
 from qgis.PyQt.QtCore import QCoreApplication
 
-# python versions below 2.6 do not have json included we need simplejson then
-try:
-    import json
-except ImportError:
-    from .. import simplejson as json
-
+import json
 import time
 from urllib.parse import urlencode
 import urllib.request, urllib.error, urllib.parse
