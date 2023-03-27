@@ -89,7 +89,7 @@ class DataUpload(QObject):
             # Layers contains all layers with shared data source
             layer = item['layers'][0]
             if layer.type() == QgsMapLayer.VectorLayer:
-                srid = layer.crs().postgisSrid()
+                srid = int(layer.crs().authid().split(':')[1])
                 geom_column = "wkb_geometry"
                 wkbType = layer.wkbType()
                 
@@ -125,11 +125,12 @@ class DataUpload(QObject):
                 
                 if wkbType != QgsWkbTypes.NoGeometry:
                     # Check if SRID is known on database, otherwise create record
-                    cursor.execute("SELECT srid FROM public.spatial_ref_sys WHERE srid = %s" % layer.crs().postgisSrid())
+                    cursor.execute("SELECT srid FROM public.spatial_ref_sys WHERE srid = %s" % layer.crs().authid().split(':')[1])
                     if not cursor.fetchone():
                         try:
-                            cursor.execute("INSERT INTO public.spatial_ref_sys VALUES ({srid},'EPSG',{srid},'{wktstr}','{projstr}')".format(
-                                srid = layer.crs().postgisSrid(),
+                            cursor.execute("INSERT INTO public.spatial_ref_sys VALUES ({srid},'{auth}',{srid},'{wktstr}','{projstr}')".format(
+                                auth = layer.crs().authid().split(':')[0], 
+                                srid = layer.crs().authid().split(':')[1],
                                 wktstr = layer.crs().toWkt(),
                                 projstr = layer.crs().toProj4()))
                             conn.commit()

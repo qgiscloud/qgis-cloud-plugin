@@ -307,7 +307,7 @@ class PGVectorLayerImport(object):
             
             # get geometry type, dim and srid
             (geometryType, dim) = self.__postgisWkbType(wkbType)
-            srid = srs.postgisSrid()
+            srid = srs.authid().split(':')[1]
 
             # create geometry column
             if geometryType:
