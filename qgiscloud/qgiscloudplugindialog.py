@@ -35,7 +35,6 @@ from .doAbout import DlgAbout
 from .error_report_dialog import ErrorReportDialog
 from .mapsettingsdialog import MapSettingsDialog
 from .background_layers_menu import BackgroundLayersMenu
-from packaging.version import Version
 from urllib.parse import urljoin, urlparse
 from datetime import datetime
 import os.path
@@ -393,8 +392,8 @@ class QgisCloudPluginDialog(QDockWidget):
 
                     self.user = login_info.get('user', login_dialog.editUser.text())
                     self._update_clouddb_mode(login_info['clouddb'])
-                    version_ok = Version(self.version) >= Version(
-                        login_info['current_plugin'])
+                    version_ok = self.version_to_number(self.version) >= \
+                        self.version_to_number(login_info['current_plugin'])
                     if not version_ok:
                         self.ui.lblVersionPlugin.setPalette(self.palette_red)
                         QMessageBox.information(None, self.tr('New Version'),  self.tr(
@@ -488,6 +487,13 @@ Do you want to create a new database now?
                     self.create_database()
                             
         return version_ok
+
+    def version_to_number(self, version):
+        """Convert version strings to number,
+        e.g. "3.8.2" -> 30802
+        """
+        major, minor, rev = [int(v) for v in version.split('.')]
+        return major * 10000 + minor * 100 + rev
 
     def create_database(self):
         if self.numDbs < self.maxDBs:
