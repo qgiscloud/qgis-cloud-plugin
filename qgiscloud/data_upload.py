@@ -89,7 +89,13 @@ class DataUpload(QObject):
             # Layers contains all layers with shared data source
             layer = item['layers'][0]
             if layer.type() == QgsMapLayer.VectorLayer:
-                srid = int(layer.crs().authid().split(':')[1])
+                if layer.isSpatial():
+                    auth = layer.crs().authid().split(':')[0]
+                    srid = int(layer.crs().authid().split(':')[1])
+                else:
+                    srid = None
+                    auth = None
+                    
                 geom_column = "wkb_geometry"
                 wkbType = layer.wkbType()
                 
@@ -125,12 +131,12 @@ class DataUpload(QObject):
                 
                 if wkbType != QgsWkbTypes.NoGeometry:
                     # Check if SRID is known on database, otherwise create record
-                    cursor.execute("SELECT srid FROM public.spatial_ref_sys WHERE srid = %s" % layer.crs().authid().split(':')[1])
+                    cursor.execute("SELECT srid FROM public.spatial_ref_sys WHERE srid = %s" % srid)
                     if not cursor.fetchone():
                         try:
                             cursor.execute("INSERT INTO public.spatial_ref_sys VALUES ({srid},'{auth}',{srid},'{wktstr}','{projstr}')".format(
-                                auth = layer.crs().authid().split(':')[0], 
-                                srid = layer.crs().authid().split(':')[1],
+                                auth = auth, 
+                                srid = srid,
                                 wktstr = layer.crs().toWkt(),
                                 projstr = layer.crs().toProj4()))
                             conn.commit()
@@ -145,7 +151,7 @@ class DataUpload(QObject):
                 # TODO: Ask user for overwriting existing table
                 # The postgres provider is terribly slow at creating tables with
                 # many attribute columns in QGIS < 2.9.0
-                vectorLayerImport = PGVectorLayerImport(db, conn,  cursor, cloudUri, fields, wkbType, layer.crs(), True)
+                vectorLayerImport = PGVectorLayerImport(db, conn,  cursor, cloudUri, fields, wkbType, srid, True)
 
                 if vectorLayerImport.hasError():
                     import_ok &= False

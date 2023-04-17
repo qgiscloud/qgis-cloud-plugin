@@ -228,7 +228,7 @@ class PGVectorLayerImport(object):
                     self.__quotedValue(field.comment()))
                 cursor.execute(sql)
 
-    def __init__(self, db, conn, cursor,  uri, fields, wkbType, srs, overwrite):
+    def __init__(self, db, conn, cursor,  uri, fields, wkbType, srid, overwrite):
         self._errorMessage = ""
         self._hasError = False
 
@@ -307,7 +307,6 @@ class PGVectorLayerImport(object):
             
             # get geometry type, dim and srid
             (geometryType, dim) = self.__postgisWkbType(wkbType)
-            srid = srs.authid().split(':')[1]
 
             # create geometry column
             if geometryType:
