@@ -730,25 +730,25 @@ Do you want to create a new database now?
 
     def refresh_maps(self):
         QApplication.setOverrideCursor(Qt.WaitCursor)
-        if self.clouddb:
-            map_list = self.api.read_maps()
-            if self.show_api_error(map_list):
-                QApplication.restoreOverrideCursor()
-                return
 
-            self.ui.tabMaps.clear()
-            self.ui.btnMapDelete.setEnabled(False)
-            self.ui.btnMapEdit.setEnabled(False)
-            self.ui.btnMapLoad.setEnabled(False)
+        map_list = self.api.read_maps()
+        if self.show_api_error(map_list):
+            QApplication.restoreOverrideCursor()
+            return
 
-            self.maps_lookup = {}
-            for map in map_list:
-                it = QListWidgetItem(map['map']['name'])
-                self.ui.tabMaps.addItem(it)
-                it.setData(Qt.UserRole,  map['map']['id'])
+        self.ui.tabMaps.clear()
+        self.ui.btnMapDelete.setEnabled(False)
+        self.ui.btnMapEdit.setEnabled(False)
+        self.ui.btnMapLoad.setEnabled(False)
 
-                # add map info to maps lookup
-                self.maps_lookup[map['map']['name']] = map['map']
+        self.maps_lookup = {}
+        for map in map_list:
+            it = QListWidgetItem(map['map']['name'])
+            self.ui.tabMaps.addItem(it)
+            it.setData(Qt.UserRole,  map['map']['id'])
+
+            # add map info to maps lookup
+            self.maps_lookup[map['map']['name']] = map['map']
 
         QApplication.restoreOverrideCursor()
 
