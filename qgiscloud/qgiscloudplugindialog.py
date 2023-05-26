@@ -471,7 +471,7 @@ Paid until: {2}""").format(self.user,
                         # so let it escalate
                         raise e
 
-            if self.numDbs == 0:
+            if self.clouddb and self.numDbs == 0:
                 res = QMessageBox.question(
                     self,
                     self.tr("No Database"),
