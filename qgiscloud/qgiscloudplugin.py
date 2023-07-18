@@ -42,12 +42,12 @@ class QgisCloudPlugin(object):
     def initGui(self):
         # Create action that will start plugin configuration
         self.action = QAction(QIcon(":/plugins/qgiscloud/icon.png"), \
-            "Cloud Settings", self.iface.mainWindow())
+            "QGIS Cloud Settings", self.iface.mainWindow())
         self.action.triggered.connect(self.showHideDockWidget)
 
         # Add toolbar button and menu item
         self.iface.addToolBarIcon(self.action)
-        self.iface.addPluginToMenu("&Cloud", self.action)
+        self.iface.addPluginToMenu("&QGIS Cloud", self.action)
 
         self.plugin_dir = os.path.dirname(__file__)
         # initialize locale
@@ -72,7 +72,7 @@ class QgisCloudPlugin(object):
 
     def unload(self):
         # Remove the plugin menu item and icon
-        self.iface.removePluginMenu("&Cloud",self.action)
+        self.iface.removePluginMenu("&QGIS Cloud",self.action)
         self.iface.removeToolBarIcon(self.action)
         self.dockWidget.unload()
         self.iface.removeDockWidget(self.dockWidget)
