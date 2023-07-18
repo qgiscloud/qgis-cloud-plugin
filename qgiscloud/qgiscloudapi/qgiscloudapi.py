@@ -116,12 +116,10 @@ class API(object):
         """
             Set user/password for authentication.
         """
-        self.user = bytearray()
-        self.user.extend(map(ord, user))
-        self.password = bytearray()
-
-        if password != None:
-            self.password.extend(map(ord,  password))
+        self.user = user
+        self.password = None
+        if password is not None:
+            self.password = password
             return True
         else:
             return False
@@ -611,8 +609,10 @@ class Request(object):
             urllib.request.install_opener(opener)
 
             # send basic auth in auth header
-            base64string = base64.b64encode(b'%s:%s' % (self.user, self.password))
-            headers['Authorization'] = b"Basic %s" % base64string
+            base64string = base64.b64encode(
+                bytearray("%s:%s" % (self.user, self.password), 'utf-8')
+            )
+            headers['Authorization'] = "Basic %s" % base64string.decode()
 
         #
         # The API expects the body to be urlencoded. If data was passed to
