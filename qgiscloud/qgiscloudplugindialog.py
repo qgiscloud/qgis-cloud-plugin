@@ -1115,10 +1115,12 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
                 if layers[0].providerType() == "ogr":
                     geometry_type_item.setToolTip(
                         self.tr("Note: OGR features will be converted to MULTI-type"))
-            if ( layers[0].crs().authid() ==  '' or   layers[0].crs().authid().split(':')[1] == '0' ) and geometry_type_item.text() != 'No geometry':
+            if ( layers[0].crs().authid() ==  '' or layers[0].crs().authid().split(':')[0].upper() != 'EPSG' or  layers[0].crs().authid().split(':')[1] == '0' ) and geometry_type_item.text() != 'No geometry':
                 srid_item = QTableWidgetItem('SRID not valid')
                 srid_item.setBackground(QBrush(Qt.red))
                 srid_item.setForeground(QBrush(Qt.white))
+                srid_item.setToolTip(
+                    self.tr("QGIS Cloud supports only Authority EPSG reference systems"))
             else:           
                 srid_item = QTableWidgetItem(layers[0].crs().authid())
             
