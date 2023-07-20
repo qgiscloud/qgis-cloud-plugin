@@ -2,22 +2,14 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="nl_NL">
 <context>
-    <name>API</name>
-    <message>
-        <location filename="../qgiscloudapi/qgiscloudapi.py" line="94"/>
-        <source>Failed to access QGIS Cloud API on {api_url}</source>
-        <translation>Geen toegang tot QGIS Cloud API op {api_url}</translation>
-    </message>
-</context>
-<context>
     <name>BackgroundLayersMenu</name>
     <message>
-        <location filename="../background_layers_menu.py" line="219"/>
+        <location filename="../background_layers_menu.py" line="251"/>
         <source>Error</source>
         <translation>Fout</translation>
     </message>
     <message>
-        <location filename="../background_layers_menu.py" line="219"/>
+        <location filename="../background_layers_menu.py" line="251"/>
         <source>A serious error has occurred during the coordinate transformation. Please set the reference system of the project to the WGS84 / Pseudo-Mercartor Projektion (EPSG: 3857) and reload the layer.</source>
         <translation>Er is een ernstige fout opgetreden tijdens de coördinatentransformatie. Stel het referentiesysteem van het project in op de WGS84 / Pseudo-Mercartor Projektion (EPSG: 3857) en laad de laag opnieuw.</translation>
     </message>
@@ -25,69 +17,44 @@
 <context>
     <name>DataUpload</name>
     <message>
-        <location filename="../data_upload.py" line="69"/>
+        <location filename="../data_upload.py" line="54"/>
         <source>Uploading to database &apos;{db}&apos;...</source>
         <translation>Uploaden naar de database &apos;{db}&apos;...</translation>
     </message>
     <message>
-        <location filename="../data_upload.py" line="86"/>
+        <location filename="../data_upload.py" line="71"/>
         <source>Database full</source>
         <translation>Gehele database</translation>
     </message>
     <message>
-        <location filename="../data_upload.py" line="86"/>
+        <location filename="../data_upload.py" line="71"/>
         <source>You have exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan.</source>
         <translation>U heeft de maximale databasegrootte voor uw huidige QGIS Cloud plan overschreden. Maak wat ruimte vrij of upgrade uw QGIS Cloud plan.</translation>
     </message>
     <message>
-        <location filename="../data_upload.py" line="129"/>
+        <location filename="../data_upload.py" line="102"/>
         <source>Creating table &apos;{table}&apos;...</source>
         <translation>Tabel &apos;{table}&apos; maken...</translation>
     </message>
     <message>
-        <location filename="../data_upload.py" line="179"/>
+        <location filename="../data_upload.py" line="141"/>
         <source>Uploading features...</source>
         <translation>Objecten uploaden...</translation>
     </message>
     <message>
-        <location filename="../data_upload.py" line="193"/>
+        <location filename="../data_upload.py" line="155"/>
         <source>Feature {id} of layer {layer} has no geometry</source>
         <translation>Object {id} van laag {layer} heeft geen geometrie</translation>
     </message>
     <message>
-        <location filename="../data_upload.py" line="196"/>
+        <location filename="../data_upload.py" line="158"/>
         <source>Feature {id} of layer {layer} has wrong geometry type {type}</source>
         <translation>Object {id} van laag {layer} heeft verkeerd geometrietype {type}</translation>
     </message>
     <message>
-        <location filename="../data_upload.py" line="244"/>
+        <location filename="../data_upload.py" line="203"/>
         <source>{table}: {count} features uploaded</source>
         <translation>{table}: {count} geladen objecten</translation>
-    </message>
-</context>
-<context>
-    <name>DbConnectionCfg</name>
-    <message>
-        <location filename="../db_connection_cfg.py" line="184"/>
-        <source>DB Connection Failed</source>
-        <translation>DB-verbinding mislukt</translation>
-    </message>
-    <message>
-        <location filename="../db_connection_cfg.py" line="184"/>
-        <source>Could not connect to the Database &lt;b&gt;%s&lt;/b&gt;&lt;br&gt;&lt;br&gt;. 
-
-Please check the following points:&lt;br&gt;&lt;br&gt;
-
-- Is the computer connected to the Internet?&lt;br&gt;
-- Is port 5432 open in the firewall?&lt;br&gt;
-- Are the proxy settings correct?</source>
-        <translation>Kan geen verbinding maken met de database &lt;b&gt;%s&lt;/b&gt;&lt;br&gt;&lt;br&gt;. 
-
-Controleer de volgende punten:&lt;br&gt;&lt;br&gt;
-
-- Is de computer verbonden met internet? &lt;br&gt;
-- Staat poort 5432 open in de firewall?&lt;br&gt;
-- Zijn de proxy-instellingen correct?</translation>
     </message>
 </context>
 <context>
@@ -101,29 +68,19 @@ Controleer de volgende punten:&lt;br&gt;&lt;br&gt;
 <context>
     <name>LoginDialog</name>
     <message>
-        <location filename="../ui_login.ui" line="14"/>
+        <location filename="../ui_login.py" line="51"/>
         <source>Login</source>
         <translation>Inloggen</translation>
     </message>
     <message>
-        <location filename="../ui_login.ui" line="20"/>
+        <location filename="../ui_login.py" line="52"/>
         <source>User:</source>
         <translation>Gebruiker:</translation>
     </message>
     <message>
-        <location filename="../ui_login.ui" line="43"/>
+        <location filename="../ui_login.py" line="53"/>
         <source>Password:</source>
         <translation>Wachtwoord:</translation>
-    </message>
-    <message>
-        <location filename="../ui_login.ui" line="72"/>
-        <source>Token:</source>
-        <translation>Token:</translation>
-    </message>
-    <message>
-        <location filename="../ui_login.ui" line="86"/>
-        <source>Copy your token from &lt;a href=&quot;{token_page_url}&quot;&gt;here&lt;/a&gt;</source>
-        <translation>Kopieer je token van &lt;a href=&quot;{token_page_url}&quot;&gt;hier&lt;/a&gt;</translation>
     </message>
 </context>
 <context>
@@ -134,57 +91,57 @@ Controleer de volgende punten:&lt;br&gt;&lt;br&gt;
         <translation>Kaartinstellingen voor de kaart: %s</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="228"/>
+        <location filename="../mapsettingsdialog.py" line="211"/>
         <source>Sql Error</source>
         <translation>Sql-fout</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="280"/>
+        <location filename="../mapsettingsdialog.py" line="263"/>
         <source>Add user(s)</source>
         <translation>Gebruiker(s) toevoegen</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="280"/>
+        <location filename="../mapsettingsdialog.py" line="263"/>
         <source>Usernames:</source>
         <translation>Gebruikersnamen:</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="313"/>
+        <location filename="../mapsettingsdialog.py" line="296"/>
         <source>User error</source>
         <translation>Gebruikersfout</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="313"/>
+        <location filename="../mapsettingsdialog.py" line="296"/>
         <source>The user(s): %s don&apos;t exist.</source>
         <translation>De gebruiker(s): %s bestaan niet.</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="377"/>
+        <location filename="../mapsettingsdialog.py" line="360"/>
         <source>Success</source>
         <translation>Success</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="321"/>
+        <location filename="../mapsettingsdialog.py" line="304"/>
         <source>The user(s): %s have been added.</source>
         <translation>De gebruiker(s): %s zijn toegevoegd.</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="329"/>
+        <location filename="../mapsettingsdialog.py" line="312"/>
         <source>Error</source>
         <translation>Fout</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="329"/>
+        <location filename="../mapsettingsdialog.py" line="312"/>
         <source>No username given.</source>
         <translation>Geen gebruikersnaam gegeven.</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="359"/>
+        <location filename="../mapsettingsdialog.py" line="342"/>
         <source>Do you really want to delete the user: %s?</source>
         <translation>Wilt u de gebruiker echt verwijderen: %s?</translation>
     </message>
     <message>
-        <location filename="../mapsettingsdialog.py" line="377"/>
+        <location filename="../mapsettingsdialog.py" line="360"/>
         <source>The user: %s has been deleted.</source>
         <translation>De gebruiker: %s is verwijderd.</translation>
     </message>
@@ -199,7 +156,7 @@ Controleer de volgende punten:&lt;br&gt;&lt;br&gt;
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="342"/>
         <source>&lt;i&gt;To add a background layer to the map, install the OpenLayers plugin.&lt;/i&gt;</source>
-        <translation>&amp;lt;i&amp;gt;Om een achtergrondlaag aan de kaart toe te voegen, installeert u de OpenLayers plugin.&amp;lt;/i&amp;gt;.</translation>
+        <translation>&lt;i&gt;Om een achtergrondlaag aan de kaart toe te voegen, installeert u de OpenLayers plugin.&lt;/i&gt;.</translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="341"/>
@@ -209,7 +166,7 @@ Controleer de volgende punten:&lt;br&gt;&lt;br&gt;
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="344"/>
         <source>Public WMS</source>
-        <translation type="obsolete">Publiek WMS</translation>
+        <translation>Publiek WMS</translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="350"/>
@@ -337,7 +294,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="394"/>
         <source>&lt;b&gt;Plugin version:&lt;/b&gt;</source>
-        <translation>&amp;lt;b&amp;gt;Versie van de plugin:&amp;lt;/b&amp;gt;</translation>
+        <translation>&lt;b&gt;Versie van de plugin:&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="345"/>
@@ -391,236 +348,211 @@ p, li { white-space: pre-wrap; }
         <source>Public OWS URL</source>
         <translation type="obsolete">Publieke OWS URL</translation>
     </message>
-    <message>
-        <location filename="../qgiscloudplugin.ui" line="106"/>
-        <source>Public WMS/WFS/WCS:</source>
-        <translation>Publiek WMS/WFS/WCS:</translation>
-    </message>
-    <message>
-        <location filename="../qgiscloudplugin.ui" line="127"/>
-        <source>Map Admin:</source>
-        <translation>Map Admin:</translation>
-    </message>
-    <message>
-        <location filename="../qgiscloudplugin.ui" line="148"/>
-        <source>Support:</source>
-        <translation>Ondersteuning:</translation>
-    </message>
-    <message>
-        <location filename="../qgiscloudplugin.ui" line="172"/>
-        <source>Webmap:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui_qgiscloudplugin.py" line="344"/>
-        <source>WMS/WFS/WCS Link</source>
-        <translation></translation>
-    </message>
 </context>
 <context>
     <name>QgisCloudPluginDialog</name>
     <message>
-        <location filename="../db_connection_cfg.py" line="138"/>
+        <location filename="../db_connection_cfg.py" line="124"/>
         <source>host: %s port: %s database: %s username: %s password: %s</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="399"/>
+        <location filename="../qgiscloudplugindialog.py" line="341"/>
         <source>New Version</source>
         <translation>Nieuwe versie</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="399"/>
+        <location filename="../qgiscloudplugindialog.py" line="341"/>
         <source>New plugin release {version} is available! Please upgrade the QGIS Cloud plugin.</source>
         <translation>Nieuwe plugin release {version} is beschikbaar! Gelieve de QGIS Cloud plugin te upgraden.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="409"/>
+        <location filename="../qgiscloudplugindialog.py" line="350"/>
         <source>Logged in as {0} ({1})</source>
         <translation>Ingelogd als {0} ({1})</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="981"/>
+        <location filename="../qgiscloudplugindialog.py" line="801"/>
         <source>QGIS Cloud</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="420"/>
+        <location filename="../qgiscloudplugindialog.py" line="353"/>
         <source>Logged in as {0}</source>
         <translation>Ingelogd als {0}</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="428"/>
+        <location filename="../qgiscloudplugindialog.py" line="360"/>
         <source>Unsupported versions detected. Please check your versions first!</source>
         <translation>Ontdekte niet-ondersteunde versies. Controleer eerst uw versies!</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="436"/>
+        <location filename="../qgiscloudplugindialog.py" line="368"/>
         <source>Account Disabled</source>
         <translation>Account Uitgeschakeld</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="436"/>
+        <location filename="../qgiscloudplugindialog.py" line="368"/>
         <source>Account {username} is disabled! Please contact support@qgiscloud.com</source>
         <translation>Account {username} is uitgeschakeld! Neem contact op met support@qgiscloud.com</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="445"/>
+        <location filename="../qgiscloudplugindialog.py" line="373"/>
         <source>Login for user {username} failed</source>
         <translation>Inloggen voor gebruiker {username} mislukt</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="449"/>
+        <location filename="../qgiscloudplugindialog.py" line="373"/>
         <source>Wrong user name or password</source>
         <translation>Verkeerde gebruikersnaam of wachtwoord</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="458"/>
+        <location filename="../qgiscloudplugindialog.py" line="379"/>
         <source>Login failed</source>
         <translation>Inloggen mislukt</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="453"/>
+        <location filename="../qgiscloudplugindialog.py" line="379"/>
         <source>Login failed: %s</source>
         <translation>Inloggen mislukt: %s</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="919"/>
+        <location filename="../qgiscloudplugindialog.py" line="741"/>
         <source>Warning!</source>
         <translation>Waarschuwing!</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="512"/>
+        <location filename="../qgiscloudplugindialog.py" line="418"/>
         <source>Number of %s permitted databases exceeded! Please upgrade your account!</source>
         <translation>Aantal %s toegestane databanken overschreden! Gelieve uw account te upgraden!</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="938"/>
+        <location filename="../qgiscloudplugindialog.py" line="760"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="524"/>
+        <location filename="../qgiscloudplugindialog.py" line="430"/>
         <source>You have layers from database &quot;{name}&quot; loaded in your project! Do you want to remove them before you delete database &quot;{name}&quot;?</source>
-        <translation>U hebt lagen uit de database &amp;quot;{name}&amp;quot; in uw project geladen! Wilt u deze verwijderen voordat u de database &amp;quot;{name}&amp;quot; verwijdert?</translation>
+        <translation>U hebt lagen uit de database &quot;{name}&quot; in uw project geladen! Wilt u deze verwijderen voordat u de database &quot;{name}&quot; verwijdert?</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="537"/>
+        <location filename="../qgiscloudplugindialog.py" line="443"/>
         <source>Deletion of database &quot;{name}&quot; interrupted!</source>
-        <translation>Het wissen van de database &amp;quot;{name}&amp;quot; wordt onderbroken!</translation>
+        <translation>Het wissen van de database &quot;{name}&quot; wordt onderbroken!</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="542"/>
+        <location filename="../qgiscloudplugindialog.py" line="448"/>
         <source>Delete QGIS Cloud database.</source>
         <translation>Verwijderen QGIS Cloud database.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="543"/>
+        <location filename="../qgiscloudplugindialog.py" line="449"/>
         <source>Do you want to delete the database &quot;%s&quot;?</source>
-        <translation>Wilt u de database &amp;quot;%s&amp;quot; verwijderen?</translation>
+        <translation>Wilt u de database &quot;%s&quot; verwijderen?</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="632"/>
+        <location filename="../qgiscloudplugindialog.py" line="513"/>
         <source>No databases</source>
         <translation>Geen databases</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="642"/>
+        <location filename="../qgiscloudplugindialog.py" line="523"/>
         <source>Select database</source>
         <translation>Database selecteren</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1402"/>
+        <location filename="../qgiscloudplugindialog.py" line="1183"/>
         <source>Save Project</source>
         <translation>Project opslaan</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="663"/>
+        <location filename="../qgiscloudplugindialog.py" line="542"/>
         <source>Your actual project has changes. Do you want to save the project?</source>
         <translation>Uw eigenlijke project is aan veranderingen onderhevig. Wilt u het project opslaan?</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="686"/>
+        <location filename="../qgiscloudplugindialog.py" line="565"/>
         <source>Delete QGIS Cloud map.</source>
         <translation>Verwijderen QGIS Cloud kaart.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="687"/>
+        <location filename="../qgiscloudplugindialog.py" line="566"/>
         <source>Do you want to delete the map &quot;%s&quot;?</source>
-        <translation>Wilt u de kaart &amp;quot;%s&amp;quot; verwijderen?</translation>
+        <translation>Wilt u de kaart &quot;%s&quot; verwijderen?</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="710"/>
+        <location filename="../qgiscloudplugindialog.py" line="587"/>
         <source>Deletion of map &quot;{name}&quot; interrupted!</source>
-        <translation>Wissen van de kaart &amp;quot;{name}&amp;quot; onderbroken!</translation>
+        <translation>Wissen van de kaart &quot;{name}&quot; onderbroken!</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="824"/>
+        <location filename="../qgiscloudplugindialog.py" line="667"/>
         <source>Project Modified</source>
         <translation>Gewijzigd project</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="825"/>
+        <location filename="../qgiscloudplugindialog.py" line="668"/>
         <source>The project has been modified.</source>
         <translation>Het project is gewijzigd.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="826"/>
+        <location filename="../qgiscloudplugindialog.py" line="669"/>
         <source>The project needs to be saved before it can be published. Proceed?</source>
         <translation>Het project moet worden opgeslagen voordat het kan worden gepubliceerd. Verdergaan?</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="882"/>
+        <location filename="../qgiscloudplugindialog.py" line="711"/>
         <source>The project has a user defined CRS. The use of user defined CRS is not supported. Please correct the project CRS before publishing!</source>
         <translation>Het project heeft een door de gebruiker gedefinieerd CRS. Het gebruik van door de gebruiker gedefinieerd CRS wordt niet ondersteund. Corrigeer het project CRS voordat u het publiceert!</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="741"/>
         <source>The layer(s) {layerlist}have user defined CRS. The use of user defined CRS is not supported. Please correct the CRS before publishing!</source>
-        <translation type="obsolete">De lagen {layerlist} hebben CRS gedefinieerd. Het gebruik van door de gebruiker gedefinieerd CRS wordt niet ondersteund. Gelieve voor publicatie het CRS te corrigeren!</translation>
+        <translation>De lagen {layerlist} hebben CRS gedefinieerd. Het gebruik van door de gebruiker gedefinieerd CRS wordt niet ondersteund. Gelieve voor publicatie het CRS te corrigeren!</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="944"/>
+        <location filename="../qgiscloudplugindialog.py" line="766"/>
         <source>Cancelled</source>
         <translation>Geannuleerd</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="946"/>
+        <location filename="../qgiscloudplugindialog.py" line="768"/>
         <source>Publishing map</source>
         <translation>Uitgeverij kaart</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="983"/>
+        <location filename="../qgiscloudplugindialog.py" line="803"/>
         <source>Map successfully published</source>
         <translation>Kaart met succes gepubliceerd</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="987"/>
+        <location filename="../qgiscloudplugindialog.py" line="807"/>
         <source>Error uploading project</source>
         <translation>Fout tijdens het uploaden van het project</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1032"/>
+        <location filename="../qgiscloudplugindialog.py" line="852"/>
         <source>An error occured.</source>
         <translation>Er is een fout opgetreden.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="993"/>
+        <location filename="../qgiscloudplugindialog.py" line="813"/>
         <source>Uploading SVG symbols</source>
         <translation>SVG-symbolen uploaden</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1032"/>
+        <location filename="../qgiscloudplugindialog.py" line="852"/>
         <source>Error checking local data sources</source>
         <translation>Fout bij het controleren van lokale gegevens</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1044"/>
+        <location filename="../qgiscloudplugindialog.py" line="864"/>
         <source>Local layers found</source>
         <translation>Gevonden lokale lagen</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1045"/>
+        <location filename="../qgiscloudplugindialog.py" line="865"/>
         <source>Some layers are using local data. Please upload local layers to your cloud database in the &apos;Upload Data&apos; tab before publishing.
 
 </source>
@@ -629,12 +561,12 @@ p, li { white-space: pre-wrap; }
 </translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1049"/>
+        <location filename="../qgiscloudplugindialog.py" line="869"/>
         <source>Unsupported layers found</source>
         <translation>Gevonden niet-ondersteunde lagen</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1053"/>
+        <location filename="../qgiscloudplugindialog.py" line="873"/>
         <source>
 Please remove or replace above layers before publishing your map.
 </source>
@@ -643,160 +575,160 @@ Verwijder of vervang bovenstaande lagen voordat u uw kaart publiceert.
 </translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1110"/>
+        <location filename="../qgiscloudplugindialog.py" line="929"/>
         <source>Unsupported geometry type</source>
         <translation>Geometrietype zonder drager</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1110"/>
+        <location filename="../qgiscloudplugindialog.py" line="929"/>
         <source>Unsupported geometry type &apos;{type}&apos; in layer &apos;{layer}&apos;</source>
         <translation>Niet-ondersteund geometrietype &apos;{type}&apos; in laag &apos;{layer}&apos;</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1116"/>
+        <location filename="../qgiscloudplugindialog.py" line="935"/>
         <source>Note: OGR features will be converted to MULTI-type</source>
         <translation>Opmerking: OGR-functies zullen worden geconverteerd naar MULTI-type</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1164"/>
+        <location filename="../qgiscloudplugindialog.py" line="977"/>
         <source>Updated local data sources</source>
         <translation>Geactualiseerde lokale gegevens</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1200"/>
+        <location filename="../qgiscloudplugindialog.py" line="1013"/>
         <source>Unknown type</source>
         <translation>Onbekend type</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1315"/>
+        <location filename="../qgiscloudplugindialog.py" line="1089"/>
         <source>No database available</source>
         <translation>Geen database beschikbaar</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1315"/>
+        <location filename="../qgiscloudplugindialog.py" line="1089"/>
         <source>Please create a database in the &apos;Account&apos; tab.</source>
         <translation>Maak een database aan in het tabblad &apos;Account&apos;.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1320"/>
+        <location filename="../qgiscloudplugindialog.py" line="1094"/>
         <source>No database selected</source>
         <translation>Geen databank geselecteerd</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1320"/>
+        <location filename="../qgiscloudplugindialog.py" line="1094"/>
         <source>Please select a database to upload data.</source>
         <translation>Selecteer een database om gegevens te uploaden.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1330"/>
+        <location filename="../qgiscloudplugindialog.py" line="1104"/>
         <source>Network Error</source>
         <translation>Fout in het netwerk</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1330"/>
+        <location filename="../qgiscloudplugindialog.py" line="1104"/>
         <source>Could not connect to database server ({0}) on port {1}. Please contact your system administrator or internet provider to open port {1} in the firewall</source>
         <translation>Kon geen verbinding maken met de databaseserver ({0}) op poort {1}. Neem contact op met uw systeembeheerder of internetprovider om de poort {1} in de firewall te openen.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1337"/>
+        <location filename="../qgiscloudplugindialog.py" line="1111"/>
         <source>Uploading data...</source>
         <translation>Gegevens uploaden...</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1365"/>
+        <location filename="../qgiscloudplugindialog.py" line="1148"/>
         <source>Upload errors occurred</source>
         <translation>Er hebben zich uploadfouten voorgedaan</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1365"/>
+        <location filename="../qgiscloudplugindialog.py" line="1148"/>
         <source>Upload errors occurred. Not all data could be uploaded.</source>
         <translation>Er zijn uploadfouten opgetreden. Niet alle gegevens konden worden geüpload.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1389"/>
+        <location filename="../qgiscloudplugindialog.py" line="1170"/>
         <source>Upload complete. The local layers in the project were replaced with the layers uploaded to the qgiscloud database.</source>
         <translation>Uploaden voltooid. De lokale lagen in het project zijn vervangen door de lagen die zijn geüpload naar de qgiscloud database.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1393"/>
+        <location filename="../qgiscloudplugindialog.py" line="1174"/>
         <source>Choose were to save the modified project:</source>
         <translation>Kiezen was om het gewijzigde project op te slaan:</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1402"/>
+        <location filename="../qgiscloudplugindialog.py" line="1183"/>
         <source>QGIS Project Files</source>
         <translation>QGIS Projectbestanden</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1429"/>
+        <location filename="../qgiscloudplugindialog.py" line="1210"/>
         <source>QGIS Cloud Error</source>
         <translation>QGIS Cloud Fout</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1431"/>
+        <location filename="../qgiscloudplugindialog.py" line="1212"/>
         <source>Error</source>
         <translation>Fout</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1516"/>
+        <location filename="../qgiscloudplugindialog.py" line="1307"/>
         <source>Used DB Storage: </source>
         <translation>Gebruikt DB Storage: </translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="159"/>
+        <location filename="../qgiscloudplugindialog.py" line="156"/>
         <source>Privacy Policy</source>
         <translation>Privacybeleid</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="376"/>
+        <location filename="../qgiscloudplugindialog.py" line="318"/>
         <source>Accept new Privacy Policy</source>
         <translation>Accepteer nieuw privacybeleid</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="1051"/>
+        <location filename="../qgiscloudplugindialog.py" line="871"/>
         <source>  -  %s (%s)
 </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="376"/>
+        <location filename="../qgiscloudplugindialog.py" line="318"/>
         <source>Due to the GDPR qgiscloud.com has a new &lt;a href=&apos;http://qgiscloud.com/en/pages/privacy&apos;&gt; Privacy Policy &lt;/a&gt;.
                                 To continue using qgiscloud.com, you must accept the new policy. </source>
-        <translation>Door de GDPR heeft qgiscloud.com een nieuwe &amp;lt;a href=&apos;http://qgiscloud.com/en/pages/privacy&apos;&amp;gt; Privacy Policy &amp;lt;/a&amp;gt;.
+        <translation>Door de GDPR heeft qgiscloud.com een nieuwe &lt;a href=&apos;http://qgiscloud.com/en/pages/privacy&apos;&gt; Privacy Policy &lt;/a&gt;.
                                 Om qgiscloud.com te kunnen blijven gebruiken, moet u het nieuwe beleid accepteren.</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="878"/>
+        <location filename="../qgiscloudplugindialog.py" line="707"/>
         <source>The project has an unknown CRS. Please set a valid map CRS in Project-&gt;Properties...-&gt;CRS before publishing!</source>
-        <translation>Het project heeft een onbekende CRS. Stel een geldige kaart CRS in in Project-&amp;gt;Properties...-&amp;gt;CRS voor publicatie!</translation>
+        <translation>Het project heeft een onbekende CRS. Stel een geldige kaart CRS in in Project-&gt;Properties...-&gt;CRS voor publicatie!</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="909"/>
+        <location filename="../qgiscloudplugindialog.py" line="731"/>
         <source>The following WMS layer names are not unique: {}. Please make sure the names are unique, then publish the project again. The layer WMS short name can be set in the layer properties dialog under &apos;QGIS Server -&gt; Short name&apos;.</source>
-        <translation>De volgende WMS-laagnamen zijn niet uniek: {}. Zorg ervoor dat de namen uniek zijn en publiceer het project dan opnieuw. De laag WMS korte naam kan worden ingesteld in het laag eigenschappen dialoogvenster onder &apos;QGIS Server -&amp;gt; Korte naam&apos;.</translation>
+        <translation>De volgende WMS-laagnamen zijn niet uniek: {}. Zorg ervoor dat de namen uniek zijn en publiceer het project dan opnieuw. De laag WMS korte naam kan worden ingesteld in het laag eigenschappen dialoogvenster onder &apos;QGIS Server -&gt; Korte naam&apos;.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="705"/>
         <source>The CRS of the background layer &apos;{layerName}&apos; is different to the  map CRS. This means that this layer will be reprojected in the published map and the webmap will therefore be slow. To improve this and make the webmap faster, go to &apos;Project -&gt; Properties... -&gt; CRS&apos; and set the map CRS to {layerCRS}. Continue publishing?</source>
-        <translation type="obsolete">Het CRS van de achtergrondlaag &apos;{layerName}&apos; is anders dan de kaart CRS. Dit betekent dat deze laag in de gepubliceerde kaart zal worden heruitgeworpen en dat de webmap dus traag zal zijn. Om dit te verbeteren en de webmap sneller te maken, gaat u naar &apos;Project -&amp;gt; Eigenschappen... -&amp;gt; CRS&apos; en zet de kaart CRS op {laagCRS}. Doorgaan met publiceren?</translation>
+        <translation type="obsolete">Het CRS van de achtergrondlaag &apos;{layerName}&apos; is anders dan de kaart CRS. Dit betekent dat deze laag in de gepubliceerde kaart zal worden heruitgeworpen en dat de webmap dus traag zal zijn. Om dit te verbeteren en de webmap sneller te maken, gaat u naar &apos;Project -&gt; Eigenschappen... -&gt; CRS&apos; en zet de kaart CRS op {laagCRS}. Doorgaan met publiceren?</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="465"/>
+        <location filename="../qgiscloudplugindialog.py" line="385"/>
         <source>Could not resolve Host Name</source>
         <translation>Kan Host Naam niet oplossen</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="465"/>
+        <location filename="../qgiscloudplugindialog.py" line="385"/>
         <source>Could not access {url}. Please check that the URL is written correctly. The error: was &apos;{e}&apos;</source>
-        <translation>Kon geen toegang krijgen tot {url}. Controleer of de URL correct geschreven is. De fout: was &amp;quot;{e}</translation>
+        <translation>Kon geen toegang krijgen tot {url}. Controleer of de URL correct geschreven is. De fout: was &quot;{e}</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="475"/>
+        <location filename="../qgiscloudplugindialog.py" line="396"/>
         <source>No Database</source>
         <translation>Geen databank</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="475"/>
+        <location filename="../qgiscloudplugindialog.py" line="396"/>
         <source>
 To work with QGIS Cloud you need at least one QGIS Cloud database. Creating a database can take a few minutes, please be patient.
 
@@ -807,7 +739,7 @@ Do you want to create a new database now?
 Wilt u nu een nieuwe database aanleggen?</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="931"/>
+        <location filename="../qgiscloudplugindialog.py" line="753"/>
         <source>
 The CRS of the background layer &apos;{layerName}&apos; is different to the  map CRS. This means that this layer will be reprojected in the published map and the webmap will therefore be slow. To improve this and make the webmap faster, go to 
 
@@ -815,14 +747,14 @@ The CRS of the background layer &apos;{layerName}&apos; is different to the  map
 
 and set the map CRS to {layerCRS}. Continue publishing?</source>
         <translation>
-De CRS van de achtergrondlaag &amp;quot;{layerName}&amp;quot; is verschillend van de kaart CRS. Dit betekent dat deze laag in de gepubliceerde kaart opnieuw geprojecteerd wordt en dat de webmap dus traag zal zijn. Om dit te verbeteren en de webmap sneller te maken, gaat u naar 
+De CRS van de achtergrondlaag &quot;{layerName}&quot; is verschillend van de kaart CRS. Dit betekent dat deze laag in de gepubliceerde kaart opnieuw geprojecteerd wordt en dat de webmap dus traag zal zijn. Om dit te verbeteren en de webmap sneller te maken, gaat u naar 
 
-&apos;Project -&amp;gt; Eigenschappen... -&amp;gt; CRS 
+&apos;Project -&gt; Eigenschappen... -&gt; CRS 
 
 en zet de kaart CRS op {layerCRS}. Doorgaan met publiceren?</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="962"/>
+        <location filename="../qgiscloudplugindialog.py" line="784"/>
         <source>
 The name of the QGIS project 
 
@@ -834,57 +766,7 @@ De naam van het QGIS project
 
 %s
 
-is ongeldig. Het heeft de extensie &amp;quot;qgs.qgz&amp;quot;. Dit is niet toegestaan. Corrigeer de projectnaam en publiceer het project opnieuw.</translation>
-    </message>
-    <message>
-        <location filename="../qgiscloudplugindialog.py" line="272"/>
-        <source>The map name has been changed to &apos;{name}&apos; to conform to allowed characters ({allowed_chars}).</source>
-        <translation>De mapnaam is veranderd in &apos;{name}&apos; om te voldoen aan de toegestane tekens ({allowed_chars}).</translation>
-    </message>
-    <message>
-        <location filename="../qgiscloudplugindialog.py" line="413"/>
-        <source>Logged in as {0} ({1}) 
-Paid until: {2}</source>
-        <translation>Aangemeld als {0} ({1}) 
-Betaald tot: {2}</translation>
-    </message>
-    <message>
-        <location filename="../qgiscloudplugindialog.py" line="443"/>
-        <source>Invalid authentication token</source>
-        <translation>Ongeldig verificatietoken</translation>
-    </message>
-    <message>
-        <location filename="../qgiscloudplugindialog.py" line="901"/>
-        <source>The following layer names do contain non allowed characters like &apos;, . : ;&apos; : {}. Please rename the layers and save the project before publishing.</source>
-        <translation>De volgende laagnamen bevatten niet toegestane tekens zoals &apos;, . : ;&apos; : {}. Geef de lagen een andere naam en sla het project op voordat je het publiceert.</translation>
-    </message>
-    <message>
-        <location filename="../qgiscloudplugindialog.py" line="919"/>
-        <source>The layer(s) {layerlist} have user defined CRS. The use of user defined CRS is not supported. Please correct the CRS before publishing!</source>
-        <translation>De laag (lagen) {layerlist} hebben door de gebruiker gedefinieerde CRS. Het gebruik van door de gebruiker gedefinieerde CRS wordt niet ondersteund. Corrigeer de CRS voor publicatie!</translation>
-    </message>
-    <message>
-        <location filename="../qgiscloudplugindialog.py" line="1259"/>
-        <source>Table name too long</source>
-        <translation>Tabelnaam te lang</translation>
-    </message>
-    <message>
-        <location filename="../qgiscloudplugindialog.py" line="1259"/>
-        <source>The name of table 
-
-{table_name} 
-
-has more than 62 characters and cannot be processed like this. Please give the table a shorter name.
-
-Should the table name be shortened automatically?
-</source>
-        <translation>De naam van de tabel 
-
-{table_name} 
-
-heeft meer dan 62 tekens en kan niet op deze manier verwerkt worden. Geef de tabel een kortere naam.
-
-Moet de tabelnaam automatisch worden ingekort?</translation>
+is ongeldig. Het heeft de extensie &quot;qgs.qgz&quot;. Dit is niet toegestaan. Corrigeer de projectnaam en publiceer het project opnieuw.</translation>
     </message>
 </context>
 <context>
@@ -905,17 +787,17 @@ Moet de tabelnaam automatisch worden ingekort?</translation>
         <translation>Tabel &apos;{table}&apos; maken...</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="131"/>
+        <location filename="../raster/raster_upload.py" line="129"/>
         <source>Creating overview-level {level} for table &apos;{table}&apos;...</source>
         <translation>Een overview-niveau creëren {level} voor tabel &apos;{table}&apos;...</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="145"/>
+        <location filename="../raster/raster_upload.py" line="139"/>
         <source>Registering raster columns of table &apos;%s&apos;...</source>
         <translation>Raster kolommen van tabel &apos;%s&apos; registreren ...</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="646"/>
+        <location filename="../raster/raster_upload.py" line="647"/>
         <source>Uploading tiles...</source>
         <translation>Tegels uploaden...</translation>
     </message>
@@ -925,14 +807,9 @@ Moet de tabelnaam automatisch worden ingekort?</translation>
         <translation type="obsolete">{table}: {count} van {sum_tiles} geüploade tegels</translation>
     </message>
     <message>
-        <location filename="../raster/raster_upload.py" line="708"/>
+        <location filename="../raster/raster_upload.py" line="693"/>
         <source>Calculating raster params for {sum_tiles} tiles ...</source>
         <translation>Berekenen rasterparameters voor {sum_tiles} tegels ...</translation>
-    </message>
-    <message>
-        <location filename="../raster/raster_upload.py" line="141"/>
-        <source>Creating GIST Index for table &apos;{table}&apos;...</source>
-        <translation>Aanmaken van GIST-index voor tabel &apos;{table}&apos;...</translation>
     </message>
 </context>
 <context>
@@ -978,55 +855,40 @@ Moet de tabelnaam automatisch worden ingekort?</translation>
         <translation>WMS publiek</translation>
     </message>
     <message>
-        <location filename="../mapsettings.ui" line="183"/>
+        <location filename="../mapsettings.ui" line="195"/>
         <source>Allowed Users</source>
         <translation>Toegelaten gebruikers</translation>
     </message>
     <message>
-        <location filename="../mapsettings.ui" line="235"/>
+        <location filename="../mapsettings.ui" line="247"/>
         <source>Search Settings</source>
         <translation>Zoekinstellingen</translation>
     </message>
     <message>
-        <location filename="../mapsettings.ui" line="267"/>
+        <location filename="../mapsettings.ui" line="279"/>
         <source>Search type</source>
         <translation>Zoek type</translation>
     </message>
     <message>
-        <location filename="../mapsettings.ui" line="280"/>
+        <location filename="../mapsettings.ui" line="292"/>
         <source>Search DB</source>
         <translation>Zoek DB</translation>
     </message>
     <message>
-        <location filename="../mapsettings.ui" line="313"/>
+        <location filename="../mapsettings.ui" line="325"/>
         <source>Search SQL</source>
         <translation>Zoek SQL</translation>
     </message>
     <message>
-        <location filename="../mapsettings.ui" line="246"/>
+        <location filename="../mapsettings.ui" line="258"/>
         <source>SQL for search with return values displaytext and bbox in map coordinates, e.g. </source>
         <translation>SQL voor het zoeken met retouroperaties weergavetekst en bbox in kaartcoördinaten, bijv. </translation>
     </message>
     <message>
-        <location filename="../mapsettings.ui" line="331"/>
+        <location filename="../mapsettings.ui" line="343"/>
         <source>SELECT name AS displaytext, Box2D(st_transform(wkb_geometry, &lt;CRS&gt;)) AS bbox 
 FROM searchtable 
 WHERE name ILIKE &apos;%?%&apos;;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mapsettings.ui" line="343"/>
-        <source>Share Map</source>
-        <translation>Map delen</translation>
-    </message>
-    <message>
-        <location filename="../mapsettings.ui" line="357"/>
-        <source>Share with</source>
-        <translation>Deel met</translation>
-    </message>
-    <message>
-        <location filename="../mapsettings.ui" line="376"/>
-        <source>CheckBox</source>
         <translation></translation>
     </message>
 </context>
