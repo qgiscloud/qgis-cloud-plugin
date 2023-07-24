@@ -868,6 +868,36 @@ Do you want to create a new database now?
                 illegal_layer_names.append(name)
 
         return illegal_layer_names        
+        
+    def collect_names(self,  item, name_list):
+            # Check if the element is a group
+            if item.nodeType() == QgsLayerTreeGroup:
+                # Add group name to list
+                name_list.append(item.name())
+
+                # In Case of group collect all child names
+                for child in item.children():
+                    collect_names(child, name_list)
+            else:
+                # If the element is a layer
+                # Add layername to list
+                name_list.append(item.name())        
+                
+    def check_duplicate_group_and_layer_names(self):
+            project = QgsProject.instance()
+            layer_and_group_names = []
+            root = project.layerTreeRoot()
+
+            for child in root.children():
+                self.collect_names(child,  layer_and_group_names)
+
+            visited = set()
+            duplicate = [layer for layer in layer_and_group_names if layer in visited or (visited.add(layer) or False)]
+
+            if duplicate == []:
+                return False, duplicate
+            else:
+                return True, duplicate
 
     def publish_map(self):
         QApplication.setOverrideCursor(Qt.WaitCursor)
@@ -903,6 +933,14 @@ Do you want to create a new database now?
             QApplication.restoreOverrideCursor()
             return        
         
+        # Check if layer and group names are unique
+        duplicate,  names = self.check_duplicate_group_and_layer_names()
+        if duplicate:
+            QMessageBox.critical(None, self.tr('Error'), self.tr(
+                "The following layer and/or group names are not unique in the project:\n\n{}\n\nPlease rename the layers and/or the groups and save the project before publishing.").format(','.join(names)))
+            QApplication.restoreOverrideCursor()
+            return      
+            
         # make sure every layer has a unique WMS name
         notUniqueLayerNames = self.check_same_layer_names(layers)
         if len(notUniqueLayerNames) > 0:
