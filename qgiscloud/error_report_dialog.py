@@ -80,8 +80,8 @@ class ErrorReportDialog(QDialog):
                     self.metadata.version(),
                     self.username)
         url = QUrl()
-        url.toEncoded("mailto:support@qgiscloud.com?subject=%s&body=%s" % (
-                urllib.parse.quote(self.windowTitle()),
-                urllib.parse.quote(body)),
-        )
+        mail_url = "mailto:support@qgiscloud.com?subject={}&body={}".format(
+                                urllib.parse.quote(self.windowTitle()),
+                                urllib.parse.quote(body))
+        url.toEncoded(mail_url)
         QDesktopServices.openUrl(url)
