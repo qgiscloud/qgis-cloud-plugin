@@ -1160,10 +1160,11 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
                 srid_item = QTableWidgetItem('SRID not valid')
                 srid_item.setBackground(QBrush(Qt.red))
                 srid_item.setForeground(QBrush(Qt.white))
-                srid_item.setToolTip(
-                    self.tr("QGIS Cloud supports only Authority EPSG, IAU_2015 or ESRI reference systems"))
+                srid_item.setToolTip(self.tr("QGIS Cloud supports only Authority EPSG, IAU_2015 or ESRI reference systems"))
+                self.ui.btnUploadData.setDisabled(True)
             else:           
                 srid_item = QTableWidgetItem(layers[0].crs().authid())
+                self.ui.btnUploadData.setDisabled(False)
             
             row = self.ui.tblLocalLayers.rowCount()
             self.ui.tblLocalLayers.insertRow(row)
