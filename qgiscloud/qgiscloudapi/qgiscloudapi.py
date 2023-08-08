@@ -89,6 +89,17 @@ class API(object):
             request = Request(url=self.url)
             content = request.get(resource)
             api_info = json.loads(content)
+        except urllib.error.URLError as e:
+            # API info request failed
+            error_msg = "%s<br><br><i>%s: %s</i>" % (
+                self.tr("Failed to access QGIS Cloud API on {api_url}")
+                    .format(api_url=self.url + '/api_info.json'),
+                type(e).__name__,
+                e.reason
+            )
+            api_info = {
+                'error': error_msg
+            }
         except Exception as e:
             # API info request failed
             error_msg = "%s<br><br><i>%s</i>" % (
