@@ -98,7 +98,7 @@ class RasterUpload(QObject):
 
         if size > float(max_size):
             QMessageBox.warning(None, self.tr("Database full"), self.tr("Upload would exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan."))
-            return False
+            return
 
         opts['schema_table'] = "\"%s\".\"%s\"" % (layer_info['schema_name'],  layer_info['table_name'])
         opts['table'] = layer_info['table_name']
