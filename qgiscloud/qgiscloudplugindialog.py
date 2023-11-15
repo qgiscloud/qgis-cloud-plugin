@@ -411,11 +411,11 @@ class QgisCloudPluginDialog(QDockWidget):
                     else:
                         paid_until = login_info['paid_until']
                         self.ui.lblLoginStatus.setText(
-                            self.tr("""Logged in as {0} ({1}) 
-Paid until: {2}""").format(self.user, 
+                            self.tr("""Logged in as {0} ({1})
+Paid until: {2}""").format(self.user,
                                         login_info['plan'],
                                         datetime.strftime(datetime.strptime(paid_until, "%Y-%m-%dT%H:%M:%SZ"), '%d.%m.%Y %H:%M')))
-                                        
+
                     self.ui.lblLoginStatus.show()
                     self._push_message(
                         self.tr("QGIS Cloud"),
@@ -485,7 +485,7 @@ Do you want to create a new database now?
                         QMessageBox.Yes))
                 if res == QMessageBox.Yes:
                     self.create_database()
-                            
+
         return version_ok
 
     def version_to_number(self, version):
@@ -712,10 +712,10 @@ Do you want to create a new database now?
 
     def clean_widgetServices(self):
 #        self.ui.lblWebmap.setText('')
-#        self.ui.lblWMS.setText('')        
+#        self.ui.lblWMS.setText('')
         pass
-        
-        
+
+
     def edit_map(self):
         map_id = self.ui.tabMaps.currentItem().data(Qt.UserRole)
         map_name = self.ui.tabMaps.currentItem().text()
@@ -854,7 +854,7 @@ Do you want to create a new database now?
                 same_layer_names.append(key)
 
         return same_layer_names
-        
+
     def check_illegal_layer_names(self, layers):
         illegal_layer_names = []
 #        layer_name_dict = {}  # name / nReferences
@@ -867,8 +867,8 @@ Do you want to create a new database now?
             if set(",.;:+'").intersection(set(name)):
                 illegal_layer_names.append(name)
 
-        return illegal_layer_names        
-        
+        return illegal_layer_names
+
     def collect_names(self,  item, name_list):
             # Check if the element is a group
             if item.nodeType() == QgsLayerTreeGroup:
@@ -881,8 +881,8 @@ Do you want to create a new database now?
             else:
                 # If the element is a layer
                 # Add layername to list
-                name_list.append(item.name())        
-                
+                name_list.append(item.name())
+
     def check_duplicate_group_and_layer_names(self):
             project = QgsProject.instance()
             layer_and_group_names = []
@@ -916,13 +916,13 @@ Do you want to create a new database now?
             QMessageBox.critical(None, self.tr('Error'), crsError)
             QApplication.restoreOverrideCursor()
             return
-        
+
         #Read layers from the layertree, not from QgsProject. Due to a bug in QGIS, it sometimes happens that layers are still present in QgsProject even if they have been deleted in the user interface
         layers = []
         layerTreeLayers = self.iface.layerTreeView().layerTreeModel().rootGroup().findLayers()
         for l in layerTreeLayers:
             layers.append( l.layer() )
-        
+
         layerList = ''
 
        # Remove extra characters like , ; : from layernames causing problems in QWC2
@@ -931,16 +931,16 @@ Do you want to create a new database now?
             QMessageBox.critical(None, self.tr('Error'), self.tr(
                 "The following layer names do contain non allowed characters like ', . : ;' : {}. Please rename the layers and save the project before publishing.").format(illegal_layer_names))
             QApplication.restoreOverrideCursor()
-            return        
-        
+            return
+
         # Check if layer and group names are unique
         duplicate,  names = self.check_duplicate_group_and_layer_names()
         if duplicate:
             QMessageBox.critical(None, self.tr('Error'), self.tr(
                 "The following layer and/or group names are not unique in the project:\n\n{}\n\nPlease rename the layers and/or the groups and save the project before publishing.").format(','.join(names)))
             QApplication.restoreOverrideCursor()
-            return      
-            
+            return
+
         # make sure every layer has a unique WMS name
         notUniqueLayerNames = self.check_same_layer_names(layers)
         if len(notUniqueLayerNames) > 0:
@@ -967,9 +967,9 @@ Do you want to create a new database now?
             bottomLayer = layersRenderingOrder[-1]
             if bottomLayer.providerType() == 'wms' and bottomLayer.crs() != mapCrs:
                 warningText = self.tr("""
-The CRS of the background layer '{layerName}' is different to the  map CRS. This means that this layer will be reprojected in the published map and the webmap will therefore be slow. To improve this and make the webmap faster, go to 
+The CRS of the background layer '{layerName}' is different to the  map CRS. This means that this layer will be reprojected in the published map and the webmap will therefore be slow. To improve this and make the webmap faster, go to
 
-'Project -> Properties... -> CRS' 
+'Project -> Properties... -> CRS'
 
 and set the map CRS to {layerCRS}. Continue publishing?""").format(
                     layerName=bottomLayer.name(), layerCRS=bottomLayer.crs().authid())
@@ -1001,7 +1001,7 @@ and set the map CRS to {layerCRS}. Continue publishing?""").format(
                         None,
                         self.tr("Error"),
                         self.tr("""
-The name of the QGIS project 
+The name of the QGIS project
 
 %s
 
@@ -1120,10 +1120,10 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
 
         for data_source, layers in list(self.local_data_sources.iteritems()):
             layer_names = []
-            
+
             for layer in layers:
                 layer_names.append(layer.name())
-                
+
             layers_item = QTableWidgetItem(", ".join(layer_names))
             layers_item.setToolTip("\n".join(layer_names))
             data_source_item = QTableWidgetItem(data_source)
@@ -1138,7 +1138,7 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
 
             table_name_item = QTableWidgetItem(
                 self.launder_pg_name(table_name))
-                
+
             if layers[0].providerType() == 'gdal':
                 geometry_type_item = QTableWidgetItem('Raster')
             else:
@@ -1153,19 +1153,19 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
                 if layers[0].providerType() == "ogr":
                     geometry_type_item.setToolTip(
                         self.tr("Note: OGR features will be converted to MULTI-type"))
-            
+
             authorities = ['ESRI',  'EPSG',  'IAU_2015']
-            
+
             if ( layers[0].crs().authid() ==  '' or layers[0].crs().authid().split(':')[0].upper() not in authorities or  layers[0].crs().authid().split(':')[1] == '0' ) and geometry_type_item.text() != 'No geometry':
                 srid_item = QTableWidgetItem('SRID not valid')
                 srid_item.setBackground(QBrush(Qt.red))
                 srid_item.setForeground(QBrush(Qt.white))
                 srid_item.setToolTip(self.tr("QGIS Cloud supports only Authority EPSG, IAU_2015 or ESRI reference systems"))
                 self.ui.btnUploadData.setDisabled(True)
-            else:           
+            else:
                 srid_item = QTableWidgetItem(layers[0].crs().authid())
                 self.ui.btnUploadData.setDisabled(False)
-            
+
             row = self.ui.tblLocalLayers.rowCount()
             self.ui.tblLocalLayers.insertRow(row)
             layers_item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
@@ -1193,18 +1193,18 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
 
             srid_item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
             self.ui.tblLocalLayers.setItem(row, self.COLUMN_SRID, srid_item)
-            
+
         if self.local_data_sources.count() > 0:
             self.ui.tblLocalLayers.resizeColumnsToContents()
             self.ui.tblLocalLayers.setColumnWidth(self.COLUMN_LAYERS, 100)
             self.ui.tblLocalLayers.setColumnWidth(self.COLUMN_DATA_SOURCE, 100)
             self.ui.tblLocalLayers.sortItems(self.COLUMN_DATA_SOURCE)
-            
+
 #        if self.ui.tblLocalLayers.rowCount() > 0:
 #            self.ui.tblLocalLayers.setSortingEnabled(True)
 #        else:
 #            self.ui.tblLocalLayers.setSortingEnabled(False)
-            
+
         self.statusBar().showMessage(self.tr("Updated local data sources"))
 
     def __wkbTypeString(self, wkbType):
@@ -1271,13 +1271,13 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
 
     def update_data_sources_table_names(self):
         schema_list = []
-        
+
         try:
           schema_list = self.fetch_schemas(
               self.ui.cbUploadDatabase.currentText())
         except BaseException as e:
           raise SchemaListException("Failed to access '{}'".format(self.ui.cbUploadDatabase.currentText()))
-            
+
         if self.local_data_sources.count() == 0:
             self.data_sources_table_names.clear()
             self.ui.btnUploadData.setDisabled(True)
@@ -1304,9 +1304,9 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
                             self,
                             self.tr("Table name too long"),
                             self.tr(
-"""The name of table 
+"""The name of table
 
-{table_name} 
+{table_name}
 
 has more than 62 characters and cannot be processed like this. Please give the table a shorter name.
 
@@ -1317,13 +1317,13 @@ Should the table name be shortened automatically?
                                 QMessageBox.Yes))
                         if answer == QMessageBox.Yes:
                             new_table_name = self.ui.tblLocalLayers.item(
-                                                                        row, 
+                                                                        row,
                                                                         self.COLUMN_TABLE_NAME).text()[:-1*(table_length - 59)]
                             self.ui.tblLocalLayers.item(
-                                    row, 
+                                    row,
                                     self.COLUMN_TABLE_NAME).setText(new_table_name + '_'+str(shortened_table_number))
                             shortened_table_number += 1
-                            
+
                     table_name = self.ui.tblLocalLayers.item(
                                             row, self.COLUMN_TABLE_NAME).text()
                     data_source = self.ui.tblLocalLayers.item(
@@ -1343,10 +1343,10 @@ Should the table name be shortened automatically?
         else:
             self.ui.btnUploadData.setDisabled(self.storage_exceeded)
             self.ui.btnPublishMap.setDisabled(self.storage_exceeded)
-        
+
         for row in range(self.ui.tblLocalLayers.rowCount()):
             if self.ui.tblLocalLayers.item(row, self.COLUMN_SRID).text() == 'SRID not valid':
-                self.ui.btnUploadData.setEnabled(False)        
+                self.ui.btnUploadData.setEnabled(False)
             elif len(self.ui.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text()) > 62:
                 self.ui.btnUploadData.setEnabled(False)
 
@@ -1415,14 +1415,14 @@ Should the table name be shortened automatically?
             self.ui.btnUploadData.show()
             self.unsetCursor()
             self.statusBar().showMessage("")
-            
+
             # Refresh local layers
             self.do_update_local_data_sources = True
             self.update_local_layers()
-            
+
             # Refresh used space after upload
             self.db_size(self.db_connections)
-            
+
             if upload_ok:
                 # Show save project dialog
                 save_dialog = QDialog(self)
@@ -1523,8 +1523,8 @@ Should the table name be shortened automatically?
                     select round(sum(pg_total_relation_size(oid)) / (1024*1024)) - 17 as size
                     from pg_class
                     where relkind in ('r','m','S')
-                      and not relisshared            
-                """        
+                      and not relisshared
+                """
                 cursor.execute(sql)
                 usedSpace += int(cursor.fetchone()[0])
                 cursor.close()
