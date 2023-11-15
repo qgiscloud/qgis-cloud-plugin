@@ -1103,7 +1103,8 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
         # update table names lookup
         self.ui.btnUploadData.setEnabled(False)
         local_layers += local_raster_layers
-        self.update_data_sources_table_names()
+        if self.update_data_sources_table_names() is False:
+            return
 
         self.local_data_sources.update_local_data_sources(local_layers)
 
@@ -1271,12 +1272,17 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
 
     def update_data_sources_table_names(self):
         schema_list = []
-
         try:
-          schema_list = self.fetch_schemas(
-              self.ui.cbUploadDatabase.currentText())
-        except BaseException as e:
-          raise SchemaListException("Failed to access '{}'".format(self.ui.cbUploadDatabase.currentText()))
+            schema_list = self.fetch_schemas(self.ui.cbUploadDatabase.currentText())
+        except BaseException:
+            QMessageBox.warning(
+                self,
+                "Database could not be found",
+                f"Failed to access '{self.ui.cbUploadDatabase.currentText()}'.\n"
+                "The database was either deleted or the connection to the database failed.\n"
+                "Please try again later or contact the support."
+            )
+            return False
 
         if self.local_data_sources.count() == 0:
             self.data_sources_table_names.clear()
