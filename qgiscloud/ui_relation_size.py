@@ -36,28 +36,28 @@ class RelationSizeDialog(QDialog, FORM_CLASS):
         QApplication.setOverrideCursor(Qt.WaitCursor)
 
         sql = """
-with tablesize as 
-(
   SELECT
     schemaname || '.' || tablename AS tablename,
-    pg_total_relation_size(schemaname || '.' || tablename) as size, 
-    pg_size_pretty(pg_total_relation_size(schemaname || '.' || tablename)) AS pretty_size
-  FROM
-    pg_tables
+    pg_size_pretty(pg_total_relation_size(schemaname || '.' || tablename)) AS pretty_size,
+    pg_total_relation_size(schemaname || '.' || tablename) as size 
+  FROM pg_tables
   WHERE schemaname not in ('pg_catalog', 'information_schema', 'topology')
     AND tablename not in ('spatial_ref_sys')
-)
-select tablename as tablename, pretty_size as size, size as order_size  from tablesize
-union
-select 'total' as tablename, 
-    pg_size_pretty(sum(size)) as size,
-    sum(size) as order_size
-from tablesize
-order by order_size desc
+  ORDER BY size desc
 """
         cursor.execute(sql)
         rows=cursor.fetchall()
-        self.result_table(rows,  self.tab_relation_size)
+        
+        sql = """
+SELECT pg_size_pretty(sum(pg_total_relation_size(schemaname || '.' || tablename))) AS size 
+FROM pg_tables
+  WHERE schemaname NOT IN ('pg_catalog', 'information_schema', 'topology')
+    AND tablename NOT IN ('spatial_ref_sys')        
+"""
+        cursor.execute(sql)
+        total_size = cursor.fetchone()[0]
+        
+        self.result_table(rows,  self.tab_relation_size,  total_size)
         QApplication.restoreOverrideCursor()
 
     @pyqtSlot()
@@ -74,8 +74,9 @@ order by order_size desc
         """
         self.save_as_csv()
         
-    def result_table(self,  result,  tab_widget):
+    def result_table(self,  result,  tab_widget,  total_size):
         tab_widget.clear()
+        self.setWindowTitle(self.tr('Total amount of used tablespace %s' % total_size))
 
         if result != None:
             column_names = ['Table',  'Size']
