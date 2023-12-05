@@ -35,6 +35,7 @@ from .doAbout import DlgAbout
 from .error_report_dialog import ErrorReportDialog
 from .mapsettingsdialog import MapSettingsDialog
 from .background_layers_menu import BackgroundLayersMenu
+from .ui_relation_size import RelationSizeDialog
 from urllib.parse import urljoin, urlparse
 from datetime import datetime
 import os.path
@@ -190,6 +191,7 @@ class QgisCloudPluginDialog(QDockWidget):
         self.ui.btnLogin.clicked.connect(self.check_login)
         self.ui.btnDbCreate.clicked.connect(self.create_database)
         self.ui.btnDbDelete.clicked.connect(self.delete_database)
+        self.ui.btnDbTables.clicked.connect(self.show_db_tables)
         self.ui.btnMapEdit.clicked.connect(self.edit_map)
         self.ui.btnDbRefresh.clicked.connect(self.refresh_databases)
         self.ui.btnMapDelete.clicked.connect(self.delete_map)
@@ -512,6 +514,24 @@ Do you want to create a new database now?
             QMessageBox.warning(None, self.tr('Warning!'),  self.tr(
                 'Number of %s permitted databases exceeded! Please upgrade your account!') % self.maxDBs)
 
+    def show_db_tables(self):
+        name = self.ui.tabDatabases.currentItem().text()
+        db = self.db_connections.db(dbname=name)     
+        
+        if db != '' :
+            self.relation_size_dlg = RelationSizeDialog(db)  
+            self.relation_size_dlg.show()            
+#            schema_list = []
+#            schema_list.append('public')
+#            cursor.execute(sql)
+#            for record in cursor:
+#                schema_list.append(list(record)[0])
+#            cursor.close()
+#            conn.close
+#            return schema_list
+#        else:
+#            return None  
+        
     def delete_database(self):
         name = self.ui.tabDatabases.currentItem().text()
 
@@ -550,6 +570,7 @@ Do you want to create a new database now?
         if ret == QMessageBox.Ok:
             self.setCursor(Qt.WaitCursor)
             self.ui.btnDbDelete.setEnabled(False)
+            self.ui.btnDbTables.setEnabled(False)
             result = self.api.delete_database(name)
             if not self.show_api_error(result):
                 # wait some time until removed DB is no longer present
@@ -571,6 +592,8 @@ Do you want to create a new database now?
     def select_database(self):
         self.ui.btnDbDelete.setEnabled(
             len(self.ui.tabDatabases.selectedItems()) > 0)
+        self.ui.btnDbTables.setEnabled(
+            len(self.ui.tabDatabases.selectedItems()) > 0)
 
     def select_map(self):
         self.ui.btnMapDelete.setEnabled(
@@ -581,6 +604,8 @@ Do you want to create a new database now?
             len(self.ui.tabMaps.selectedItems()) > 0)
         self.ui.btnDbDelete.setEnabled(
             len(self.ui.tabDatabases.selectedItems()) > 0)
+        self.ui.btnDbTables.setEnabled(
+            len(self.ui.tabDatabases.selectedItems()) > 0)            
         self.update_urls(
             map=self.ui.tabMaps.currentItem().text())
 
@@ -625,6 +650,7 @@ Do you want to create a new database now?
             self.ui.tabDatabases.clear()
             self.ui.btnDbCreate.setEnabled(True)
             self.ui.btnDbDelete.setEnabled(False)
+            self.ui.btnDbTables.setEnabled(False)
             self.ui.cbUploadDatabase.clear()
             self.ui.cbUploadDatabase.setEditable(True)
             self.ui.cbUploadDatabase.lineEdit().setReadOnly(True)

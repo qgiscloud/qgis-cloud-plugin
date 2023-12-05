@@ -21,7 +21,7 @@
     <item row="1" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="mapTab">
        <attribute name="title">
@@ -568,6 +568,16 @@ p, li { white-space: pre-wrap; }
                </property>
                <property name="text">
                 <string>Delete</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnDbTables">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>DB Tables</string>
                </property>
               </widget>
              </item>
