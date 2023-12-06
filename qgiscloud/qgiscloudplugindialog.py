@@ -515,26 +515,16 @@ Do you want to create a new database now?
                 'Number of %s permitted databases exceeded! Please upgrade your account!') % self.maxDBs)
 
     def show_db_tables(self):
-        name = self.ui.tabDatabases.currentItem().text()
+        name = self.ui.tabDatabases.currentItem().text().split(' - ')[0]
         db = self.db_connections.db(dbname=name)     
         
         if db != '' :
             self.relation_size_dlg = RelationSizeDialog(db)  
             self.relation_size_dlg.show()            
-#            schema_list = []
-#            schema_list.append('public')
-#            cursor.execute(sql)
-#            for record in cursor:
-#                schema_list.append(list(record)[0])
-#            cursor.close()
-#            conn.close
-#            return schema_list
-#        else:
-#            return None  
+
         
     def delete_database(self):
-        name = self.ui.tabDatabases.currentItem().text()
-
+        name = self.ui.tabDatabases.currentItem().text().split(' - ')[0]
         answer = False
 
         for layer in list(self.PROJECT_INSTANCE.mapLayers().values()):
@@ -658,7 +648,8 @@ Do you want to create a new database now?
                 self.ui.cbUploadDatabase.setEditText(self.tr("No databases"))
             else:
                 for name, db in list(self.db_connections.iteritems()):
-                    it = QListWidgetItem(name)
+                    db_size = self.db_size_name(name)
+                    it = QListWidgetItem('%s - %s MB' % (name,  db_size))
                     it.setToolTip(db.description())
                     self.ui.tabDatabases.addItem(it)
                     self.ui.cbUploadDatabase.addItem(name)
@@ -1517,7 +1508,6 @@ Should the table name be shortened automatically?
         @param p0 DESCRIPTION
         @type str
         """
-        # TODO: not implemented yet
         self.fetch_schemas(p0)
 
     def fetch_schemas(self,  db):
@@ -1541,6 +1531,22 @@ Should the table name be shortened automatically?
         else:
             return None
 
+    def db_size_name(self,  name):
+        
+        conn = self.db_connections.db(name).psycopg_connection()
+        cursor = conn.cursor()
+        sql = """
+            select round(sum(pg_total_relation_size(oid)) / (1024*1024)) - 17 as size
+            from pg_class
+            where relkind in ('r','m','S')
+              and not relisshared
+        """
+        cursor.execute(sql)
+        usedSpace = int(cursor.fetchone()[0])
+        cursor.close()
+        conn.close     
+        return usedSpace   
+        
     def db_size(self,  db_connections):
         usedSpace = 0
 
