@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de_CH">
+<TS version="2.1" language="de_DE">
 <context>
     <name>API</name>
     <message>
         <location filename="../qgiscloudapi/qgiscloudapi.py" line="105"/>
         <source>Failed to access QGIS Cloud API on {api_url}</source>
-        <translation>QGIS Cloud API Zugriff auf {api_url} fehlgeschlagen</translation>
+        <translation>Zugriff auf die QGIS Cloud API {api_url} fehlgeschlagen</translation>
     </message>
 </context>
 <context>
