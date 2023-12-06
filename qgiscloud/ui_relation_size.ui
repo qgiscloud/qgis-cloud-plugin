@@ -37,6 +37,9 @@
        <family>DejaVu Sans</family>
       </font>
      </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
    <item row="1" column="2">
