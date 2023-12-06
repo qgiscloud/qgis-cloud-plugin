@@ -21,7 +21,7 @@
 """
 # Import the PyQt and QGIS libraries
 from qgis.PyQt.QtCore import Qt, QSettings, QFileInfo, QTranslator
-from qgis.PyQt.QtWidgets import QAction
+from qgis.PyQt.QtWidgets import QAction,  QMessageBox
 from qgis.PyQt.QtGui import QIcon
 # Initialize Qt resources from file resources_rc.py
 from .resources_rc import *
@@ -56,11 +56,12 @@ class QgisCloudPlugin(object):
                 
         if QFileInfo(self.plugin_dir).exists():            
             if QFileInfo(self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_short + ".qm").exists():
-                self.translator = QTranslator()
-                self.translator.load( self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_short + ".qm")            
+                translation = self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_short + ".qm"
             elif QFileInfo(self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_long + ".qm").exists():
-                self.translator = QTranslator()
-                self.translator.load( self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_long + ".qm")          
+                translation = self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_long + ".qm"
+
+            self.translator = QTranslator()
+            self.translator.load( translation )            
                 
 #        # dock widget
         self.dockWidget = QgisCloudPluginDialog(self.iface, self.version)
