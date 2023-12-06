@@ -76,7 +76,7 @@ FROM pg_tables
         
     def result_table(self,  result,  tab_widget,  total_size):
         tab_widget.clear()
-        self.setWindowTitle(self.tr('Total amount of used tablespace %s' % total_size))
+        self.setWindowTitle(self.tr('Table overview'))
 
         if result != None:
             column_names = ['Table',  'Size']
