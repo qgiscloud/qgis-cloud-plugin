@@ -53,15 +53,15 @@ class QgisCloudPlugin(object):
         # initialize locale
         locale_short = QSettings().value("locale/userLocale", type=str)[0:2]
         locale_long = QSettings().value("locale/userLocale", type=str)
-                
+        
+        self.translator = QTranslator()        
         if QFileInfo(self.plugin_dir).exists():            
             if QFileInfo(self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_short + ".qm").exists():
                 translation = self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_short + ".qm"
+                self.translator.load( translation )            
             elif QFileInfo(self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_long + ".qm").exists():
                 translation = self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_long + ".qm"
-
-            self.translator = QTranslator()
-            self.translator.load( translation )            
+                self.translator.load( translation )            
                 
 #        # dock widget
         self.dockWidget = QgisCloudPluginDialog(self.iface, self.version)
