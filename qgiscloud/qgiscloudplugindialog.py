@@ -519,7 +519,7 @@ Do you want to create a new database now?
         db = self.db_connections.db(dbname=name)     
         
         if db != '' :
-            self.relation_size_dlg = RelationSizeDialog(db)  
+            self.relation_size_dlg = RelationSizeDialog(db,  name)  
             self.relation_size_dlg.show()            
 
         

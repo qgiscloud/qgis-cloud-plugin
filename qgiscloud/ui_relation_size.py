@@ -21,7 +21,7 @@ class RelationSizeDialog(QDialog, FORM_CLASS):
     Class documentation goes here.
     """
 
-    def __init__(self, db,  parent=None):
+    def __init__(self, db,  dbname,  parent=None):
         """
         Constructor
 
@@ -32,6 +32,7 @@ class RelationSizeDialog(QDialog, FORM_CLASS):
         self.setupUi(self)
         conn = db.psycopg_connection()
         cursor = conn.cursor()
+        self.setWindowTitle(self.tr('Database {db} - Table overview'.format(db = dbname)))
         
         QApplication.setOverrideCursor(Qt.WaitCursor)
 
@@ -76,7 +77,6 @@ FROM pg_tables
         
     def result_table(self,  result,  tab_widget,  total_size):
         tab_widget.clear()
-        self.setWindowTitle(self.tr('Table overview'))
 
         if result != None:
             column_names = ['Table',  'Size']
