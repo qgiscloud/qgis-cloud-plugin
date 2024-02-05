@@ -90,8 +90,16 @@ class DataUpload(QObject):
             layer = item['layers'][0]
             if layer.type() == QgsMapLayer.VectorLayer:
                 if layer.isSpatial():
-                    auth = layer.crs().authid().split(':')[0]
-                    srid = int(layer.crs().authid().split(':')[1])
+                    try:
+                        auth = layer.crs().authid().split(':')[0]
+                        srid = int(layer.crs().authid().split(':')[1])
+                    except:
+                        QMessageBox.warning(None, 
+                                self.tr("Not Supported CRS %s" % layer.crs().authid()), 
+                                self.tr("Layer %s does not have a supported CRS." % layer.name()))
+                        srid = None
+                        auth = None                                
+                        break
                 else:
                     srid = None
                     auth = None
