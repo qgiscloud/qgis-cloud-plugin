@@ -10,6 +10,8 @@ about= QGIS Cloud is your powerful Web-GIS platform for publishing maps, data an
 ; Optional items:
 
 changelog=
+    3.9.3
+    - Error message whe layer CRS is invalid
     3.9.2
     - Database name added to window title of table overview 
     3.9.1
