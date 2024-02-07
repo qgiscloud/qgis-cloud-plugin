@@ -188,7 +188,7 @@ class DbConnectionCfg(object):
 
 Please check the following points:<br><br>
 
-- Is the computer connected to the Internet?<br>
+- Is the computer connected to the Internet and is the Internet connection working?<br>
 - Is port 5432 open in the firewall?<br>
 - Are the proxy settings correct?""" % self.database),
                 QMessageBox.StandardButtons(
