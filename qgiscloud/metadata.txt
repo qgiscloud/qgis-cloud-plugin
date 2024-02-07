@@ -10,6 +10,8 @@ about= QGIS Cloud is your powerful Web-GIS platform for publishing maps, data an
 ; Optional items:
 
 changelog=
+    3.9.5
+    - Connection failed error message improved
     3.9.4
     - Fixes viewer error when mapsettings are opened from free account.
     3.9.3
