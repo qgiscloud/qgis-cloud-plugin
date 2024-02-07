@@ -99,21 +99,23 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
         # get all databases owned by the user
         user_databases = self.api.read_databases()
         # get viewer information
-        viewers = self.api.read_viewers()
-        # fill comboboxes and choose the right option
-        viewer_id = self.map_settings["map"]["viewer_id"]
-        for view in viewers:
-            self.viewer_combobox.addItem(view["viewer"]["name"])
-            if viewer_id == view["viewer"]["id"]:
-                self.viewer_combobox.setCurrentIndex(
-                    self.viewer_combobox.findText(view["viewer"]["name"]))
+        
+        if self.plan != 'Free':
+            viewers = self.api.read_viewers()
+            # fill comboboxes and choose the right option
+            viewer_id = self.map_settings["map"]["viewer_id"]
+            for view in viewers:
+                self.viewer_combobox.addItem(view["viewer"]["name"])
+                if viewer_id == view["viewer"]["id"]:
+                    self.viewer_combobox.setCurrentIndex(
+                        self.viewer_combobox.findText(view["viewer"]["name"]))
 
-        search_db_name = self.map_settings["map"]["search_db"]
-        for db in user_databases:
-            self.search_db_combobox.addItem(db["name"])
-            if db["name"] == search_db_name:
-                self.search_db_combobox.setCurrentIndex(
-                    self.search_db_combobox.findText(db["name"]))
+            search_db_name = self.map_settings["map"]["search_db"]
+            for db in user_databases:
+                self.search_db_combobox.addItem(db["name"])
+                if db["name"] == search_db_name:
+                    self.search_db_combobox.setCurrentIndex(
+                        self.search_db_combobox.findText(db["name"]))
 
         language = self.map_settings["map"]["lang"]
         for locale in self.map_options["locales"]:
