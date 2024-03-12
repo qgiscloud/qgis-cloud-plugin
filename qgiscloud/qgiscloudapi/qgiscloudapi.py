@@ -37,6 +37,10 @@ import urllib.request, urllib.error, urllib.parse
 import base64, zlib
 from .version import __version__
 
+# Fixes the SSL:CERTIFICATE_VERYFY_FAILED error
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
+
 API_URL = 'https://api.qgiscloud.com'
 
 __all__ = ['API', 'UnauthorizedError', 'ConnectionException', 'TokenRequiredError', 'BadRequestError', 'ForbiddenError',
