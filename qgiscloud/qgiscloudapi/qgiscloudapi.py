@@ -33,13 +33,10 @@ from qgis.PyQt.QtCore import QCoreApplication
 import json
 import time
 from urllib.parse import urlencode
-import urllib.request, urllib.error, urllib.parse
-import base64, zlib
+import urllib.request, urllib.error, urllib.parse,  urllib.request
+import base64
+import zlib
 from .version import __version__
-
-# Fixes the SSL:CERTIFICATE_VERYFY_FAILED error
-import ssl
-ssl._create_default_https_context = ssl._create_unverified_context
 
 API_URL = 'https://api.qgiscloud.com'
 
