@@ -141,7 +141,7 @@ class DbConnections(object):
         """
         conn_cfg = DbConnectionCfg(db['host'], db['port'], db['name'], db['username'], db['password'])
         new_db_ready = False
-        tries = 5
+        tries = 20
         while not new_db_ready and tries > 0:
             tries -= 1
             QApplication.processEvents()

@@ -498,6 +498,7 @@ Do you want to create a new database now?
         return major * 10000 + minor * 100 + rev
 
     def create_database(self):
+        self.ui.btnDbRefresh.setDisabled(True)
         if self.numDbs < self.maxDBs:
             self.setCursor(Qt.WaitCursor)
             self.ui.btnDbCreate.setEnabled(False)
@@ -507,7 +508,8 @@ Do you want to create a new database now?
                 new_db_ready = DbConnections.wait_for_new_db(db)
                 if new_db_ready:
                     self.refresh_databases()
-
+                    self.ui.btnDbRefresh.setEnabled(True)
+                    
             self.ui.btnDbCreate.setEnabled(True)
             self.unsetCursor()
         else:
