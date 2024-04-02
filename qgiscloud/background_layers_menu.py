@@ -89,12 +89,6 @@ class BackgroundLayersMenu(QMenu):
             ("OpenTopoMap", OrderedDict([
                 ("OSM OpenTopoMap", 'http://c.tile.opentopomap.org/{z}/{x}/{y}.png')
             ])),
-            ("OSM/Stamen", OrderedDict([
-                ("Stamen Toner / OSM", 'http://tile.stamen.com/toner/{z}/{x}/{y}.png'),
-                ("Stamen Toner Lite / OSM", 'http://tile.stamen.com/toner-lite/{z}/{x}/{y}.png'),
-                ("Stamen Watercolor / OSM", 'http://tile.stamen.com/watercolor/{z}/{x}/{y}.jpg'),
-                ("Stamen Terrain / OSM", 'http://tile.stamen.com/terrain/{z}/{x}/{y}.png')
-            ])),
             ("OSM/Thunderforest", OrderedDict([
                 ("OpenCycleMap", 'https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png'),
                 ("OCM Landscape", 'https://tile.thunderforest.com/landscape/{z}/{x}/{y}.png'),
