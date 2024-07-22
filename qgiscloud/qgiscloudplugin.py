@@ -20,7 +20,7 @@
  ***************************************************************************/
 """
 # Import the PyQt and QGIS libraries
-from qgis.PyQt.QtCore import Qt, QSettings, QFileInfo, QTranslator
+from qgis.PyQt.QtCore import Qt, QSettings, QFileInfo, QTranslator,  QCoreApplication
 from qgis.PyQt.QtWidgets import QAction,  QMessageBox
 from qgis.PyQt.QtGui import QIcon
 # Initialize Qt resources from file resources_rc.py
@@ -48,14 +48,14 @@ class QgisCloudPlugin(object):
         # Add toolbar button and menu item
         self.iface.addToolBarIcon(self.action)
         self.iface.addPluginToMenu("&QGIS Cloud", self.action)
-
+        
         self.plugin_dir = os.path.dirname(__file__)
         
-        # initialize locale
+#        # initialize locale
         try:
             locale_short = QSettings().value("locale/userLocale", type=str)[0:2]
             locale_long = QSettings().value("locale/userLocale", type=str)
-            
+        
             self.translator = QTranslator()        
             if QFileInfo(self.plugin_dir).exists():            
                 if QFileInfo(self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_short + ".qm").exists():
@@ -64,6 +64,8 @@ class QgisCloudPlugin(object):
                 elif QFileInfo(self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_long + ".qm").exists():
                     translation = self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_long + ".qm"
                     self.translator.load( translation )            
+            
+            QCoreApplication.installTranslator(self.translator)        
         except:
             pass
                 

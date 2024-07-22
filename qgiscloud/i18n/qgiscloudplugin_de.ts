@@ -203,11 +203,11 @@ Bitte überprüfen Sie die folgenden Punkte:&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://qgiscloud.com/account/sign_up&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;Signup&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&amp;lt;!DOCTYPE HTML PUBLIC &amp;quot;-//W3C//DTD HTML 4.0//EN&amp;quot; &amp;quot;http://www.w3.org/TR/REC-html40/strict.dtd&amp;quot;&amp;gt;
-&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta name=&amp;quot;qrichtext&amp;quot; content=&amp;quot;1&amp;quot; /&amp;gt;&amp;lt;style type=&amp;quot;text/css&amp;quot;&amp;gt;
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&amp;lt;/style&amp;gt;&amp;lt;/head&amp;gt;&amp;lt;body style=&amp;quot; font-family:&apos;Ubuntu&apos;; font-size:9pt; font-weight:400; font-style:normal;&amp;quot;&amp;gt;
-&amp;lt;p style=&amp;quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&amp;quot;&amp;gt;&amp;lt;a href=&amp;quot;https://qgiscloud.com/account/sign_up&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot; text-decoration: underline; color:#0057ae;&amp;quot;&amp;gt;Registrieren&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;</translation>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://qgiscloud.com/account/sign_up&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;Anmelden&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="361"/>
@@ -311,7 +311,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="399"/>
         <source>&lt;b&gt;Plugin version:&lt;/b&gt;</source>
-        <translation>&amp;lt;b&amp;gt;Plugin-Version:&amp;lt;/b&amp;gt;</translation>
+        <translation type="unfinished">&lt;b&gt;Pluginversion:&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="381"/>

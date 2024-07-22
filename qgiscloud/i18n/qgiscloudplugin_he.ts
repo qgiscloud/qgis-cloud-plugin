@@ -27,7 +27,7 @@
     <message>
         <location filename="../data_upload.py" line="69"/>
         <source>Uploading to database &apos;{db}&apos;...</source>
-        <translation>מעלה למסד הנתונים '{db}'...</translation>
+        <translation>מעלה למסד הנתונים &apos;{db}&apos;...</translation>
     </message>
     <message>
         <location filename="../data_upload.py" line="86"/>
@@ -42,7 +42,7 @@
     <message>
         <location filename="../data_upload.py" line="129"/>
         <source>Creating table &apos;{table}&apos;...</source>
-        <translation>יוצר טבלה'{table}'...</translation>
+        <translation>יוצר טבלה&apos;{table}&apos;...</translation>
     </message>
     <message>
         <location filename="../data_upload.py" line="179"/>
@@ -193,7 +193,7 @@ Please check the following points:&lt;br&gt;&lt;br&gt;
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="346"/>
         <source>&lt;i&gt;To add a background layer to the map, install the OpenLayers plugin.&lt;/i&gt;</source>
-        <translation>&amp;lt;i&amp;gt;.OpenLayer התוסף את התקן רקע, שכבת להוספת&amp;lt;/i&amp;gt;</translation>
+        <translation>&lt;i&gt;.OpenLayer התוסף את התקן רקע, שכבת להוספת&amp;lt;&lt;/i&gt;</translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="347"/>
@@ -207,11 +207,7 @@ Please check the following points:&lt;br&gt;&lt;br&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;mailto:support@qgiscloud.com?subject=QGISCloud support&quot;&gt;&lt;span style=&quot; font-family:&apos;Ubuntu&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;support@qgiscloud.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&amp;lt;!DOCTYPE HTML PUBLIC &amp;quot;-//W3C//DTD HTML 4.0//EN&amp;quot; &amp;quot;http://www.w3.org/TR/REC-html40/strict.dtd&amp;quot;&amp;gt;
-&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta name=&amp;quot;qrichtext&amp;quot; content=&amp;quot;1&amp;quot; /&amp;gt;&amp;lt;style type=&amp;quot;text/css&amp;quot;&amp;gt;
-p, li { white-space: pre-wrap; }
-&amp;lt;/style&amp;gt;&amp;lt;/head&amp;gt;&amp;lt;body style=&amp;quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&amp;quot;&amp;gt;
-&amp;lt;p style=&amp;quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&amp;quot;&amp;gt;&amp;lt;a href=&amp;quot;mailto:support@qgiscloud.com?subject=QGISCloud support&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot; font-family:'Ubuntu'; text-decoration: underline; color:#0057ae;&amp;quot;&amp;gt;support@qgiscloud.com&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="380"/>
@@ -265,11 +261,7 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://qgiscloud.com/account/sign_up&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;Signup&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&amp;lt;!DOCTYPE HTML PUBLIC &amp;quot;-//W3C//DTD HTML 4.0//EN&amp;quot; &amp;quot;http://www.w3.org/TR/REC-html40/strict.dtd&amp;quot;&amp;gt;
-&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta name=&amp;quot;qrichtext&amp;quot; content=&amp;quot;1&amp;quot; /&amp;gt;&amp;lt;style type=&amp;quot;text/css&amp;quot;&amp;gt;
-p, li { white-space: pre-wrap; }
-&amp;lt;/style&amp;gt;&amp;lt;/head&amp;gt;&amp;lt;body style=&amp;quot; font-family:'Ubuntu'; font-size:9pt; font-weight:400; font-style:normal;&amp;quot;&amp;gt;
-&amp;lt;p style=&amp;quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&amp;quot;&amp;gt;&amp;lt;a href=&amp;quot;https://qgiscloud.com/account/sign_up&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot; text-decoration: underline; color:#0057ae;&amp;quot;&amp;gt;Signup&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="391"/>
@@ -561,7 +553,7 @@ Please remove or replace above layers before publishing your map.
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1175"/>
         <source>Unsupported geometry type &apos;{type}&apos; in layer &apos;{layer}&apos;</source>
-        <translation>סוג גיאומטריה '{type}'לא נתמכת בשכבה '{layer}'</translation>
+        <translation>סוג גיאומטריה &apos;{type}&apos;לא נתמכת בשכבה &apos;{layer}&apos;</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1181"/>
@@ -586,7 +578,7 @@ Please remove or replace above layers before publishing your map.
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1391"/>
         <source>Please create a database in the &apos;Account&apos; tab.</source>
-        <translation>אנא צור מסד נתונים בלשונית 'חשבון'.</translation>
+        <translation>אנא צור מסד נתונים בלשונית &apos;חשבון&apos;.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1396"/>
@@ -859,17 +851,17 @@ Should the table name be shortened automatically?
     <message>
         <location filename="../raster/raster_upload.py" line="107"/>
         <source>Creating table &apos;{table}&apos;...</source>
-        <translation type="unfinished">יוצר טבלה '{table}'...</translation>
+        <translation type="unfinished">יוצר טבלה &apos;{table}&apos;...</translation>
     </message>
     <message>
         <location filename="../raster/raster_upload.py" line="131"/>
         <source>Creating overview-level {level} for table &apos;{table}&apos;...</source>
-        <translation type="unfinished">יוצר מבט-על ברמה {level} עבור טבלה '{table}'...</translation>
+        <translation type="unfinished">יוצר מבט-על ברמה {level} עבור טבלה &apos;{table}&apos;...</translation>
     </message>
     <message>
         <location filename="../raster/raster_upload.py" line="145"/>
         <source>Registering raster columns of table &apos;%s&apos;...</source>
-        <translation type="unfinished">רושם עמודות רסטר של טבלה 's%'...</translation>
+        <translation type="unfinished">רושם עמודות רסטר של טבלה &apos;s%&apos;...</translation>
     </message>
     <message>
         <location filename="../raster/raster_upload.py" line="646"/>

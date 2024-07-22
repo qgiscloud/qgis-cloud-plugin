@@ -27,7 +27,7 @@
     <message>
         <location filename="../data_upload.py" line="69"/>
         <source>Uploading to database &apos;{db}&apos;...</source>
-        <translation>Cargando a la Base de Datos '{db}'...</translation>
+        <translation>Cargando a la Base de Datos &apos;{db}&apos;...</translation>
     </message>
     <message>
         <location filename="../data_upload.py" line="86"/>
@@ -42,7 +42,7 @@
     <message>
         <location filename="../data_upload.py" line="129"/>
         <source>Creating table &apos;{table}&apos;...</source>
-        <translation>Creando Tabla '{table}'...</translation>
+        <translation>Creando Tabla &apos;{table}&apos;...</translation>
     </message>
     <message>
         <location filename="../data_upload.py" line="179"/>
@@ -193,7 +193,7 @@ Please check the following points:&lt;br&gt;&lt;br&gt;
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="346"/>
         <source>&lt;i&gt;To add a background layer to the map, install the OpenLayers plugin.&lt;/i&gt;</source>
-        <translation>&amp;lt;i&amp;gt;Para agregar una Capa de fondo al mapa, instale el complemento de OpenLayers.&amp;lt;/i&amp;gt;</translation>
+        <translation>&lt;i&gt;Para agregar una Capa de fondo al mapa, instale el complemento de OpenLayers.&lt;/i&gt;</translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="347"/>
@@ -301,7 +301,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="399"/>
         <source>&lt;b&gt;Plugin version:&lt;/b&gt;</source>
-        <translation>&amp;lt;b&amp;gt;Versión del Plugin:&amp;lt;/b&amp;gt;</translation>
+        <translation>&lt;b&gt;Versión del Plugin:&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="376"/>
@@ -553,7 +553,7 @@ Please remove or replace above layers before publishing your map.
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1175"/>
         <source>Unsupported geometry type &apos;{type}&apos; in layer &apos;{layer}&apos;</source>
-        <translation>Tipo de geometría no soportado '{type}' en la Capa '{layer}'</translation>
+        <translation>Tipo de geometría no soportado &apos;{type}&apos; en la Capa &apos;{layer}&apos;</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1181"/>
@@ -578,7 +578,7 @@ Please remove or replace above layers before publishing your map.
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1391"/>
         <source>Please create a database in the &apos;Account&apos; tab.</source>
-        <translation>Favor de crear una Base de Datos desde el menú 'Cuenta'.</translation>
+        <translation>Favor de crear una Base de Datos desde el menú &apos;Cuenta&apos;.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1396"/>
@@ -655,7 +655,7 @@ Please remove or replace above layers before publishing your map.
         <source>Some layers are using local data. Please upload local layers to your cloud database in the &apos;Upload Data&apos; tab before publishing.
 
 </source>
-        <translation>Algunas capas utilizan datos locales. Cargue las capas locales en su base de datos de la nube desde el menú 'Cargar Datos' Antes de publicar.</translation>
+        <translation>Algunas capas utilizan datos locales. Cargue las capas locales en su base de datos de la nube desde el menú &apos;Cargar Datos&apos; Antes de publicar.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="160"/>
@@ -854,17 +854,17 @@ Should the table name be shortened automatically?
     <message>
         <location filename="../raster/raster_upload.py" line="107"/>
         <source>Creating table &apos;{table}&apos;...</source>
-        <translation>Creando Tabla '{table}'...</translation>
+        <translation>Creando Tabla &apos;{table}&apos;...</translation>
     </message>
     <message>
         <location filename="../raster/raster_upload.py" line="131"/>
         <source>Creating overview-level {level} for table &apos;{table}&apos;...</source>
-        <translation>Creación de nivel de vista general {level} para la Tabla '{table}'...</translation>
+        <translation>Creación de nivel de vista general {level} para la Tabla &apos;{table}&apos;...</translation>
     </message>
     <message>
         <location filename="../raster/raster_upload.py" line="145"/>
         <source>Registering raster columns of table &apos;%s&apos;...</source>
-        <translation>Registro de columnas Ráster de la Tabla '%s'...</translation>
+        <translation>Registro de columnas Ráster de la Tabla &apos;%s&apos;...</translation>
     </message>
     <message>
         <location filename="../raster/raster_upload.py" line="646"/>

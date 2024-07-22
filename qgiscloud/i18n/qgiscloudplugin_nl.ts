@@ -27,7 +27,7 @@
     <message>
         <location filename="../data_upload.py" line="69"/>
         <source>Uploading to database &apos;{db}&apos;...</source>
-        <translation>Uploaden naar de database '{db}'...</translation>
+        <translation>Uploaden naar de database &apos;{db}&apos;...</translation>
     </message>
     <message>
         <location filename="../data_upload.py" line="86"/>
@@ -42,7 +42,7 @@
     <message>
         <location filename="../data_upload.py" line="129"/>
         <source>Creating table &apos;{table}&apos;...</source>
-        <translation>Tabel '{table}' maken...</translation>
+        <translation>Tabel &apos;{table}&apos; maken...</translation>
     </message>
     <message>
         <location filename="../data_upload.py" line="179"/>
@@ -193,7 +193,7 @@ Please check the following points:&lt;br&gt;&lt;br&gt;
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="346"/>
         <source>&lt;i&gt;To add a background layer to the map, install the OpenLayers plugin.&lt;/i&gt;</source>
-        <translation>&amp;lt;i&amp;gt;Om een achtergrondlaag aan de kaart toe te voegen, installeert u de OpenLayers plugin.&amp;lt;/i&amp;gt;.</translation>
+        <translation>&lt;i&gt;Om een achtergrondlaag aan de kaart toe te voegen, installeert u de OpenLayers plugin.&lt;/i&gt;</translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="345"/>
@@ -311,7 +311,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="399"/>
         <source>&lt;b&gt;Plugin version:&lt;/b&gt;</source>
-        <translation>&amp;lt;b&amp;gt;Versie van de plugin:&amp;lt;/b&amp;gt;</translation>
+        <translation>&lt;b&gt;Versie van de plugin:&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="349"/>
@@ -588,7 +588,7 @@ p, li { white-space: pre-wrap; }
         <source>Some layers are using local data. Please upload local layers to your cloud database in the &apos;Upload Data&apos; tab before publishing.
 
 </source>
-        <translation>Sommige lagen maken gebruik van lokale gegevens. Upload lokale lagen naar uw clouddatabase in het tabblad 'Gegevens uploaden' voordat u ze publiceert.
+        <translation>Sommige lagen maken gebruik van lokale gegevens. Upload lokale lagen naar uw clouddatabase in het tabblad &apos;Gegevens uploaden&apos; voordat u ze publiceert.
 
 </translation>
     </message>
@@ -614,7 +614,7 @@ Verwijder of vervang bovenstaande lagen voordat u uw kaart publiceert.
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1175"/>
         <source>Unsupported geometry type &apos;{type}&apos; in layer &apos;{layer}&apos;</source>
-        <translation>Niet-ondersteund geometrietype '{type}' in laag '{layer}'</translation>
+        <translation>Niet-ondersteund geometrietype &apos;{type}&apos; in laag &apos;{layer}&apos;</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1181"/>
@@ -639,7 +639,7 @@ Verwijder of vervang bovenstaande lagen voordat u uw kaart publiceert.
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1391"/>
         <source>Please create a database in the &apos;Account&apos; tab.</source>
-        <translation>Maak een database aan in het tabblad 'Account'.</translation>
+        <translation>Maak een database aan in het tabblad &apos;Account&apos;.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1396"/>
@@ -726,7 +726,7 @@ Verwijder of vervang bovenstaande lagen voordat u uw kaart publiceert.
         <location filename="../qgiscloudplugindialog.py" line="378"/>
         <source>Due to the GDPR qgiscloud.com has a new &lt;a href=&apos;http://qgiscloud.com/en/pages/privacy&apos;&gt; Privacy Policy &lt;/a&gt;.
                                 To continue using qgiscloud.com, you must accept the new policy. </source>
-        <translation>Door de GDPR heeft qgiscloud.com een nieuwe &amp;lt;a href='http://qgiscloud.com/en/pages/privacy'&amp;gt; Privacy Policy &amp;lt;/a&amp;gt;.
+        <translation>Door de GDPR heeft qgiscloud.com een nieuwe &amp;lt;a href=&apos;http://qgiscloud.com/en/pages/privacy&apos;&amp;gt; Privacy Policy &amp;lt;/a&amp;gt;.
                                 Om qgiscloud.com te kunnen blijven gebruiken, moet u het nieuwe beleid accepteren.</translation>
     </message>
     <message>
@@ -737,7 +737,7 @@ Verwijder of vervang bovenstaande lagen voordat u uw kaart publiceert.
     <message>
         <location filename="../qgiscloudplugindialog.py" line="973"/>
         <source>The following WMS layer names are not unique: {}. Please make sure the names are unique, then publish the project again. The layer WMS short name can be set in the layer properties dialog under &apos;QGIS Server -&gt; Short name&apos;.</source>
-        <translation>De volgende WMS-laagnamen zijn niet uniek: {}. Zorg ervoor dat de namen uniek zijn en publiceer het project dan opnieuw. De laag WMS korte naam kan worden ingesteld in het laag eigenschappen dialoogvenster onder 'QGIS Server -&amp;gt; Korte naam'.</translation>
+        <translation>De volgende WMS-laagnamen zijn niet uniek: {}. Zorg ervoor dat de namen uniek zijn en publiceer het project dan opnieuw. De laag WMS korte naam kan worden ingesteld in het laag eigenschappen dialoogvenster onder &apos;QGIS Server -&amp;gt; Korte naam&apos;.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="467"/>
@@ -858,17 +858,17 @@ Should the table name be shortened automatically?
     <message>
         <location filename="../raster/raster_upload.py" line="107"/>
         <source>Creating table &apos;{table}&apos;...</source>
-        <translation>Tabel '{table}' maken...</translation>
+        <translation>Tabel &apos;{table}&apos; maken...</translation>
     </message>
     <message>
         <location filename="../raster/raster_upload.py" line="131"/>
         <source>Creating overview-level {level} for table &apos;{table}&apos;...</source>
-        <translation>Een overview-niveau creëren {level} voor tabel '{table}'...</translation>
+        <translation>Een overview-niveau creëren {level} voor tabel &apos;{table}&apos;...</translation>
     </message>
     <message>
         <location filename="../raster/raster_upload.py" line="145"/>
         <source>Registering raster columns of table &apos;%s&apos;...</source>
-        <translation>Raster kolommen van tabel '%s' registreren ...</translation>
+        <translation>Raster kolommen van tabel &apos;%s&apos; registreren ...</translation>
     </message>
     <message>
         <location filename="../raster/raster_upload.py" line="646"/>
