@@ -7,3 +7,7 @@ createdist.sh
 exclude.lst
 .eric6project
 gdalwmscache
+.eric7project
+.jedi/
+QGIS Cloud Plugin.epj
+
