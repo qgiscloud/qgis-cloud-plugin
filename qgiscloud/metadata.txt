@@ -12,7 +12,7 @@ about= QGIS Cloud is your powerful Web-GIS platform for publishing maps, data an
 
 changelog=
     3.9.12
-    - map name to publish success message added
+    - map name to publish success message added - Thanks to Simon Groechering for the pull request
     3.9.11
     - Pixes translation error #65
     3.9.10
