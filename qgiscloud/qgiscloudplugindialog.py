@@ -1035,10 +1035,9 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
                     # update map info in maps lookup
                     self.maps_lookup[map['name']] = map
                     self.update_urls()
-                    self._push_message(self.tr("QGIS Cloud"), self.tr(
-                        "Map successfully published"), level=0, duration=2)
-                    self.statusBar().showMessage(
-                        self.tr("Map successfully published"))
+                    message = self.tr("Map {} successfully published").format(self.map_name())
+                    self._push_message(self.tr("QGIS Cloud"), message, level=0, duration=2)
+                    self.statusBar().showMessage(message)
             except Exception as e:
                 self.statusBar().showMessage("")
                 ErrorReportDialog(self.tr("Error uploading project"), self.tr(
