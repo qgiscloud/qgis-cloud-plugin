@@ -311,7 +311,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="399"/>
         <source>&lt;b&gt;Plugin version:&lt;/b&gt;</source>
-        <translation type="unfinished">&lt;b&gt;Pluginversion:&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Pluginversion:&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../ui_qgiscloudplugin.py" line="381"/>
@@ -684,7 +684,7 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.
     <message>
         <location filename="../qgiscloudplugindialog.py" line="544"/>
         <source>You have layers from database &quot;{name}&quot; loaded in your project! Do you want to remove them before you delete database &quot;{name}&quot;?</source>
-        <translation>Layer der Datenbank &amp;quot;{name}&amp;quot; sind im Projekt geladen! Sollen diese entfernt werden, befor die Datenbank &amp;quot;{name}&amp;quot; gelöscht wird?</translation>
+        <translation>Layer der Datenbank &quot;{name}&quot; sind im Projekt geladen! Sollen diese entfernt werden, befor die Datenbank &quot;{name}&quot; gelöscht wird?</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="712"/>
@@ -694,12 +694,12 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.
     <message>
         <location filename="../qgiscloudplugindialog.py" line="563"/>
         <source>Do you want to delete the database &quot;%s&quot;?</source>
-        <translation>Möchten Sie die Datenbank &amp;quot;%s&amp;quot; wirklich löschen?</translation>
+        <translation>Möchten Sie die Datenbank &quot;%s&quot; wirklich löschen?</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="713"/>
         <source>Do you want to delete the map &quot;%s&quot;?</source>
-        <translation>Möchten Sie die Karte &amp;quot;%s&amp;quot; wirklich löschen?</translation>
+        <translation>Möchten Sie die Karte &quot;%s&quot; wirklich löschen?</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="411"/>
@@ -714,7 +714,7 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.
     <message>
         <location filename="../qgiscloudplugindialog.py" line="736"/>
         <source>Deletion of map &quot;{name}&quot; interrupted!</source>
-        <translation>Löschen der Karte &amp;quot;{name}&amp;quot; abgebrochen!</translation>
+        <translation>Löschen der Karte &quot;{name}&quot; abgebrochen!</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="689"/>
