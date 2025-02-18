@@ -3,7 +3,7 @@ name=QGIS Cloud Plugin
 qgisMinimumVersion=3.00
 qgisMaximumVersion=3.99
 description=Publish maps on qgiscloud.com
-version=3.9.14
+version=3.9.15
 author=Sourcepole AG - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich, Switzerland
 email=support@qgiscloud.com
 about= QGIS Cloud is your powerful Web-GIS platform for publishing maps, data and services on the internet.  Create and edit professional maps with all the capabilities from QGIS.     With only a few short mouse-clicks you can share your work on qgiscloud.com with the public. <br><br>The documentation of  QGIS Cloud can be found in <a href="https://docs.qgiscloud.com/en/">English</a> or <a href="https://docs.qgiscloud.com/de/">German</a>.
@@ -11,6 +11,9 @@ about= QGIS Cloud is your powerful Web-GIS platform for publishing maps, data an
 ; Optional items:
 
 changelog=
+    3.9.15
+    - German translations improved
+    - C/C++ object of type QgsVectorLayer has been deleted Error fixed
     3.9.14
     - Check of illegal layers improved
     3.9.13
