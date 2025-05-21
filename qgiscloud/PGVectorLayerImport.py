@@ -216,7 +216,6 @@ class PGVectorLayerImport(object):
             sql += "%sADD COLUMN %s %s" % (delim, self.__quotedIdentifier(field.name().lower()), type)
             delim = ","
 
-        print (sql)
         # send sql statement and do error handling
         cursor.execute(sql)
 
