@@ -545,7 +545,11 @@ Do you want to create a new database now?
                 if answer == QMessageBox.Yes:
                     remove_layer = self.PROJECT_INSTANCE.mapLayers().get(layer.id())
                     if isinstance(remove_layer, QgsMapLayer):
-                        self.PROJECT_INSTANCE.removeMapLayer(layer.id())
+                        try:
+                            self.PROJECT_INSTANCE.removeMapLayer(layer.id())
+                        except RuntimeError:
+                            pass
+
 
         if answer == QMessageBox.Cancel:
             QMessageBox.warning(None,  self.tr('Warning'),  self.tr(
