@@ -22,12 +22,13 @@
 # NOTE: always convert features in OGR layers or PostGIS layers of type GEOMETRY to MULTI-type geometry, as geometry type detection of e.g. shapefiles is unreliable
 """
 from qgis.PyQt.QtCore import Qt,  QObject, QVariant, QDate, QDateTime
-from qgis.PyQt.QtWidgets import QMessageBox, QApplication
+from qgis.PyQt.QtWidgets import QMessageBox, QApplication,  QDialog
 from qgis.PyQt.QtXml import QDomDocument
 from qgis.core import *
 from .db_connections import DbConnections
 from .raster.raster_upload import RasterUpload
 from .PGVectorLayerImport import PGVectorLayerImport
+from .ui_overwrite_or_append_dialog import OverwriteOrAppendDialog
 from psycopg2 import sql as psycopg2_sql
 import re
 from io import StringIO
@@ -156,17 +157,31 @@ class DataUpload(QObject):
 
     #                cursor.close()
 
-                # TODO: Ask user for overwriting existing table
-                # The postgres provider is terribly slow at creating tables with
-                # many attribute columns in QGIS < 2.9.0
-                vectorLayerImport = PGVectorLayerImport(db, conn,  cursor, cloudUri, fields, wkbType, srid, True)
+                # Ask user for overwriting existing table
+                    sql = """SELECT exists( 
+                                        SELECT table_name 
+                                        FROM information_schema.tables 
+                                        WHERE table_schema = '{}' and table_name = '{}')
+                            """.format(item['schema'],  item['table'])
+                cursor.execute(sql)
+                table_exists = cursor.fetchone()[0]
+                if table_exists:
+                    dialog = OverwriteOrAppendDialog(item['schema'],  item['table'])
+                    result = dialog.exec_()
 
-                if vectorLayerImport.hasError():
-                    import_ok &= False
-                    messages += "VectorLayerImport-Error: "+vectorLayerImport.errorMessage() + "\n"
-                    continue
+                    if  result == QDialog.Accepted:
+                        if dialog.choice == 'overwrite':
+                            
+                            # The postgres provider is terribly slow at creating tables with
+                            # many attribute columns in QGIS < 2.9.0
+                            vectorLayerImport = PGVectorLayerImport(db, conn,  cursor, cloudUri, fields, wkbType, srid, True)
 
-                vectorLayerImport = None
+                            if vectorLayerImport.hasError():
+                                import_ok &= False
+                                messages += "VectorLayerImport-Error: "+vectorLayerImport.errorMessage() + "\n"
+                                continue
+                        else:
+                            vectorLayerImport = None
 
                 copy_table_sql = ""
                 if self.psycopg2_version >= 20900:
@@ -288,10 +303,11 @@ class DataUpload(QObject):
                             'geom_column': geom_column
                         }
 
-                if wkbType != QgsWkbTypes.NoGeometry:
-                    sql = 'create index "{1}_{2}_idx" on "{0}"."{1}" using gist ("{2}");'.format(item['schema'],  item['table'],  geom_column)
-                    cursor.execute(sql)
-                    conn.commit()
+                if dialog.choice == 'overwrite':
+                    if wkbType != QgsWkbTypes.NoGeometry:
+                        sql = 'create index "{1}_{2}_idx" on "{0}"."{1}" using gist ("{2}");'.format(item['schema'],  item['table'],  geom_column)
+                        cursor.execute(sql)
+                        conn.commit()
                     
             elif layer.type() == QgsMapLayer.RasterLayer:
                 raster_to_upload = {
