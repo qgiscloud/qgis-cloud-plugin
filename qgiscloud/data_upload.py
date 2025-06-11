@@ -157,8 +157,8 @@ class DataUpload(QObject):
 
     #                cursor.close()
 
-                # Ask user for overwriting existing table
-                    sql = """SELECT exists( 
+    # Ask user for overwriting existing table
+                sql = """SELECT exists( 
                                         SELECT table_name 
                                         FROM information_schema.tables 
                                         WHERE table_schema = '{}' and table_name = '{}')
@@ -180,8 +180,10 @@ class DataUpload(QObject):
                                 import_ok &= False
                                 messages += "VectorLayerImport-Error: "+vectorLayerImport.errorMessage() + "\n"
                                 continue
-                        else:
-                            vectorLayerImport = None
+                        elif dialog.choice == 'append':
+                            pass
+                    else:
+                        return False
 
                 copy_table_sql = ""
                 if self.psycopg2_version >= 20900:
@@ -350,6 +352,8 @@ class DataUpload(QObject):
         self.progress_label.setText("")
         if not import_ok:
             raise RuntimeError(str(messages))
+            
+        return True
 
 
     def _wkbToEWkbHex(self, wkb, srid, convertToMulti=False):

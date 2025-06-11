@@ -8,8 +8,7 @@ copyright            : (C) 2016 by Dr. Horst Duester / Sourcepole AG
 email                : horst.duester@sourcepole.ch
  ***************************************************************************/
 """
-from qgis.PyQt.QtCore import Qt, QSettings, QFileInfo, QFile, QTextStream, QIODevice, pyqtSlot
-from qgis.core import *
+from qgis.PyQt.QtCore import QFile, QTextStream, QIODevice
 import os
 
 class Metadata():

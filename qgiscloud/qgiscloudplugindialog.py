@@ -1417,10 +1417,13 @@ Should the table name be shortened automatically?
 
             # Map<data_source, {schema: schema, table: table, layers: layers}>
             data_sources_items = {}
-            for row in range(0, self.ui.tblLocalLayers.rowCount()):
+            rows = self.ui.tblLocalLayers.rowCount()
+            row = 0
+            while row < rows:
                 data_source = unicode(
                     self.ui.tblLocalLayers.item(
                         row, self.COLUMN_DATA_SOURCE).text())
+                        
                 layers = self.local_data_sources.layers(data_source)
                 if layers is not None:
                     schema_name = unicode(
@@ -1432,27 +1435,33 @@ Should the table name be shortened automatically?
                     data_sources_items[data_source] = {
                         u'schema': unicode(schema_name), u'table': unicode(table_name), u'layers': layers}
 
-            try:
-                self.data_upload.upload(self.db_connections.db(
-                    unicode(db_name)), data_sources_items, unicode(self.maxSize))
-                upload_ok = True
-            except Exception as e:
-                ErrorReportDialog(self.tr("Upload errors occurred"), self.tr("Upload errors occurred. Not all data could be uploaded."), str(
-                    e) + "\n\n\n" + traceback.format_exc(), self.user, self).exec_()
-                upload_ok = False
+                try:
+                    success = self.data_upload.upload(self.db_connections.db(
+                        unicode(db_name)), data_sources_items, unicode(self.maxSize))
+                    upload_ok = success
+                    
+                    if upload_ok:
+                        rows -= 1
+                    else:
+                        row += 1
+                    
+                except Exception as e:
+                    ErrorReportDialog(self.tr("Upload errors occurred"), self.tr("Upload errors occurred. Not all data could be uploaded."), str(
+                        e) + "\n\n\n" + traceback.format_exc(), self.user, self).exec_()
+                    upload_ok = False
 
-            self.ui.spinner.stop()
-            self.ui.progressWidget.hide()
-            self.ui.btnUploadData.show()
-            self.unsetCursor()
-            self.statusBar().showMessage("")
+                self.ui.spinner.stop()
+                self.ui.progressWidget.hide()
+                self.ui.btnUploadData.show()
+                self.unsetCursor()
+                self.statusBar().showMessage("")
 
-            # Refresh local layers
-            self.do_update_local_data_sources = True
-            self.update_local_layers()
+                # Refresh local layers
+                self.do_update_local_data_sources = True
+                self.update_local_layers()
 
-            # Refresh used space after upload
-            self.db_size(self.db_connections)
+                # Refresh used space after upload
+                self.db_size(self.db_connections)
 
             if upload_ok:
                 # Show save project dialog
