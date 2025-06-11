@@ -1147,7 +1147,8 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
             layer_names = []
 
             for layer in layers:
-                layer_names.append(layer.name())
+                if layer is not None and layer.isValid():
+                    layer_names.append(layer.name())
 
             layers_item = QTableWidgetItem(", ".join(layer_names))
             layers_item.setToolTip("\n".join(layer_names))

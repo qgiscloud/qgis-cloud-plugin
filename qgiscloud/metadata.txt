@@ -13,6 +13,8 @@ about= QGIS Cloud is your powerful Web-GIS platform for publishing maps, data an
 changelog=
     3.10.0
     - Ask user for overwriting existing table
+    3.9.17
+    - Bugfixing
     3.9.16
     - Error "C/C++ object of type QgsVectorLayer has been deleted" fixed in second step
     3.9.15
