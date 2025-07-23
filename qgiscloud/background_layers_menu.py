@@ -100,11 +100,12 @@ class BackgroundLayersMenu(QMenu):
                 ("Pioneer", 'https://tile.thunderforest.com/pioneer/{z}/{x}/{y}.png'),
                 ("Spinal Map", 'https://tile.thunderforest.com/spinal-map/{z}/{x}/{y}.png')
             ])),
-            ("Bing Maps", OrderedDict([
-                ("Bing Roads", 'http://ecn.t3.tiles.virtualearth.net/tiles/r{q}.jpeg?g=1'),
-                ("Bing Aerial", 'http://ecn.t3.tiles.virtualearth.net/tiles/a{q}.jpeg?g=1'),
-                ("Bing Aerial with labels", 'http://ecn.t3.tiles.virtualearth.net/tiles/h{q}.jpeg?g=1')
+            ("ArcGIS World Imagery", OrderedDict([
+                ("Satellite", 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}')
             ]))
+            
+# https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}            
+            
         ])
 
         for layer_type in xyz_layers:
