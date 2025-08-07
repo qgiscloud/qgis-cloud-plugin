@@ -21,7 +21,7 @@
     <item row="1" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="mapTab">
        <attribute name="title">
@@ -34,7 +34,7 @@
            <bool>false</bool>
           </property>
           <property name="pixmap">
-           <pixmap resource="resources.qrc">:/plugins/qgiscloud/logo.png</pixmap>
+           <pixmap>:/plugins/qgiscloud/logo.png</pixmap>
           </property>
           <property name="scaledContents">
            <bool>false</bool>
@@ -247,7 +247,6 @@ p, li { white-space: pre-wrap; }
                <widget class="QLabel" name="lblMaps_3">
                 <property name="font">
                  <font>
-                  <weight>75</weight>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -368,9 +367,6 @@ p, li { white-space: pre-wrap; }
          <widget class="QWidget" name="progressWidget" native="true">
           <layout class="QHBoxLayout" name="horizontalLayout_6">
            <item>
-            <widget class="Spinner" name="spinner" native="true"/>
-           </item>
-           <item>
             <widget class="QLabel" name="lblProgress">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -431,7 +427,7 @@ p, li { white-space: pre-wrap; }
              <string>...</string>
             </property>
             <property name="icon">
-             <iconset resource="resources.qrc">
+             <iconset>
               <normaloff>:/plugins/qgiscloud/icon.png</normaloff>:/plugins/qgiscloud/icon.png</iconset>
             </property>
            </widget>
@@ -527,7 +523,6 @@ p, li { white-space: pre-wrap; }
               <widget class="QLabel" name="label_29">
                <property name="font">
                 <font>
-                 <weight>75</weight>
                  <bold>true</bold>
                 </font>
                </property>
@@ -626,7 +621,7 @@ p, li { white-space: pre-wrap; }
            <bool>false</bool>
           </property>
           <property name="pixmap">
-           <pixmap resource="resources.qrc">:/plugins/qgiscloud/logo.png</pixmap>
+           <pixmap>:/plugins/qgiscloud/logo.png</pixmap>
           </property>
           <property name="scaledContents">
            <bool>false</bool>
@@ -676,16 +671,6 @@ p, li { white-space: pre-wrap; }
    </layout>
   </widget>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>Spinner</class>
-   <extends>QWidget</extends>
-   <header>spinner.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
