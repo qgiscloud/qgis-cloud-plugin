@@ -19,13 +19,12 @@
  *                                                                         *
  ***************************************************************************/
 """
-from qgis.PyQt.QtCore import Qt, QSettings, pyqtSlot
+from qgis.PyQt.QtCore import Qt, QSettings, pyqtSlot,  QUrl
 from qgis.PyQt.QtWidgets import QApplication, QDockWidget,   QTableWidgetItem, QListWidgetItem, \
     QDialog, QMessageBox, QWidget, QLabel,  QVBoxLayout,  \
     QFileDialog,  QComboBox
 from qgis.PyQt.QtGui import QPalette, QColor,  QBrush
 from qgis.core import *
-from .ui_qgiscloudplugin import Ui_QgisCloudPlugin
 from .login_dialog import LoginDialog
 from .qgiscloudapi.qgiscloudapi import *
 from .db_connections import DbConnections
@@ -39,9 +38,7 @@ from .ui_relation_size import RelationSizeDialog
 from urllib.parse import urljoin, urlparse
 from datetime import datetime
 import os.path
-import sys
 import traceback
-import string
 import re
 import time
 import platform
@@ -51,6 +48,15 @@ import warnings
 warnings.simplefilter("ignore", ResourceWarning)
 import urllib.error, socket # import exceptions!
 
+# initialize Qt resources from file resources.py
+from .resources_rc import *
+
+import sys
+import os
+from qgis.PyQt import uic
+
+FORM_CLASS, _ = uic.loadUiType(os.path.join(
+    os.path.dirname(__file__), 'qgiscloudplugin.ui'))
 
 __all__ = ["QgisCloudPluginDialog", "SchemaListException"]
 
@@ -69,7 +75,7 @@ class SchemaListException(Exception):
     def __str__(self):
         return self.msg
 
-class QgisCloudPluginDialog(QDockWidget):
+class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
     COLUMN_LAYERS = 0
     COLUMN_SCHEMA_NAME = 1
     COLUMN_TABLE_NAME = 2
@@ -140,14 +146,18 @@ class QgisCloudPluginDialog(QDockWidget):
         self.clouddb = True
         self.version = version
         # Set up the user interface from Designer.
-        self.ui = Ui_QgisCloudPlugin()
-        self.ui.setupUi(self)
+#        self = Ui_QgisCloudPlugin()
+        self.setupUi(self)
         self.storage_exceeded = True
-        self.ui.progressBar.setValue(0)
-        self.ui.btnUploadData.setEnabled(False)
+        self.progressBar.setValue(0)
+        self.btnUploadData.setEnabled(False)
+        self.setFloating(False) 
+        self.widget_width = 421
+#        self.setMaximumWidth(self.maximum_width)
+        self.resize(self.widget_width, self.height())
 
         myAbout = DlgAbout()
-        self.ui.aboutText.setText(
+        self.aboutText.setText(
             myAbout.aboutString() +
             myAbout.contribString() +
             myAbout.licenseString() +
@@ -160,49 +170,49 @@ class QgisCloudPluginDialog(QDockWidget):
         data_protection_link = """<a href="http://qgiscloud.com/pages/privacy">%s</a>""" % (
             self.tr("Privacy Policy"))
 
-        self.ui.lblVersionPlugin.setText("%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%s" % (
+        self.lblVersionPlugin.setText("%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%s" % (
             self.version,  data_protection_link))
-        self.ui.lblVersionPlugin.setOpenExternalLinks(True)
+        self.lblVersionPlugin.setOpenExternalLinks(True)
 
-        self.ui.tblLocalLayers.setColumnCount(6)
+        self.tblLocalLayers.setColumnCount(6)
         header = ["Layers", "Table Schema", "Table name",
                   "Geometry type", "SRID", "Data Source"]
-        self.ui.tblLocalLayers.setHorizontalHeaderLabels(header)
-        self.ui.tblLocalLayers.resizeColumnsToContents()
-        self.ui.btnUploadData.setEnabled(False)
-        self.ui.btnPublishMap.setEnabled(False)
-        self.ui.btnMapDelete.setEnabled(False)
-        self.ui.btnMapEdit.setEnabled(False)
-        self.ui.progressWidget.hide()
-        self.ui.btnLogout.hide()
-        self.ui.lblLoginStatus.hide()
-        self.ui.widgetServices.hide()
-        self.ui.widgetDatabases.setEnabled(False)
-        self.ui.widgetMaps.setEnabled(False)
-        self.ui.labelOpenLayersPlugin.hide()
+        self.tblLocalLayers.setHorizontalHeaderLabels(header)
+        self.tblLocalLayers.resizeColumnsToContents()
+        self.btnUploadData.setEnabled(False)
+        self.btnPublishMap.setEnabled(False)
+        self.btnMapDelete.setEnabled(False)
+        self.btnMapEdit.setEnabled(False)
+        self.progressWidget.hide()
+        self.btnLogout.hide()
+        self.lblLoginStatus.hide()
+        self.widgetServices.hide()
+        self.widgetDatabases.setEnabled(False)
+        self.widgetMaps.setEnabled(False)
+        self.labelOpenLayersPlugin.hide()
 
-        self.ui.btnBackgroundLayer.setMenu(BackgroundLayersMenu(self.iface))
+        self.btnBackgroundLayer.setMenu(BackgroundLayersMenu(self.iface))
 
         # map<data source, table name>
         self.data_sources_table_names = {}
         # flag to disable update of local data sources during upload
         self.do_update_local_data_sources = True
 
-        self.ui.btnLogin.clicked.connect(self.check_login)
-        self.ui.btnDbCreate.clicked.connect(self.create_database)
-        self.ui.btnDbDelete.clicked.connect(self.delete_database)
-        self.ui.btnDbTables.clicked.connect(self.show_db_tables)
-        self.ui.btnMapEdit.clicked.connect(self.edit_map)
-        self.ui.btnDbRefresh.clicked.connect(self.refresh_databases)
-        self.ui.btnMapDelete.clicked.connect(self.delete_map)
-        self.ui.btnMapLoad.clicked.connect(self.map_load)
-        self.ui.tabMaps.itemDoubleClicked.connect(self.map_load)
-        self.ui.tabDatabases.itemSelectionChanged.connect(self.select_database)
-        self.ui.tabMaps.itemSelectionChanged.connect(self.select_map)
-        self.ui.btnPublishMap.clicked.connect(self.publish_map)
-        self.ui.btnRefreshLocalLayers.clicked.connect(
+        self.btnLogin.clicked.connect(self.check_login)
+        self.btnDbCreate.clicked.connect(self.create_database)
+        self.btnDbDelete.clicked.connect(self.delete_database)
+        self.btnDbTables.clicked.connect(self.show_db_tables)
+        self.btnMapEdit.clicked.connect(self.edit_map)
+        self.btnDbRefresh.clicked.connect(self.refresh_databases)
+        self.btnMapDelete.clicked.connect(self.delete_map)
+        self.btnMapLoad.clicked.connect(self.map_load)
+        self.tabMaps.itemDoubleClicked.connect(self.map_load)
+        self.tabDatabases.itemSelectionChanged.connect(self.select_database)
+        self.tabMaps.itemSelectionChanged.connect(self.select_map)
+        self.btnPublishMap.clicked.connect(self.publish_map)
+        self.btnRefreshLocalLayers.clicked.connect(
             self.refresh_local_data_sources)
-        self.ui.cbUploadDatabase.currentTextChanged.connect(
+        self.cbUploadDatabase.currentTextChanged.connect(
             self.update_data_sources_table_names)
         self.iface.newProjectCreated.connect(self.reset_load_data)
         self.iface.projectRead.connect(self.reset_load_data)
@@ -210,12 +220,12 @@ class QgisCloudPluginDialog(QDockWidget):
         self.PROJECT_INSTANCE.layerWillBeRemoved.connect(self.remove_layer)
         self.PROJECT_INSTANCE.layerWasAdded.connect(self.add_layer)
 
-        self.ui.cbUploadDatabase.currentIndexChanged.connect(
+        self.cbUploadDatabase.currentIndexChanged.connect(
             lambda idx: self.activate_upload_button())
-        self.ui.btnUploadData.clicked.connect(self.upload_data)
+        self.btnUploadData.clicked.connect(self.upload_data)
 
-        self.ui.editServer.textChanged.connect(self.serverURL)
-        self.ui.resetUrlBtn.clicked.connect(self.resetApiUrl)
+        self.editServer.textChanged.connect(self.serverURL)
+        self.resetUrlBtn.clicked.connect(self.resetApiUrl)
 
         self.read_settings()
         self.api = API()
@@ -225,18 +235,68 @@ class QgisCloudPluginDialog(QDockWidget):
         self.numDbs = -1
         self.local_data_sources = LocalDataSources()
         self.data_upload = DataUpload(
-            self.iface, self.statusBar(), self.ui.lblProgress, self.ui.progressBar,  self.api,
+            self.iface, self.statusBar(), self.lblProgress, self.progressBar,  self.api,
             self.db_connections)
 
         if self.URL == "":
-            self.ui.editServer.setText(self.api.api_url())
+            self.editServer.setText(self.api.api_url())
         else:
-            self.ui.editServer.setText(self.URL)
+            self.editServer.setText(self.URL)
 
-        self.palette_red = QPalette(self.ui.lblVersionPlugin.palette())
+        self.palette_red = QPalette(self.lblVersionPlugin.palette())
         self.palette_red.setColor(QPalette.WindowText, Qt.red)
 
         self.maps_lookup = {}
+        
+    @pyqtSlot(int)
+    def on_tabWidget_currentChanged(self, index):
+        locale = QgsApplication.locale()
+        available_locales = ['en',  'de']
+
+        if index == 3: # Help Tab
+            if locale in available_locales:
+                url = 'https://docs.qgiscloud.com/{}/'.format(locale)
+                self.restore_scroll_position()
+            else:
+                url = 'https://docs.qgiscloud.com/en/'
+                
+            self.show_documentation(url)
+        else:
+            self.save_scroll_position()
+            self.setMinimumWidth(self.widget_width)
+            self.resize(self.widget_width, self.height())
+            
+    def show_documentation(self,  url):       
+        # Resize the DockWidget, just for the documentation
+        self.setMinimumWidth(1000)
+        self.resize(1000, self.height())             
+        
+        # Create QWebEngineView content
+        self.webEngineView.load(QUrl(url))  # z.B. 'file:///path/to/build/html/index.html
+
+    def save_scroll_position(self):
+        settings = QgsSettings()
+        def on_scroll_y(scroll_y):
+            settings.setValue("qgiscloud/lastUrl", self.webEngineView.url().toString())
+            settings.setValue("qgiscloud/scrollY", scroll_y)
+        self.webEngineView.page().runJavaScript("window.scrollY", on_scroll_y)
+        
+    def restore_scroll_position(self):
+        settings = QgsSettings()
+        url = settings.value("qgiscloud/lastUrl", "")
+        scroll_y = settings.value("qgiscloud/scrollY", "0")
+
+        if url:
+            self.webEngineView.load(QUrl(url))
+
+            def on_load_finished():
+                js = f"window.scrollTo(0, {scroll_y});"
+                self.webEngineView.page().runJavaScript(js)
+
+            self.webEngineView.loadFinished.connect(on_load_finished)
+        else:
+            self.webEngineView.load(QUrl("https://qgiscloud.com"))  # Fallback
+
 
     def unload(self):
         self.do_update_local_data_sources = False
@@ -281,7 +341,7 @@ class QgisCloudPluginDialog(QDockWidget):
         return name
 
     def resetApiUrl(self):
-        self.ui.editServer.setText(self.api.api_url())
+        self.editServer.setText(self.api.api_url())
 
     def serverURL(self, URL):
         self.URL = URL.strip()
@@ -299,14 +359,14 @@ class QgisCloudPluginDialog(QDockWidget):
 
     def _update_clouddb_mode(self, clouddb):
         self.clouddb = clouddb
-        self.ui.widgetDatabases.setVisible(self.clouddb)
+        self.widgetDatabases.setVisible(self.clouddb)
         tab_index = 1
         tab_name = QApplication.translate("QgisCloudPlugin", "Upload Data")
-        visible = (self.ui.tabWidget.indexOf(self.ui.uploadTab) == tab_index)
+        visible = (self.tabWidget.indexOf(self.uploadTab) == tab_index)
         if visible and not self.clouddb:
-            self.ui.tabWidget.removeTab(tab_index)
+            self.tabWidget.removeTab(tab_index)
         elif not visible and self.clouddb:
-            self.ui.tabWidget.insertTab(tab_index, self.ui.uploadTab, tab_name)
+            self.tabWidget.insertTab(tab_index, self.uploadTab, tab_name)
 
     def _version_info(self):
         return {
@@ -397,28 +457,28 @@ class QgisCloudPluginDialog(QDockWidget):
                     version_ok = self.version_to_number(self.version) >= \
                         self.version_to_number(login_info['current_plugin'])
                     if not version_ok:
-                        self.ui.lblVersionPlugin.setPalette(self.palette_red)
+                        self.lblVersionPlugin.setPalette(self.palette_red)
                         QMessageBox.information(None, self.tr('New Version'),  self.tr(
                             'New plugin release {version} is available! Please upgrade the QGIS Cloud plugin.').format(version=login_info['current_plugin']))
                     self.store_settings()
-                    self.ui.btnLogin.hide()
-                    self.ui.lblSignup.hide()
-                    self.ui.btnLogout.show()
-                    self.ui.widgetDatabases.setEnabled(True)
-                    self.ui.widgetMaps.setEnabled(True)
+                    self.btnLogin.hide()
+                    self.lblSignup.hide()
+                    self.btnLogout.show()
+                    self.widgetDatabases.setEnabled(True)
+                    self.widgetMaps.setEnabled(True)
 
                     if login_info.get('paid_until') is None:
-                        self.ui.lblLoginStatus.setText(
+                        self.lblLoginStatus.setText(
                             self.tr("Logged in as {0} ({1})".format(self.user, login_info['plan'])))
                     else:
                         paid_until = login_info['paid_until']
-                        self.ui.lblLoginStatus.setText(
+                        self.lblLoginStatus.setText(
                             self.tr("""Logged in as {0} ({1})
 Paid until: {2}""").format(self.user,
                                         login_info['plan'],
                                         datetime.strftime(datetime.strptime(paid_until, "%Y-%m-%dT%H:%M:%SZ"), '%d.%m.%Y %H:%M')))
 
-                    self.ui.lblLoginStatus.show()
+                    self.lblLoginStatus.show()
                     self._push_message(
                         self.tr("QGIS Cloud"),
                         self.tr("Logged in as {0}").format(self.user),
@@ -430,7 +490,7 @@ Paid until: {2}""").format(self.user,
                         self._push_message(self.tr("QGIS Cloud"), self.tr(
                             "Unsupported versions detected. Please check your versions first!"), level=1)
                         version_ok = False
-                        self.ui.tabWidget.setCurrentWidget(self.ui.aboutTab)
+                        self.tabWidget.setCurrentWidget(self.aboutTab)
                     login_ok = True
                     self.update_local_layers()
 
@@ -498,26 +558,26 @@ Do you want to create a new database now?
         return major * 10000 + minor * 100 + rev
 
     def create_database(self):
-        self.ui.btnDbRefresh.setDisabled(True)
+        self.btnDbRefresh.setDisabled(True)
         if self.numDbs < self.maxDBs:
             self.setCursor(Qt.WaitCursor)
-            self.ui.btnDbCreate.setEnabled(False)
+            self.btnDbCreate.setEnabled(False)
             db = self.api.create_database()
             if not self.show_api_error(db):
                 # wait some time until new db is available
                 new_db_ready = DbConnections.wait_for_new_db(db)
                 if new_db_ready:
                     self.refresh_databases()
-                    self.ui.btnDbRefresh.setEnabled(True)
+                    self.btnDbRefresh.setEnabled(True)
                     
-            self.ui.btnDbCreate.setEnabled(True)
+            self.btnDbCreate.setEnabled(True)
             self.unsetCursor()
         else:
             QMessageBox.warning(None, self.tr('Warning!'),  self.tr(
                 'Number of %s permitted databases exceeded! Please upgrade your account!') % self.maxDBs)
 
     def show_db_tables(self):
-        name = self.ui.tabDatabases.currentItem().text().split(' - ')[0]
+        name = self.tabDatabases.currentItem().text().split(' - ')[0]
         db = self.db_connections.db(dbname=name)     
         
         if db != '' :
@@ -526,7 +586,7 @@ Do you want to create a new database now?
 
         
     def delete_database(self):
-        name = self.ui.tabDatabases.currentItem().text().split(' - ')[0]
+        name = self.tabDatabases.currentItem().text().split(' - ')[0]
         answer = False
 
         for layer in list(self.PROJECT_INSTANCE.mapLayers().values()):
@@ -567,8 +627,8 @@ Do you want to create a new database now?
 
         if ret == QMessageBox.Ok:
             self.setCursor(Qt.WaitCursor)
-            self.ui.btnDbDelete.setEnabled(False)
-            self.ui.btnDbTables.setEnabled(False)
+            self.btnDbDelete.setEnabled(False)
+            self.btnDbTables.setEnabled(False)
             result = self.api.delete_database(name)
             if not self.show_api_error(result):
                 # wait some time until removed DB is no longer present
@@ -588,38 +648,38 @@ Do you want to create a new database now?
             self.unsetCursor()
 
     def select_database(self):
-        self.ui.btnDbDelete.setEnabled(
-            len(self.ui.tabDatabases.selectedItems()) > 0)
-        self.ui.btnDbTables.setEnabled(
-            len(self.ui.tabDatabases.selectedItems()) > 0)
+        self.btnDbDelete.setEnabled(
+            len(self.tabDatabases.selectedItems()) > 0)
+        self.btnDbTables.setEnabled(
+            len(self.tabDatabases.selectedItems()) > 0)
 
     def select_map(self):
-        self.ui.btnMapDelete.setEnabled(
-            len(self.ui.tabMaps.selectedItems()) > 0)
-        self.ui.btnMapLoad.setEnabled(
-            len(self.ui.tabMaps.selectedItems()) > 0)
-        self.ui.btnMapEdit.setEnabled(
-            len(self.ui.tabMaps.selectedItems()) > 0)
-        self.ui.btnDbDelete.setEnabled(
-            len(self.ui.tabDatabases.selectedItems()) > 0)
-        self.ui.btnDbTables.setEnabled(
-            len(self.ui.tabDatabases.selectedItems()) > 0)            
+        self.btnMapDelete.setEnabled(
+            len(self.tabMaps.selectedItems()) > 0)
+        self.btnMapLoad.setEnabled(
+            len(self.tabMaps.selectedItems()) > 0)
+        self.btnMapEdit.setEnabled(
+            len(self.tabMaps.selectedItems()) > 0)
+        self.btnDbDelete.setEnabled(
+            len(self.tabDatabases.selectedItems()) > 0)
+        self.btnDbTables.setEnabled(
+            len(self.tabDatabases.selectedItems()) > 0)            
         self.update_urls(
-            map=self.ui.tabMaps.currentItem().text())
+            map=self.tabMaps.currentItem().text())
 
     @pyqtSlot()
     def on_btnLogout_clicked(self):
         self.api.reset_auth()
-        self.ui.btnLogout.hide()
-        self.ui.lblLoginStatus.hide()
-        self.ui.btnLogin.show()
-        self.ui.widgetServices.hide()
-        self.ui.tabDatabases.clear()
-        self.ui.tabMaps.clear()
-        self.ui.lblDbSize.setText("")
-        self.ui.lblDbSizeUpload.setText("")
-        self.ui.cbUploadDatabase.clear()
-        self.ui.widgetDatabases.setEnabled(False)
+        self.btnLogout.hide()
+        self.lblLoginStatus.hide()
+        self.btnLogin.show()
+        self.widgetServices.hide()
+        self.tabDatabases.clear()
+        self.tabMaps.clear()
+        self.lblDbSize.setText("")
+        self.lblDbSizeUpload.setText("")
+        self.cbUploadDatabase.clear()
+        self.widgetDatabases.setEnabled(False)
         self.activate_upload_button()
 
     def refresh_plan_limits(self, login_info=None):
@@ -638,33 +698,33 @@ Do you want to create a new database now?
             if self.show_api_error(db_list):
                 # mark as error
                 self.numDbs = -1
-                self.ui.btnDbCreate.setEnabled(False)
+                self.btnDbCreate.setEnabled(False)
                 QApplication.restoreOverrideCursor()
                 return
             self.db_connections = DbConnections()
             for db in db_list:
                 self.db_connections.add_from_json(db)
 
-            self.ui.tabDatabases.clear()
-            self.ui.btnDbCreate.setEnabled(True)
-            self.ui.btnDbDelete.setEnabled(False)
-            self.ui.btnDbTables.setEnabled(False)
-            self.ui.cbUploadDatabase.clear()
-            self.ui.cbUploadDatabase.setEditable(True)
-            self.ui.cbUploadDatabase.lineEdit().setReadOnly(True)
+            self.tabDatabases.clear()
+            self.btnDbCreate.setEnabled(True)
+            self.btnDbDelete.setEnabled(False)
+            self.btnDbTables.setEnabled(False)
+            self.cbUploadDatabase.clear()
+            self.cbUploadDatabase.setEditable(True)
+            self.cbUploadDatabase.lineEdit().setReadOnly(True)
             if self.db_connections.count() == 0:
-                self.ui.cbUploadDatabase.setEditText(self.tr("No databases"))
+                self.cbUploadDatabase.setEditText(self.tr("No databases"))
             else:
                 for name, db in list(self.db_connections.iteritems()):
                     db_size = self.db_size_name(name)
                     it = QListWidgetItem('%s - %s MB' % (name,  db_size))
                     it.setToolTip(db.description())
-                    self.ui.tabDatabases.addItem(it)
-                    self.ui.cbUploadDatabase.addItem(name)
-                if self.ui.cbUploadDatabase.count() > 1:
+                    self.tabDatabases.addItem(it)
+                    self.cbUploadDatabase.addItem(name)
+                if self.cbUploadDatabase.count() > 1:
                     # Display the "Select database" text if more than one db is available
-                    self.ui.cbUploadDatabase.setCurrentIndex(-1)
-                    self.ui.cbUploadDatabase.setEditText(
+                    self.cbUploadDatabase.setCurrentIndex(-1)
+                    self.cbUploadDatabase.setEditText(
                         self.tr("Select database"))
             self.db_connections.refresh(self.user)
 
@@ -674,10 +734,10 @@ Do you want to create a new database now?
         QApplication.restoreOverrideCursor()
 
     def map_load(self,  item=None,  row=None):
-        self.ui.widgetServices.close()
+        self.widgetServices.close()
         self.setCursor(Qt.WaitCursor)
-        map_id = self.ui.tabMaps.currentItem().data(Qt.UserRole)
-        map_name = self.ui.tabMaps.currentItem().text()
+        map_id = self.tabMaps.currentItem().data(Qt.UserRole)
+        map_name = self.tabMaps.currentItem().text()
         result = self.api.load_map_project(map_name,  map_id)
         qgs_file_name = '%s/%s.qgs' % (tempfile.gettempdir(), map_name)
         qgs_file = open(qgs_file_name,  'w')
@@ -704,8 +764,8 @@ Do you want to create a new database now?
         self.unsetCursor()
 
     def delete_map(self):
-        name = self.ui.tabMaps.currentItem().text()
-        map_id = self.ui.tabMaps.currentItem().data(Qt.UserRole)
+        name = self.tabMaps.currentItem().text()
+        map_id = self.tabMaps.currentItem().data(Qt.UserRole)
 
         msgBox = QMessageBox()
         msgBox.setWindowTitle(self.tr("Delete QGIS Cloud map."))
@@ -717,33 +777,33 @@ Do you want to create a new database now?
         ret = msgBox.exec_()
 
         if ret == QMessageBox.Ok:
-#            self.ui.widgetServices.close()
+#            self.widgetServices.close()
             self.clean_widgetServices()
             self.setCursor(Qt.WaitCursor)
             success = self.api.delete_map(map_id)
 
             if success:
-                self.ui.btnMapDelete.setEnabled(False)
+                self.btnMapDelete.setEnabled(False)
                 self.refresh_maps()
             else:
                 self.show_api_error(success)
 
             self.unsetCursor()
-#            self.ui.widgetServices.close()
+#            self.widgetServices.close()
             self.clean_widgetServices()
         else:
             QMessageBox.warning(None,  self.tr('Warning'),  self.tr(
                 'Deletion of map "{name}" interrupted!').format(name=name))
 
     def clean_widgetServices(self):
-#        self.ui.lblWebmap.setText('')
-#        self.ui.lblWMS.setText('')
+#        self.lblWebmap.setText('')
+#        self.lblWMS.setText('')
         pass
 
 
     def edit_map(self):
-        map_id = self.ui.tabMaps.currentItem().data(Qt.UserRole)
-        map_name = self.ui.tabMaps.currentItem().text()
+        map_id = self.tabMaps.currentItem().data(Qt.UserRole)
+        map_name = self.tabMaps.currentItem().text()
         plan = self.api.check_login(
             version_info=self._version_info())["plan"]
 
@@ -761,15 +821,15 @@ Do you want to create a new database now?
             QApplication.restoreOverrideCursor()
             return
 
-        self.ui.tabMaps.clear()
-        self.ui.btnMapDelete.setEnabled(False)
-        self.ui.btnMapEdit.setEnabled(False)
-        self.ui.btnMapLoad.setEnabled(False)
+        self.tabMaps.clear()
+        self.btnMapDelete.setEnabled(False)
+        self.btnMapEdit.setEnabled(False)
+        self.btnMapLoad.setEnabled(False)
 
         self.maps_lookup = {}
         for map in map_list:
             it = QListWidgetItem(map['map']['name'])
-            self.ui.tabMaps.addItem(it)
+            self.tabMaps.addItem(it)
             it.setData(Qt.UserRole,  map['map']['id'])
 
             # add map info to maps lookup
@@ -778,7 +838,7 @@ Do you want to create a new database now?
         QApplication.restoreOverrideCursor()
 
     def api_url(self):
-        return str(self.ui.editServer.text().strip())
+        return str(self.editServer.text().strip())
 
     def update_urls(self,  map=None):
         if map == None:
@@ -806,31 +866,31 @@ Do you want to create a new database now?
 
         # default: https://qgiscloud.com/:user/:map/
         viewer_path = links.get('viewer', "/%s/%s/" % (self.user, map))
-        self.update_url(self.ui.lblWebmap, host, viewer_path)
+        self.update_url(self.lblWebmap, host, viewer_path)
 
         # default: https://wms.qgiscloud.com/:user/:map/
         ows_path = links.get('ows', "/%s/%s/" % (self.user, map))
-        self.update_url(self.ui.lblWMS, wms_host, ows_path)
+        self.update_url(self.lblWMS, wms_host, ows_path)
 
         # default: https://qgiscloud.com/maps
         map_admin_path = links.get('map_admin', '/maps')
         if map_admin_path:
-            self.update_url(self.ui.lblMaps, host, map_admin_path)
-            self.ui.label_5.show()
-            self.ui.lblMaps.show()
+            self.update_url(self.lblMaps, host, map_admin_path)
+            self.label_5.show()
+            self.lblMaps.show()
         else:
-            self.ui.label_5.hide()
-            self.ui.lblMaps.hide()
+            self.label_5.hide()
+            self.lblMaps.hide()
 
         # show support link only for qgiscloud.com
         if host.endswith('qgiscloud.com'):
-            self.ui.label_8.show()
-            self.ui.lblMobileMap_2.show()
+            self.label_8.show()
+            self.lblMobileMap_2.show()
         else:
-            self.ui.label_8.hide()
-            self.ui.lblMobileMap_2.hide()
+            self.label_8.hide()
+            self.lblMobileMap_2.hide()
 
-        self.ui.widgetServices.show()
+        self.widgetServices.show()
 
     def update_url(self, label, api_url, path):
         url = urljoin(api_url, path)
@@ -1069,10 +1129,10 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
         self.statusBar().showMessage("")
 
     def reset_load_data(self):
-        self.ui.widgetServices.hide()
+        self.widgetServices.hide()
         self.update_local_data_sources([],  [])
-        self.ui.btnUploadData.setEnabled(False)
-        self.ui.tabMaps.clearSelection()
+        self.btnUploadData.setEnabled(False)
+        self.tabMaps.clearSelection()
 
     def remove_layer(self, layer_id):
         if self.do_update_local_data_sources:
@@ -1118,14 +1178,14 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
             QMessageBox.warning(self, title, message)
 
             self.refresh_databases()
-            self.ui.tabWidget.setCurrentWidget(self.ui.uploadTab)
+            self.tabWidget.setCurrentWidget(self.uploadTab)
             return False
 
         return True
 
     def update_local_data_sources(self, local_layers,  local_raster_layers):
         # update table names lookup
-        self.ui.btnUploadData.setEnabled(False)
+        self.btnUploadData.setEnabled(False)
         local_layers += local_raster_layers
         if self.update_data_sources_table_names() is False:
             return
@@ -1133,15 +1193,15 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
         self.local_data_sources.update_local_data_sources(local_layers)
 
         # update GUI
-        self.ui.tblLocalLayers.setRowCount(0)
+        self.tblLocalLayers.setRowCount(0)
 
         schema_list = []
-        if self.ui.cbUploadDatabase.count() == 1:
+        if self.cbUploadDatabase.count() == 1:
             schema_list = self.fetch_schemas(
-                self.ui.cbUploadDatabase.currentText())
-        elif self.ui.cbUploadDatabase.currentIndex() > 0:
+                self.cbUploadDatabase.currentText())
+        elif self.cbUploadDatabase.currentIndex() > 0:
             schema_list = self.fetch_schemas(
-                self.ui.cbUploadDatabase.currentText())
+                self.cbUploadDatabase.currentText())
 
         for data_source, layers in list(self.local_data_sources.iteritems()):
             layer_names = []
@@ -1190,49 +1250,49 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
                 srid_item.setBackground(QBrush(Qt.red))
                 srid_item.setForeground(QBrush(Qt.white))
                 srid_item.setToolTip(self.tr("QGIS Cloud supports only Authority EPSG, IAU_2015 or ESRI reference systems"))
-                self.ui.btnUploadData.setDisabled(True)
+                self.btnUploadData.setDisabled(True)
             else:
                 srid_item = QTableWidgetItem(layers[0].crs().authid())
-                self.ui.btnUploadData.setDisabled(False)
+                self.btnUploadData.setDisabled(False)
 
-            row = self.ui.tblLocalLayers.rowCount()
-            self.ui.tblLocalLayers.insertRow(row)
+            row = self.tblLocalLayers.rowCount()
+            self.tblLocalLayers.insertRow(row)
             layers_item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
-            self.ui.tblLocalLayers.setItem(
+            self.tblLocalLayers.setItem(
                 row, self.COLUMN_LAYERS, layers_item)
             data_source_item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
-            self.ui.tblLocalLayers.setItem(
+            self.tblLocalLayers.setItem(
                 row, self.COLUMN_DATA_SOURCE, data_source_item)
 
 # create combo box in schema column filled with all schema names of the selected database
             cmb_schema = QComboBox()
             cmb_schema.setEditable(True)
             cmb_schema.addItems(schema_list)
-            self.ui.tblLocalLayers.setCellWidget(
+            self.tblLocalLayers.setCellWidget(
                 row, self.COLUMN_SCHEMA_NAME, cmb_schema)
 
             table_name_item.setFlags(
                 Qt.ItemIsSelectable | Qt.ItemIsEditable | Qt.ItemIsEnabled)
-            self.ui.tblLocalLayers.setItem(
+            self.tblLocalLayers.setItem(
                 row, self.COLUMN_TABLE_NAME, table_name_item)
 
             geometry_type_item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
-            self.ui.tblLocalLayers.setItem(
+            self.tblLocalLayers.setItem(
                 row, self.COLUMN_GEOMETRY_TYPE, geometry_type_item)
 
             srid_item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
-            self.ui.tblLocalLayers.setItem(row, self.COLUMN_SRID, srid_item)
+            self.tblLocalLayers.setItem(row, self.COLUMN_SRID, srid_item)
 
         if self.local_data_sources.count() > 0:
-            self.ui.tblLocalLayers.resizeColumnsToContents()
-            self.ui.tblLocalLayers.setColumnWidth(self.COLUMN_LAYERS, 100)
-            self.ui.tblLocalLayers.setColumnWidth(self.COLUMN_DATA_SOURCE, 100)
-            self.ui.tblLocalLayers.sortItems(self.COLUMN_DATA_SOURCE)
+            self.tblLocalLayers.resizeColumnsToContents()
+            self.tblLocalLayers.setColumnWidth(self.COLUMN_LAYERS, 100)
+            self.tblLocalLayers.setColumnWidth(self.COLUMN_DATA_SOURCE, 100)
+            self.tblLocalLayers.sortItems(self.COLUMN_DATA_SOURCE)
 
-#        if self.ui.tblLocalLayers.rowCount() > 0:
-#            self.ui.tblLocalLayers.setSortingEnabled(True)
+#        if self.tblLocalLayers.rowCount() > 0:
+#            self.tblLocalLayers.setSortingEnabled(True)
 #        else:
-#            self.ui.tblLocalLayers.setSortingEnabled(False)
+#            self.tblLocalLayers.setSortingEnabled(False)
 
         self.statusBar().showMessage(self.tr("Updated local data sources"))
 
@@ -1301,12 +1361,12 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
     def update_data_sources_table_names(self):
         schema_list = []
         try:
-            schema_list = self.fetch_schemas(self.ui.cbUploadDatabase.currentText())
+            schema_list = self.fetch_schemas(self.cbUploadDatabase.currentText())
         except BaseException:
             QMessageBox.warning(
                 self,
                 "Database could not be found",
-                f"Failed to access '{self.ui.cbUploadDatabase.currentText()}'.\n"
+                f"Failed to access '{self.cbUploadDatabase.currentText()}'.\n"
                 "The database was either deleted or the connection to the database failed.\n"
                 "Please try again later or contact the support."
             )
@@ -1314,9 +1374,9 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
 
         if self.local_data_sources.count() == 0:
             self.data_sources_table_names.clear()
-            self.ui.btnUploadData.setDisabled(True)
+            self.btnUploadData.setDisabled(True)
         else:
-            self.ui.btnUploadData.setDisabled(False)
+            self.btnUploadData.setDisabled(False)
             # remove table names without data sources
             keys_to_remove = []
             for key in list(self.data_sources_table_names.keys()):
@@ -1329,10 +1389,10 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
             # update table names
             if schema_list != None:
                 shortened_table_number = 0
-                for row in range(0, self.ui.tblLocalLayers.rowCount()):
-                    table_length = len(self.ui.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text())
+                for row in range(0, self.tblLocalLayers.rowCount()):
+                    table_length = len(self.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text())
                     if  table_length > 62:
-                        self.ui.btnUploadData.setDisabled(True)
+                        self.btnUploadData.setDisabled(True)
                         QApplication.restoreOverrideCursor()
                         answer = QMessageBox.question(
                             self,
@@ -1345,44 +1405,44 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
 has more than 62 characters and cannot be processed like this. Please give the table a shorter name.
 
 Should the table name be shortened automatically?
-""".format(table_name=self.ui.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text())),
+""".format(table_name=self.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text())),
                             QMessageBox.StandardButtons(
                                 QMessageBox.No |
                                 QMessageBox.Yes))
                         if answer == QMessageBox.Yes:
-                            new_table_name = self.ui.tblLocalLayers.item(
+                            new_table_name = self.tblLocalLayers.item(
                                                                         row,
                                                                         self.COLUMN_TABLE_NAME).text()[:-1*(table_length - 59)]
-                            self.ui.tblLocalLayers.item(
+                            self.tblLocalLayers.item(
                                     row,
                                     self.COLUMN_TABLE_NAME).setText(new_table_name + '_'+str(shortened_table_number))
                             shortened_table_number += 1
 
-                    table_name = self.ui.tblLocalLayers.item(
+                    table_name = self.tblLocalLayers.item(
                                             row, self.COLUMN_TABLE_NAME).text()
-                    data_source = self.ui.tblLocalLayers.item(
+                    data_source = self.tblLocalLayers.item(
                         row, self.COLUMN_DATA_SOURCE).text()
                     cmb_schema = QComboBox()
                     cmb_schema.setEditable(True)
                     cmb_schema.addItems(schema_list)
-                    self.ui.tblLocalLayers.setCellWidget(
+                    self.tblLocalLayers.setCellWidget(
                         row, self.COLUMN_SCHEMA_NAME, cmb_schema)
                     self.data_sources_table_names[data_source] = table_name
 
     def activate_upload_button(self):
         if not self.storage_exceeded:
-            self.ui.btnUploadData.setEnabled(
+            self.btnUploadData.setEnabled(
                 self.local_data_sources.count() > 0)
-            self.ui.btnPublishMap.setDisabled(self.storage_exceeded)
+            self.btnPublishMap.setDisabled(self.storage_exceeded)
         else:
-            self.ui.btnUploadData.setDisabled(self.storage_exceeded)
-            self.ui.btnPublishMap.setDisabled(self.storage_exceeded)
+            self.btnUploadData.setDisabled(self.storage_exceeded)
+            self.btnPublishMap.setDisabled(self.storage_exceeded)
 
-        for row in range(self.ui.tblLocalLayers.rowCount()):
-            if self.ui.tblLocalLayers.item(row, self.COLUMN_SRID).text() == 'SRID not valid':
-                self.ui.btnUploadData.setEnabled(False)
-            elif len(self.ui.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text()) > 62:
-                self.ui.btnUploadData.setEnabled(False)
+        for row in range(self.tblLocalLayers.rowCount()):
+            if self.tblLocalLayers.item(row, self.COLUMN_SRID).text() == 'SRID not valid':
+                self.btnUploadData.setEnabled(False)
+            elif len(self.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text()) > 62:
+                self.btnUploadData.setEnabled(False)
 
     def upload_data(self):
         if self.check_login():
@@ -1394,12 +1454,12 @@ Should the table name be shortened automatically?
                     "Please create a database in the 'Account' tab."))
                 return
 
-            if not self.ui.cbUploadDatabase.currentIndex() >= 0:
+            if not self.cbUploadDatabase.currentIndex() >= 0:
                 QMessageBox.warning(self, self.tr("No database selected"), self.tr(
                     "Please select a database to upload data."))
                 return
 
-            db_name = self.ui.cbUploadDatabase.currentText()
+            db_name = self.cbUploadDatabase.currentText()
 
             if not self.db_connections.isPortOpen(db_name):
                 uri = self.db_connections.cloud_layer_uri(db_name, "", "")
@@ -1414,23 +1474,23 @@ Should the table name be shortened automatically?
             self.do_update_local_data_sources = False
             self.statusBar().showMessage(self.tr("Uploading data..."))
             self.setCursor(Qt.WaitCursor)
-            self.ui.btnUploadData.hide()
-            self.ui.spinner.start()
-            self.ui.progressWidget.show()
+            self.btnUploadData.hide()
+            self.spinner.start()
+            self.progressWidget.show()
 
             # Map<data_source, {schema: schema, table: table, layers: layers}>
             data_sources_items = {}
-            for row in range(0, self.ui.tblLocalLayers.rowCount()):
+            for row in range(0, self.tblLocalLayers.rowCount()):
                 data_source = unicode(
-                    self.ui.tblLocalLayers.item(
+                    self.tblLocalLayers.item(
                         row, self.COLUMN_DATA_SOURCE).text())
                 layers = self.local_data_sources.layers(data_source)
                 if layers is not None:
                     schema_name = unicode(
-                        self.ui.tblLocalLayers.cellWidget(
+                        self.tblLocalLayers.cellWidget(
                             row, self.COLUMN_SCHEMA_NAME).currentText())
                     table_name = unicode(
-                        self.ui.tblLocalLayers.item(
+                        self.tblLocalLayers.item(
                             row, self.COLUMN_TABLE_NAME).text())
                     data_sources_items[data_source] = {
                         u'schema': unicode(schema_name), u'table': unicode(table_name), u'layers': layers}
@@ -1444,9 +1504,9 @@ Should the table name be shortened automatically?
                     e) + "\n\n\n" + traceback.format_exc(), self.user, self).exec_()
                 upload_ok = False
 
-            self.ui.spinner.stop()
-            self.ui.progressWidget.hide()
-            self.ui.btnUploadData.show()
+            self.spinner.stop()
+            self.progressWidget.hide()
+            self.btnUploadData.show()
             self.unsetCursor()
             self.statusBar().showMessage("")
 
@@ -1493,7 +1553,7 @@ Should the table name be shortened automatically?
                         self.iface.actionSaveProject().trigger()
 
                 # Switch to map tab
-                self.ui.tabWidget.setCurrentWidget(self.ui.mapTab)
+                self.tabWidget.setCurrentWidget(self.mapTab)
 
     def _push_message(self, title, text, level=0, duration=0):
         # QGIS >= 2.0
@@ -1522,7 +1582,7 @@ Should the table name be shortened automatically?
         self.fetch_schemas(p0)
 
     def fetch_schemas(self,  db):
-        if db != '' and self.ui.cbUploadDatabase.currentIndex() >= 0:
+        if db != '' and self.cbUploadDatabase.currentIndex() >= 0:
             conn = self.db_connections.db(db).psycopg_connection()
             cursor = conn.cursor()
             sql = """
@@ -1581,7 +1641,7 @@ Should the table name be shortened automatically?
             except:
                 continue
 
-        lblPalette = QPalette(self.ui.lblDbSize.palette())
+        lblPalette = QPalette(self.lblDbSize.palette())
         usage = usedSpace / float(self.maxSize)
         self.storage_exceeded = False
 
@@ -1599,14 +1659,14 @@ Should the table name be shortened automatically?
         lblPalette.setColor(QPalette.Window, QColor(bg_color))
         lblPalette.setColor(QPalette.Foreground, QColor(text_color))
 
-        self.ui.lblDbSize.setAutoFillBackground(True)
-        self.ui.lblDbSize.setPalette(lblPalette)
-        self.ui.lblDbSize.setText(
+        self.lblDbSize.setAutoFillBackground(True)
+        self.lblDbSize.setPalette(lblPalette)
+        self.lblDbSize.setText(
             self.tr("Used DB Storage: ") + "%d / %d MB" % (usedSpace, self.maxSize))
 
-        self.ui.lblDbSizeUpload.setAutoFillBackground(True)
-        self.ui.lblDbSizeUpload.setPalette(lblPalette)
-        self.ui.lblDbSizeUpload.setText(
+        self.lblDbSizeUpload.setAutoFillBackground(True)
+        self.lblDbSizeUpload.setPalette(lblPalette)
+        self.lblDbSizeUpload.setText(
             self.tr("Used DB Storage: ") + "%d / %d MB" % (usedSpace, self.maxSize))
-        self.ui.btnUploadData.setDisabled(self.storage_exceeded)
-        self.ui.btnPublishMap.setDisabled(self.storage_exceeded)
+        self.btnUploadData.setDisabled(self.storage_exceeded)
+        self.btnPublishMap.setDisabled(self.storage_exceeded)
