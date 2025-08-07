@@ -1,6 +1,1 @@
-<RCC>
-  <qresource prefix="/plugins/qgiscloud">
-    <file>logo.png</file>
-    <file>icon.png</file>
-  </qresource>
-</RCC>
+<RCC/>
