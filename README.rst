@@ -4,6 +4,8 @@ qgis-cloud-plugin
 
 qgis-cloud-plugin is a `QGIS <http://www.qgis.org/>`_ plugin for publishing maps on `qgiscloud.com <http://qgiscloud.com>`_.
 
+For further information about QGIS Cloud please take a look at the `documentation <https://docs.qgiscloud.com/en/>`_.
+
 
 Copyright and License
 =====================
