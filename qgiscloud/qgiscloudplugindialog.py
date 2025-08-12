@@ -20,10 +20,12 @@
  ***************************************************************************/
 """
 from qgis.PyQt.QtCore import Qt, QSettings, pyqtSlot,  QUrl
-from qgis.PyQt.QtWidgets import QApplication, QDockWidget,   QTableWidgetItem, QListWidgetItem, \
-    QDialog, QMessageBox, QWidget, QLabel,  QVBoxLayout,  \
-    QFileDialog,  QComboBox
-from qgis.PyQt.QtGui import QPalette, QColor,  QBrush
+from qgis.PyQt.QtWidgets import (
+                                                                QApplication, QDockWidget,   QTableWidgetItem, 
+                                                                QListWidgetItem, QDialog, QMessageBox, QWidget, 
+                                                                QLabel,  QVBoxLayout,  QFileDialog,  QComboBox,  QTabBar
+                                                          )
+from qgis.PyQt.QtGui import QPalette, QColor,  QBrush,  QDesktopServices
 from qgis.core import *
 from .login_dialog import LoginDialog
 from .qgiscloudapi.qgiscloudapi import *
@@ -74,6 +76,7 @@ class SchemaListException(Exception):
 
     def __str__(self):
         return self.msg
+
 
 class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
     COLUMN_LAYERS = 0
@@ -146,16 +149,10 @@ class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
         self.clouddb = True
         self.version = version
         # Set up the user interface from Designer.
-#        self = Ui_QgisCloudPlugin()
         self.setupUi(self)
         self.storage_exceeded = True
         self.progressBar.setValue(0)
         self.btnUploadData.setEnabled(False)
-        self.setFloating(False) 
-        self.widget_width = 421
-#        self.setMaximumWidth(self.maximum_width)
-        self.resize(self.widget_width, self.height())
-
         myAbout = DlgAbout()
         self.aboutText.setText(
             myAbout.aboutString() +
@@ -248,54 +245,18 @@ class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
 
         self.maps_lookup = {}
         
-    @pyqtSlot(int)
-    def on_tabWidget_currentChanged(self, index):
+        # QLabel with HTML-Link for Tab Help
+        self.last_index = 2
         locale = QgsApplication.locale()
         available_locales = ['en',  'de']
-
-        if index == 3: # Help Tab
-            if locale in available_locales:
-                url = 'https://docs.qgiscloud.com/{}/'.format(locale)
-                self.restore_scroll_position()
-            else:
-                url = 'https://docs.qgiscloud.com/en/'
-                
-            self.show_documentation(url)
+        
+        if locale in available_locales:
+            self.docu_url = 'https://docs.qgiscloud.com/{}/'.format(locale)
         else:
-            self.save_scroll_position()
-            self.setMinimumWidth(self.widget_width)
-            self.resize(self.widget_width, self.height())
+            self.docu_url = 'https://docs.qgiscloud.com/en/'
             
-    def show_documentation(self,  url):       
-        # Resize the DockWidget, just for the documentation
-        self.setMinimumWidth(1000)
-        self.resize(1000, self.height())             
-        
-        # Create QWebEngineView content
-        self.webEngineView.load(QUrl(url))  # z.B. 'file:///path/to/build/html/index.html
-
-    def save_scroll_position(self):
-        settings = QgsSettings()
-        def on_scroll_y(scroll_y):
-            settings.setValue("qgiscloud/lastUrl", self.webEngineView.url().toString())
-            settings.setValue("qgiscloud/scrollY", scroll_y)
-        self.webEngineView.page().runJavaScript("window.scrollY", on_scroll_y)
-        
-    def restore_scroll_position(self):
-        settings = QgsSettings()
-        url = settings.value("qgiscloud/lastUrl", "")
-        scroll_y = settings.value("qgiscloud/scrollY", "0")
-
-        if url:
-            self.webEngineView.load(QUrl(url))
-
-            def on_load_finished():
-                js = f"window.scrollTo(0, {scroll_y});"
-                self.webEngineView.page().runJavaScript(js)
-
-            self.webEngineView.loadFinished.connect(on_load_finished)
-        else:
-            self.webEngineView.load(QUrl("https://qgiscloud.com"))  # Fallback
+        self.lbl_doku_image.setText(self.tr("""You can open the <a href=‘{}’> online documentation</a> here.""").format(self.docu_url))
+        self.lbl_doku_image.setOpenExternalLinks(True)  # Links dürfen geklickt werden
 
 
     def unload(self):
@@ -1475,7 +1436,6 @@ Should the table name be shortened automatically?
             self.statusBar().showMessage(self.tr("Uploading data..."))
             self.setCursor(Qt.WaitCursor)
             self.btnUploadData.hide()
-            self.spinner.start()
             self.progressWidget.show()
 
             # Map<data_source, {schema: schema, table: table, layers: layers}>
@@ -1504,7 +1464,6 @@ Should the table name be shortened automatically?
                     e) + "\n\n\n" + traceback.format_exc(), self.user, self).exec_()
                 upload_ok = False
 
-            self.spinner.stop()
             self.progressWidget.hide()
             self.btnUploadData.show()
             self.unsetCursor()
