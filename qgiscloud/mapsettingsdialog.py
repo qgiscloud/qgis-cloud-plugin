@@ -24,6 +24,7 @@ from qgis.PyQt.QtCore import *
 from qgis.PyQt.QtWidgets import *
 from qgis.gui import QgsCodeEditorSQL
 from qgis.PyQt import uic
+from contextlib import contextmanager
 
 import re
 import os
@@ -50,35 +51,41 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
         # get all map options
         self.map_options = self.api.read_map_options()
 
+    @contextmanager
+    def wait_cursor(self):
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            yield
+        finally:
+            QApplication.restoreOverrideCursor()     
+            
     def prepare_ui(self):
-        QGuiApplication.setOverrideCursor(Qt.WaitCursor)
-        self.set_checkboxes()
-        self.set_combobox_options()
-        self.set_scales()
-        self.set_search_type()
-        self.enable_user_management()
-        self.fill_users_listWidget()
-        self.set_icons()
-        self.set_shared_groups()
+        with self.wait_cursor():
+            self.set_checkboxes()
+            self.set_combobox_options()
+            self.set_scales()
+            self.set_search_type()
+            self.enable_user_management()
+            self.fill_users_listWidget()
+            self.set_icons()
+            self.set_shared_groups()
 
-        self.viewer_active_chkb.stateChanged.connect(
-            self.enable_user_management)
-        self.wms_public_chkb.stateChanged.connect(
-            self.enable_user_management)
-        self.map_public_chkb.stateChanged.connect(
-            self.enable_user_management)
-        self.search_type_combobox.currentIndexChanged.connect(
-            self.enable_DBsearch)
-        self.sql_preview_btn.clicked.connect(self.validate_sql_query)
-        self.add_users_btn.clicked.connect(
-            lambda: self.add_user())
-        self.delete_user_btn.clicked.connect(self.delete_user)
-        self.dialog_buttonBox.button(
-            QDialogButtonBox.Save).clicked.connect(self.save_options)
+            self.viewer_active_chkb.stateChanged.connect(
+                self.enable_user_management)
+            self.wms_public_chkb.stateChanged.connect(
+                self.enable_user_management)
+            self.map_public_chkb.stateChanged.connect(
+                self.enable_user_management)
+            self.search_type_combobox.currentIndexChanged.connect(
+                self.enable_DBsearch)
+            self.sql_preview_btn.clicked.connect(self.validate_sql_query)
+            self.add_users_btn.clicked.connect(
+                lambda: self.add_user())
+            self.delete_user_btn.clicked.connect(self.delete_user)
+            self.dialog_buttonBox.button(
+                QDialogButtonBox.Save).clicked.connect(self.save_options)
 
-        self.toggle_disabled_fields()
-
-        QGuiApplication.restoreOverrideCursor()
+            self.toggle_disabled_fields()
 
     def set_checkboxes(self):
         """
@@ -286,53 +293,50 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
         if ok is False:
             return
 
-        QGuiApplication.setOverrideCursor(Qt.WaitCursor)
-        map_settings = self.api.read_map(self.map_id)
-        # current user list
-        current_user_list = []
-        # list with the users that will be added
-        users_to_add = re.sub(
-            r"\s+", "", users_list).split(",")
-        # list for users that don't exist
-        nonexistent_users = []
-        # create list of all users
-        for old_user in map_settings["map"]["users"]:
-            current_user_list.append(old_user)
+        with self.wait_cursor():
+            map_settings = self.api.read_map(self.map_id)
+            # current user list
+            current_user_list = []
+            # list with the users that will be added
+            users_to_add = re.sub(
+                r"\s+", "", users_list).split(",")
+            # list for users that don't exist
+            nonexistent_users = []
+            # create list of all users
+            for old_user in map_settings["map"]["users"]:
+                current_user_list.append(old_user)
 
-        new_user_list = ",".join(current_user_list + users_to_add)
+            new_user_list = ",".join(current_user_list + users_to_add)
 
-        updated_user_list = self.api.update_map(
-            self.map_id, {"map[users]": new_user_list})
+            updated_user_list = self.api.update_map(
+                self.map_id, {"map[users]": new_user_list})
 
-        for user in users_to_add:
-            if user not in updated_user_list["map"]["users"]:
-                nonexistent_users.append(user)
+            for user in users_to_add:
+                if user not in updated_user_list["map"]["users"]:
+                    nonexistent_users.append(user)
 
-        if users_list \
-                and users_list.isspace() is False:
-            if nonexistent_users:
-                QGuiApplication.restoreOverrideCursor()
+            if users_list \
+                    and users_list.isspace() is False:
+                if nonexistent_users:
+                    QMessageBox.warning(
+                        self,
+                        self.tr("User error"),
+                        self.tr("The user(s): %s don't exist.") %
+                        (", ".join(nonexistent_users)))
+                    self.add_user(", ".join(nonexistent_users))
+                else:
+                    QMessageBox.information(
+                        self,
+                        self.tr("Success"),
+                        self.tr("The user(s): %s have been added.") % (
+                            ", ".join(users_to_add)))
+                    self.fill_users_listWidget()
+            else:
                 QMessageBox.warning(
                     self,
-                    self.tr("User error"),
-                    self.tr("The user(s): %s don't exist.") %
-                    (", ".join(nonexistent_users)))
-                self.add_user(", ".join(nonexistent_users))
-            else:
-                QGuiApplication.restoreOverrideCursor()
-                QMessageBox.information(
-                    self,
-                    self.tr("Success"),
-                    self.tr("The user(s): %s have been added.") % (
-                        ", ".join(users_to_add)))
-                self.fill_users_listWidget()
-        else:
-            QGuiApplication.restoreOverrideCursor()
-            QMessageBox.warning(
-                self,
-                self.tr("Error"),
-                self.tr("No username given."))
-            self.add_user()
+                    self.tr("Error"),
+                    self.tr("No username given."))
+                self.add_user()
 
     def delete_user(self):
         """
@@ -340,48 +344,45 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
         then an error message is shown.
         """
         # String object
-        QGuiApplication.setOverrideCursor(Qt.WaitCursor)
-        map_settings = self.api.read_map(self.map_id)
+        with self.wait_cursor():
+            map_settings = self.api.read_map(self.map_id)
 
-        users_to_delete = [self.users_listWidget.currentItem().text()]
-        current_user_list = []
-        new_user_list = []
-        deleted_users = []
-        # create list of all users
-        for user in map_settings["map"]["users"]:
-            current_user_list.append(user)
-        # create list of all users without the user that's going to be deleted
-        for user in current_user_list:
-            if user in users_to_delete:
-                continue
-            else:
-                new_user_list.append(user)
+            users_to_delete = [self.users_listWidget.currentItem().text()]
+            current_user_list = []
+            new_user_list = []
+            deleted_users = []
+            # create list of all users
+            for user in map_settings["map"]["users"]:
+                current_user_list.append(user)
+            # create list of all users without the user that's going to be deleted
+            for user in current_user_list:
+                if user in users_to_delete:
+                    continue
+                else:
+                    new_user_list.append(user)
 
-        QGuiApplication.restoreOverrideCursor()
-        res = QMessageBox.information(
-            self,
-            self.tr(""),
-            self.tr("Do you really want to delete the user: %s?") %
-            (", ".join(users_to_delete)), QMessageBox.Yes | QMessageBox.No)
+            res = QMessageBox.information(
+                self,
+                self.tr(""),
+                self.tr("Do you really want to delete the user: %s?") %
+                (", ".join(users_to_delete)), QMessageBox.Yes | QMessageBox.No)
 
-        if res == QMessageBox.No:
-            return
+            if res == QMessageBox.No:
+                return
 
-        QGuiApplication.setOverrideCursor(Qt.WaitCursor)
-        updated_user_list = self.api.update_map(
-            self.map_id, {"map[users]": ",".join(new_user_list)})
+            updated_user_list = self.api.update_map(
+                self.map_id, {"map[users]": ",".join(new_user_list)})
 
-        for deleted_user in users_to_delete:
-            if deleted_user not in updated_user_list:
-                deleted_users.append(deleted_user)
+            for deleted_user in users_to_delete:
+                if deleted_user not in updated_user_list:
+                    deleted_users.append(deleted_user)
 
-        QGuiApplication.restoreOverrideCursor()
-        QMessageBox.information(
-            self,
-            self.tr("Success"),
-            self.tr("The user: %s has been deleted.") %
-            (", ".join(deleted_users)))
-        self.fill_users_listWidget()
+            QMessageBox.information(
+                self,
+                self.tr("Success"),
+                self.tr("The user: %s has been deleted.") %
+                (", ".join(deleted_users)))
+            self.fill_users_listWidget()
 
     def fill_users_listWidget(self):
         """
@@ -400,55 +401,53 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
         This method saves all options that the user changed. It uses the
         REST API to make the PUT request.
         """
-        QGuiApplication.setOverrideCursor(Qt.WaitCursor)
-        data = {}
+        with self.wait_cursor():
+            data = {}
 
-        # general settings
-        if self.viewer_active_chkb.isEnabled():
-            data['map[viewer_active]'] = int(self.viewer_active_chkb.isChecked())  # 0 or 1
-        if self.wms_public_chkb.isEnabled():
-            data['map[wms_public]'] = int(self.wms_public_chkb.isChecked())  # 0 or 1
-        if self.map_public_chkb.isEnabled():
-            data['map[map_public]'] = int(self.map_public_chkb.isChecked())  # 0 or 1
-        if self.language_combobox.isEnabled():
-            data['map[lang]'] = self.language_combobox.currentText()
-        if self.scales_lineedit.isEnabled():
-            data['map[scales]'] = ",".join(
-                # remove non-numeric values
-                filter(
-                    str.isnumeric,
-                    # split input value and trim whitespace
-                    map(str.strip, self.scales_lineedit.text().split(','))
+            # general settings
+            if self.viewer_active_chkb.isEnabled():
+                data['map[viewer_active]'] = int(self.viewer_active_chkb.isChecked())  # 0 or 1
+            if self.wms_public_chkb.isEnabled():
+                data['map[wms_public]'] = int(self.wms_public_chkb.isChecked())  # 0 or 1
+            if self.map_public_chkb.isEnabled():
+                data['map[map_public]'] = int(self.map_public_chkb.isChecked())  # 0 or 1
+            if self.language_combobox.isEnabled():
+                data['map[lang]'] = self.language_combobox.currentText()
+            if self.scales_lineedit.isEnabled():
+                data['map[scales]'] = ",".join(
+                    # remove non-numeric values
+                    filter(
+                        str.isnumeric,
+                        # split input value and trim whitespace
+                        map(str.strip, self.scales_lineedit.text().split(','))
+                    )
                 )
-            )
-        if self.viewer_combobox.isEnabled():
-            viewer_name = self.viewer_combobox.currentText()
-            if viewer_name:
-                data['map[viewer_id]'] = self.get_viewer_id(viewer_name)
+            if self.viewer_combobox.isEnabled():
+                viewer_name = self.viewer_combobox.currentText()
+                if viewer_name:
+                    data['map[viewer_id]'] = self.get_viewer_id(viewer_name)
 
-        # search settings
-        if self.search_type_combobox.isEnabled():
-            data['map[search_type]'] = self.search_type_combobox.currentText()
-        if self.search_db_combobox.isEnabled():
-            data['map[search_db]'] = self.search_db_combobox.currentText()
-        if self.search_sql_textedit.isEnabled():
-            data['map[search_sql]'] = self.search_sql_textedit.text()
+            # search settings
+            if self.search_type_combobox.isEnabled():
+                data['map[search_type]'] = self.search_type_combobox.currentText()
+            if self.search_db_combobox.isEnabled():
+                data['map[search_db]'] = self.search_db_combobox.currentText()
+            if self.search_sql_textedit.isEnabled():
+                data['map[search_sql]'] = self.search_sql_textedit.text()
 
-        if self.share_map.isEnabled():
-            # collect selected groups to share with
-            shared_groups = []
-            for i in range(self.share_list_layout.count()):
-                checkbox = self.share_list_layout.itemAt(i).widget()
-                if checkbox.isChecked():
-                    # NOTE: use objectName as text has an ampersand prefix
-                    shared_groups.append(checkbox.objectName())
-            data['map[groups]'] = ','.join(shared_groups)
+            if self.share_map.isEnabled():
+                # collect selected groups to share with
+                shared_groups = []
+                for i in range(self.share_list_layout.count()):
+                    checkbox = self.share_list_layout.itemAt(i).widget()
+                    if checkbox.isChecked():
+                        # NOTE: use objectName as text has an ampersand prefix
+                        shared_groups.append(checkbox.objectName())
+                data['map[groups]'] = ','.join(shared_groups)
 
-        if data:
-            self.api.update_map(self.map_id, data)
+            if data:
+                self.api.update_map(self.map_id, data)
 
-        # add userlist to settings
-        QGuiApplication.restoreOverrideCursor()
 
     def toggle_disabled_fields(self):
         # general settings

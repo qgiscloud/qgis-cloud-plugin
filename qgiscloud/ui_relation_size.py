@@ -8,6 +8,7 @@ from qgis.PyQt.QtCore import pyqtSlot,  Qt
 from qgis.PyQt.QtWidgets import QApplication,  QDialog,  QTableWidgetItem,  QAbstractScrollArea,  QFileDialog
 import sys
 import os
+from contextlib import contextmanager
 
 try:
     filename = os.path.join(os.path.dirname(sys.executable), 'forms/relation_size.ui')
@@ -20,6 +21,15 @@ class RelationSizeDialog(QDialog, FORM_CLASS):
     """
     Class documentation goes here.
     """
+    
+    @contextmanager
+    def wait_cursor(self):
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            yield
+        finally:
+            QApplication.restoreOverrideCursor()     
+    
 
     def __init__(self, db,  dbname,  parent=None):
         """
@@ -34,33 +44,32 @@ class RelationSizeDialog(QDialog, FORM_CLASS):
         cursor = conn.cursor()
         self.setWindowTitle(self.tr('Database {db} - Table overview'.format(db = dbname)))
         
-        QApplication.setOverrideCursor(Qt.WaitCursor)
+        with self.wait_cursor():
 
-        sql = """
-  SELECT
-    schemaname || '.' || tablename AS tablename,
-    pg_size_pretty(pg_total_relation_size(schemaname || '.' || tablename)) AS pretty_size,
-    pg_total_relation_size(schemaname || '.' || tablename) as size 
-  FROM pg_tables
-  WHERE schemaname not in ('pg_catalog', 'information_schema', 'topology')
-    AND tablename not in ('spatial_ref_sys')
-  ORDER BY size desc
-"""
-        cursor.execute(sql)
-        rows=cursor.fetchall()
-        
-        sql = """
-SELECT pg_size_pretty(sum(pg_total_relation_size(schemaname || '.' || tablename))) AS size 
-FROM pg_tables
-  WHERE schemaname NOT IN ('pg_catalog', 'information_schema', 'topology')
-    AND tablename NOT IN ('spatial_ref_sys')        
-"""
-        cursor.execute(sql)
-        total_size = cursor.fetchone()[0]
-        
-        self.result_table(rows,  self.tab_relation_size,  total_size)
-        QApplication.restoreOverrideCursor()
-
+            sql = """
+      SELECT
+        schemaname || '.' || tablename AS tablename,
+        pg_size_pretty(pg_total_relation_size(schemaname || '.' || tablename)) AS pretty_size,
+        pg_total_relation_size(schemaname || '.' || tablename) as size 
+      FROM pg_tables
+      WHERE schemaname not in ('pg_catalog', 'information_schema', 'topology')
+        AND tablename not in ('spatial_ref_sys')
+      ORDER BY size desc
+    """
+            cursor.execute(sql)
+            rows=cursor.fetchall()
+            
+            sql = """
+    SELECT pg_size_pretty(sum(pg_total_relation_size(schemaname || '.' || tablename))) AS size 
+    FROM pg_tables
+      WHERE schemaname NOT IN ('pg_catalog', 'information_schema', 'topology')
+        AND tablename NOT IN ('spatial_ref_sys')        
+    """
+            cursor.execute(sql)
+            total_size = cursor.fetchone()[0]
+            
+            self.result_table(rows,  self.tab_relation_size,  total_size)            
+            
     @pyqtSlot()
     def on_buttonBox_rejected(self):
         """
@@ -99,19 +108,17 @@ FROM pg_tables
         path,  filter = QFileDialog.getSaveFileName(
                 self, 'Save File', '', 'CSV(*.csv)')
         if len(path) > 0:
-            QApplication.setOverrideCursor(Qt.WaitCursor)
-            with open(path, 'w',  newline='') as stream:
-                writer = csv.writer(stream)
-                writer.writerow(['Tablename',  'Size'])
-                for row in range( self.tab_relation_size.rowCount()):
-                    rowdata = []
-                    for column in range( self.tab_relation_size.columnCount()):
-                        item =  self.tab_relation_size.item(row, column)
-                        if item is not None:
-                            rowdata.append(
-                                item.text())
-                        else:
-                            rowdata.append('')
-                    writer.writerow(rowdata)
-                    
-        QApplication.restoreOverrideCursor()        
+            with self.wait_cursor():
+                with open(path, 'w',  newline='') as stream:
+                    writer = csv.writer(stream)
+                    writer.writerow(['Tablename',  'Size'])
+                    for row in range( self.tab_relation_size.rowCount()):
+                        rowdata = []
+                        for column in range( self.tab_relation_size.columnCount()):
+                            item =  self.tab_relation_size.item(row, column)
+                            if item is not None:
+                                rowdata.append(
+                                    item.text())
+                            else:
+                                rowdata.append('')
+                        writer.writerow(rowdata)

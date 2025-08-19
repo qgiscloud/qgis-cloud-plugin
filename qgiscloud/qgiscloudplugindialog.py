@@ -49,6 +49,7 @@ import hashlib
 import warnings
 warnings.simplefilter("ignore", ResourceWarning)
 import urllib.error, socket # import exceptions!
+from contextlib import contextmanager
 
 # initialize Qt resources from file resources.py
 from .resources_rc import *
@@ -258,7 +259,14 @@ class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
         self.lbl_doku_image.setText(self.tr("""You can open the <a href=‘{}’> online documentation</a> here.""").format(self.docu_url))
         self.lbl_doku_image.setOpenExternalLinks(True)  # Links dürfen geklickt werden
 
-
+    @contextmanager
+    def wait_cursor(self):
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            yield
+        finally:
+            QApplication.restoreOverrideCursor()     
+            
     def unload(self):
         self.do_update_local_data_sources = False
         if self.iface:
@@ -630,18 +638,19 @@ Do you want to create a new database now?
 
     @pyqtSlot()
     def on_btnLogout_clicked(self):
-        self.api.reset_auth()
-        self.btnLogout.hide()
-        self.lblLoginStatus.hide()
-        self.btnLogin.show()
-        self.widgetServices.hide()
-        self.tabDatabases.clear()
-        self.tabMaps.clear()
-        self.lblDbSize.setText("")
-        self.lblDbSizeUpload.setText("")
-        self.cbUploadDatabase.clear()
-        self.widgetDatabases.setEnabled(False)
-        self.activate_upload_button()
+        with self.wait_cursor():
+            self.api.reset_auth()
+            self.btnLogout.hide()
+            self.lblLoginStatus.hide()
+            self.btnLogin.show()
+            self.widgetServices.hide()
+            self.tabDatabases.clear()
+            self.tabMaps.clear()
+            self.lblDbSize.setText("")
+            self.lblDbSizeUpload.setText("")
+            self.cbUploadDatabase.clear()
+            self.widgetDatabases.setEnabled(False)
+            self.activate_upload_button()
 
     def refresh_plan_limits(self, login_info=None):
         if login_info is None:
@@ -652,47 +661,46 @@ Do you want to create a new database now?
         self.maxDBs = login_info.get('max_dbs', 5)
 
     def refresh_databases(self):
-        QApplication.setOverrideCursor(Qt.WaitCursor)
-        self.numDbs = -1
-        if self.clouddb:
-            db_list = self.api.read_databases()
-            if self.show_api_error(db_list):
-                # mark as error
-                self.numDbs = -1
-                self.btnDbCreate.setEnabled(False)
-                QApplication.restoreOverrideCursor()
-                return
-            self.db_connections = DbConnections()
-            for db in db_list:
-                self.db_connections.add_from_json(db)
+        with self.wait_cursor():
+            self.numDbs = -1
+            if self.clouddb:
+                db_list = self.api.read_databases()
+                if self.show_api_error(db_list):
+                    # mark as error
+                    self.numDbs = -1
+                    self.btnDbCreate.setEnabled(False)
+                    return
+                self.db_connections = DbConnections()
+                for db in db_list:
+                    self.db_connections.add_from_json(db)
 
-            self.tabDatabases.clear()
-            self.btnDbCreate.setEnabled(True)
-            self.btnDbDelete.setEnabled(False)
-            self.btnDbTables.setEnabled(False)
-            self.cbUploadDatabase.clear()
-            self.cbUploadDatabase.setEditable(True)
-            self.cbUploadDatabase.lineEdit().setReadOnly(True)
-            if self.db_connections.count() == 0:
-                self.cbUploadDatabase.setEditText(self.tr("No databases"))
-            else:
-                for name, db in list(self.db_connections.iteritems()):
-                    db_size = self.db_size_name(name)
-                    it = QListWidgetItem('%s - %s MB' % (name,  db_size))
-                    it.setToolTip(db.description())
-                    self.tabDatabases.addItem(it)
-                    self.cbUploadDatabase.addItem(name)
-                if self.cbUploadDatabase.count() > 1:
-                    # Display the "Select database" text if more than one db is available
-                    self.cbUploadDatabase.setCurrentIndex(-1)
-                    self.cbUploadDatabase.setEditText(
-                        self.tr("Select database"))
-            self.db_connections.refresh(self.user)
+                self.tabDatabases.clear()
+                self.btnDbCreate.setEnabled(True)
+                self.btnDbDelete.setEnabled(False)
+                self.btnDbTables.setEnabled(False)
+                self.cbUploadDatabase.clear()
+                self.cbUploadDatabase.setEditable(True)
+                self.cbUploadDatabase.lineEdit().setReadOnly(True)
+                if self.db_connections.count() == 0:
+                    self.cbUploadDatabase.setEditText(self.tr("No databases"))
+                else:
+                    for name, db in list(self.db_connections.iteritems()):
+                        db_size = self.db_size_name(name)
+                        it = QListWidgetItem('%s - %s MB' % (name,  db_size))
+                        it.setToolTip(db.description())
+                        self.tabDatabases.addItem(it)
+                        self.cbUploadDatabase.addItem(name)
+                    if self.cbUploadDatabase.count() > 1:
+                        # Display the "Select database" text if more than one db is available
+                        self.cbUploadDatabase.setCurrentIndex(-1)
+                        self.cbUploadDatabase.setEditText(
+                            self.tr("Select database"))
+                self.db_connections.refresh(self.user)
 
-        self.numDbs = len(list(self.db_connections._dbs.keys()))
+            self.numDbs = len(list(self.db_connections._dbs.keys()))
 
-        self.db_size(self.db_connections)
-        QApplication.restoreOverrideCursor()
+            self.db_size(self.db_connections)
+
 
     def map_load(self,  item=None,  row=None):
         self.widgetServices.close()
@@ -775,28 +783,27 @@ Do you want to create a new database now?
         mapsettings.exec_()
 
     def refresh_maps(self):
-        QApplication.setOverrideCursor(Qt.WaitCursor)
+        with self.wait_cursor():
 
-        map_list = self.api.read_maps()
-        if self.show_api_error(map_list):
-            QApplication.restoreOverrideCursor()
-            return
+            map_list = self.api.read_maps()
+            if self.show_api_error(map_list):
+                return
 
-        self.tabMaps.clear()
-        self.btnMapDelete.setEnabled(False)
-        self.btnMapEdit.setEnabled(False)
-        self.btnMapLoad.setEnabled(False)
+            self.tabMaps.clear()
+            self.btnMapDelete.setEnabled(False)
+            self.btnMapEdit.setEnabled(False)
+            self.btnMapLoad.setEnabled(False)
 
-        self.maps_lookup = {}
-        for map in map_list:
-            it = QListWidgetItem(map['map']['name'])
-            self.tabMaps.addItem(it)
-            it.setData(Qt.UserRole,  map['map']['id'])
+            self.maps_lookup = {}
+            for map in map_list:
+                it = QListWidgetItem(map['map']['name'])
+                self.tabMaps.addItem(it)
+                it.setData(Qt.UserRole,  map['map']['id'])
 
-            # add map info to maps lookup
-            self.maps_lookup[map['map']['name']] = map['map']
+                # add map info to maps lookup
+                self.maps_lookup[map['map']['name']] = map['map']
 
-        QApplication.restoreOverrideCursor()
+
 
     def api_url(self):
         return str(self.editServer.text().strip())
@@ -946,131 +953,125 @@ Do you want to create a new database now?
                 return True, duplicate
 
     def publish_map(self):
-        QApplication.setOverrideCursor(Qt.WaitCursor)
-        mapCrs = QgsProject.instance().crs()
+        with self.wait_cursor():
+            mapCrs = QgsProject.instance().crs()
 
-        crsError = ''
-        if not mapCrs.authid():
-            crsError = self.tr(
-                "The project has an unknown CRS. Please set a valid map CRS in Project->Properties...->CRS before publishing!")
+            crsError = ''
+            if not mapCrs.authid():
+                crsError = self.tr(
+                    "The project has an unknown CRS. Please set a valid map CRS in Project->Properties...->CRS before publishing!")
 
-        if "USER" in mapCrs.authid():
-            crsError = self.tr(
-                "The project has a user defined CRS. The use of user defined CRS is not supported. Please correct the project CRS before publishing!")
+            if "USER" in mapCrs.authid():
+                crsError = self.tr(
+                    "The project has a user defined CRS. The use of user defined CRS is not supported. Please correct the project CRS before publishing!")
 
-        if crsError:
-            QMessageBox.critical(None, self.tr('Error'), crsError)
-            QApplication.restoreOverrideCursor()
-            return
+            if crsError:
+                QMessageBox.critical(None, self.tr('Error'), crsError)
+                return
 
-        #Read layers from the layertree, not from QgsProject. Due to a bug in QGIS, it sometimes happens that layers are still present in QgsProject even if they have been deleted in the user interface
-        layers = []
-        layerTreeLayers = self.iface.layerTreeView().layerTreeModel().rootGroup().findLayers()
-        for l in layerTreeLayers:
-            layers.append( l.layer() )
+            #Read layers from the layertree, not from QgsProject. Due to a bug in QGIS, it sometimes happens that layers are still present in QgsProject even if they have been deleted in the user interface
+            layers = []
+            layerTreeLayers = self.iface.layerTreeView().layerTreeModel().rootGroup().findLayers()
+            for l in layerTreeLayers:
+                layers.append( l.layer() )
 
-        layerList = ''
+            layerList = ''
 
-       # Remove extra characters like , ; : from layernames causing problems in QWC2
-        illegal_layer_names = self.check_illegal_layer_names(layers)
-        if len(illegal_layer_names) > 0:
-            QMessageBox.critical(None, self.tr('Error'), self.tr(
-                "The following layer names do contain non allowed characters like ', . : ;' : {}. Please rename the layers and save the project before publishing.").format(illegal_layer_names))
-            QApplication.restoreOverrideCursor()
-            return
+           # Remove extra characters like , ; : from layernames causing problems in QWC2
+            illegal_layer_names = self.check_illegal_layer_names(layers)
+            if len(illegal_layer_names) > 0:
+                QMessageBox.critical(None, self.tr('Error'), self.tr(
+                    "The following layer names do contain non allowed characters like ', . : ;' : {}. Please rename the layers and save the project before publishing.").format(illegal_layer_names))
+                return
 
-        # Check if layer and group names are unique
-        duplicate,  names = self.check_duplicate_group_and_layer_names()
-        if duplicate:
-            QMessageBox.critical(None, self.tr('Error'), self.tr(
-                "The following layer and/or group names are not unique in the project:\n\n{}\n\nPlease rename the layers and/or the groups and save the project before publishing.").format(','.join(names)))
-            QApplication.restoreOverrideCursor()
-            return
+            # Check if layer and group names are unique
+            duplicate,  names = self.check_duplicate_group_and_layer_names()
+            if duplicate:
+                QMessageBox.critical(None, self.tr('Error'), self.tr(
+                    "The following layer and/or group names are not unique in the project:\n\n{}\n\nPlease rename the layers and/or the groups and save the project before publishing.").format(','.join(names)))
+                return
 
-        # make sure every layer has a unique WMS name
-        notUniqueLayerNames = self.check_same_layer_names(layers)
-        if len(notUniqueLayerNames) > 0:
-            QMessageBox.critical(None, self.tr('Error'), self.tr(
-                "The following WMS layer names are not unique: {}. Please make sure the names are unique, then publish the project again. The layer WMS short name can be set in the layer properties dialog under 'QGIS Server -> Short name'.").format(notUniqueLayerNames))
-            QApplication.restoreOverrideCursor()
-            return
+            # make sure every layer has a unique WMS name
+            notUniqueLayerNames = self.check_same_layer_names(layers)
+            if len(notUniqueLayerNames) > 0:
+                QMessageBox.critical(None, self.tr('Error'), self.tr(
+                    "The following WMS layer names are not unique: {}. Please make sure the names are unique, then publish the project again. The layer WMS short name can be set in the layer properties dialog under 'QGIS Server -> Short name'.").format(notUniqueLayerNames))
+                return
 
-        for layer in layers:
-            if "USER" in layer.crs().authid():
-                layerList += "'"+layer.name()+"' "
+            for layer in layers:
+                if "USER" in layer.crs().authid():
+                    layerList += "'"+layer.name()+"' "
 
-        if len(layerList) > 0:
-            QMessageBox.warning(None, self.tr('Warning!'),  self.tr(
-                "The layer(s) {layerlist} have user defined CRS. The use of user defined CRS is not supported. Please correct the CRS before publishing!").format(layerlist=layerList))
-            QApplication.restoreOverrideCursor()
-            return
+            if len(layerList) > 0:
+                QMessageBox.warning(None, self.tr('Warning!'),  self.tr(
+                    "The layer(s) {layerlist} have user defined CRS. The use of user defined CRS is not supported. Please correct the CRS before publishing!").format(layerlist=layerList))
+                return
 
-        # check if several layers use the same wms name
+            # check if several layers use the same wms name
 
-        # check if bottom layer is reprojected WMS/WMTS/XYZ and warn user that published webmap will be slow
-        layersRenderingOrder = self.iface.mapCanvas().mapSettings().layers()
-        if len(layersRenderingOrder) > 0:
-            bottomLayer = layersRenderingOrder[-1]
-            if bottomLayer.providerType() == 'wms' and bottomLayer.crs() != mapCrs:
-                warningText = self.tr("""
-The CRS of the background layer '{layerName}' is different to the  map CRS. This means that this layer will be reprojected in the published map and the webmap will therefore be slow. To improve this and make the webmap faster, go to
+            # check if bottom layer is reprojected WMS/WMTS/XYZ and warn user that published webmap will be slow
+            layersRenderingOrder = self.iface.mapCanvas().mapSettings().layers()
+            if len(layersRenderingOrder) > 0:
+                bottomLayer = layersRenderingOrder[-1]
+                if bottomLayer.providerType() == 'wms' and bottomLayer.crs() != mapCrs:
+                    warningText = self.tr("""
+    The CRS of the background layer '{layerName}' is different to the  map CRS. This means that this layer will be reprojected in the published map and the webmap will therefore be slow. To improve this and make the webmap faster, go to
 
-'Project -> Properties... -> CRS'
+    'Project -> Properties... -> CRS'
 
-and set the map CRS to {layerCRS}. Continue publishing?""").format(
-                    layerName=bottomLayer.name(), layerCRS=bottomLayer.crs().authid())
-                if QMessageBox.question(None, self.tr('Warning'), warningText, QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes) == QMessageBox.No:
-                    QApplication.restoreOverrideCursor()
-                    return
+    and set the map CRS to {layerCRS}. Continue publishing?""").format(
+                        layerName=bottomLayer.name(), layerCRS=bottomLayer.crs().authid())
+                    if QMessageBox.question(None, self.tr('Warning'), warningText, QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes) == QMessageBox.No:
+                        return
 
-        saved = self.check_project_saved()
-        if not saved:
-            self.statusBar().showMessage(self.tr("Cancelled"))
-        elif self.check_login() and self.check_layers():
-            self.statusBar().showMessage(self.tr("Publishing map"))
-            try:
-                fullExtent = self.iface.mapCanvas().fullExtent()
-                config = {
-                    'fullExtent': {
-                        'xmin': fullExtent.xMinimum(),
-                        'ymin': fullExtent.yMinimum(),
-                        'xmax': fullExtent.xMaximum(),
-                        'ymax': fullExtent.yMaximum()
-                        # },
-                        # 'svgPaths': QgsApplication.svgPaths() #For resolving absolute symbol paths in print composer
+            saved = self.check_project_saved()
+            if not saved:
+                self.statusBar().showMessage(self.tr("Cancelled"))
+            elif self.check_login() and self.check_layers():
+                self.statusBar().showMessage(self.tr("Publishing map"))
+                try:
+                    fullExtent = self.iface.mapCanvas().fullExtent()
+                    config = {
+                        'fullExtent': {
+                            'xmin': fullExtent.xMinimum(),
+                            'ymin': fullExtent.yMinimum(),
+                            'xmax': fullExtent.xMaximum(),
+                            'ymax': fullExtent.yMaximum()
+                            # },
+                            # 'svgPaths': QgsApplication.svgPaths() #For resolving absolute symbol paths in print composer
+                        }
                     }
-                }
 
-                fname = str(QgsProject.instance().fileName())
-                if 'qgs.qgz' in fname:
-                    QMessageBox.warning(
-                        None,
-                        self.tr("Error"),
-                        self.tr("""
-The name of the QGIS project
+                    fname = str(QgsProject.instance().fileName())
+                    if 'qgs.qgz' in fname:
+                        QMessageBox.warning(
+                            None,
+                            self.tr("Error"),
+                            self.tr("""
+    The name of the QGIS project
 
-%s
+    %s
 
-is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct the project name and publish the project again.""" % (fname)),
-                        QMessageBox.StandardButtons(
-                            QMessageBox.Close))
-                else:
-                    map = self.api.create_map(self.map_name(show_notice=True), fname, config)['map']
-                    self.show_api_error(map)
-                    if map['config']['missingSvgSymbols']:
-                        self.publish_symbols(map['config']['missingSvgSymbols'])
-                    # update map info in maps lookup
-                    self.maps_lookup[map['name']] = map
-                    self.update_urls()
-                    message = self.tr("Map {} successfully published").format(self.map_name())
-                    self._push_message(self.tr("QGIS Cloud"), message, level=0, duration=2)
-                    self.statusBar().showMessage(message)
-            except Exception as e:
-                self.statusBar().showMessage("")
-                ErrorReportDialog(self.tr("Error uploading project"), self.tr(
-                    "An error occured."), str(e) + "\n\n\n" + traceback.format_exc(), self.user, self).exec_()
-        self.refresh_maps()
-        QApplication.restoreOverrideCursor()
+    is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct the project name and publish the project again.""" % (fname)),
+                            QMessageBox.StandardButtons(
+                                QMessageBox.Close))
+                    else:
+                        map = self.api.create_map(self.map_name(show_notice=True), fname, config)['map']
+                        self.show_api_error(map)
+                        if map['config']['missingSvgSymbols']:
+                            self.publish_symbols(map['config']['missingSvgSymbols'])
+                        # update map info in maps lookup
+                        self.maps_lookup[map['name']] = map
+                        self.update_urls()
+                        message = self.tr("Map {} successfully published").format(self.map_name())
+                        self._push_message(self.tr("QGIS Cloud"), message, level=0, duration=2)
+                        self.statusBar().showMessage(message)
+                except Exception as e:
+                    self.statusBar().showMessage("")
+                    ErrorReportDialog(self.tr("Error uploading project"), self.tr(
+                        "An error occured."), str(e) + "\n\n\n" + traceback.format_exc(), self.user, self).exec_()
+            self.refresh_maps()
+
 
     def publish_symbols(self, missingSvgSymbols):
         self.statusBar().showMessage(self.tr("Uploading SVG symbols"))
@@ -1354,7 +1355,6 @@ is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct 
                     table_length = len(self.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text())
                     if  table_length > 62:
                         self.btnUploadData.setDisabled(True)
-                        QApplication.restoreOverrideCursor()
                         answer = QMessageBox.question(
                             self,
                             self.tr("Table name too long"),
