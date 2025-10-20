@@ -4,6 +4,7 @@
 *.e4p
 qgiscloud.zip
 createdist.sh
+create_translations.sh
 exclude.lst
 .eric6project
 gdalwmscache
