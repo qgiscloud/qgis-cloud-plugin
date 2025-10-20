@@ -5,6 +5,7 @@
 qgiscloud.zip
 createdist.sh
 create_translations.sh
+template.ts
 exclude.lst
 .eric6project
 gdalwmscache
