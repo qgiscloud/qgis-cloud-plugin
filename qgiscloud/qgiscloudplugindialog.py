@@ -19,13 +19,13 @@
  *                                                                         *
  ***************************************************************************/
 """
-from qgis.PyQt.QtCore import Qt, QSettings, pyqtSlot,  QUrl
+from qgis.PyQt.QtCore import Qt, QSettings, pyqtSlot
 from qgis.PyQt.QtWidgets import (
                                                                 QApplication, QDockWidget,   QTableWidgetItem, 
                                                                 QListWidgetItem, QDialog, QMessageBox, QWidget, 
-                                                                QLabel,  QVBoxLayout,  QFileDialog,  QComboBox,  QTabBar
+                                                                QLabel,  QVBoxLayout,  QFileDialog,  QComboBox
                                                           )
-from qgis.PyQt.QtGui import QPalette, QColor,  QBrush,  QDesktopServices
+from qgis.PyQt.QtGui import QPalette, QColor,  QBrush
 from qgis.core import *
 from qgis.gui import *
 from .login_dialog import LoginDialog
@@ -34,6 +34,7 @@ from .db_connections import DbConnections
 from .local_data_sources import LocalDataSources
 from .data_upload import DataUpload
 from .doAbout import DlgAbout
+from .about.metadata import MetaData
 from .error_report_dialog import ErrorReportDialog
 from .mapsettingsdialog import MapSettingsDialog
 from .background_layers_menu import BackgroundLayersMenu
@@ -152,6 +153,7 @@ class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
         self.version = version
         # Set up the user interface from Designer.
         self.setupUi(self)
+        self.setWindowTitle('QGIS Cloud %s' % (MetaData().version()))
         self.storage_exceeded = True
         self.progressBar.setValue(0)
         self.btnUploadData.setEnabled(False)
@@ -306,7 +308,7 @@ class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
                 self.tr(
                     "The map name has been changed to '{name}' to conform to allowed characters ({allowed_chars})."
                 ).format(name=name, allowed_chars="A-Z a-z 0-9 _ -"),
-                level=1)
+                level=Qgis.Warning)
 
         return name
 
@@ -452,13 +454,13 @@ Paid until: {2}""").format(self.user,
                     self._push_message(
                         self.tr("QGIS Cloud"),
                         self.tr("Logged in as {0}").format(self.user),
-                        level=0, duration=2)
+                        level=Qgis.Info, duration=2)
                     self.refresh_plan_limits(login_info)
                     self.refresh_databases()
                     self.refresh_maps()
                     if not version_ok:
                         self._push_message(self.tr("QGIS Cloud"), self.tr(
-                            "Unsupported versions detected. Please check your versions first!"), level=1)
+                            "Unsupported versions detected. Please check your versions first!"), level=Qgis.Warning)
                         version_ok = False
                         self.tabWidget.setCurrentWidget(self.aboutTab)
                     login_ok = True
@@ -1065,7 +1067,7 @@ Do you want to create a new database now?
                         self.maps_lookup[map['name']] = map
                         self.update_urls()
                         message = self.tr("Map {} successfully published").format(self.map_name())
-                        self._push_message(self.tr("QGIS Cloud"), message, level=0, duration=2)
+                        self._push_message(self.tr("QGIS Cloud"), message, level=Qgis.Info, duration=2)
                         self.statusBar().showMessage(message)
                 except Exception as e:
                     self.statusBar().showMessage("")
@@ -1515,13 +1517,8 @@ Should the table name be shortened automatically?
                 # Switch to map tab
                 self.tabWidget.setCurrentWidget(self.mapTab)
 
-    def _push_message(self, title, text, level=0, duration=0):
-        level = Qgis.Critical
-        print (title)
-        print (text)
-        print(level)
-        print(duration)
-        # QGIS >= 2.0
+    def _push_message(self, title, text, level=Qgis.Info, duration=0):
+
         if hasattr(self.iface, 'messageBar') and hasattr(self.iface.messageBar(), 'pushMessage'):
             self.iface.messageBar().pushMessage(title,  text, level,  duration)
         else:
@@ -1622,7 +1619,7 @@ Should the table name be shortened automatically?
             self.storage_exceeded = True
 
         lblPalette.setColor(QPalette.ColorRole.Window, QColor(bg_color))
-        lblPalette.setColor(QPalette.Foreground, QColor(text_color))
+#        lblPalette.setColor(QPalette.Foreground, QColor(text_color))
 
         self.lblDbSize.setAutoFillBackground(True)
         self.lblDbSize.setPalette(lblPalette)
