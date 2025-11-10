@@ -71,7 +71,7 @@ class QgisCloudPlugin(object):
                 
 #        # dock widget
         self.dockWidget = QgisCloudPluginDialog(self.iface, self.version)
-        self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)                
+        self.iface.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.dockWidget)                
 
     def unload(self):
         # Remove the plugin menu item and icon

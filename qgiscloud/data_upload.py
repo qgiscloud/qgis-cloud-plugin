@@ -88,7 +88,7 @@ class DataUpload(QObject):
 
             # Layers contains all layers with shared data source
             layer = item['layers'][0]
-            if layer.type() == QgsMapLayer.VectorLayer:
+            if layer.type() == QgsMapLayer.LayerType.VectorLayer:
                 if layer.isSpatial():
                     try:
                         auth = layer.crs().authid().split(':')[0]
@@ -121,7 +121,7 @@ class DataUpload(QObject):
                 if not schema_exists:
                     cursor.execute("create schema %s" % item['schema'])
                 
-                if wkbType == QgsWkbTypes.NoGeometry:
+                if wkbType == QgsWkbTypes.Type.NoGeometry:
                     cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"%s\".\"%s\"" % (
                     db.database, db.host, db.port, db.username, db.password, item['schema'],  item['table'])
                     geom_column = ""
@@ -137,7 +137,7 @@ class DataUpload(QObject):
                 self.progress_label.setText(self.tr("Creating table '{table}'...").format(table=item['table']))
                 QApplication.processEvents()
                 
-                if wkbType != QgsWkbTypes.NoGeometry:
+                if wkbType != QgsWkbTypes.Type.NoGeometry:
                     # Check if SRID is known on database, otherwise create record
                     cursor.execute("SELECT srid FROM public.spatial_ref_sys WHERE srid = %s" % srid)
                     if not cursor.fetchone():
@@ -213,7 +213,7 @@ class DataUpload(QObject):
                         if val is None or isinstance(val, QVariant):
                             val = b"\\N"
                         elif isinstance(val, QDate) or isinstance(val, QDateTime):
-                            val = bytearray(val.toString(Qt.ISODate).encode('utf-8'))
+                            val = bytearray(val.toString(Qt.DateFormat.ISODate).encode('utf-8'))
                             if not val:
                                 val = b"\\N"
                         else:
@@ -288,12 +288,12 @@ class DataUpload(QObject):
                             'geom_column': geom_column
                         }
 
-                if wkbType != QgsWkbTypes.NoGeometry:
+                if wkbType != QgsWkbTypes.Type.NoGeometry:
                     sql = 'create index "{1}_{2}_idx" on "{0}"."{1}" using gist ("{2}");'.format(item['schema'],  item['table'],  geom_column)
                     cursor.execute(sql)
                     conn.commit()
                     
-            elif layer.type() == QgsMapLayer.RasterLayer:
+            elif layer.type() == QgsMapLayer.LayerType.RasterLayer:
                 raster_to_upload = {
                             'layer': layer,
                             'data_source': layer.source(),
@@ -422,7 +422,7 @@ class DataUpload(QObject):
     def replace_local_layer(self, node, local_layer, data_source, db_name, schema_name,  table_name, geom_column):
         self.status_bar.showMessage(u"Replace layer %s ..." % local_layer.name())
 
-        if local_layer.type() == QgsMapLayer.VectorLayer:
+        if local_layer.type() == QgsMapLayer.LayerType.VectorLayer:
             # create remote layer
             uri = self.db_connections.cloud_layer_uri(db_name, schema_name,  table_name, geom_column)
 
@@ -430,7 +430,7 @@ class DataUpload(QObject):
             uri2 = QgsDataSourceUri(uri.uri().replace(' ()',  ''))
 
             remote_layer = QgsVectorLayer(uri2.uri(), local_layer.name(), 'postgres')
-        elif local_layer.type() == QgsMapLayer.RasterLayer:
+        elif local_layer.type() == QgsMapLayer.LayerType.RasterLayer:
             uri = self.db_connections.cloud_layer_uri(db_name, schema_name,  table_name, geom_column)
             connString = "PG: dbname=%s host=%s user=%s password=%s port=%s mode=2 schema=%s column=rast table=%s" \
                   % (uri.database(), uri.host(),  uri.database(),  uri.password(),  uri.port(),  schema_name,  table_name )

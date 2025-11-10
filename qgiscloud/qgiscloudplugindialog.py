@@ -27,6 +27,7 @@ from qgis.PyQt.QtWidgets import (
                                                           )
 from qgis.PyQt.QtGui import QPalette, QColor,  QBrush,  QDesktopServices
 from qgis.core import *
+from qgis.gui import *
 from .login_dialog import LoginDialog
 from .qgiscloudapi.qgiscloudapi import *
 from .db_connections import DbConnections
@@ -88,58 +89,58 @@ class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
     COLUMN_DATA_SOURCE = 5
 
     GEOMETRY_TYPES = {
-        QgsWkbTypes.Unknown: "Unknown",
-        QgsWkbTypes.NoGeometry: "No geometry",
-        QgsWkbTypes.Point: "Point",
-        QgsWkbTypes.MultiPoint: "MultiPoint",
-        QgsWkbTypes.PointZ: "PointZ",
-        QgsWkbTypes.MultiPointZ: "MultiPointZ",
-        QgsWkbTypes.PointM: "PointM",
-        QgsWkbTypes.MultiPointM: "MultiPointM",
-        QgsWkbTypes.PointZM: "PointZM",
-        QgsWkbTypes.MultiPointZM: "MultiPointZM",
-        QgsWkbTypes.Point25D: "Point25D",
-        QgsWkbTypes.MultiPoint25D: "MultiPoint25D",
-        QgsWkbTypes.LineString: "LineString",
-        QgsWkbTypes.MultiLineString: "LineString",
-        QgsWkbTypes.LineStringZ: "LineStringZ",
-        QgsWkbTypes.MultiLineStringZ: "LineStringZ",
-        QgsWkbTypes.LineStringM: "LineStringM",
-        QgsWkbTypes.MultiLineStringM: "LineStringM",
-        QgsWkbTypes.LineStringZM: "LineStringZM",
-        QgsWkbTypes.MultiLineStringZM: "LineStringZM",
-        QgsWkbTypes.LineString25D: "LineString25D",
-        QgsWkbTypes.MultiLineString25D: "MultiLineString25D",
-        QgsWkbTypes.Polygon: "Polygon",
-        QgsWkbTypes.MultiPolygon: "MultiPolygon",
-        QgsWkbTypes.PolygonZ: "PolygonZ",
-        QgsWkbTypes.MultiPolygonZ: "MultiPolygonZ",
-        QgsWkbTypes.PolygonM: "PolygonM",
-        QgsWkbTypes.MultiPolygonM: "MultiPolygonM",
-        QgsWkbTypes.PolygonZM: "PolygonZM",
-        QgsWkbTypes.MultiPolygonZM: "MultiPolygonZM",
-        QgsWkbTypes.Polygon25D: "Polygon25D",
-        QgsWkbTypes.MultiPolygon25D: "MultiPolygon25D",
-        QgsWkbTypes.CircularString: "CircularString",
-        QgsWkbTypes.CompoundCurve: "CompoundCurve",
-        QgsWkbTypes.CurvePolygon: "CurvePolygon",
-        QgsWkbTypes.MultiCurve: "MultiCurve",
-        QgsWkbTypes.MultiSurface: "MultiSurface",
-        QgsWkbTypes.CircularStringZ: "CircularStringZ",
-        QgsWkbTypes.CompoundCurveZ: "CompoundCurveZ",
-        QgsWkbTypes.CurvePolygonZ: "CurvePolygonZ",
-        QgsWkbTypes.MultiCurveZ: "MultiCurveZ",
-        QgsWkbTypes.MultiSurfaceZ: "MultiSurfaceZ",
-        QgsWkbTypes.CircularStringM: "CircularStringM",
-        QgsWkbTypes.CompoundCurveM: "CompoundCurveM",
-        QgsWkbTypes.CurvePolygonM: "CurvePolygonM",
-        QgsWkbTypes.MultiCurveM: "MultiCurveM",
-        QgsWkbTypes.MultiSurfaceM: "MultiSurfaceM",
-        QgsWkbTypes.CircularStringZM: "CircularStringZM",
-        QgsWkbTypes.CompoundCurveZM: "CompoundCurveZM",
-        QgsWkbTypes.CurvePolygonZM: "CurvePolygonZM",
-        QgsWkbTypes.MultiCurveZM: "MultiCurveZM",
-        QgsWkbTypes.MultiSurfaceZM: "MultiSurfaceZM",
+        QgsWkbTypes.Type.Unknown: "Unknown",
+        QgsWkbTypes.Type.NoGeometry: "No geometry",
+        QgsWkbTypes.Type.Point: "Point",
+        QgsWkbTypes.Type.MultiPoint: "MultiPoint",
+        QgsWkbTypes.Type.PointZ: "PointZ",
+        QgsWkbTypes.Type.MultiPointZ: "MultiPointZ",
+        QgsWkbTypes.Type.PointM: "PointM",
+        QgsWkbTypes.Type.MultiPointM: "MultiPointM",
+        QgsWkbTypes.Type.PointZM: "PointZM",
+        QgsWkbTypes.Type.MultiPointZM: "MultiPointZM",
+        QgsWkbTypes.Type.Point25D: "Point25D",
+        QgsWkbTypes.Type.MultiPoint25D: "MultiPoint25D",
+        QgsWkbTypes.Type.LineString: "LineString",
+        QgsWkbTypes.Type.MultiLineString: "LineString",
+        QgsWkbTypes.Type.LineStringZ: "LineStringZ",
+        QgsWkbTypes.Type.MultiLineStringZ: "LineStringZ",
+        QgsWkbTypes.Type.LineStringM: "LineStringM",
+        QgsWkbTypes.Type.MultiLineStringM: "LineStringM",
+        QgsWkbTypes.Type.LineStringZM: "LineStringZM",
+        QgsWkbTypes.Type.MultiLineStringZM: "LineStringZM",
+        QgsWkbTypes.Type.LineString25D: "LineString25D",
+        QgsWkbTypes.Type.MultiLineString25D: "MultiLineString25D",
+        QgsWkbTypes.Type.Polygon: "Polygon",
+        QgsWkbTypes.Type.MultiPolygon: "MultiPolygon",
+        QgsWkbTypes.Type.PolygonZ: "PolygonZ",
+        QgsWkbTypes.Type.MultiPolygonZ: "MultiPolygonZ",
+        QgsWkbTypes.Type.PolygonM: "PolygonM",
+        QgsWkbTypes.Type.MultiPolygonM: "MultiPolygonM",
+        QgsWkbTypes.Type.PolygonZM: "PolygonZM",
+        QgsWkbTypes.Type.MultiPolygonZM: "MultiPolygonZM",
+        QgsWkbTypes.Type.Polygon25D: "Polygon25D",
+        QgsWkbTypes.Type.MultiPolygon25D: "MultiPolygon25D",
+        QgsWkbTypes.Type.CircularString: "CircularString",
+        QgsWkbTypes.Type.CompoundCurve: "CompoundCurve",
+        QgsWkbTypes.Type.CurvePolygon: "CurvePolygon",
+        QgsWkbTypes.Type.MultiCurve: "MultiCurve",
+        QgsWkbTypes.Type.MultiSurface: "MultiSurface",
+        QgsWkbTypes.Type.CircularStringZ: "CircularStringZ",
+        QgsWkbTypes.Type.CompoundCurveZ: "CompoundCurveZ",
+        QgsWkbTypes.Type.CurvePolygonZ: "CurvePolygonZ",
+        QgsWkbTypes.Type.MultiCurveZ: "MultiCurveZ",
+        QgsWkbTypes.Type.MultiSurfaceZ: "MultiSurfaceZ",
+        QgsWkbTypes.Type.CircularStringM: "CircularStringM",
+        QgsWkbTypes.Type.CompoundCurveM: "CompoundCurveM",
+        QgsWkbTypes.Type.CurvePolygonM: "CurvePolygonM",
+        QgsWkbTypes.Type.MultiCurveM: "MultiCurveM",
+        QgsWkbTypes.Type.MultiSurfaceM: "MultiSurfaceM",
+        QgsWkbTypes.Type.CircularStringZM: "CircularStringZM",
+        QgsWkbTypes.Type.CompoundCurveZM: "CompoundCurveZM",
+        QgsWkbTypes.Type.CurvePolygonZM: "CurvePolygonZM",
+        QgsWkbTypes.Type.MultiCurveZM: "MultiCurveZM",
+        QgsWkbTypes.Type.MultiSurfaceZM: "MultiSurfaceZM",
     }
 
     PROJECT_INSTANCE = QgsProject.instance()
@@ -242,7 +243,7 @@ class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
             self.editServer.setText(self.URL)
 
         self.palette_red = QPalette(self.lblVersionPlugin.palette())
-        self.palette_red.setColor(QPalette.WindowText, Qt.red)
+        self.palette_red.setColor(QPalette.ColorRole.WindowText, Qt.GlobalColor.red)
 
         self.maps_lookup = {}
         
@@ -261,7 +262,7 @@ class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
 
     @contextmanager
     def wait_cursor(self):
-        QApplication.setOverrideCursor(Qt.WaitCursor)
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         try:
             yield
         finally:
@@ -380,14 +381,14 @@ class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
 
                 if use_token_auth:
                     # use token auth
-                    if not login_dialog.exec_():
+                    if not login_dialog.exec():
                         self.api.set_token(None)
                         return login_ok
 
                     self.api.set_token(login_dialog.editToken.text())
                 else:
                     # use login auth
-                    if not login_dialog.exec_():
+                    if not login_dialog.exec():
                         self.api.set_auth(
                             user=login_dialog.editUser.text(),
                             password=None
@@ -410,10 +411,10 @@ class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
                                 self.tr("""Due to the GDPR qgiscloud.com has a new <a href='http://qgiscloud.com/en/pages/privacy'> Privacy Policy </a>.
                                 To continue using qgiscloud.com, you must accept the new policy. """),
                                 QMessageBox.StandardButtons(
-                                    QMessageBox.No |
-                                    QMessageBox.Yes))
+                                    QMessageBox.StandardButton.No |
+                                    QMessageBox.StandardButton.Yes))
 
-                            if result == QMessageBox.No:
+                            if result == QMessageBox.StandardButton.No:
                                 login_ok = False
                                 return
                             else:
@@ -512,9 +513,9 @@ To work with QGIS Cloud you need at least one QGIS Cloud database. Creating a da
 Do you want to create a new database now?
 """),
                     QMessageBox.StandardButtons(
-                        QMessageBox.No |
-                        QMessageBox.Yes))
-                if res == QMessageBox.Yes:
+                        QMessageBox.StandardButton.No |
+                        QMessageBox.StandardButton.Yes))
+                if res == QMessageBox.StandardButton.Yes:
                     self.create_database()
 
         return version_ok
@@ -529,7 +530,7 @@ Do you want to create a new database now?
     def create_database(self):
         self.btnDbRefresh.setDisabled(True)
         if self.numDbs < self.maxDBs:
-            self.setCursor(Qt.WaitCursor)
+            self.setCursor(Qt.CursorShape.WaitCursor)
             self.btnDbCreate.setEnabled(False)
             db = self.api.create_database()
             if not self.show_api_error(db):
@@ -568,10 +569,10 @@ Do you want to create a new database now?
                         self.tr('You have layers from database "{name}" loaded in your project! Do you want to remove them before you delete database "{name}"?').format(
                             name=name),
                         QMessageBox.StandardButtons(
-                            QMessageBox.Cancel |
-                            QMessageBox.Yes))
+                            QMessageBox.StandardButton.Cancel |
+                            QMessageBox.StandardButton.Yes))
 
-                if answer == QMessageBox.Yes:
+                if answer == QMessageBox.StandardButton.Yes:
                     remove_layer = self.PROJECT_INSTANCE.mapLayers().get(layer.id())
                     if isinstance(remove_layer, QgsMapLayer):
                         try:
@@ -580,7 +581,7 @@ Do you want to create a new database now?
                             pass
 
 
-        if answer == QMessageBox.Cancel:
+        if answer == QMessageBox.StandardButton.Cancel:
             QMessageBox.warning(None,  self.tr('Warning'),  self.tr(
                 'Deletion of database "{name}" interrupted!').format(name=name))
             return
@@ -589,13 +590,13 @@ Do you want to create a new database now?
         msgBox.setWindowTitle(self.tr("Delete QGIS Cloud database."))
         msgBox.setText(
             self.tr("Do you want to delete the database \"%s\"?") % name)
-        msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-        msgBox.setDefaultButton(QMessageBox.Cancel)
-        msgBox.setIcon(QMessageBox.Question)
-        ret = msgBox.exec_()
+        msgBox.setStandardButtons(QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel)
+        msgBox.setDefaultButton(QMessageBox.StandardButton.Cancel)
+        msgBox.setIcon(QMessageBox.Icon.Question)
+        ret = msgBox.exec()
 
-        if ret == QMessageBox.Ok:
-            self.setCursor(Qt.WaitCursor)
+        if ret == QMessageBox.StandardButton.Ok:
+            self.setCursor(Qt.CursorShape.WaitCursor)
             self.btnDbDelete.setEnabled(False)
             self.btnDbTables.setEnabled(False)
             result = self.api.delete_database(name)
@@ -704,8 +705,8 @@ Do you want to create a new database now?
 
     def map_load(self,  item=None,  row=None):
         self.widgetServices.close()
-        self.setCursor(Qt.WaitCursor)
-        map_id = self.tabMaps.currentItem().data(Qt.UserRole)
+        self.setCursor(Qt.CursorShape.WaitCursor)
+        map_id = self.tabMaps.currentItem().data(Qt.ItemDataRole.UserRole)
         map_name = self.tabMaps.currentItem().text()
         result = self.api.load_map_project(map_name,  map_id)
         qgs_file_name = '%s/%s.qgs' % (tempfile.gettempdir(), map_name)
@@ -720,9 +721,9 @@ Do you want to create a new database now?
                 self.tr(
                     """Your actual project has changes. Do you want to save the project?"""),
                 QMessageBox.StandardButtons(
-                    QMessageBox.Abort |
-                    QMessageBox.Discard |
-                    QMessageBox.Save))
+                    QMessageBox.StandardButton.Abort |
+                    QMessageBox.StandardButton.Discard |
+                    QMessageBox.StandardButton.Save))
             if ok:
                 project.write()
 
@@ -734,21 +735,21 @@ Do you want to create a new database now?
 
     def delete_map(self):
         name = self.tabMaps.currentItem().text()
-        map_id = self.tabMaps.currentItem().data(Qt.UserRole)
+        map_id = self.tabMaps.currentItem().data(Qt.ItemDataRole.UserRole)
 
         msgBox = QMessageBox()
         msgBox.setWindowTitle(self.tr("Delete QGIS Cloud map."))
         msgBox.setText(
             self.tr("Do you want to delete the map \"%s\"?") % name)
-        msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-        msgBox.setDefaultButton(QMessageBox.Cancel)
-        msgBox.setIcon(QMessageBox.Question)
-        ret = msgBox.exec_()
+        msgBox.setStandardButtons(QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel)
+        msgBox.setDefaultButton(QMessageBox.StandardButton.Cancel)
+        msgBox.setIcon(QMessageBox.Icon.Question)
+        ret = msgBox.exec()
 
-        if ret == QMessageBox.Ok:
+        if ret == QMessageBox.StandardButton.Ok:
 #            self.widgetServices.close()
             self.clean_widgetServices()
-            self.setCursor(Qt.WaitCursor)
+            self.setCursor(Qt.CursorShape.WaitCursor)
             success = self.api.delete_map(map_id)
 
             if success:
@@ -771,7 +772,7 @@ Do you want to create a new database now?
 
 
     def edit_map(self):
-        map_id = self.tabMaps.currentItem().data(Qt.UserRole)
+        map_id = self.tabMaps.currentItem().data(Qt.ItemDataRole.UserRole)
         map_name = self.tabMaps.currentItem().text()
         plan = self.api.check_login(
             version_info=self._version_info())["plan"]
@@ -780,7 +781,7 @@ Do you want to create a new database now?
                                         plan)
         mapsettings.prepare_ui()
 
-        mapsettings.exec_()
+        mapsettings.exec()
 
     def refresh_maps(self):
         with self.wait_cursor():
@@ -798,7 +799,7 @@ Do you want to create a new database now?
             for map in map_list:
                 it = QListWidgetItem(map['map']['name'])
                 self.tabMaps.addItem(it)
-                it.setData(Qt.UserRole,  map['map']['id'])
+                it.setData(Qt.ItemDataRole.UserRole,  map['map']['id'])
 
                 # add map info to maps lookup
                 self.maps_lookup[map['map']['name']] = map['map']
@@ -878,9 +879,9 @@ Do you want to create a new database now?
             msgBox.setText(self.tr("The project has been modified."))
             msgBox.setInformativeText(
                 self.tr("The project needs to be saved before it can be published. Proceed?"))
-            msgBox.setStandardButtons(QMessageBox.Save | QMessageBox.Cancel)
-            msgBox.setDefaultButton(QMessageBox.Save)
-            if msgBox.exec_() == QMessageBox.Save:
+            msgBox.setStandardButtons(QMessageBox.StandardButton.Save | QMessageBox.StandardButton.Cancel)
+            msgBox.setDefaultButton(QMessageBox.StandardButton.Save)
+            if msgBox.exec() == QMessageBox.StandardButton.Save:
                 self.iface.actionSaveProject().trigger()
                 return not project.isDirty()
             else:
@@ -1021,7 +1022,7 @@ Do you want to create a new database now?
 
     and set the map CRS to {layerCRS}. Continue publishing?""").format(
                         layerName=bottomLayer.name(), layerCRS=bottomLayer.crs().authid())
-                    if QMessageBox.question(None, self.tr('Warning'), warningText, QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes) == QMessageBox.No:
+                    if QMessageBox.question(None, self.tr('Warning'), warningText, QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, QMessageBox.StandardButton.Yes) == QMessageBox.StandardButton.No:
                         return
 
             saved = self.check_project_saved()
@@ -1054,7 +1055,7 @@ Do you want to create a new database now?
 
     is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct the project name and publish the project again.""" % (fname)),
                             QMessageBox.StandardButtons(
-                                QMessageBox.Close))
+                                QMessageBox.StandardButton.Close))
                     else:
                         map = self.api.create_map(self.map_name(show_notice=True), fname, config)['map']
                         self.show_api_error(map)
@@ -1209,8 +1210,8 @@ Do you want to create a new database now?
 
             if ( layers[0].crs().authid() ==  '' or layers[0].crs().authid().split(':')[0].upper() not in authorities or  layers[0].crs().authid().split(':')[1] == '0' ) and geometry_type_item.text() != 'No geometry':
                 srid_item = QTableWidgetItem('SRID not valid')
-                srid_item.setBackground(QBrush(Qt.red))
-                srid_item.setForeground(QBrush(Qt.white))
+                srid_item.setBackground(QBrush(Qt.GlobalColor.red))
+                srid_item.setForeground(QBrush(Qt.GlobalColor.white))
                 srid_item.setToolTip(self.tr("QGIS Cloud supports only Authority EPSG, IAU_2015 or ESRI reference systems"))
                 self.btnUploadData.setDisabled(True)
             else:
@@ -1219,10 +1220,10 @@ Do you want to create a new database now?
 
             row = self.tblLocalLayers.rowCount()
             self.tblLocalLayers.insertRow(row)
-            layers_item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+            layers_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
             self.tblLocalLayers.setItem(
                 row, self.COLUMN_LAYERS, layers_item)
-            data_source_item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+            data_source_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
             self.tblLocalLayers.setItem(
                 row, self.COLUMN_DATA_SOURCE, data_source_item)
 
@@ -1234,15 +1235,15 @@ Do you want to create a new database now?
                 row, self.COLUMN_SCHEMA_NAME, cmb_schema)
 
             table_name_item.setFlags(
-                Qt.ItemIsSelectable | Qt.ItemIsEditable | Qt.ItemIsEnabled)
+                Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEditable | Qt.ItemFlag.ItemIsEnabled)
             self.tblLocalLayers.setItem(
                 row, self.COLUMN_TABLE_NAME, table_name_item)
 
-            geometry_type_item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+            geometry_type_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
             self.tblLocalLayers.setItem(
                 row, self.COLUMN_GEOMETRY_TYPE, geometry_type_item)
 
-            srid_item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+            srid_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
             self.tblLocalLayers.setItem(row, self.COLUMN_SRID, srid_item)
 
         if self.local_data_sources.count() > 0:
@@ -1259,37 +1260,37 @@ Do you want to create a new database now?
         self.statusBar().showMessage(self.tr("Updated local data sources"))
 
     def __wkbTypeString(self, wkbType):
-        if wkbType == QgsWkbTypes.Unknown:
+        if wkbType == QgsWkbTypes.Type.Unknown:
             return "WkbUnknown"
-        elif wkbType == QgsWkbTypes.Point:
+        elif wkbType == QgsWkbTypes.Type.Point:
             return "WkbPoint"
-        elif wkbType == QgsWkbTypes.LineString:
+        elif wkbType == QgsWkbTypes.Type.LineString:
             return "WkbLineString"
-        elif wkbType == QgsWkbTypes.MultiLineString:
+        elif wkbType == QgsWkbTypes.Type.MultiLineString:
             return "WkbMultiLineString"
-        elif wkbType == QgsWkbTypes.Polygon:
+        elif wkbType == QgsWkbTypes.Type.Polygon:
             return "WkbPolygon"
-        elif wkbType == QgsWkbTypes.MultiPoint:
+        elif wkbType == QgsWkbTypes.Type.MultiPoint:
             return "WkbMultiPoint"
-        elif wkbType == QgsWkbTypes.MultiPolygon:
+        elif wkbType == QgsWkbTypes.Type.MultiPolygon:
             return "WkbMultiPolygon"
-        elif wkbType == QgsWkbTypes.NoGeometry:
+        elif wkbType == QgsWkbTypes.Type.NoGeometry:
             return "WkbNoGeometry"
-        elif wkbType == QgsWkbTypes.Point25D:
+        elif wkbType == QgsWkbTypes.Type.Point25D:
             return "WkbPoint25D"
-        elif wkbType == QgsWkbTypes.LineString25D:
+        elif wkbType == QgsWkbTypes.Type.LineString25D:
             return "WkbLineString25D"
-        elif wkbType == QgsWkbTypes.Polygon25D:
+        elif wkbType == QgsWkbTypes.Type.Polygon25D:
             return "WkbPolygon25D"
-        elif wkbType == QgsWkbTypes.MultiPoint25D:
+        elif wkbType == QgsWkbTypes.Type.MultiPoint25D:
             return "WkbMultiPoint25D"
-        elif wkbType == QgsWkbTypes.MultiLineString25D:
+        elif wkbType == QgsWkbTypes.Type.MultiLineString25D:
             return "WkbMultiLineString25D"
-        elif wkbType == QgsWkbTypes.MultiPolygon25D:
+        elif wkbType == QgsWkbTypes.Type.MultiPolygon25D:
             return "WkbMultiPolygon25D"
-        elif wkbType == QgsWkbTypes.LineStringZM:
+        elif wkbType == QgsWkbTypes.Type.LineStringZM:
             return "WkbLineStringZM"
-        elif wkbType == QgsWkbTypes.MultiLineStringZM:
+        elif wkbType == QgsWkbTypes.Type.MultiLineStringZM:
             return "WkbMultiLineStringZM"
 
         return self.tr("Unknown type")
@@ -1368,9 +1369,9 @@ has more than 62 characters and cannot be processed like this. Please give the t
 Should the table name be shortened automatically?
 """.format(table_name=self.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text())),
                             QMessageBox.StandardButtons(
-                                QMessageBox.No |
-                                QMessageBox.Yes))
-                        if answer == QMessageBox.Yes:
+                                QMessageBox.StandardButton.No |
+                                QMessageBox.StandardButton.Yes))
+                        if answer == QMessageBox.StandardButton.Yes:
                             new_table_name = self.tblLocalLayers.item(
                                                                         row,
                                                                         self.COLUMN_TABLE_NAME).text()[:-1*(table_length - 59)]
@@ -1434,7 +1435,7 @@ Should the table name be shortened automatically?
             # temporary layers added and removed
             self.do_update_local_data_sources = False
             self.statusBar().showMessage(self.tr("Uploading data..."))
-            self.setCursor(Qt.WaitCursor)
+            self.setCursor(Qt.CursorShape.WaitCursor)
             self.btnUploadData.hide()
             self.progressWidget.show()
 
@@ -1461,7 +1462,7 @@ Should the table name be shortened automatically?
                 upload_ok = True
             except Exception as e:
                 ErrorReportDialog(self.tr("Upload errors occurred"), self.tr("Upload errors occurred. Not all data could be uploaded."), str(
-                    e) + "\n\n\n" + traceback.format_exc(), self.user, self).exec_()
+                    e) + "\n\n\n" + traceback.exec(), self.user, self).exec_()
                 upload_ok = False
 
             self.progressWidget.hide()
@@ -1498,14 +1499,14 @@ Should the table name be shortened automatically?
                     initialPath = QSettings().value("/UI/lastProjectDir", ".")
                 fd = QFileDialog(None, self.tr(
                     "Save Project"), initialPath, "%s (*.qgz *.qgs)" % self.tr("QGIS Project Files"))
-                fd.setParent(save_dialog, Qt.Widget)
-                fd.setOption(QFileDialog.DontUseNativeDialog)
-                fd.setAcceptMode(QFileDialog.AcceptSave)
+                fd.setParent(save_dialog, Qt.WindowType.Widget)
+                fd.setOption(QFileDialog.Option.DontUseNativeDialog)
+                fd.setAcceptMode(QFileDialog.AcceptMode.AcceptSave)
                 save_dialog.layout().addWidget(fd)
                 header.layout().setContentsMargins(fd.layout().contentsMargins())
                 fd.accepted.connect(save_dialog.accept)
                 fd.rejected.connect(save_dialog.reject)
-                if save_dialog.exec_() == QDialog.Accepted:
+                if save_dialog.exec() == QDialog.DialogCode.Accepted:
                     files = list(fd.selectedFiles())
                     if files:
                         QgsProject.instance().setFileName(files[0])
@@ -1515,9 +1516,14 @@ Should the table name be shortened automatically?
                 self.tabWidget.setCurrentWidget(self.mapTab)
 
     def _push_message(self, title, text, level=0, duration=0):
+        level = Qgis.Critical
+        print (title)
+        print (text)
+        print(level)
+        print(duration)
         # QGIS >= 2.0
         if hasattr(self.iface, 'messageBar') and hasattr(self.iface.messageBar(), 'pushMessage'):
-            self.iface.messageBar().pushMessage(title, text, level, duration)
+            self.iface.messageBar().pushMessage(title,  text, level,  duration)
         else:
             QMessageBox.information(self, title, text)
 
@@ -1606,16 +1612,16 @@ Should the table name be shortened automatically?
 
         if usage < 0.8:
             bg_color = QColor(255, 0, 0, 0)
-            text_color = QColor(Qt.black)
+            text_color = QColor(Qt.GlobalColor.black)
         elif usage >= 0.8 and usage < 1:
             bg_color = QColor(255, 0, 0, 100)
-            text_color = QColor(Qt.white)
+            text_color = QColor(Qt.GlobalColor.white)
         elif usage >= 1:
             bg_color = QColor(255, 0, 0, 255)
-            text_color = QColor(Qt.white)
+            text_color = QColor(Qt.GlobalColor.white)
             self.storage_exceeded = True
 
-        lblPalette.setColor(QPalette.Window, QColor(bg_color))
+        lblPalette.setColor(QPalette.ColorRole.Window, QColor(bg_color))
         lblPalette.setColor(QPalette.Foreground, QColor(text_color))
 
         self.lblDbSize.setAutoFillBackground(True)

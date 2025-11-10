@@ -132,7 +132,7 @@ class BackgroundLayersMenu(QMenu):
         apiKey = QSettings().value("qgis-cloud-plugin/thunderforestApiKey")
         newApiKey, ok = QInputDialog.getText(
             self.iface.mainWindow(), "API key",
-            "Enter your API key (<a href=\"https://thunderforest.com/pricing/\">https://thunderforest.com</a>)", QLineEdit.Normal, apiKey)
+            "Enter your API key (<a href=\"https://thunderforest.com/pricing/\">https://thunderforest.com</a>)", QLineEdit.EchoMode.Normal, apiKey)
         if ok:
             QSettings().setValue("qgis-cloud-plugin/thunderforestApiKey",
                                  newApiKey)
@@ -205,7 +205,7 @@ class BackgroundLayersMenu(QMenu):
             extMap = mapCanvas.extent()
             try:
                 extMap = coordTrans.transform(
-                    extMap, QgsCoordinateTransform.ForwardTransform)
+                    extMap, QgsCoordinateTransform.TransformDirection.ForwardTransform)
                 QgsProject.instance().setCrs(coordRefSys)
                 mapCanvas.freeze(False)
                 mapCanvas.setExtent(extMap)

@@ -20,7 +20,7 @@ class Metadata():
     def _read_metadata(self):
         self.plugindir = self.plugin_dir = self.plugin_dir = os.path.dirname(__file__)
         mdFile = QFile(self.plugindir+"/metadata.txt")
-        mdFile.open(QIODevice.ReadOnly | QIODevice.Text)
+        mdFile.open(QIODevice.OpenModeFlag.ReadOnly | QIODevice.OpenModeFlag.Text)
         inFile = QTextStream(mdFile)
         
         changeLog = ''

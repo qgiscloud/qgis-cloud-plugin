@@ -48,10 +48,10 @@ class ErrorReportDialog(QDialog):
         self.verticalLayout.addWidget(self.plainTextEdit)
 
         self.buttonBox = QDialogButtonBox(self)
-        self.buttonBox.setOrientation(Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QDialogButtonBox.Close)
+        self.buttonBox.setOrientation(Qt.Orientation.Horizontal)
+        self.buttonBox.setStandardButtons(QDialogButtonBox.StandardButton.Close)
         self.verticalLayout.addWidget(self.buttonBox)
-        self.reportButton = self.buttonBox.addButton(self.tr("Report error"), QDialogButtonBox.ActionRole)
+        self.reportButton = self.buttonBox.addButton(self.tr("Report error"), QDialogButtonBox.ButtonRole.ActionRole)
 
         self.reportButton.clicked.connect(self.__reportError)
         self.buttonBox.accepted.connect(self.accept)

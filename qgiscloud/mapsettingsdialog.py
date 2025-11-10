@@ -53,7 +53,7 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
 
     @contextmanager
     def wait_cursor(self):
-        QApplication.setOverrideCursor(Qt.WaitCursor)
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         try:
             yield
         finally:
@@ -83,7 +83,7 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
                 lambda: self.add_user())
             self.delete_user_btn.clicked.connect(self.delete_user)
             self.dialog_buttonBox.button(
-                QDialogButtonBox.Save).clicked.connect(self.save_options)
+                QDialogButtonBox.StandardButton.Save).clicked.connect(self.save_options)
 
             self.toggle_disabled_fields()
 
@@ -264,7 +264,7 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
         # set size of row
         sql_preview_view.resizeColumnsToContents()
         preview_dialog.resize(1000, 600)
-        preview_dialog.exec_()
+        preview_dialog.exec()
 
     def enable_user_management(self):
         if self.viewer_active_chkb.isChecked() \
@@ -288,7 +288,7 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
         # String object
         users_list, ok = QInputDialog.getText(
             self, self.tr("Add user(s)"),
-            self.tr("Usernames:"), QLineEdit.Normal, username)
+            self.tr("Usernames:"), QLineEdit.EchoMode.Normal, username)
 
         if ok is False:
             return
@@ -365,9 +365,9 @@ class MapSettingsDialog(QDialog, FORM_CLASS):
                 self,
                 self.tr(""),
                 self.tr("Do you really want to delete the user: %s?") %
-                (", ".join(users_to_delete)), QMessageBox.Yes | QMessageBox.No)
+                (", ".join(users_to_delete)), QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
 
-            if res == QMessageBox.No:
+            if res == QMessageBox.StandardButton.No:
                 return
 
             updated_user_list = self.api.update_map(
@@ -517,14 +517,14 @@ class TableModel(QAbstractTableModel):
 
     def data(self, index, role):
         if not index.isValid():
-            return QVariant()
-        elif role != Qt.DisplayRole:
-            return QVariant()
+            return NULL
+        elif role != Qt.ItemDataRole.DisplayRole:
+            return NULL
         return QVariant(self.data[index.row()][index.column()])
 
     def headerData(self, row, orientation, role):
-        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
+        if orientation == Qt.Orientation.Horizontal and role == Qt.ItemDataRole.DisplayRole:
             return self.header[row]
-        elif orientation == Qt.Vertical and role == Qt.DisplayRole:
+        elif orientation == Qt.Orientation.Vertical and role == Qt.ItemDataRole.DisplayRole:
             return row
         return None

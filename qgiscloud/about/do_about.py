@@ -1,4 +1,4 @@
-# -*- coding: latin1 -*-
+# -*- coding: utf-8 -*-
 """
 /***************************************************************************
  QgisCloudPlugin
@@ -28,7 +28,7 @@ class DlgAbout(object):
     def contribString(self):
         return """
         <p><center><b>The QGIS Cloud-Plugin is developed by the following persons:</b></center></p> 
-        <p>Dr. Horst Düster (product manager, developer and support)<br>
+        <p>Dr. Horst DÃ¼ster (product manager, developer and support)<br>
         Pirmin Kalberer (project manager, developer and support)<br>
         Sandro Mani (developer)<br>
         Mathias Walker (developer and support)<br>
@@ -45,7 +45,7 @@ class DlgAbout(object):
     def licenseString(self):
         return  """
         Sourcepole AG - Linux & Open Source Solutions<br>
-        Weberstrasse 5, 8004 Zürich, Switzerland<br>
+        Weberstrasse 5, 8004 ZÃ¼rich, Switzerland<br>
         <br>
         Contact:<br>
         support@qgiscloud.com<br>

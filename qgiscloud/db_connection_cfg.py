@@ -192,7 +192,7 @@ Please check the following points:<br><br>
 - Is port 5432 open in the firewall?<br>
 - Are the proxy settings correct?""" % self.database),
                 QMessageBox.StandardButtons(
-                    QMessageBox.Close))
+                    QMessageBox.StandardButton.Close))
                     
             return None
 

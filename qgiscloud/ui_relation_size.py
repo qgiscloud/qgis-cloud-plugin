@@ -3,7 +3,7 @@
 """
 Module implementing RelationSizeDialog.
 """
-from PyQt5 import uic
+from qgis.PyQt import uic
 from qgis.PyQt.QtCore import pyqtSlot,  Qt
 from qgis.PyQt.QtWidgets import QApplication,  QDialog,  QTableWidgetItem,  QAbstractScrollArea,  QFileDialog
 import sys
@@ -24,7 +24,7 @@ class RelationSizeDialog(QDialog, FORM_CLASS):
     
     @contextmanager
     def wait_cursor(self):
-        QApplication.setOverrideCursor(Qt.WaitCursor)
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         try:
             yield
         finally:
@@ -92,7 +92,7 @@ class RelationSizeDialog(QDialog, FORM_CLASS):
             tab_widget.setColumnCount(len(column_names))
             tab_widget.setRowCount(len(result))
             tab_widget.setHorizontalHeaderLabels(column_names)
-            tab_widget.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+            tab_widget.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
             
             row_count = 0
             for row in result:

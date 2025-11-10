@@ -50,7 +50,7 @@ class LocalDataSources(object):
         for layer in layer_list:
             if layer.id() == skip_layer_id:
                 continue
-            if layer.type() != QgsMapLayer.PluginLayer:
+            if layer.type() != QgsMapLayer.LayerType.PluginLayer:
                 try:
                     provider = layer.dataProvider().name()
                 except:
@@ -83,7 +83,7 @@ class LocalDataSources(object):
                     local_raster_layers.append(layer)
 
             elif provider not in ["wms", "openlayers",  "arcgismapserver",   "postgresraster",  "arcgisvectortileservice", "vectortile",  "xyzvectortiles"]:
-                if layer.type() == QgsMapLayer.VectorLayer:
+                if layer.type() == QgsMapLayer.LayerType.VectorLayer:
                     local_layers.append(layer)
                 else:
                     unsupported_layers.append(layer)
