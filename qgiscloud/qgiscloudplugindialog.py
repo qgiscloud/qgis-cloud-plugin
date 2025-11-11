@@ -896,9 +896,7 @@ Do you want to create a new database now?
         layer_name_dict = {}  # name / nReferences
 
         for layer in layers:
-            name = layer.shortName()
-            if not name:
-                name = layer.name()
+            name = layer.customProperty('shortName', layer.name())
 
             if name in layer_name_dict:
                 layer_name_dict[name] = layer_name_dict[name] + 1
@@ -916,10 +914,8 @@ Do you want to create a new database now?
 #        layer_name_dict = {}  # name / nReferences
 
         for layer in layers:
-            name = layer.shortName()
-            if not name:
-                name = layer.name()
-
+            name = layer.customProperty('shortName', layer.name())
+            
             if set(",.;:+/'").intersection(set(name)):
                 illegal_layer_names.append(name)
 
