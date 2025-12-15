@@ -4,7 +4,7 @@ qgisMinimumVersion=3.99
 qgisMaximumVersion=4.99
 supportsQt6=True
 description=Publish maps on qgiscloud.com
-version=4.0.1
+version=4.0.2
 author=Sourcepole - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich, Switzerland
 email=support@qgiscloud.com
 about= QGIS Cloud is your powerful Web-GIS platform for publishing maps, data and services on the internet.  Create and edit professional maps with all the capabilities from QGIS.     With only a few short mouse-clicks you can share your work on qgiscloud.com with the public. <br><br>The documentation of  QGIS Cloud can be found in <a href="https://docs.qgiscloud.com/en/">English</a> or <a href="https://docs.qgiscloud.com/de/">German</a>.
@@ -12,6 +12,8 @@ about= QGIS Cloud is your powerful Web-GIS platform for publishing maps, data an
 ; Optional items:
 
 changelog=
+    4.0.2
+    - Compatibility with QGIS Cloud V3
     4.0.1
     - QgsMapLayer.shortName() removed
     4.0.0 

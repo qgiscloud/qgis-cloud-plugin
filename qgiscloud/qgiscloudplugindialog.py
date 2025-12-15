@@ -444,12 +444,19 @@ class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
                             self.tr("Logged in as {0} ({1})".format(self.user, login_info['plan'])))
                     else:
                         paid_until = login_info['paid_until']
-                        self.lblLoginStatus.setText(
-                            self.tr("""Logged in as {0} ({1})
+                        try:
+                            self.lblLoginStatus.setText(
+                                self.tr("""Logged in as {0} ({1})
 Paid until: {2}""").format(self.user,
                                         login_info['plan'],
                                         datetime.strftime(datetime.strptime(paid_until, "%Y-%m-%dT%H:%M:%SZ"), '%d.%m.%Y %H:%M')))
-
+                        except:
+# Neues Datumsformat in QGIS Cloud V3                            
+                            self.lblLoginStatus.setText(
+                                self.tr("""Logged in as {0} ({1})
+Paid until: {2}""").format(self.user,
+                                        login_info['plan'],
+                                        datetime.strftime(datetime.strptime(paid_until, "%Y-%m-%dT%H:%M:%S.%fZ"), '%d.%m.%Y %H:%M')))
                     self.lblLoginStatus.show()
                     self._push_message(
                         self.tr("QGIS Cloud"),
