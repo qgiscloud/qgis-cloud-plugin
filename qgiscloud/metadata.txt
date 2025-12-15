@@ -11,6 +11,8 @@ about= QGIS Cloud is your powerful Web-GIS platform for publishing maps, data an
 ; Optional items:
 
 changelog=
+    3.11.2
+    - Support of QGIS Cloud V3 date format added
     3.11.1
     - QApplication.setWaitCurser() substituted with self.wait_cursor()
     3.11.0
