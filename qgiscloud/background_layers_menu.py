@@ -86,6 +86,66 @@ class BackgroundLayersMenu(QMenu):
                 ("OpenStreetMap", 'http://tile.openstreetmap.org/{z}/{x}/{y}.png'),
                 ("OSM Humanitarian Data Model", 'http://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png')
             ])),
+            ("CARTO", OrderedDict([
+                ("CARTO Voyager", "https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"),
+                ("CARTO Voyager without labels", "https://a.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}.png"),
+                ("CARTO Positron", "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"),
+                ("CARTO Positron without labels", "https://a.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png"),
+                ("CARTO Dark Matter", "https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"),
+                ("CARTO Dark Matter without labels", "https://a.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png")
+            ])),
+            ("Countries", OrderedDict([
+                ("Australia", OrderedDict([
+                    ("National Topographic Map", "https://services.ga.gov.au/gis/rest/services/NationalBaseMap/MapServer/tile/{z}/{y}/{x}"),
+                    ("National Topographic Map Grayscale", "https://services.ga.gov.au/gis/rest/services/NationalBaseMap_GreyScale/MapServer/tile/{z}/{y}/{x}")
+                ])),
+                ("Austria", OrderedDict([
+                    ("Standard", "https://mapsneu.wien.gv.at/basemap/geolandbasemap/normal/google3857/{z}/{y}/{x}.png"),
+                    ("Grau", "https://mapsneu.wien.gv.at/basemap/bmapgrau/normal/google3857/{z}/{y}/{x}.png"),
+                    ("Gelände", "https://mapsneu.wien.gv.at/basemap/bmapgelaende/grau/google3857/{z}/{y}/{x}.jpeg"),
+                    ("Oberfläche", "https://mapsneu.wien.gv.at/basemap/bmapoberflaeche/grau/google3857/{z}/{y}/{x}.jpeg"),
+                    ("Orthofoto", "https://mapsneu.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.jpeg"),
+                ])),
+                ("Belgium", OrderedDict([
+                    ("NGI Topographic Map", "https://cartoweb.wmts.ngi.be/1.0.0/topo/default/3857/{z}/{y}/{x}.png")
+                ])),
+                ("France", OrderedDict([
+                    ("IGN Plan", "https://data.geopf.fr/wmts?SERVICE=WMTS%26REQUEST=GetTile%26VERSION=1.0.0%26LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2%26STYLE=normal%26FORMAT=image/png%26TILEMATRIXSET=PM%26TILEMATRIX={z}%26TILEROW={y}%26TILECOL={x}"),
+                    ("IGN Orthophoto", "https://data.geopf.fr/wmts?SERVICE=WMTS%26REQUEST=GetTile%26VERSION=1.0.0%26LAYER=ORTHOIMAGERY.ORTHOPHOTOS%26STYLE=normal%26FORMAT=image/jpeg%26TILEMATRIXSET=PM%26TILEMATRIX={z}%26TILEROW={y}%26TILECOL={x}")
+                ])),
+                ("Germany", OrderedDict([
+                    ("Farbe", "https://sgx.geodatenzentrum.de/wmts_basemapde/tile/1.0.0/de_basemapde_web_raster_farbe/default/GLOBAL_WEBMERCATOR/{z}/{y}/{x}.png"),
+                    ("Grau", "https://sgx.geodatenzentrum.de/wmts_basemapde/tile/1.0.0/de_basemapde_web_raster_grau/default/GLOBAL_WEBMERCATOR/{z}/{y}/{x}.png"),
+                    ("TopPlusOpen", "https://sgx.geodatenzentrum.de/wmts_topplus_open/tile/1.0.0/web/default/WEBMERCATOR/{z}/{y}/{x}.png"),
+                    ("TopPlusOpen Grau", "https://sgx.geodatenzentrum.de/wmts_topplus_open/tile/1.0.0/web_grau/default/WEBMERCATOR/{z}/{y}/{x}.png"),
+                    ("TopPlusOpen Light", "https://sgx.geodatenzentrum.de/wmts_topplus_open/tile/1.0.0/web_light/default/WEBMERCATOR/{z}/{y}/{x}.png"),
+                    ("TopPlusOpen Light Grau", "https://sgx.geodatenzentrum.de/wmts_topplus_open/tile/1.0.0/web_light_grau/default/WEBMERCATOR/{z}/{y}/{x}.png")
+                ])),
+                ("Japan", OrderedDict([
+                    ("Pale Map", "https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png")
+                ])),
+                ("Netherlands", OrderedDict([
+                    ("Standard", "https://service.pdok.nl/brt/achtergrondkaart/wmts/v2_0/standaard/EPSG:3857/{z}/{x}/{y}.png"),
+                    ("Grau", "https://service.pdok.nl/brt/achtergrondkaart/wmts/v2_0/grijs/EPSG:3857/{z}/{x}/{y}.png"),
+                    ("Pastel", "https://service.pdok.nl/brt/achtergrondkaart/wmts/v2_0/pastel/EPSG:3857/{z}/{x}/{y}.png"),
+                    ("Water", "https://service.pdok.nl/brt/achtergrondkaart/wmts/v2_0/water/EPSG:3857/{z}/{x}/{y}.png"),
+                ])),
+                ("Norway", OrderedDict([
+                    ("Topographic", "https://cache.kartverket.no/v1/wmts/1.0.0/topo/default/webmercator/{z}/{y}/{x}.png"),
+                    ("Hiking Map", "https://cache.kartverket.no/v1/wmts/1.0.0/toporaster/default/webmercator/{z}/{y}/{x}.png"),
+                    ("Nautical Chart", "https://cache.kartverket.no/v1/wmts/1.0.0/sjokartraster/default/webmercator/{z}/{y}/{x}.png")
+                ])),
+                ("Spain", OrderedDict([
+                    ("IGN Base", "https://www.ign.es/wmts/ign-base?SERVICE=WMTS%26REQUEST=GetTile%26VERSION=1.0.0%26LAYER=IGNBaseTodo%26STYLE=default%26FORMAT=image/jpeg%26TILEMATRIXSET=GoogleMapsCompatible%26TILEMATRIX={z}%26TILEROW={y}%26TILECOL={x}"),
+                    ("IGN Topographic Map", "https://www.ign.es/wmts/mapa-raster?SERVICE=WMTS%26REQUEST=GetTile%26VERSION=1.0.0%26LAYER=MTN%26STYLE=default%26FORMAT=image/jpeg%26TILEMATRIXSET=GoogleMapsCompatible%26TILEMATRIX={z}%26TILEROW={y}%26TILECOL={x}"),
+                    ("PNOA Orthophoto", "https://www.ign.es/wmts/pnoa-ma?SERVICE=WMTS%26REQUEST=GetTile%26VERSION=1.0.0%26LAYER=OI.OrthoimageCoverage%26STYLE=default%26FORMAT=image/jpeg%26TILEMATRIXSET=GoogleMapsCompatible%26TILEMATRIX={z}%26TILEROW={y}%26TILECOL={x}")
+                ])),
+                ("USA", OrderedDict([
+                    ("USGS Topographic", "https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}"),
+                    ("USGS Imagery", "https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}"),
+                    ("USGS Imagery Topographic", "https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}")
+                ])),
+            ])),
             ("OpenTopoMap", OrderedDict([
                 ("OSM OpenTopoMap", 'http://c.tile.opentopomap.org/{z}/{x}/{y}.png')
             ])),
@@ -108,12 +168,20 @@ class BackgroundLayersMenu(QMenu):
             
         ])
 
-        for layer_type in xyz_layers:
+        def add_menu_items(parent_menu, items):
+            for name, value in items.items():
+                if isinstance(value, OrderedDict):
+                    submenu = QMenu(name, parent_menu)
+                    add_menu_items(submenu, value)
+                    parent_menu.addMenu(submenu)
+                else:
+                    action = self.create_add_layer_action(
+                        value, name, parent_menu)
+                    parent_menu.addAction(action)
+
+        for layer_type, layers in xyz_layers.items():
             menu = QMenu(layer_type, self)
-            for layer in xyz_layers[layer_type]:
-                action = self.create_add_layer_action(
-                    xyz_layers[layer_type][layer], layer, menu)
-                menu.addAction(action)
+            add_menu_items(menu, layers)
             if "Thunderforest" in layer_type:
                 add_api_key_action = QAction("Set api Key", menu)
                 add_api_key_action.triggered.connect(
