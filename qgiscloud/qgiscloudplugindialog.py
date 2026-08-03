@@ -19,13 +19,16 @@
  *                                                                         *
  ***************************************************************************/
 """
-from qgis.PyQt.QtCore import Qt, QSettings, pyqtSlot,  QUrl
+from qgis.PyQt.QtCore import Qt, QSettings, pyqtSlot,  QUrl, QRect, pyqtSignal
 from qgis.PyQt.QtWidgets import (
                                                                 QApplication, QDockWidget,   QTableWidgetItem, 
                                                                 QListWidgetItem, QDialog, QMessageBox, QWidget, 
-                                                                QLabel,  QVBoxLayout,  QFileDialog,  QComboBox,  QTabBar
+                                                                QLabel,  QVBoxLayout,  QFileDialog,  QComboBox,  QTabBar,
+                                                                QFrame, QSizePolicy, QStackedWidget, QPushButton
                                                           )
-from qgis.PyQt.QtGui import QPalette, QColor,  QBrush,  QDesktopServices
+from qgis.PyQt.QtGui import (
+    QPalette, QColor,  QBrush,  QDesktopServices, QPixmap, QPainter,
+)
 from qgis.core import *
 from .login_dialog import LoginDialog
 from .qgiscloudapi.qgiscloudapi import *
@@ -62,6 +65,47 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'qgiscloudplugin.ui'))
 
 __all__ = ["QgisCloudPluginDialog", "SchemaListException"]
+
+
+class WelcomeMapPanel(QFrame):
+    def __init__(self, image_path, parent=None):
+        QFrame.__init__(self, parent)
+        self.background = QPixmap(image_path)
+        self.veil_color = QColor(255, 255, 255, 165)
+        self.fallback_color = QColor("#f7f9fa")
+        self.setFrameShape(QFrame.NoFrame)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+
+    def paintEvent(self, event):
+        rect = self.rect()
+        if rect.isEmpty():
+            return
+
+        painter = QPainter(self)
+        painter.fillRect(rect, self.fallback_color)
+
+        if not self.background.isNull():
+            pixmap = self.background.scaled(
+                rect.size(), Qt.KeepAspectRatioByExpanding, Qt.SmoothTransformation
+            )
+            pixmap_rect = QRect(0, 0, pixmap.width(), pixmap.height())
+            pixmap_rect.moveCenter(rect.center())
+            painter.setClipRect(rect)
+            painter.drawPixmap(pixmap_rect, pixmap)
+            painter.setClipping(False)
+
+        painter.fillRect(rect, self.veil_color)
+
+
+class ClickableLabel(QLabel):
+    clicked = pyqtSignal()
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton and self.rect().contains(event.pos()):
+            self.clicked.emit()
+            event.accept()
+            return
+        QLabel.mouseReleaseEvent(self, event)
 
 class SchemaListException(Exception):
     """
@@ -188,6 +232,7 @@ class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
         self.widgetDatabases.setEnabled(False)
         self.widgetMaps.setEnabled(False)
         self.labelOpenLayersPlugin.hide()
+        self._setup_welcome_view()
 
         self.btnBackgroundLayer.setMenu(BackgroundLayersMenu(self.iface))
 
@@ -326,6 +371,162 @@ class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
         self.user = s.value("qgiscloud/user", "")
         self.URL = s.value("qgiscloud/URL", "")
 
+    def _setup_welcome_view(self):
+        assets_dir = os.path.join(os.path.dirname(__file__), "assets")
+
+        self.accountSessionWidget = QWidget(self.accountTab)
+        self.accountSessionWidget.setSizePolicy(
+            QSizePolicy.Expanding, QSizePolicy.Preferred
+        )
+        login_row_item = self.gridLayout_5.itemAtPosition(1, 0)
+        if login_row_item is not None:
+            self.gridLayout_5.removeItem(login_row_item)
+        self.accountSessionWidget.setLayout(self.horizontalLayout_5)
+        self.gridLayout_5.addWidget(self.accountSessionWidget, 1, 0)
+
+        self.welcomeWidget = QWidget(self.accountTab)
+        self.welcomeWidget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+
+        welcome_layout = QVBoxLayout(self.welcomeWidget)
+        welcome_layout.setContentsMargins(0, 0, 0, 0)
+        welcome_layout.setSpacing(0)
+
+        self.welcomePanel = WelcomeMapPanel(
+            os.path.join(assets_dir, "welcome_map_background.png"),
+            self.welcomeWidget
+        )
+
+        panel_layout = QVBoxLayout(self.welcomePanel)
+        panel_layout.setContentsMargins(0, 0, 0, 0)
+        panel_layout.setSpacing(0)
+
+        self.welcomeOverlay = QWidget(self.welcomePanel)
+        self.welcomeOverlay.setObjectName("welcomeOverlay")
+        self.welcomeOverlay.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.welcomeOverlay.setStyleSheet("QWidget#welcomeOverlay { background: transparent; }")
+
+        overlay_layout = QVBoxLayout(self.welcomeOverlay)
+        overlay_layout.setContentsMargins(28, 28, 28, 28)
+        overlay_layout.setSpacing(10)
+        overlay_layout.addStretch(1)
+
+        self.welcomeLogo = ClickableLabel(self.welcomeOverlay)
+        self.welcomeLogo.setAlignment(Qt.AlignHCenter)
+        self.welcomeLogo.setPixmap(QPixmap(os.path.join(assets_dir, "qgiscloud_logo.png")))
+        self.welcomeLogo.setStyleSheet("background: transparent;")
+        self.welcomeLogo.setCursor(Qt.PointingHandCursor)
+        self.welcomeLogo.clicked.connect(self._open_qgiscloud_website)
+        overlay_layout.addWidget(self.welcomeLogo, 0, Qt.AlignHCenter)
+
+        self.welcomeHeading = QLabel(self.tr("Welcome to QGIS Cloud"), self.welcomeOverlay)
+        heading_font = self.welcomeHeading.font()
+        if heading_font.pointSize() > 0:
+            heading_font.setPointSize(heading_font.pointSize() + 2)
+        heading_font.setBold(True)
+        self.welcomeHeading.setFont(heading_font)
+        self.welcomeHeading.setAlignment(Qt.AlignHCenter)
+        self.welcomeHeading.setWordWrap(True)
+        self.welcomeHeading.setStyleSheet(
+            "QLabel { background: transparent; color: #1f2f3a; }"
+        )
+        overlay_layout.addWidget(self.welcomeHeading)
+
+        self.welcomeDescription = QLabel(
+            self.tr("Publish, manage and share your QGIS projects online."),
+            self.welcomeOverlay
+        )
+        self.welcomeDescription.setAlignment(Qt.AlignHCenter)
+        self.welcomeDescription.setWordWrap(True)
+        self.welcomeDescription.setStyleSheet(
+            "QLabel { background: transparent; color: #41505a; }"
+        )
+        overlay_layout.addWidget(self.welcomeDescription)
+
+        self.btnLogin.setStyleSheet("""
+            QPushButton {
+                background-color: #1586c4;
+                color: white;
+                border: 1px solid #106d9f;
+                border-radius: 4px;
+                padding: 8px 18px;
+                font-weight: 600;
+            }
+        """)
+        self.btnLogin.setCursor(Qt.PointingHandCursor)
+        self.btnLogin.setMinimumWidth(112)
+        overlay_layout.addSpacing(4)
+        overlay_layout.addWidget(self.btnLogin, 0, Qt.AlignHCenter)
+
+        self.btnSignup = QPushButton(self.tr("Sign up"), self.welcomeOverlay)
+        self.btnSignup.setCursor(Qt.PointingHandCursor)
+        self.btnSignup.setMinimumWidth(112)
+        self.btnSignup.setStyleSheet("""
+            QPushButton {
+                background-color: rgba(255, 255, 255, 165);
+                color: #1586c4;
+                border: 1px solid #1586c4;
+                border-radius: 4px;
+                padding: 8px 18px;
+                font-weight: 600;
+            }
+        """)
+        self.btnSignup.clicked.connect(self._open_qgiscloud_registration)
+        overlay_layout.addWidget(self.btnSignup, 0, Qt.AlignHCenter)
+        overlay_layout.addStretch(1)
+
+        panel_layout.addWidget(self.welcomeOverlay)
+
+        welcome_layout.addWidget(self.welcomePanel)
+
+        self.accountContentStack = QStackedWidget(self.accountTab)
+        self.accountContentStack.setContentsMargins(0, 0, 0, 0)
+        self.accountContentStack.setSizePolicy(
+            QSizePolicy.Expanding, QSizePolicy.Expanding
+        )
+        self.gridLayout_5.removeWidget(self.widgetDatabases)
+        self.accountContentStack.addWidget(self.welcomeWidget)
+        self.accountContentStack.addWidget(self.widgetDatabases)
+        self.gridLayout_5.addWidget(self.accountContentStack, 2, 0)
+
+        self._set_authenticated_state(False)
+
+    def _open_qgiscloud_registration(self):
+        QDesktopServices.openUrl(QUrl("https://qgiscloud.com/account/sign_up"))
+
+    def _open_qgiscloud_website(self):
+        QDesktopServices.openUrl(QUrl("https://qgiscloud.com"))
+
+    def _set_authenticated_state(self, authenticated):
+        self.accountContentStack.setCurrentWidget(
+            self.widgetDatabases if authenticated else self.welcomeWidget
+        )
+        if hasattr(self, "horizontalSpacer_3"):
+            if authenticated:
+                self.horizontalSpacer_3.changeSize(
+                    40,
+                    20,
+                    QSizePolicy.Expanding,
+                    QSizePolicy.Minimum
+                )
+            else:
+                self.horizontalSpacer_3.changeSize(
+                    0, 0, QSizePolicy.Ignored, QSizePolicy.Ignored
+                )
+            self.horizontalLayout_5.invalidate()
+            self.gridLayout_5.invalidate()
+        self.accountSessionWidget.setVisible(authenticated)
+        self.btnLogin.setVisible(not authenticated)
+        self.btnSignup.setVisible(not authenticated)
+        self.lblSignup.hide()
+        self.btnLogout.setVisible(authenticated)
+        self.widgetDatabases.setEnabled(authenticated)
+        self.widgetMaps.setEnabled(authenticated)
+        if hasattr(self, "line_4"):
+            self.line_4.setVisible(authenticated)
+        if not authenticated:
+            self.lblLoginStatus.hide()
+            self.widgetServices.hide()
+
     def _update_clouddb_mode(self, clouddb):
         self.clouddb = clouddb
         self.widgetDatabases.setVisible(self.clouddb)
@@ -430,11 +631,7 @@ class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
                         QMessageBox.information(None, self.tr('New Version'),  self.tr(
                             'New plugin release {version} is available! Please upgrade the QGIS Cloud plugin.').format(version=login_info['current_plugin']))
                     self.store_settings()
-                    self.btnLogin.hide()
-                    self.lblSignup.hide()
-                    self.btnLogout.show()
-                    self.widgetDatabases.setEnabled(True)
-                    self.widgetMaps.setEnabled(True)
+                    self._set_authenticated_state(True)
 
                     if login_info.get('paid_until') is None:
                         self.lblLoginStatus.setText(
@@ -656,7 +853,7 @@ Do you want to create a new database now?
             self.lblDbSize.setText("")
             self.lblDbSizeUpload.setText("")
             self.cbUploadDatabase.clear()
-            self.widgetDatabases.setEnabled(False)
+            self._set_authenticated_state(False)
             self.activate_upload_button()
 
     def refresh_plan_limits(self, login_info=None):

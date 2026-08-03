@@ -389,6 +389,21 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>QgisCloudPluginDialog</name>
     <message>
+        <location filename="../qgiscloudplugindialog.py" line="419"/>
+        <source>Welcome to QGIS Cloud</source>
+        <translation>Bienvenido a QGIS Cloud</translation>
+    </message>
+    <message>
+        <location filename="../qgiscloudplugindialog.py" line="433"/>
+        <source>Publish, manage and share your QGIS projects online.</source>
+        <translation>Publique, gestione y comparta sus proyectos QGIS en línea.</translation>
+    </message>
+    <message>
+        <location filename="../qgiscloudplugindialog.py" line="494"/>
+        <source>Sign up</source>
+        <translation>Registrarse</translation>
+    </message>
+    <message>
         <location filename="../db_connection_cfg.py" line="138"/>
         <source>host: %s port: %s database: %s username: %s password: %s</source>
         <translation>host: %s puerto: %s base de datos: %s usuario: %s contraseña: %s</translation>
