@@ -41,6 +41,7 @@ PLUGINNAME = qgiscloud
 PY_FILES = qgiscloudplugin.py qgiscloudplugindialog.py __init__.py
 
 EXTRAS = icon.png logo.png
+ASSETS = assets
 
 UI_FILES = ui_qgiscloudplugin.py ui_login.py
 
@@ -68,6 +69,7 @@ deploy: compile doc transcompile
 	cp -vf $(UI_FILES) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
 	cp -vf $(RESOURCE_FILES) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
 	cp -vf $(EXTRAS) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
+	cp -vfr $(ASSETS) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
 	cp -vfr i18n $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
 	cp -vfr $(HELP) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)/help
 
