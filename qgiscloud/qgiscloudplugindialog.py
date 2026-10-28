@@ -340,7 +340,11 @@ class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
         if original_name != name and re.match(r'^[^A-Za-z]+$', name):
             # name was modified and contains no allowed letters
             # replace name with simple hash to avoid collisions with similar escaped map names
-            name = hashlib.md5(original_name.encode()).hexdigest()[0:8]
+            try:
+                name = hashlib.md5(original_name.encode(), usedforsecurity=False).hexdigest()[0:8]
+            except TypeError:
+                # Python < 3.9 has no usedforsecurity argument
+                name = hashlib.md5(original_name.encode()).hexdigest()[0:8]  # nosec B324
 
         # Replace whitespace
         name = name.replace(" ",  "_")
@@ -621,7 +625,8 @@ class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
                                 return
                             else:
                                 result = self.api.accept_tos()
-                    except:
+                    except Exception as e:
+                        QgsMessageLog.logMessage(str(e), "QGIS Cloud", Qgis.Warning)
                         pass
 
                     self.user = login_info.get('user', login_dialog.editUser.text())
@@ -1018,10 +1023,8 @@ Do you want to create a new database now?
         if map == None:
             map = self.map_name()
 
-        try:
+        if isinstance(map, bytes):
             map = map.decode('utf-8')
-        except:
-            pass
 
         # get base host URL from current API URL
         api_uri = urlparse(self.api.url)
@@ -1758,7 +1761,7 @@ Should the table name be shortened automatically?
             for record in cursor:
                 schema_list.append(list(record)[0])
             cursor.close()
-            conn.close
+            conn.close()
             return schema_list
         else:
             return None
@@ -1776,7 +1779,7 @@ Should the table name be shortened automatically?
         cursor.execute(sql)
         usedSpace = int(cursor.fetchone()[0])
         cursor.close()
-        conn.close     
+        conn.close()
         return usedSpace   
         
     def db_size(self,  db_connections):
@@ -1786,7 +1789,8 @@ Should the table name be shortened automatically?
             try:
                 try:
                     conn = db_connections.db(db).psycopg_connection()
-                except:
+                except Exception as e:
+                    QgsMessageLog.logMessage(str(e), "QGIS Cloud", Qgis.Warning)
                     continue
                 cursor = conn.cursor()
                 sql = """
@@ -1798,8 +1802,9 @@ Should the table name be shortened automatically?
                 cursor.execute(sql)
                 usedSpace += int(cursor.fetchone()[0])
                 cursor.close()
-                conn.close
-            except:
+                conn.close()
+            except Exception as e:
+                QgsMessageLog.logMessage(str(e), "QGIS Cloud", Qgis.Warning)
                 continue
 
         lblPalette = QPalette(self.lblDbSize.palette())

@@ -128,7 +128,8 @@ class DbConnectionCfg(object):
                 host = settings.value("host")
                 if db == db_name and host in DbConnectionCfg.CLOUD_DB_HOSTS:
                     connection_names.append(name)
-            except:
+            except Exception as e:
+                QgsMessageLog.logMessage(str(e), "QGIS Cloud", Qgis.Warning)
                 pass
             settings.endGroup()
         settings.endGroup()
