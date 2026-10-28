@@ -22,6 +22,7 @@
 # Import the PyQt and QGIS libraries
 from qgis.PyQt.QtCore import Qt, QSettings, QFileInfo, QTranslator,  QCoreApplication
 from qgis.PyQt.QtWidgets import QAction,  QMessageBox
+from qgis.core import QgsMessageLog, Qgis
 from qgis.PyQt.QtGui import QIcon
 # Initialize Qt resources from file resources_rc.py
 from .resources_rc import *
@@ -66,7 +67,8 @@ class QgisCloudPlugin(object):
                     self.translator.load( translation )            
             
             QCoreApplication.installTranslator(self.translator)        
-        except:
+        except Exception as e:
+            QgsMessageLog.logMessage(str(e), "QGIS Cloud", Qgis.Warning)
             pass
                 
 #        # dock widget
