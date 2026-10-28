@@ -53,7 +53,8 @@ class LocalDataSources(object):
             if layer.type() != QgsMapLayer.PluginLayer:
                 try:
                     provider = layer.dataProvider().name()
-                except:
+                except Exception as e:
+                    QgsMessageLog.logMessage(str(e), "QGIS Cloud", Qgis.Warning)
                     continue
             else:
                 provider = layer.pluginLayerType()

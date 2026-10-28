@@ -22,7 +22,7 @@ limitations under the License.
 # from qgiscloudapi.qgiscloudapi import *
 #
 # api = API()
-# api.set_auth(user='myname', password='secretpassword')
+# api.set_auth(user='myname', password='<your_password>')
 #
 # maps = api.read_maps()
 
@@ -667,7 +667,9 @@ class Request(object):
             if request_method in ['PUT', 'DELETE']:
                 # add PUT and DELETE methods
                 req.get_method = lambda: request_method
-            response = urllib.request.urlopen(req).read()
+            if not req.full_url.startswith(("https://", "http://")):
+                raise ValueError("Invalid URL scheme: %s" % req.full_url)
+            response = urllib.request.urlopen(req).read()  # nosec B310
 
         except urllib.error.HTTPError as e:
             #

@@ -115,11 +115,11 @@ class DataUpload(QObject):
                         fields.append(f)
                         
 # Check if database schema exists
-                cursor.execute("SELECT EXISTS(SELECT 1 FROM pg_namespace WHERE nspname = '%s')" % item['schema'])
+                cursor.execute("SELECT EXISTS(SELECT 1 FROM pg_namespace WHERE nspname = %s)", (item['schema'],))
                 schema_exists = cursor.fetchone()[0]
                 
                 if not schema_exists:
-                    cursor.execute("create schema %s" % item['schema'])
+                    cursor.execute(psycopg2_sql.SQL("CREATE SCHEMA {}").format(psycopg2_sql.Identifier(item['schema'])))
                 
                 if wkbType == QgsWkbTypes.NoGeometry:
                     cloudUri = "dbname='%s' host=%s port=%d user='%s' password='%s' key='' table=\"%s\".\"%s\"" % (
@@ -139,14 +139,15 @@ class DataUpload(QObject):
                 
                 if wkbType != QgsWkbTypes.NoGeometry:
                     # Check if SRID is known on database, otherwise create record
-                    cursor.execute("SELECT srid FROM public.spatial_ref_sys WHERE srid = %s" % srid)
+                    cursor.execute("SELECT srid FROM public.spatial_ref_sys WHERE srid = %s", (srid,))
                     if not cursor.fetchone():
                         try:
-                            cursor.execute("INSERT INTO public.spatial_ref_sys VALUES ({srid},'{auth}',{srid},'{wktstr}','{projstr}')".format(
-                                auth = auth, 
-                                srid = srid,
-                                wktstr = layer.crs().toWkt(),
-                                projstr = layer.crs().toProj4()))
+                            cursor.execute("INSERT INTO public.spatial_ref_sys VALUES (%s, %s, %s, %s, %s)", (
+                                srid,
+                                auth,
+                                srid,
+                                layer.crs().toWkt(),
+                                layer.crs().toProj4()))
                             conn.commit()
                         except Exception as e:
                             conn.rollback()
@@ -313,15 +314,15 @@ class DataUpload(QObject):
                         WHERE S.relkind = 'S'     
                           AND S.oid = D.objid     
                           AND S.relnamespace = PGNS.oid 
-                          AND PGNS.nspname = '{0}'     
+                          AND PGNS.nspname = %s     
                           AND D.refobjid = T.oid     
                           AND D.refobjid = C.attrelid     
                           AND D.refobjsubid = C.attnum     
                           AND T.relname = PGT.tablename     
-                          AND schemaname = '{0}'     
-                          AND tablename = '{1}' ORDER BY S.relname;""".format(item['schema'],  item['table'])
+                          AND schemaname = %s     
+                          AND tablename = %s ORDER BY S.relname;"""
         
-        cursor.execute(sql)
+        cursor.execute(sql, (item['schema'], item['schema'], item['table']))
         rows = cursor.fetchall()
         
         for row in rows:
