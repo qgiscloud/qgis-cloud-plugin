@@ -54,7 +54,7 @@ class LocalDataSources(object):
                 try:
                     provider = layer.dataProvider().name()
                 except Exception as e:
-                    QgsMessageLog.logMessage(str(e), "QGIS Cloud", Qgis.Warning)
+                    QgsMessageLog.logMessage(str(e), "QGIS Cloud", Qgis.MessageLevel.Warning)
                     continue
             else:
                 provider = layer.pluginLayerType()
