@@ -68,7 +68,7 @@ class QgisCloudPlugin(object):
             
             QCoreApplication.installTranslator(self.translator)        
         except Exception as e:
-            QgsMessageLog.logMessage(str(e), "QGIS Cloud", Qgis.Warning)
+            QgsMessageLog.logMessage(str(e), "QGIS Cloud", Qgis.MessageLevel.Warning)
             pass
                 
 #        # dock widget

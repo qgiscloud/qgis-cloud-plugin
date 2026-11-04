@@ -356,7 +356,7 @@ class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
                 self.tr(
                     "The map name has been changed to '{name}' to conform to allowed characters ({allowed_chars})."
                 ).format(name=name, allowed_chars="A-Z a-z 0-9 _ -"),
-                level=Qgis.Warning)
+                level=Qgis.MessageLevel.Warning)
 
         return name
 
@@ -626,7 +626,7 @@ class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
                             else:
                                 result = self.api.accept_tos()
                     except Exception as e:
-                        QgsMessageLog.logMessage(str(e), "QGIS Cloud", Qgis.Warning)
+                        QgsMessageLog.logMessage(str(e), "QGIS Cloud", Qgis.MessageLevel.Warning)
                         pass
 
                     self.user = login_info.get('user', login_dialog.editUser.text())
@@ -662,13 +662,13 @@ Paid until: {2}""").format(self.user,
                     self._push_message(
                         self.tr("QGIS Cloud"),
                         self.tr("Logged in as {0}").format(self.user),
-                        level=Qgis.Info, duration=2)
+                        level=Qgis.MessageLevel.Info, duration=2)
                     self.refresh_plan_limits(login_info)
                     self.refresh_databases()
                     self.refresh_maps()
                     if not version_ok:
                         self._push_message(self.tr("QGIS Cloud"), self.tr(
-                            "Unsupported versions detected. Please check your versions first!"), level=Qgis.Warning)
+                            "Unsupported versions detected. Please check your versions first!"), level=Qgis.MessageLevel.Warning)
                         version_ok = False
                         self.tabWidget.setCurrentWidget(self.aboutTab)
                     login_ok = True
@@ -1269,12 +1269,12 @@ Do you want to create a new database now?
                         self.maps_lookup[map['name']] = map
                         self.update_urls()
                         message = self.tr("Map {} successfully published").format(self.map_name())
-                        self._push_message(self.tr("QGIS Cloud"), message, level=Qgis.Info, duration=2)
+                        self._push_message(self.tr("QGIS Cloud"), message, level=Qgis.MessageLevel.Info, duration=2)
                         self.statusBar().showMessage(message)
                 except Exception as e:
                     self.statusBar().showMessage("")
                     ErrorReportDialog(self.tr("Error uploading project"), self.tr(
-                        "An error occured."), str(e) + "\n\n\n" + traceback.format_exc(), self.user, self).exec_()
+                        "An error occured."), str(e) + "\n\n\n" + traceback.format_exc(), self.user, self).exec()
             self.refresh_maps()
 
 
@@ -1319,7 +1319,7 @@ Do you want to create a new database now?
             self.update_local_data_sources(local_layers,  local_raster_layers)
         except Exception as e:
             ErrorReportDialog(self.tr("Error checking local data sources"), self.tr(
-                "An error occured."), str(e) + "\n\n\n" + traceback.format_exc(), self.user, self).exec_()
+                "An error occured."), str(e) + "\n\n\n" + traceback.format_exc(), self.user, self).exec()
 
         return local_layers, unsupported_layers,  local_raster_layers
 
@@ -1666,7 +1666,7 @@ Should the table name be shortened automatically?
                 upload_ok = True
             except Exception as e:
                 ErrorReportDialog(self.tr("Upload errors occurred"), self.tr("Upload errors occurred. Not all data could be uploaded."), str(
-                    e) + "\n\n\n" + traceback.exec(), self.user, self).exec_()
+                    e) + "\n\n\n" + traceback.format_exc(), self.user, self).exec()
                 upload_ok = False
 
             self.progressWidget.hide()
@@ -1719,7 +1719,7 @@ Should the table name be shortened automatically?
                 # Switch to map tab
                 self.tabWidget.setCurrentWidget(self.mapTab)
 
-    def _push_message(self, title, text, level=Qgis.Info, duration=0):
+    def _push_message(self, title, text, level=Qgis.MessageLevel.Info, duration=0):
 
         if hasattr(self.iface, 'messageBar') and hasattr(self.iface.messageBar(), 'pushMessage'):
             self.iface.messageBar().pushMessage(title,  text, level,  duration)
@@ -1790,7 +1790,7 @@ Should the table name be shortened automatically?
                 try:
                     conn = db_connections.db(db).psycopg_connection()
                 except Exception as e:
-                    QgsMessageLog.logMessage(str(e), "QGIS Cloud", Qgis.Warning)
+                    QgsMessageLog.logMessage(str(e), "QGIS Cloud", Qgis.MessageLevel.Warning)
                     continue
                 cursor = conn.cursor()
                 sql = """
@@ -1804,7 +1804,7 @@ Should the table name be shortened automatically?
                 cursor.close()
                 conn.close()
             except Exception as e:
-                QgsMessageLog.logMessage(str(e), "QGIS Cloud", Qgis.Warning)
+                QgsMessageLog.logMessage(str(e), "QGIS Cloud", Qgis.MessageLevel.Warning)
                 continue
 
         lblPalette = QPalette(self.lblDbSize.palette())

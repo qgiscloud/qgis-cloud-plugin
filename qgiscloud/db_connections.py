@@ -58,7 +58,7 @@ class DbConnections(object):
             try:
                 conn = self.db(db).psycopg_connection()
             except Exception as e:
-                QgsMessageLog.logMessage(str(e), "QGIS Cloud", Qgis.Warning)
+                QgsMessageLog.logMessage(str(e), "QGIS Cloud", Qgis.MessageLevel.Warning)
                 continue
             cursor = conn.cursor()
             sql = "SELECT pg_database_size('" + str(db) + "')"
