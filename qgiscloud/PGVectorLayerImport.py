@@ -281,20 +281,16 @@ class PGVectorLayerImport(object):
         try:
             sql = ("SELECT 1 FROM pg_class AS cls JOIN pg_namespace AS nsp"
                    " ON nsp.oid=cls.relnamespace "
-                   " WHERE cls.relname={tableName} AND nsp.nspname={schemaName}").format(
-                       tableName=self.__quotedValue(tableName),
-                       schemaName=self.__quotedValue(schemaName))
+                   " WHERE cls.relname=%s AND nsp.nspname=%s")
 
-            cursor.execute(sql)
+            cursor.execute(sql, (tableName or None, schemaName or None))
             if cursor.fetchone() and overwrite:
                 # delete the table if exists, then re-create it
-                sql = ("SELECT DropGeometryTable({schemaName},{tableName})"
+                sql = ("SELECT DropGeometryTable(%s,%s)"
                        " FROM pg_class AS cls JOIN pg_namespace AS nsp"
                        " ON nsp.oid=cls.relnamespace "
-                       " WHERE cls.relname={tableName} AND nsp.nspname={schemaName}").format(
-                           tableName=self.__quotedValue(tableName),
-                           schemaName=self.__quotedValue(schemaName))
-                cursor.execute(sql)
+                       " WHERE cls.relname=%s AND nsp.nspname=%s")
+                cursor.execute(sql, (schemaName or None, tableName or None, tableName or None, schemaName or None))
 
             sql = ("CREATE TABLE {schemaTableName}({primaryKey} {primaryKeyType} PRIMARY KEY)").format(
                 schemaTableName=schemaTableName,

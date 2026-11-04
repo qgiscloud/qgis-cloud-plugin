@@ -57,14 +57,15 @@ class DbConnections(object):
         for db in list(self._dbs.keys()):
             try:
                 conn = self.db(db).psycopg_connection()
-            except:
+            except Exception as e:
+                QgsMessageLog.logMessage(str(e), "QGIS Cloud", Qgis.Warning)
                 continue
             cursor = conn.cursor()
             sql = "SELECT pg_database_size('" + str(db) + "')"
             cursor.execute(sql)
             usedSpace += int(cursor.fetchone()[0])
             cursor.close()
-            conn.close
+            conn.close()
 
         # Used space in MB
         usedSpace /= 1024 * 1024
