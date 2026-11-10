@@ -424,13 +424,13 @@ class DataUpload(QObject):
         self.status_bar.showMessage(u"Replace layer %s ..." % local_layer.name())
 
         if local_layer.type() == QgsMapLayer.VectorLayer:
-            # create remote layer
             uri = self.db_connections.cloud_layer_uri(db_name, schema_name,  table_name, geom_column)
 
             #Workaround for loading geometryless layers
             uri2 = QgsDataSourceUri(uri.uri().replace(' ()',  ''))
 
-            remote_layer = QgsVectorLayer(uri2.uri(), local_layer.name(), 'postgres')
+            local_layer.setDataSource(uri2.uri(), local_layer.name(), 'postgres', False)
+            return local_layer.id() if local_layer.isValid() else None
         elif local_layer.type() == QgsMapLayer.RasterLayer:
             uri = self.db_connections.cloud_layer_uri(db_name, schema_name,  table_name, geom_column)
             connString = "PG: dbname=%s host=%s user=%s password=%s port=%s mode=2 schema=%s column=rast table=%s" \
