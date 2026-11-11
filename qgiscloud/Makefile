@@ -23,18 +23,40 @@ PLUGIN_UPLOAD = $(CURDIR)/plugin_upload.py
 # Makefile for a PyQGIS plugin 
 
 # translation
-SOURCES = qgiscloudplugindialog.py \
-          ui_login.py  \
-          db_connection_cfg.py  \
-          ui_qgiscloudplugin.py \
+PYLUPDATE ?= pylupdate5
+LRELEASE ?= lrelease
+
+# Python modules used by the plugin at runtime
+SOURCES = qgiscloudplugin.py \
+          qgiscloudplugindialog.py \
+          background_layers_menu.py \
           data_upload.py \
-          error_report_dialog.py
+          db_connection_cfg.py \
+          db_connections.py \
+          error_report_dialog.py \
+          local_data_sources.py \
+          login_dialog.py \
+          mapsettingsdialog.py \
+          PGVectorLayerImport.py \
+          ui_relation_size.py \
+          qgiscloudapi/qgiscloudapi.py \
+          raster/raster_upload.py
+
+# Qt Designer forms loaded at runtime with uic.loadUiType()
+FORMS = qgiscloudplugin.ui \
+        ui_login.ui \
+        mapsettings.ui \
+        ui_relation_size.ui
 
 TRANSLATIONS = i18n/qgiscloudplugin_de.ts \
+	i18n/qgiscloudplugin_es.ts \
+	i18n/qgiscloudplugin_fr.ts \
 	i18n/qgiscloudplugin_he.ts \
 	i18n/qgiscloudplugin_it.ts \
+	i18n/qgiscloudplugin_nl.ts \
 	i18n/qgiscloudplugin_pt_BR.ts \
-	i18n/qgiscloudplugin_pt_PT.ts
+	i18n/qgiscloudplugin_pt_PT.ts \
+	i18n/qgiscloudplugin_zh-Hans.ts
 
 PLUGINNAME = qgiscloud
 
@@ -43,30 +65,21 @@ PY_FILES = qgiscloudplugin.py qgiscloudplugindialog.py __init__.py
 EXTRAS = icon.png logo.png
 ASSETS = assets
 
-UI_FILES = ui_qgiscloudplugin.py ui_login.py
-
+# resources_rc.py is committed as is (resources.qrc is empty), do not regenerate it
 RESOURCE_FILES = resources_rc.py
 
-default: compile
-
-compile: $(UI_FILES) $(RESOURCE_FILES)
-
-%_rc.py : %.qrc
-	pyrcc4 -o $*_rc.py  $<
-
-%.py : %.ui
-	pyuic4 -o $@ $<
+default: transcompile
 
 %.qm : %.ts
-	lrelease $<
+	$(LRELEASE) $<
 
 # The deploy  target only works on unix like operating system where
 # the Python plugin directory is located at:
 # $HOME/.qgis/python/plugins
-deploy: compile doc transcompile
+deploy: doc transcompile
 	mkdir -p $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
 	cp -vf $(PY_FILES) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
-	cp -vf $(UI_FILES) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
+	cp -vf $(FORMS) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
 	cp -vf $(RESOURCE_FILES) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
 	cp -vf $(EXTRAS) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
 	cp -vfr $(ASSETS) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
@@ -94,7 +107,7 @@ zip: deploy dclean
 # git repository).
 # To use, pass a valid commit or tag as follows:
 #   make package VERSION=Version_0.3.2
-package: compile
+package:
 		rm -f $(PLUGINNAME).zip
 		git archive --prefix=$(PLUGINNAME)/ -o $(PLUGINNAME).zip $(VERSION)
 		echo "Created package: $(PLUGINNAME).zip"
@@ -103,9 +116,10 @@ upload: #zip
 	$(PLUGIN_UPLOAD) $(PLUGINNAME).zip
 
 # transup
-# update .ts translation files
+# update .ts translation files from SOURCES and FORMS
+# (strings no longer in the code are kept and marked as obsolete)
 transup:
-	pylupdate4 Makefile
+	$(PYLUPDATE) $(SOURCES) $(FORMS) -ts $(TRANSLATIONS)
 
 # transcompile
 # compile translation files into .qm binary format
@@ -115,9 +129,6 @@ transcompile: $(TRANSLATIONS:.ts=.qm)
 # deletes all .qm files
 transclean:
 	rm -f i18n/*.qm
-
-clean:
-	rm $(UI_FILES) $(RESOURCE_FILES)
 
 # build documentation with sphinx
 doc: 
