@@ -42,7 +42,7 @@ class RelationSizeDialog(QDialog, FORM_CLASS):
         self.setupUi(self)
         conn = db.psycopg_connection()
         cursor = conn.cursor()
-        self.setWindowTitle(self.tr('Database {db} - Table overview'.format(db = dbname)))
+        self.setWindowTitle(self.tr('Database {db} - Table overview').format(db = dbname))
         
         with self.wait_cursor():
 

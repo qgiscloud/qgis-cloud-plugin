@@ -53,7 +53,7 @@ class DbConnectionCfg(object):
         :rtype: QString
         """
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
-        return QCoreApplication.translate('QGIS Cloud Plugin', message)        
+        return QCoreApplication.translate('DbConnectionCfg', message)        
 
     @staticmethod
     def conn_name(db_name):
@@ -191,7 +191,7 @@ Please check the following points:<br><br>
 
 - Is the computer connected to the Internet and is the Internet connection working?<br>
 - Is port 5432 open in the firewall?<br>
-- Are the proxy settings correct?""" % self.database),
+- Are the proxy settings correct?""") % self.database,
                 QMessageBox.StandardButtons(
                     QMessageBox.StandardButton.Close))
                     

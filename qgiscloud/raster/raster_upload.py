@@ -143,7 +143,7 @@ class RasterUpload(QObject):
                 self.cursor.execute(self.make_sql_create_gist(index_table,  opts['column']))
                 self.conn.commit()
 
-        self.progress_label.setText(self.tr("Registering raster columns of table '%s'..." % (opts['schema_table'].replace('"',  ''))))
+        self.progress_label.setText(self.tr("Registering raster columns of table '%s'...") % (opts['schema_table'].replace('"',  '')))
         QApplication.processEvents()
         self.cursor.execute(self.make_sql_addrastercolumn(opts))
         self.conn.commit()
@@ -722,7 +722,7 @@ class RasterUpload(QObject):
         # Open source raster file
         ds = gdal.Open(infile, gdalc.GA_ReadOnly);
         if ds is None:
-            QMessageBox.critical(None,'Error:','Cannot open input file: ' + str(infile))
+            QMessageBox.critical(None, self.tr('Error:'), self.tr('Cannot open input file: ') + str(infile))
 
 # By default, translate all raster bands
 
@@ -736,7 +736,7 @@ class RasterUpload(QObject):
         current_gt = self.get_gdal_geotransform(ds)
         if previous_gt is not None:
             if previous_gt[1] != current_gt[1] or previous_gt[5] != current_gt[5]:
-                QMessageBox.critical(None,'Error:', 'Cannot load raster with different pixel size in the same raster table')
+                QMessageBox.critical(None, self.tr('Error:'), self.tr('Cannot load raster with different pixel size in the same raster table'))
 
         # Generate requested overview level (base raster if level = 1)
         summary = self.wkblify_raster_level(options, ds, options['overview_level'], band_range, infile, i)

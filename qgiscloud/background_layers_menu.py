@@ -183,7 +183,7 @@ class BackgroundLayersMenu(QMenu):
             menu = QMenu(layer_type, self)
             add_menu_items(menu, layers)
             if "Thunderforest" in layer_type:
-                add_api_key_action = QAction("Set api Key", menu)
+                add_api_key_action = QAction(self.tr("Set api Key"), menu)
                 add_api_key_action.triggered.connect(
                     self.showThunderforestApiKeyDialog)
                 menu.addAction(add_api_key_action)
