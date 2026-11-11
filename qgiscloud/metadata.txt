@@ -3,7 +3,7 @@ name=QGIS Cloud Plugin
 qgisMinimumVersion=3.00
 qgisMaximumVersion=3.99
 description=Publish maps on qgiscloud.com
-version=3.11.5
+version=3.11.6
 author=Sourcepole - Linux & Open Source Solutions, Weberstrasse 5, 8004 Zurich, Switzerland
 email=support@qgiscloud.com
 about= QGIS Cloud is your powerful Web-GIS platform for publishing maps, data and services on the internet.  Create and edit professional maps with all the capabilities from QGIS.     With only a few short mouse-clicks you can share your work on qgiscloud.com with the public. <br><br>The documentation of  QGIS Cloud can be found in <a href="https://docs.qgiscloud.com/en/">English</a> or <a href="https://docs.qgiscloud.com/de/">German</a>.
@@ -11,6 +11,10 @@ about= QGIS Cloud is your powerful Web-GIS platform for publishing maps, data an
 ; Optional items:
 
 changelog=
+    3.11.6
+    - Translations fixed and completed for existing languages
+    - 13 new languages added (Catalan, Czech, Danish, Finnish, Hungarian, Japanese, Norwegian, Polish, Romanian, Russian, Swedish, Turkish, Ukrainian)
+    - Plugin language loading fixed
     3.11.5
     - Preserve relations and attribute form settings when uploading data
     3.11.4
