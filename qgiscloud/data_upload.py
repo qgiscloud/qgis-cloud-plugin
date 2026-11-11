@@ -95,8 +95,8 @@ class DataUpload(QObject):
                         srid = int(layer.crs().authid().split(':')[1])
                     except:
                         QMessageBox.warning(None, 
-                                self.tr("Not Supported CRS %s" % layer.crs().authid()), 
-                                self.tr("Layer %s does not have a supported CRS." % layer.name()))
+                                self.tr("Not Supported CRS %s") % layer.crs().authid(), 
+                                self.tr("Layer %s does not have a supported CRS.") % layer.name())
                         srid = None
                         auth = None                                
                         break
@@ -471,7 +471,7 @@ class DataUpload(QObject):
         if not error:
             target_layer.readSymbology(node, error,  QgsReadWriteContext())
         if error:
-            QMessageBox.warning(None, "Could not copy symbology", error)
+            QMessageBox.warning(None, self.tr("Could not copy symbology"), error)
 
         # copy scale based visibility
         try:
@@ -493,7 +493,7 @@ class DataUpload(QObject):
 
     def show_api_error(self, result):
         if 'error' in result:
-            QMessageBox.critical(None, "QGIS Cloud Error", "%s" % result['error'])
+            QMessageBox.critical(None, self.tr("QGIS Cloud Error"), "%s" % result['error'])
             self.status_bar.showMessage(u"Error")
             return True
         else:

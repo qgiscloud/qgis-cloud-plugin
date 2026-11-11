@@ -301,7 +301,7 @@ class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
         else:
             self.docu_url = 'https://docs.qgiscloud.com/en/'
             
-        self.lbl_doku_image.setText(self.tr("""You can open the <a href=‘{}’> online documentation</a> here.""").format(self.docu_url))
+        self.lbl_doku_image.setText(self.tr("""You can open the <a href='{}'> online documentation</a> here.""").format(self.docu_url))
         self.lbl_doku_image.setOpenExternalLinks(True)  # Links dürfen geklickt werden
 
     @contextmanager
@@ -640,7 +640,7 @@ class QgisCloudPluginDialog(QDockWidget,  FORM_CLASS):
 
                     if login_info.get('paid_until') is None:
                         self.lblLoginStatus.setText(
-                            self.tr("Logged in as {0} ({1})".format(self.user, login_info['plan'])))
+                            self.tr("Logged in as {0} ({1})").format(self.user, login_info['plan']))
                     else:
                         paid_until = login_info['paid_until']
                         try:
@@ -1259,7 +1259,7 @@ Do you want to create a new database now?
 
     %s
 
-    is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct the project name and publish the project again.""" % (fname)),
+    is invalid. It has the extension 'qgs.qgz'. This is not allowed. Please correct the project name and publish the project again.""") % (fname),
                             QMessageBox.StandardButtons(
                                 QMessageBox.Close))
                     else:
@@ -1380,7 +1380,7 @@ Do you want to create a new database now?
                     if layer is not None and layer.isValid():
                         layer_names.append(layer.name())
                 except RuntimeError as e:
-                    QMessageBox.information(None,  self.tr("Layer error"), self.tr("Error accessing the layer:{}".format(e)))
+                    QMessageBox.information(None,  self.tr("Layer error"), self.tr("Error accessing the layer:{}").format(e))
                     
             layers_item = QTableWidgetItem(", ".join(layer_names))
             layers_item.setToolTip("\n".join(layer_names))
@@ -1573,7 +1573,7 @@ Do you want to create a new database now?
 has more than 62 characters and cannot be processed like this. Please give the table a shorter name.
 
 Should the table name be shortened automatically?
-""".format(table_name=self.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text())),
+""").format(table_name=self.tblLocalLayers.item(row, self.COLUMN_TABLE_NAME).text()),
                             QMessageBox.StandardButtons(
                                 QMessageBox.No |
                                 QMessageBox.Yes))
@@ -1634,7 +1634,7 @@ Should the table name be shortened automatically?
                 host = str(uri.host())
                 port = uri.port()
                 QMessageBox.critical(self, self.tr("Network Error"),
-                                     self.tr("Could not connect to database server ({0}) on port {1}. Please contact your system administrator or internet provider to open port {1} in the firewall".format(host, port)))
+                                     self.tr("Could not connect to database server ({0}) on port {1}. Please contact your system administrator or internet provider to open port {1} in the firewall").format(host, port))
                 return
 
             # disable update of local data sources during upload, as there are

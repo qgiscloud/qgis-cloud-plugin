@@ -41,22 +41,16 @@ class QgisCloudPlugin(object):
         
 
     def initGui(self):
-        # Create action that will start plugin configuration
-        self.action = QAction(QIcon(":/plugins/qgiscloud/icon.png"), \
-            "QGIS Cloud Settings", self.iface.mainWindow())
-        self.action.triggered.connect(self.showHideDockWidget)
-
-        # Add toolbar button and menu item
-        self.iface.addToolBarIcon(self.action)
-        self.iface.addPluginToMenu("&QGIS Cloud", self.action)
-        
         self.plugin_dir = os.path.dirname(__file__)
         
 #        # initialize locale
         try:
             locale_short = QSettings().value("locale/userLocale", type=str)[0:2]
             locale_long = QSettings().value("locale/userLocale", type=str)
-        
+            # Simplified Chinese locales -> zh-Hans (zh_TW, zh_HK, zh-Hant stay in English)
+            if locale_long in ("zh_CN", "zh_SG", "zh-Hans"):
+                locale_short = locale_long = "zh-Hans"
+
             self.translator = QTranslator()        
             if QFileInfo(self.plugin_dir).exists():            
                 if QFileInfo(self.plugin_dir + "/i18n/qgiscloudplugin_" + locale_short + ".qm").exists():
@@ -70,7 +64,17 @@ class QgisCloudPlugin(object):
         except Exception as e:
             QgsMessageLog.logMessage(str(e), "QGIS Cloud", Qgis.Warning)
             pass
-                
+
+        # Create action that will start plugin configuration
+        # (after installing the translator so that its text can be translated)
+        self.action = QAction(QIcon(":/plugins/qgiscloud/icon.png"), \
+            QCoreApplication.translate("QgisCloudPlugin", "QGIS Cloud Settings"), self.iface.mainWindow())
+        self.action.triggered.connect(self.showHideDockWidget)
+
+        # Add toolbar button and menu item
+        self.iface.addToolBarIcon(self.action)
+        self.iface.addPluginToMenu("&QGIS Cloud", self.action)
+
 #        # dock widget
         self.dockWidget = QgisCloudPluginDialog(self.iface, self.version)
         self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)                
