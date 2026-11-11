@@ -50,6 +50,9 @@ class QgisCloudPlugin(object):
             # Simplified Chinese locales -> zh-Hans (zh_TW, zh_HK, zh-Hant stay in English)
             if locale_long in ("zh_CN", "zh_SG", "zh-Hans"):
                 locale_short = locale_long = "zh-Hans"
+            # Norwegian (no, nn) -> nb, the only Norwegian translation (as in QGIS)
+            elif locale_short in ("no", "nn"):
+                locale_short = locale_long = "nb"
 
             self.translator = QTranslator()        
             if QFileInfo(self.plugin_dir).exists():            

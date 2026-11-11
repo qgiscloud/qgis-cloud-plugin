@@ -48,14 +48,27 @@ FORMS = qgiscloudplugin.ui \
         mapsettings.ui \
         ui_relation_size.ui
 
-TRANSLATIONS = i18n/qgiscloudplugin_de.ts \
+TRANSLATIONS = i18n/qgiscloudplugin_ca.ts \
+	i18n/qgiscloudplugin_cs.ts \
+	i18n/qgiscloudplugin_da.ts \
+	i18n/qgiscloudplugin_de.ts \
 	i18n/qgiscloudplugin_es.ts \
+	i18n/qgiscloudplugin_fi.ts \
 	i18n/qgiscloudplugin_fr.ts \
 	i18n/qgiscloudplugin_he.ts \
+	i18n/qgiscloudplugin_hu.ts \
 	i18n/qgiscloudplugin_it.ts \
+	i18n/qgiscloudplugin_ja.ts \
+	i18n/qgiscloudplugin_nb.ts \
 	i18n/qgiscloudplugin_nl.ts \
+	i18n/qgiscloudplugin_pl.ts \
 	i18n/qgiscloudplugin_pt_BR.ts \
 	i18n/qgiscloudplugin_pt_PT.ts \
+	i18n/qgiscloudplugin_ro.ts \
+	i18n/qgiscloudplugin_ru.ts \
+	i18n/qgiscloudplugin_sv.ts \
+	i18n/qgiscloudplugin_tr.ts \
+	i18n/qgiscloudplugin_uk.ts \
 	i18n/qgiscloudplugin_zh-Hans.ts
 
 PLUGINNAME = qgiscloud
