@@ -447,7 +447,7 @@ p, li { white-space: pre-wrap; }
         <translation>&lt;b&gt;Pluginversion:&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugin.py" line="70"/>
+        <location filename="../qgiscloudplugin.py" line="73"/>
         <source>QGIS Cloud Settings</source>
         <translation>QGIS Cloud Einstellungen</translation>
     </message>

@@ -442,7 +442,7 @@ p, li { white-space: pre-wrap; }
         <translation>Tablas de la BD</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugin.py" line="70"/>
+        <location filename="../qgiscloudplugin.py" line="73"/>
         <source>QGIS Cloud Settings</source>
         <translation>Configuración de QGIS Cloud</translation>
     </message>

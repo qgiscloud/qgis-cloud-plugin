@@ -442,7 +442,7 @@ p, li { white-space: pre-wrap; }
         <translation>&lt;b&gt;插件版本：&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugin.py" line="70"/>
+        <location filename="../qgiscloudplugin.py" line="73"/>
         <source>QGIS Cloud Settings</source>
         <translation>QGIS Cloud 设置</translation>
     </message>
