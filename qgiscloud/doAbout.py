@@ -31,7 +31,8 @@ class DlgAbout(object):
         Sandro Mani (developer)<br>
         Mathias Walker (developer and support)<br>
         Dr. Marco Hugentobler (developer and support)<br>
-        Hussein Kabbout (developer and support)
+        Hussein Kabbout (developer and support)<br>
+        Mariano Salas (product owner, developer and support)
         </p>
         <p><b>Translations:</b</p><br>
         Hebrew - Harel Dan <br>
