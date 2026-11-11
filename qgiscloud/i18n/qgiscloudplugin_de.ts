@@ -19,12 +19,12 @@
     <message>
         <location filename="../background_layers_menu.py" line="282"/>
         <source>A serious error has occurred during the coordinate transformation. Please set the reference system of the project to the WGS84 / Pseudo-Mercartor Projektion (EPSG: 3857) and reload the layer.</source>
-        <translation>Es ist ein schwerwiegender Fehler bei der Koordinatentransformation aufgetreten. Bitte setzen Sie das Referenzsystem des Projektes auf die WGS84 / Pseudo-Mercartor Projektion (EPSG: 3857) und laden Sie den Layer erneut.</translation>
+        <translation>Bei der Koordinatentransformation ist ein schwerwiegender Fehler aufgetreten. Bitte setzen Sie das KBS des Projekts auf WGS 84 / Pseudo-Mercator (EPSG:3857) und laden Sie den Layer erneut.</translation>
     </message>
     <message>
         <location filename="../background_layers_menu.py" line="186"/>
         <source>Set api Key</source>
-        <translation type="unfinished"></translation>
+        <translation>API-Schlüssel festlegen</translation>
     </message>
 </context>
 <context>
@@ -52,17 +52,17 @@
     <message>
         <location filename="../data_upload.py" line="188"/>
         <source>Uploading features...</source>
-        <translation>Die Objekte werden hochgeladen ...</translation>
+        <translation>Objekte werden hochgeladen...</translation>
     </message>
     <message>
         <location filename="../data_upload.py" line="202"/>
         <source>Feature {id} of layer {layer} has no geometry</source>
-        <translation>Das Objekt {id} der Ebene {layer} hat keine Geometrie</translation>
+        <translation>Das Objekt {id} des Layers {layer} hat keine Geometrie</translation>
     </message>
     <message>
         <location filename="../data_upload.py" line="205"/>
         <source>Feature {id} of layer {layer} has wrong geometry type {type}</source>
-        <translation>Das Objekt {id} des Layers {layer} hat einen falschen Geometrie-Typ {type}</translation>
+        <translation>Das Objekt {id} des Layers {layer} hat einen falschen Geometrietyp: {type}</translation>
     </message>
     <message>
         <location filename="../data_upload.py" line="253"/>
@@ -72,22 +72,22 @@
     <message>
         <location filename="../data_upload.py" line="97"/>
         <source>Not Supported CRS %s</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht unterstütztes KBS: %s</translation>
     </message>
     <message>
         <location filename="../data_upload.py" line="97"/>
         <source>Layer %s does not have a supported CRS.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Layer %s hat kein unterstütztes KBS.</translation>
     </message>
     <message>
         <location filename="../data_upload.py" line="474"/>
         <source>Could not copy symbology</source>
-        <translation type="unfinished"></translation>
+        <translation>Symbolisierung konnte nicht kopiert werden</translation>
     </message>
     <message>
         <location filename="../data_upload.py" line="496"/>
         <source>QGIS Cloud Error</source>
-        <translation type="unfinished"></translation>
+        <translation>QGIS Cloud Fehler</translation>
     </message>
 </context>
 <context>
@@ -106,7 +106,13 @@ Please check the following points:&lt;br&gt;&lt;br&gt;
 - Is the computer connected to the Internet and is the Internet connection working?&lt;br&gt;
 - Is port 5432 open in the firewall?&lt;br&gt;
 - Are the proxy settings correct?</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung zur Datenbank &lt;b&gt;%s&lt;/b&gt; konnte nicht hergestellt werden.&lt;br&gt;&lt;br&gt;
+
+Bitte prüfen Sie folgende Punkte:&lt;br&gt;&lt;br&gt;
+
+- Ist der Computer mit dem Internet verbunden und funktioniert die Internetverbindung?&lt;br&gt;
+- Ist Port 5432 in der Firewall geöffnet?&lt;br&gt;
+- Sind die Proxy-Einstellungen korrekt?</translation>
     </message>
 </context>
 <context>
@@ -122,7 +128,7 @@ Please check the following points:&lt;br&gt;&lt;br&gt;
     <message>
         <location filename="../ui_login.ui" line="86"/>
         <source>Copy your token from &lt;a href=&quot;{token_page_url}&quot;&gt;here&lt;/a&gt;</source>
-        <translation>Kopieren Sie Ihr Token von &amp;lt;a href=&amp;quot;{token_page_url}&amp;quot;&amp;gt;hier&amp;lt;/a&amp;gt;</translation>
+        <translation>Kopieren Sie Ihr Token &lt;a href=&quot;{token_page_url}&quot;&gt;hier&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../login_dialog.py" line="36"/>
@@ -132,12 +138,12 @@ Please check the following points:&lt;br&gt;&lt;br&gt;
     <message>
         <location filename="../ui_login.ui" line="14"/>
         <source>Login</source>
-        <translation>Login</translation>
+        <translation>Anmelden</translation>
     </message>
     <message>
         <location filename="../ui_login.ui" line="20"/>
         <source>User:</source>
-        <translation>User:</translation>
+        <translation>Benutzer:</translation>
     </message>
     <message>
         <location filename="../ui_login.ui" line="43"/>
@@ -160,7 +166,7 @@ Please check the following points:&lt;br&gt;&lt;br&gt;
     <message>
         <location filename="../mapsettingsdialog.py" line="237"/>
         <source>Sql Error</source>
-        <translation>SQL Fehler</translation>
+        <translation>SQL-Fehler</translation>
     </message>
     <message>
         <location filename="../mapsettingsdialog.py" line="289"/>
@@ -218,7 +224,7 @@ Please check the following points:&lt;br&gt;&lt;br&gt;
     <message>
         <location filename="../qgiscloudplugin.ui" line="338"/>
         <source>Upload Data</source>
-        <translation>Daten laden</translation>
+        <translation>Daten hochladen</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugin.ui" line="35"/>
@@ -233,12 +239,12 @@ Please check the following points:&lt;br&gt;&lt;br&gt;
     <message>
         <location filename="../qgiscloudplugin.ui" line="83"/>
         <source>Add background layer</source>
-        <translation>Hintergrundebene hinzufügen</translation>
+        <translation>Hintergrundlayer hinzufügen</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugin.ui" line="99"/>
         <source>&lt;i&gt;To add a background layer to the map, install the OpenLayers plugin.&lt;/i&gt;</source>
-        <translation></translation>
+        <translation>&lt;i&gt;Um der Karte einen Hintergrundlayer hinzuzufügen, installieren Sie das OpenLayers Plugin.&lt;/i&gt;</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugin.ui" line="116"/>
@@ -257,7 +263,11 @@ Please check the following points:&lt;br&gt;&lt;br&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://wms.qgiscloud.com/user/map&quot;&gt;&lt;span style=&quot; font-size:9pt; text-decoration: underline; color:#0057ae;&quot;&gt;https://wms.qgiscloud.com/user/map&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://wms.qgiscloud.com/user/map&quot;&gt;&lt;span style=&quot; font-size:9pt; text-decoration: underline; color:#0057ae;&quot;&gt;https://wms.qgiscloud.com/user/map&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugin.ui" line="157"/>
@@ -271,12 +281,16 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://qgiscloud.com/maps&quot;&gt;&lt;span style=&quot; font-size:9pt; text-decoration: underline; color:#0057ae;&quot;&gt;https://qgiscloud.com/maps&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://qgiscloud.com/maps&quot;&gt;&lt;span style=&quot; font-size:9pt; text-decoration: underline; color:#0057ae;&quot;&gt;https://qgiscloud.com/maps&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugin.ui" line="181"/>
         <source>Support:</source>
-        <translation>Hilfe:</translation>
+        <translation>Support:</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugin.ui" line="191"/>
@@ -285,12 +299,16 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;mailto:support@qgiscloud.com?subject=QGISCloud support&quot;&gt;&lt;span style=&quot; font-family:&apos;Ubuntu&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;support@qgiscloud.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;mailto:support@qgiscloud.com?subject=QGISCloud support&quot;&gt;&lt;span style=&quot; font-family:'Ubuntu'; text-decoration: underline; color:#0057ae;&quot;&gt;support@qgiscloud.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugin.ui" line="208"/>
         <source>Webmap:</source>
-        <translation>Webmap:</translation>
+        <translation>Webkarte:</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugin.ui" line="215"/>
@@ -299,7 +317,11 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://qgiscloud.com/user/map&quot;&gt;&lt;span style=&quot; font-size:9pt; text-decoration: underline; color:#0057ae;&quot;&gt;https://qgiscloud.com/user/map&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://qgiscloud.com/user/map&quot;&gt;&lt;span style=&quot; font-size:9pt; text-decoration: underline; color:#0057ae;&quot;&gt;https://qgiscloud.com/user/map&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugin.ui" line="606"/>
@@ -344,12 +366,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../qgiscloudplugin.ui" line="444"/>
         <source>&amp;Server:</source>
-        <translation></translation>
+        <translation>&amp;Server:</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugin.ui" line="457"/>
         <source>https://api.qgiscloud.com</source>
-        <translation></translation>
+        <translation>https://api.qgiscloud.com</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugin.ui" line="464"/>
@@ -359,7 +381,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../qgiscloudplugin.ui" line="467"/>
         <source>...</source>
-        <translation></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugin.ui" line="482"/>
@@ -397,7 +419,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../qgiscloudplugin.ui" line="596"/>
         <source>Create</source>
-        <translation>Erzeugen</translation>
+        <translation>Erstellen</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugin.ui" line="616"/>
@@ -427,7 +449,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../qgiscloudplugin.py" line="70"/>
         <source>QGIS Cloud Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>QGIS Cloud Einstellungen</translation>
     </message>
 </context>
 <context>
@@ -453,14 +475,9 @@ p, li { white-space: pre-wrap; }
         <translation>Datenschutzrichtlinie</translation>
     </message>
     <message>
-        <location filename="../qgiscloudplugindialog.py" line="258"/>
-        <source>You can open the &lt;a href=‘{}’&gt; online documentation&lt;/a&gt; here.</source>
-        <translation type="obsolete">Hier können Sie die &lt;a href='{}'&gt; Online-Dokumentation&lt;/a&gt; öffnen.</translation>
-    </message>
-    <message>
         <location filename="../qgiscloudplugindialog.py" line="1274"/>
         <source>QGIS Cloud</source>
-        <translation></translation>
+        <translation>QGIS Cloud</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="352"/>
@@ -476,8 +493,7 @@ p, li { white-space: pre-wrap; }
         <location filename="../qgiscloudplugindialog.py" line="612"/>
         <source>Due to the GDPR qgiscloud.com has a new &lt;a href=&apos;http://qgiscloud.com/en/pages/privacy&apos;&gt; Privacy Policy &lt;/a&gt;.
                                 To continue using qgiscloud.com, you must accept the new policy. </source>
-        <translation>Aufgrund der DSGVO hat qgiscloud.com eine neue &amp;lt;a href='http://qgiscloud.com/de/pages/privacy'&amp;gt; Datenschutzrichtlinie &amp;lt;/a&amp;gt;.
-                                Um qgiscloud.com weiterhin verwenden zu können, müssen Sie die neue Richtlinie akzeptieren. </translation>
+        <translation>Aufgrund der DSGVO hat qgiscloud.com eine neue &lt;a href='http://qgiscloud.com/de/pages/privacy'&gt;Datenschutzrichtlinie&lt;/a&gt;. Um qgiscloud.com weiterhin verwenden zu können, müssen Sie die neue Richtlinie akzeptieren. </translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="636"/>
@@ -514,7 +530,7 @@ Bezahlt bis: {2}</translation>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="676"/>
         <source>Account {username} is disabled! Please contact support@qgiscloud.com</source>
-        <translation>Das KOnto mit dem Benutzernamen {username} ist gesperrt! Bitte wenden Sie sich an support@qgiscloud.com</translation>
+        <translation>Das Konto mit dem Benutzernamen {username} ist gesperrt! Bitte wenden Sie sich an support@qgiscloud.com</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="698"/>
@@ -529,7 +545,7 @@ Bezahlt bis: {2}</translation>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="685"/>
         <source>Login for user {username} failed</source>
-        <translation>Login für den Benutzer {username} gescheitert</translation>
+        <translation>Anmeldung für den Benutzer {username} fehlgeschlagen</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="689"/>
@@ -587,12 +603,12 @@ Möchten Sie jetzt eine neue Datenbank anlegen?
     <message>
         <location filename="../qgiscloudplugindialog.py" line="774"/>
         <source>You have layers from database &quot;{name}&quot; loaded in your project! Do you want to remove them before you delete database &quot;{name}&quot;?</source>
-        <translation>Layer der Datenbank &quot;{name}&quot; sind im Projekt geladen! Sollen diese entfernt werden, befor die Datenbank &quot;{name}&quot; gelöscht wird?</translation>
+        <translation>Im Projekt sind Layer der Datenbank &quot;{name}&quot; geladen! Sollen diese entfernt werden, bevor die Datenbank &quot;{name}&quot; gelöscht wird?</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="793"/>
         <source>Deletion of database &quot;{name}&quot; interrupted!</source>
-        <translation>Löschen der Datenbank &amp;quot;{name}&amp;quot; abgebrochen!</translation>
+        <translation>Löschen der Datenbank &quot;{name}&quot; abgebrochen!</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="798"/>
@@ -652,12 +668,12 @@ Möchten Sie jetzt eine neue Datenbank anlegen?
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1086"/>
         <source>The project needs to be saved before it can be published. Proceed?</source>
-        <translation>Das Project muss gespeichert werden bevor es veröffentlicht werden kann. Fortsetzen?</translation>
+        <translation>Das Projekt muss gespeichert werden, bevor es veröffentlicht werden kann. Fortfahren?</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1168"/>
         <source>The project has an unknown CRS. Please set a valid map CRS in Project-&gt;Properties...-&gt;CRS before publishing!</source>
-        <translation>Das Projekt hat ein unbekanntes KBS. Bitte legen Sie vor der Veröffentlichung unter Projekt-&amp;gt; Eigenschaften ...-&amp;gt; KBS eine gültige Karten-KBS fest!</translation>
+        <translation>Das Projekt hat ein unbekanntes KBS. Bitte legen Sie vor der Veröffentlichung unter Projekt -&gt; Eigenschaften... -&gt; KBS ein gültiges Karten-KBS fest!</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1172"/>
@@ -672,7 +688,7 @@ Möchten Sie jetzt eine neue Datenbank anlegen?
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1190"/>
         <source>The following layer names do contain non allowed characters like &apos;, . : ;&apos; : {}. Please rename the layers and save the project before publishing.</source>
-        <translation>Die folgenden Layernamen enthalten nicht erlaubte Zeichen wie ', . : ;' : {}. Bitte benennen Sie die Ebenen um und speichern Sie das Projekt vor der Veröffentlichung.</translation>
+        <translation>Die folgenden Layernamen enthalten nicht erlaubte Zeichen wie ', . : ;': {}. Bitte benennen Sie die Layer um und speichern Sie das Projekt vor der Veröffentlichung.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1197"/>
@@ -681,35 +697,21 @@ Möchten Sie jetzt eine neue Datenbank anlegen?
 {}
 
 Please rename the layers and/or the groups and save the project before publishing.</source>
-        <translation>Die folgenden Ebenen- und/oder Gruppennamen sind im Projekt nicht eindeutig:
+        <translation>Die folgenden Layer- und/oder Gruppennamen sind im Projekt nicht eindeutig:
 
 {}
 
-Bitte benennen Sie die Ebenen und/oder die Gruppen um und speichern Sie das Projekt vor der Veröffentlichung.</translation>
+Bitte benennen Sie die Layer und/oder die Gruppen um und speichern Sie das Projekt vor der Veröffentlichung.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1204"/>
         <source>The following WMS layer names are not unique: {}. Please make sure the names are unique, then publish the project again. The layer WMS short name can be set in the layer properties dialog under &apos;QGIS Server -&gt; Short name&apos;.</source>
-        <translation>Die folgenden WMS-Layernamen sind nicht eindeutig: {}. Bitte stellen Sie sicher, dass die Namen eindeutig sind, und veröffentlichen Sie das Projekt erneut. Der Layer-WMS-Kurzname kann im Layer-Eigenschaftendialog unter 'QGIS Server -&amp;gt; Kurzname' festgelegt werden.</translation>
+        <translation>Die folgenden WMS-Layernamen sind nicht eindeutig: {}. Bitte stellen Sie sicher, dass die Namen eindeutig sind, und veröffentlichen Sie das Projekt erneut. Der WMS-Kurzname eines Layers kann in den Layereigenschaften unter 'QGIS Server -&gt; Kurzname' festgelegt werden.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1213"/>
         <source>The layer(s) {layerlist} have user defined CRS. The use of user defined CRS is not supported. Please correct the CRS before publishing!</source>
-        <translation>Die Ebene(n) {layerlist} haben benutzerdefinierte CRS. Die Verwendung von benutzerdefinierten CRS wird nicht unterstützt. Bitte korrigieren Sie die CRS vor der Veröffentlichung!</translation>
-    </message>
-    <message>
-        <location filename="../qgiscloudplugindialog.py" line="1015"/>
-        <source>
-The CRS of the background layer &apos;{layerName}&apos; is different to the  map CRS. This means that this layer will be reprojected in the published map and the webmap will therefore be slow. To improve this and make the webmap faster, go to
-
-&apos;Project -&gt; Properties... -&gt; CRS&apos;
-
-and set the map CRS to {layerCRS}. Continue publishing?</source>
-        <translation type="obsolete">Der CRS der Hintergrundebene '{layerName}' unterscheidet sich vom CRS der Karte. Dies bedeutet, dass diese Ebene in der veröffentlichten Karte neu projiziert wird und die Webkarte daher langsam ist. Um dies zu verbessern und die Webkarte schneller zu machen, gehen Sie zu
-
-'Projekt -&gt; Eigenschaften... -&gt; CRS'
-
-und setzen Sie das CRS der Karte auf {layerCRS}. Veröffentlichung fortsetzen?</translation>
+        <translation>Die Layer {layerlist} haben ein benutzerdefiniertes KBS. Benutzerdefinierte KBS werden nicht unterstützt. Bitte korrigieren Sie das KBS vor der Veröffentlichung!</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1236"/>
@@ -719,7 +721,7 @@ und setzen Sie das CRS der Karte auf {layerCRS}. Veröffentlichung fortsetzen?</
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1238"/>
         <source>Publishing map</source>
-        <translation>Die Karte wird publiziert</translation>
+        <translation>Die Karte wird veröffentlicht</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1273"/>
@@ -739,12 +741,12 @@ und setzen Sie das CRS der Karte auf {layerCRS}. Veröffentlichung fortsetzen?</
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1284"/>
         <source>Uploading SVG symbols</source>
-        <translation>SVG Symbole werden hoch geladen</translation>
+        <translation>SVG-Symbole werden hochgeladen</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1323"/>
         <source>Error checking local data sources</source>
-        <translation>Fehler bei der Prüfung der loalen Datenquellen</translation>
+        <translation>Fehler bei der Prüfung der lokalen Datenquellen</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1335"/>
@@ -756,7 +758,7 @@ und setzen Sie das CRS der Karte auf {layerCRS}. Veröffentlichung fortsetzen?</
         <source>Some layers are using local data. Please upload local layers to your cloud database in the &apos;Upload Data&apos; tab before publishing.
 
 </source>
-        <translation>Einige Ebenen verwenden lokale Daten. Bitte diese Daten im 'Daten laden' Reiter in die Datenbank laden, bevor das Projekt veröffentlicht wird.
+        <translation>Einige Layer verwenden lokale Daten. Bitte laden Sie diese Layer im Reiter 'Daten hochladen' in Ihre Cloud-Datenbank hoch, bevor Sie das Projekt veröffentlichen.
 
 </translation>
     </message>
@@ -769,7 +771,8 @@ und setzen Sie das CRS der Karte auf {layerCRS}. Veröffentlichung fortsetzen?</
         <location filename="../qgiscloudplugindialog.py" line="1342"/>
         <source>  -  %s (%s)
 </source>
-        <translation></translation>
+        <translation>  -  %s (%s)
+</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1344"/>
@@ -777,13 +780,13 @@ und setzen Sie das CRS der Karte auf {layerCRS}. Veröffentlichung fortsetzen?</
 Please remove or replace above layers before publishing your map.
 </source>
         <translation>
-Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.
+Bitte entfernen oder ersetzen Sie die oben genannten Layer, bevor Sie Ihre Karte veröffentlichen.
 </translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1383"/>
         <source>Layer error</source>
-        <translation>Ebenenfehler</translation>
+        <translation>Layerfehler</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1406"/>
@@ -793,12 +796,12 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1406"/>
         <source>Unsupported geometry type &apos;{type}&apos; in layer &apos;{layer}&apos;</source>
-        <translation>Nicht unterstützter Geometrietyp '{type}' in Ebene '{layer}'</translation>
+        <translation>Nicht unterstützter Geometrietyp '{type}' im Layer '{layer}'</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1412"/>
         <source>Note: OGR features will be converted to MULTI-type</source>
-        <translation>Hinweis: OGS Geometrien werden zu Multi-Geomtrien konvertiert</translation>
+        <translation>Hinweis: OGR-Objekte werden in MULTI-Geometrien konvertiert</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1421"/>
@@ -808,7 +811,7 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1466"/>
         <source>Updated local data sources</source>
-        <translation>Die lokalen Daten wurden hoch geladen</translation>
+        <translation>Lokale Datenquellen aktualisiert</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1502"/>
@@ -823,12 +826,12 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1621"/>
         <source>No database available</source>
-        <translation>Keine Datenbanken verfügbar</translation>
+        <translation>Keine Datenbank verfügbar</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1621"/>
         <source>Please create a database in the &apos;Account&apos; tab.</source>
-        <translation>Bitte legen Sie eine Datenbank in 'Benutzerkonto' Registerkarte an.</translation>
+        <translation>Bitte legen Sie im Reiter 'Benutzerkonto' eine Datenbank an.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1626"/>
@@ -838,17 +841,17 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1626"/>
         <source>Please select a database to upload data.</source>
-        <translation>Bitte wählen Sie eine Datenbank aus um Daten hochzuladen.</translation>
+        <translation>Bitte wählen Sie eine Datenbank aus, um Daten hochzuladen.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1636"/>
         <source>Network Error</source>
-        <translation>Netzwerk Fehler</translation>
+        <translation>Netzwerkfehler</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1643"/>
         <source>Uploading data...</source>
-        <translation>Daten werden hoch geladen...</translation>
+        <translation>Daten werden hochgeladen...</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1670"/>
@@ -863,7 +866,7 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1693"/>
         <source>Upload complete. The local layers in the project were replaced with the layers uploaded to the qgiscloud database.</source>
-        <translation>Die Daten wurden hochgeladen. Die lokalen Ebenen im Projekt wurden mit den Layers in der qgiscloud Datenbank ersetzt.</translation>
+        <translation>Die Daten wurden hochgeladen. Die lokalen Layer im Projekt wurden durch die Layer in der QGIS Cloud Datenbank ersetzt.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1697"/>
@@ -873,7 +876,7 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1706"/>
         <source>QGIS Project Files</source>
-        <translation>QGIS Projektdateien</translation>
+        <translation>QGIS-Projektdateien</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1733"/>
@@ -888,17 +891,17 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.
     <message>
         <location filename="../db_connection_cfg.py" line="139"/>
         <source>host: %s port: %s database: %s username: %s password: %s</source>
-        <translation></translation>
+        <translation>Host: %s Port: %s Datenbank: %s Benutzername: %s Passwort: %s</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="304"/>
         <source>You can open the &lt;a href=&apos;{}&apos;&gt; online documentation&lt;/a&gt; here.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hier können Sie die &lt;a href='{}'&gt;Online-Dokumentation&lt;/a&gt; öffnen.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="642"/>
         <source>Logged in as {0} ({1})</source>
-        <translation type="unfinished"></translation>
+        <translation>Angemeldet als {0} ({1})</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1224"/>
@@ -908,7 +911,12 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.
     &apos;Project -&gt; Properties... -&gt; CRS&apos;
 
     and set the map CRS to {layerCRS}. Continue publishing?</source>
-        <translation type="unfinished"></translation>
+        <translation>
+Das KBS des Hintergrundlayers '{layerName}' unterscheidet sich vom KBS der Karte. Dieser Layer wird daher in der veröffentlichten Karte umprojiziert und die Webkarte wird langsam. Um die Webkarte schneller zu machen, gehen Sie zu
+
+'Projekt -&gt; Eigenschaften... -&gt; KBS'
+
+und setzen Sie das KBS der Karte auf {layerCRS}. Veröffentlichung fortsetzen?</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1254"/>
@@ -918,12 +926,17 @@ Bitte entfernen Sie die folgenden Layer, bevor Sie Ihre Karte publizieren.
     %s
 
     is invalid. It has the extension &apos;qgs.qgz&apos;. This is not allowed. Please correct the project name and publish the project again.</source>
-        <translation type="unfinished"></translation>
+        <translation>
+Der Name des QGIS-Projekts
+
+%s
+
+ist ungültig. Er hat die Endung 'qgs.qgz', was nicht erlaubt ist. Bitte korrigieren Sie den Projektnamen und veröffentlichen Sie das Projekt erneut.</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1383"/>
         <source>Error accessing the layer:{}</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Zugriff auf den Layer: {}</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1565"/>
@@ -935,12 +948,19 @@ has more than 62 characters and cannot be processed like this. Please give the t
 
 Should the table name be shortened automatically?
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Der Name der Tabelle
+
+{table_name}
+
+hat mehr als 62 Zeichen und kann so nicht verarbeitet werden. Bitte geben Sie der Tabelle einen kürzeren Namen.
+
+Soll der Tabellenname automatisch gekürzt werden?
+</translation>
     </message>
     <message>
         <location filename="../qgiscloudplugindialog.py" line="1636"/>
         <source>Could not connect to database server ({0}) on port {1}. Please contact your system administrator or internet provider to open port {1} in the firewall</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindung zum Datenbankserver ({0}) auf Port {1} fehlgeschlagen. Bitte wenden Sie sich an Ihren Systemadministrator oder Internetanbieter, um Port {1} in der Firewall öffnen zu lassen.</translation>
     </message>
 </context>
 <context>
@@ -953,7 +973,7 @@ Should the table name be shortened automatically?
     <message>
         <location filename="../raster/raster_upload.py" line="100"/>
         <source>Upload would exceeded the maximum database size for your current QGIS Cloud plan. Please free up some space or upgrade your QGIS Cloud plan.</source>
-        <translation>Der Upload würde die maximale Datenbankgröße für Ihren aktuellen QGIS Cloud-Plan überschreiten. Bitte geben Sie etwas Platz frei oder aktualisieren Sie Ihren QGIS Cloud Plan.</translation>
+        <translation>Der Upload würde die maximale Datenbankgröße Ihres aktuellen QGIS Cloud Plans überschreiten. Bitte geben Sie Speicherplatz frei oder führen Sie ein Upgrade Ihres QGIS Cloud Plans durch.</translation>
     </message>
     <message>
         <location filename="../raster/raster_upload.py" line="107"/>
@@ -963,42 +983,42 @@ Should the table name be shortened automatically?
     <message>
         <location filename="../raster/raster_upload.py" line="131"/>
         <source>Creating overview-level {level} for table &apos;{table}&apos;...</source>
-        <translation></translation>
+        <translation>Pyramidenstufe {level} für Tabelle '{table}' wird erstellt...</translation>
     </message>
     <message>
         <location filename="../raster/raster_upload.py" line="141"/>
         <source>Creating GIST Index for table &apos;{table}&apos;...</source>
-        <translation>GIST-Index für Tabelle '{table}' erstellen...</translation>
+        <translation>GIST-Index für Tabelle '{table}' wird erstellt...</translation>
     </message>
     <message>
         <location filename="../raster/raster_upload.py" line="646"/>
         <source>Uploading tiles...</source>
-        <translation>Kacheln hochladen...</translation>
+        <translation>Kacheln werden hochgeladen...</translation>
     </message>
     <message>
         <location filename="../raster/raster_upload.py" line="708"/>
         <source>Calculating raster params for {sum_tiles} tiles ...</source>
-        <translation>Berechnen von Rasterparametern für {sum_tiles} Kacheln ...</translation>
+        <translation>Rasterparameter für {sum_tiles} Kacheln werden berechnet...</translation>
     </message>
     <message>
         <location filename="../raster/raster_upload.py" line="145"/>
         <source>Registering raster columns of table &apos;%s&apos;...</source>
-        <translation type="unfinished"></translation>
+        <translation>Rasterspalten der Tabelle '%s' werden registriert...</translation>
     </message>
     <message>
         <location filename="../raster/raster_upload.py" line="738"/>
         <source>Error:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler:</translation>
     </message>
     <message>
         <location filename="../raster/raster_upload.py" line="724"/>
         <source>Cannot open input file: </source>
-        <translation type="unfinished"></translation>
+        <translation>Eingabedatei kann nicht geöffnet werden: </translation>
     </message>
     <message>
         <location filename="../raster/raster_upload.py" line="738"/>
         <source>Cannot load raster with different pixel size in the same raster table</source>
-        <translation type="unfinished"></translation>
+        <translation>Raster mit unterschiedlicher Pixelgröße können nicht in dieselbe Rastertabelle geladen werden</translation>
     </message>
 </context>
 <context>
@@ -1016,7 +1036,7 @@ Should the table name be shortened automatically?
     <message>
         <location filename="../ui_relation_size.py" line="45"/>
         <source>Database {db} - Table overview</source>
-        <translation type="unfinished"></translation>
+        <translation>Datenbank {db} - Tabellenübersicht</translation>
     </message>
 </context>
 <context>
@@ -1029,7 +1049,7 @@ Should the table name be shortened automatically?
     <message>
         <location filename="../mapsettings.ui" line="20"/>
         <source>General Settings</source>
-        <translation>Generelle Einstellungen</translation>
+        <translation>Allgemeine Einstellungen</translation>
     </message>
     <message>
         <location filename="../mapsettings.ui" line="53"/>
@@ -1084,19 +1104,21 @@ Should the table name be shortened automatically?
     <message>
         <location filename="../mapsettings.ui" line="280"/>
         <source>Search DB</source>
-        <translation>Such DB</translation>
+        <translation>Such-DB</translation>
     </message>
     <message>
         <location filename="../mapsettings.ui" line="313"/>
         <source>Search SQL</source>
-        <translation>Such SQL</translation>
+        <translation>Such-SQL</translation>
     </message>
     <message>
         <location filename="../mapsettings.ui" line="331"/>
         <source>SELECT name AS displaytext, Box2D(st_transform(wkb_geometry, &lt;CRS&gt;)) AS bbox 
 FROM searchtable 
 WHERE name ILIKE &apos;%?%&apos;;</source>
-        <translation></translation>
+        <translation>SELECT name AS displaytext, Box2D(st_transform(wkb_geometry, &lt;CRS&gt;)) AS bbox 
+FROM searchtable 
+WHERE name ILIKE '%?%';</translation>
     </message>
     <message>
         <location filename="../mapsettings.ui" line="343"/>
