@@ -23,8 +23,8 @@ PLUGIN_UPLOAD = $(CURDIR)/plugin_upload.py
 # Makefile for a PyQGIS plugin 
 
 # translation
-PYLUPDATE ?= pylupdate5
-LRELEASE ?= lrelease
+PYLUPDATE ?= pylupdate6
+LRELEASE ?= /usr/lib/qt6/bin/lrelease
 
 # Python modules used by the plugin at runtime
 SOURCES = qgiscloudplugin.py \
@@ -130,9 +130,10 @@ upload: #zip
 
 # transup
 # update .ts translation files from SOURCES and FORMS
-# (strings no longer in the code are kept and marked as obsolete)
+# (pylupdate6 takes one --ts per file; strings no longer in the code
+# are kept and marked as obsolete)
 transup:
-	$(PYLUPDATE) $(SOURCES) $(FORMS) -ts $(TRANSLATIONS)
+	$(PYLUPDATE) $(SOURCES) $(FORMS) $(foreach t,$(TRANSLATIONS),--ts $(t))
 
 # transcompile
 # compile translation files into .qm binary format
